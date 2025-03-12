@@ -1,10 +1,7 @@
 #pragma once
-#include <memory>
-#include <functional>
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <shader.hpp>
-#include <nodes/node.hpp>
+
+#include "shader.hpp"
+#include "nodes/node.hpp"
 
 
 namespace Tank

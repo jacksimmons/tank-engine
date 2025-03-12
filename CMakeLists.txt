@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12) # Required for CSharp
+cmake_minimum_required(VERSION 3.16) # Required for C# and pch
 project("TankEngine")
     add_subdirectory("Application")
     add_subdirectory("Tank-ScriptCore")

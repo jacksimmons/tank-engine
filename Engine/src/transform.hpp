@@ -1,11 +1,8 @@
 #pragma once
-#include <memory>
-#include <glm/glm.hpp>
+
 #include <glm/gtx/quaternion.hpp>
-#include <nlohmann/json.hpp>
 #include <core.hpp>
 #include "transformation.hpp"
-using json = nlohmann::json;
 
 
 namespace Tank

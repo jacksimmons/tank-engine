@@ -1,5 +1,6 @@
 set(MONO_ROOT "../vendor/mono")
 set(SCRIPTCORE_ROOT "Resources/Scripts/$<CONFIG>")
+set(ENGINE_ROOT "../Engine/$<CONFIG>")
 get_filename_component(ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../" ABSOLUTE)
 
 project("Application") #EXE
@@ -33,6 +34,9 @@ project("Application") #EXE
         "include/imgui/backends"
         "${MONO_ROOT}/include"
     )
+    target_precompile_headers(${PROJECT_NAME} PRIVATE
+        "../Engine/src/tepch.hpp"
+    )
     target_link_directories(${PROJECT_NAME} PRIVATE
         "lib"
         "${MONO_ROOT}/lib/$<CONFIG>"
@@ -52,15 +56,20 @@ project("Application") #EXE
         FMT_UNICODE=0
         ROOT_DIRECTORY="${ROOT_DIR}/"
         APP_DIRECTORY="${ROOT_DIR}/${PROJECT_NAME}/"
-        SCRIPTCORE_DIRECTORY="${SCRIPTCORE_ROOT}/$<CONFIG>/"
+        SCRIPTCORE_DIRECTORY="${SCRIPTCORE_ROOT}/"
     )
-    # Copy all required DLL/LIBs into the output dir
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "lib/$<CONFIG>" $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    # Copy ScriptCore into Application
+    # Copy ScriptCore and its deps into Application
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${SCRIPTCORE_ROOT}" $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+    # Copy Engine and its deps into Application
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${ENGINE_ROOT}" $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+    # Copy all deps into the output dir
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "lib/$<CONFIG>" $<TARGET_FILE_DIR:${PROJECT_NAME}>
     )

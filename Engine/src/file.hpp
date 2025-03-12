@@ -1,6 +1,6 @@
 #pragma once
+
 #include <fstream>
-#include <string>
 #include <exception>
 #include <filesystem>
 #include "core.hpp"

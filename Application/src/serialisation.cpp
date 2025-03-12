@@ -1,10 +1,7 @@
 #include <format>
-#include <string>
-#include <nlohmann/json.hpp>
 #include "serialisation.hpp"
 #include "file.hpp"
 #include "log.hpp"
-#include "nodes/node.hpp"
 #include "nodes/camera.hpp"
 #include "nodes/cube_map.hpp"
 #include "nodes/light.hpp"

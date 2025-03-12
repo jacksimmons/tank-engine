@@ -1,9 +1,7 @@
 #include <format>
-#include <functional>
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <stdio.h>
 
 #include "log.hpp"
 #include "framebuffer.hpp"

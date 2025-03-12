@@ -1,6 +1,5 @@
 #pragma once
-#include <memory>
-#include <glad/glad.h>
+
 #include "nodes/ui/window.hpp"
 
 

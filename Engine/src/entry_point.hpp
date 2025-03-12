@@ -1,7 +1,6 @@
 #pragma once
-#include <memory>
+
 #include "stb_image.h"
-#include "mono/jit/jit.h"
 
 
 extern std::unique_ptr<Tank::Application> Tank::createApplication();

@@ -1,8 +1,10 @@
 #include <mono/metadata/assembly.h>
+#include <mono/metadata/object.h>
 #include <mono/jit/jit.h>
 #include "log.hpp"
 #include "file.hpp"
 #include "script_engine.hpp"
+#include "script_glue.hpp"
 
 
 /// <summary>
@@ -16,11 +18,14 @@ namespace Tank
 		MonoDomain *appDomain = nullptr;
 
 		MonoAssembly *coreAssembly = nullptr;
+		MonoImage *coreAssemblyImage = nullptr;
+
+		ScriptClass nodeClass;
 	};
 	static ScriptEngineData *s_data = nullptr;
 
 
-	MonoAssembly *loadCSharpAssembly(const std::filesystem::path &fp)
+	static MonoAssembly *loadMonoAssembly(const std::filesystem::path &fp)
 	{
 		int fileSize = 0;
 		char *fileData = File::readBytes(fp, &fileSize);
@@ -43,7 +48,7 @@ namespace Tank
 	}
 
 
-	void printAssemblyTypes(MonoAssembly *assembly)
+	static void printAssemblyTypes(MonoAssembly *assembly)
 	{
 		MonoImage *image = mono_assembly_get_image(assembly);
 		const MonoTableInfo *typeDefinitionsTable = mono_image_get_table_info(image, MONO_TABLE_TYPEDEF);
@@ -66,6 +71,13 @@ namespace Tank
 	{
 		s_data = new ScriptEngineData();
 		initMono();
+		loadAssembly(std::string{} + SCRIPTCORE_DIRECTORY + "Tank-ScriptCore.dll");
+
+		ScriptGlue::registerFunctions();
+
+		// Instantiate
+		s_data->nodeClass = ScriptClass("Tank", "Node");
+		MonoObject *instance = s_data->nodeClass.instantiate();
 	}
 
 
@@ -74,35 +86,77 @@ namespace Tank
 		const std::string path = std::string{} + APP_DIRECTORY + "mono/lib";
 		mono_set_assemblies_path(path.c_str());
 
+		// Create root domain
 		MonoDomain *rootDomain = mono_jit_init("TankJITRuntime");
-		
 		if (!rootDomain)
 		{
 			TE_CORE_CRITICAL("Failed to init script engine.");
 			return;
 		}
-
 		s_data->rootDomain = rootDomain;
-
-		char appDomainName[] = "TankScriptRuntime";
-		s_data->appDomain = mono_domain_create_appdomain(appDomainName, nullptr);
-
-		mono_domain_set(s_data->appDomain, true);
-
-		s_data->coreAssembly = loadCSharpAssembly(std::string{} + SCRIPTCORE_DIRECTORY + "Tank-ScriptCore.dll");
-		printAssemblyTypes(s_data->coreAssembly);
 	}
 
 
 	void ScriptEngine::shutdown()
 	{
-		delete s_data;
 		shutdownMono();
+		delete s_data;
 	}
 
 
 	void ScriptEngine::shutdownMono()
 	{
+		mono_jit_cleanup(s_data->appDomain);
+		s_data->appDomain = nullptr;
 
+		mono_jit_cleanup(s_data->rootDomain);
+		s_data->rootDomain = nullptr;
+	}
+
+
+	void ScriptEngine::loadAssembly(const std::filesystem::path &fp)
+	{
+		// Create app domain
+		char appDomainName[] = "TankScriptRuntime";
+		s_data->appDomain = mono_domain_create_appdomain(appDomainName, nullptr);
+		mono_domain_set(s_data->appDomain, true);
+
+		// Load C# assembly
+		s_data->coreAssembly = loadMonoAssembly(fp);
+		s_data->coreAssemblyImage = mono_assembly_get_image(s_data->coreAssembly);
+		//printAssemblyTypes(s_data->coreAssembly);
+	}
+
+
+	MonoObject *ScriptEngine::instantiateClass(MonoClass *monoClass)
+	{
+		MonoObject *instance = mono_object_new(s_data->appDomain, monoClass);
+		mono_runtime_object_init(instance);
+		return instance;
+	}
+
+
+	ScriptClass::ScriptClass(const std::string &nameSpace, const std::string &name)
+		: m_namespace(nameSpace), m_name(name)
+	{
+		m_monoClass = mono_class_from_name(s_data->coreAssemblyImage, nameSpace.c_str(), name.c_str());
+	}
+
+
+	MonoObject *ScriptClass::instantiate()
+	{
+		return ScriptEngine::instantiateClass(m_monoClass);
+	}
+
+
+	MonoMethod *ScriptClass::getMethod(const std::string &name, int paramCount)
+	{
+		return mono_class_get_method_from_name(m_monoClass, name.c_str(), paramCount);
+	}
+
+
+	MonoObject *invokeMethod(MonoObject *instance, MonoMethod *method, void **params)
+	{
+		return mono_runtime_invoke(method, instance, params, nullptr);
 	}
 }

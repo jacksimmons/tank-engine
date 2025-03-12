@@ -1,9 +1,5 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <memory>
-#include <glm/glm.hpp>
-#include <shader.hpp>
+
 
 
 namespace Tank
@@ -16,7 +12,9 @@ namespace Tank
 	};
 
 
-	class Texture; class IMeshContainer;
+	class Texture;
+	class IMeshContainer;
+	class Shader;
 	class Mesh
 	{
 		friend class IMeshContainer;

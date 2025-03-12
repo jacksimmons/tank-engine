@@ -1,7 +1,3 @@
-#include <iostream>
-#include <stack>
-#include <algorithm>
-
 #include "node.hpp"
 #include "log.hpp"
 #include "transform.hpp"

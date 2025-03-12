@@ -107,7 +107,8 @@
     <Exec Command="setlocal&#10;&quot;C:\Program Files\CMake\bin\cmake.exe&quot; -SC:/Git/tank-engine -BC:/Git/tank-engine --check-stamp-file C:/Git/tank-engine/Tank-ScriptCore/CMakeFiles/generate.stamp&#10;if %errorlevel% neq 0 goto :cmEnd&#10;:cmEnd&#10;endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone&#10;:cmErrorLevel&#10;exit /b %1&#10;:cmDone&#10;if %errorlevel% neq 0 goto :VCEnd&#10;:VCEnd" />
   </Target>
   <ItemGroup>
-    <Compile Include="C:\Git\tank-engine\Tank-ScriptCore\Source\Main.cs" />
+    <Compile Include="C:\Git\tank-engine\Tank-ScriptCore\Source\Node.cs" />
+    <Compile Include="C:\Git\tank-engine\Tank-ScriptCore\Source\Transform.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

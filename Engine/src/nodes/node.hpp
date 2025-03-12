@@ -1,14 +1,8 @@
 #pragma once
-#include <vector>
-#include <memory>
-#include <string>
-#include <stack>
-#include <glm/mat4x4.hpp>
-#include <nlohmann/json.hpp>
-#include <core.hpp>
-#include "transform.hpp"
 
-using json = nlohmann::json;
+#include <glm/mat4x4.hpp>
+#include "core.hpp"
+#include "transform.hpp"
 
 
 namespace Tank
@@ -33,8 +27,8 @@ namespace Tank
 		bool m_started = false;
 	protected:
 		std::string m_type;
-		Node *m_parent;
 		std::unique_ptr<Transform> m_transform;
+		Node *m_parent;
 		std::vector<std::unique_ptr<Node>> m_children;
 
 		// Member Functions

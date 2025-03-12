@@ -1,10 +1,12 @@
 #include <filesystem>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
+#include <glad/glad.h>
 #include "sprite.hpp"
 #include "quad_mesh.hpp"
 #include "texture.hpp"
 #include "light.hpp"
+#include "nodes/scene.hpp"
+#include "nodes/camera.hpp"
 namespace fs = std::filesystem;
 
 

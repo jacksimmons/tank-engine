@@ -1,6 +1,5 @@
 #pragma once
-#include <string>
-#include <glad/glad.h>
+
 #include "interfaces/mesh_container.hpp"
 namespace fs = std::filesystem;
 

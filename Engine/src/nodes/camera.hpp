@@ -1,6 +1,5 @@
 #pragma once
-#include <string>
-#include <glm/glm.hpp>
+
 #include <glm/gtx/quaternion.hpp>
 #include "nodes/node.hpp"
 #include "transformation.hpp"

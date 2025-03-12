@@ -1,7 +1,5 @@
 #pragma once
-#include <vector>
-#include <memory>
-#include "imgui.h"
+
 #include "nodes/node.hpp"
 
 

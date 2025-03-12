@@ -1,7 +1,4 @@
 #pragma once
-#include <nlohmann/json.hpp>
-#include <glm/glm.hpp>
-using json = nlohmann::json;
 #include "log.hpp"
 
 

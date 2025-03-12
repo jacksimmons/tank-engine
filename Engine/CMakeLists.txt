@@ -9,12 +9,17 @@ project("Engine") #DLL
     source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES
         ${PROJECT_SOURCES}
     )
-    target_compile_features(${PROJECT_NAME} PRIVATE "cxx_std_20")
+    target_compile_features(${PROJECT_NAME} PRIVATE
+        "cxx_std_20"
+    )
     target_include_directories(${PROJECT_NAME} PRIVATE
         "../include"
         "../include/glm"
         "include"
         "src"
+    )
+    target_precompile_headers(${PROJECT_NAME} PRIVATE
+        "src/tepch.hpp"
     )
     # Provide root directory to the application
     get_filename_component(ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../" ABSOLUTE)

@@ -1,6 +1,4 @@
-#include <iostream>
-#include <algorithm>
-
+#include <GLFW/glfw3.h>
 #include "key_input.hpp"
 
 

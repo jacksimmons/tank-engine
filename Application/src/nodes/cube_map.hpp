@@ -1,13 +1,14 @@
 #pragma once
-#include <memory>
-#include <glad/glad.h>
-#include <nodes/node.hpp>
-#include "shader.hpp"
+#include "tepch.hpp"
+#include "nodes/node.hpp"
+#include "shader_source.hpp"
 
 
 namespace Tank
 {
-	class Node; class Texture;
+	class Node;
+	class Texture;
+	class Shader;
 	class CubeMap : public Node
 	{
 		// Serialisation
@@ -16,8 +17,8 @@ namespace Tank
 		static void deserialise(const json &serialised, CubeMap **targetPtr);
 
 	protected:
-		GLuint m_vao;
-		GLuint m_vbo;
+		unsigned m_vao;
+		unsigned m_vbo;
 		std::unique_ptr<Shader> m_shader;
 		std::shared_ptr<Texture> m_texture;
 		std::array<std::string, 6> m_texturePaths;

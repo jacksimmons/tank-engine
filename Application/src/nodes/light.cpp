@@ -1,9 +1,10 @@
-#include <string>
 #include "transform.hpp"
 #include "shader.hpp"
 #include "log.hpp"
 #include "static/glm_serialise.hpp"
 #include "nodes/light.hpp"
+#include "nodes/model.hpp"
+#include "nodes/scene.hpp"
 
 
 namespace Tank
