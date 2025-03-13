@@ -1,6 +1,5 @@
 set(MONO_ROOT "../vendor/mono")
 set(SCRIPTCORE_ROOT "Resources/Scripts/$<CONFIG>")
-set(ENGINE_ROOT "../Engine/$<CONFIG>")
 get_filename_component(ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../" ABSOLUTE)
 
 project("Application") #EXE
@@ -22,7 +21,6 @@ project("Application") #EXE
     source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES
         ${PROJECT_SOURCES}
     )
-    find_package(OpenGL REQUIRED)
     target_compile_features(${PROJECT_NAME} PRIVATE "cxx_std_20")
     target_include_directories(${PROJECT_NAME} PRIVATE
         "../include"
@@ -38,10 +36,12 @@ project("Application") #EXE
         "../Engine/src/tepch.hpp"
     )
     target_link_directories(${PROJECT_NAME} PRIVATE
+        "../lib"
         "lib"
         "${MONO_ROOT}/lib/$<CONFIG>"
         "${SCRIPTCORE_ROOT}"
     )
+    find_package(OpenGL REQUIRED)
     target_link_libraries(${PROJECT_NAME}
         OpenGL::GL
         "Engine"

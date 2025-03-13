@@ -20,7 +20,7 @@ namespace Tank
 		float getGravityScalar(float distance, float otherMass) const;
 	public:
 		PhysicsBody(const std::string &name = "PhysicsBody", float mass = 1);
-		~PhysicsBody();
+		virtual ~PhysicsBody();
 
 		void setMass(float mass) noexcept { m_mass = mass; }
 		float getMass() const noexcept { return m_mass; }
@@ -28,6 +28,5 @@ namespace Tank
 		glm::vec3 getCentre() const noexcept { return mat4::getTranslation(m_transform->getWorldModelMatrix()); }
 
 		void update() override;
-		void step(unsigned numSteps);
 	};
 }

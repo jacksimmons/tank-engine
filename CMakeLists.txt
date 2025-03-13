@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.16) # Required for C# and pch
+cmake_minimum_required(VERSION 3.21)
+# Required for C#, pch and install(TARGET_RUNTIME_DLLS)
 project("TankEngine")
     add_subdirectory("Application")
     add_subdirectory("Tank-ScriptCore")

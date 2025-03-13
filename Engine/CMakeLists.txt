@@ -22,6 +22,13 @@ project("Engine") #DLL
     target_precompile_headers(${PROJECT_NAME} PRIVATE
         "src/tepch.hpp"
     )
+    target_link_directories(${PROJECT_NAME} PRIVATE
+        "../lib"
+        "lib"
+    )
+    target_link_libraries(${PROJECT_NAME}
+        "assimp-vc143-mt"
+    )
     # Provide root directory to the application
     get_filename_component(ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../" ABSOLUTE)
     target_compile_definitions(${PROJECT_NAME} PRIVATE
