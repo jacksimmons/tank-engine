@@ -23,15 +23,12 @@ namespace Tank
 		/// If false, Node::draw isn't invoked for this Node only.
 		/// </summary>
 		bool m_visible = true;
-
-		bool m_started = false;
 	protected:
 		std::string m_type;
 		std::unique_ptr<Transform> m_transform;
 		Node *m_parent;
 		std::vector<std::unique_ptr<Node>> m_children;
-
-		// Member Functions
+		bool m_started = false;
 	protected:
 		virtual void draw();
 	public:
@@ -94,8 +91,8 @@ namespace Tank
 		/// </summary>
 		std::vector<int> treeFromChild(Node *child);
 
-		void startup();
-		void shutdown();
+		virtual void startup();
+		virtual void shutdown();
 		virtual void update();
 	};
 }

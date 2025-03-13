@@ -1,3 +1,4 @@
+set(APPLICATION_DIR "../Application/$<CONFIG>")
 project("Engine") #DLL
     file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS
         "src/*.hpp"
@@ -33,4 +34,9 @@ project("Engine") #DLL
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         lib $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+    # Copy Engine and its deps into Application
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        $<TARGET_FILE_DIR:${PROJECT_NAME}> "${APPLICATION_DIR}"
     )

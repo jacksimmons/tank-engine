@@ -1,7 +1,5 @@
 #pragma once
 
-#include <filesystem>
-
 
 extern "C" {
 	typedef struct _MonoClass MonoClass;

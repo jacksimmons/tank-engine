@@ -1,4 +1,3 @@
-#include <filesystem>
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glad/glad.h>
 #include "sprite.hpp"

@@ -8,6 +8,10 @@ namespace Tank::Editor
 	class Tank::Framebuffer;
 	class Tank::Camera;
 	class Tank::KeyInput;
+	/// <summary>
+	/// Displays a Scene in a window. Draws a Play button, that when pressed,
+	/// calls 'startup' on all Nodes. Is exempt from EditorNode properties.
+	/// </summary>
 	class _SceneView final : public _Window
 	{
 		friend class EditorApp;
@@ -39,8 +43,10 @@ namespace Tank::Editor
 		);
 	public:
 		void rescale(int w, int h) const;
+		void startup() override;
 		void update() override;
-		virtual void drawUI() override;
+		void shutdown() override;
+		virtual void draw() override;
 		virtual void drawPanel() override;
 		constexpr int getSceneW() const noexcept { return m_sceneW; }
 		constexpr int getSceneH() const noexcept { return m_sceneH; }

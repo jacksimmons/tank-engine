@@ -190,21 +190,17 @@ namespace Tank::Editor
 				object->getTransform()->setLocalTranslation({ 0, 0, 0 });
 				scene->addChild(std::move(object));
 
-				auto backpackPhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("PhysicsBody", 100.0f));
+				auto backpackPhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
 				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", sources, "backpack/backpack.obj"));
 				backpack->getTransform()->setLocalScale({ 100, 100, 100 });
 				backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
 				backpackPhysics->addChild(std::move(backpack));
 				scene->addChild(std::move(backpackPhysics));
 
-				auto spritePhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("PhysicsBody", 1.0f));
+				auto spritePhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
 				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", sources, std::string(ROOT_DIRECTORY) + "/textures/awesomeface.png"));
 				spritePhysics->addChild(std::move(sprite));
 				scene->addChild(std::move(spritePhysics));
-
-				auto planet = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("Planet", 1e14));
-				planet->getTransform()->setLocalTranslation({ 0, -1000, 0 });
-				scene->addChild(std::move(planet));
 			}
 
 			loadScene(std::move(scene));

@@ -3,7 +3,6 @@
 #include "file_dialog.hpp"
 #include "colours.hpp"
 #include "widget.hpp"
-
 namespace fs = std::filesystem;
 
 

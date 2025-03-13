@@ -53,6 +53,9 @@ namespace Tank
 	void Node::addChild(std::unique_ptr<Node> child)
 	{
 		child->m_parent = this;
+		if (m_started)
+			child->startup();
+
 		m_children.push_back(std::move(child));
 	}
 

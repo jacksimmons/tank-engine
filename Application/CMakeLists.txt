@@ -63,11 +63,6 @@ project("Application") #EXE
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${SCRIPTCORE_ROOT}" $<TARGET_FILE_DIR:${PROJECT_NAME}>
     )
-    # Copy Engine and its deps into Application
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${ENGINE_ROOT}" $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
     # Copy all deps into the output dir
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory

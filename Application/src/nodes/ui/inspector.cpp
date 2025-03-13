@@ -1,4 +1,3 @@
-#include <filesystem>
 #include <optional>
 #include <imgui.h>
 #include <glm/gtx/euler_angles.hpp>
@@ -11,7 +10,6 @@
 #include "nodes/scene.hpp"
 #include "nodes/light.hpp"
 #include "nodes/camera.hpp"
-#include "nodes/ui/ui.hpp"
 #include "nodes/ui/console.hpp"
 #include "nodes/ui/inspector.hpp"
 #include "nodes/interfaces/shader_container.hpp"

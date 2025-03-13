@@ -1,5 +1,5 @@
 #pragma once
-
+#include "nodes/editor_node.hpp"
 #include "window.hpp"
 
 

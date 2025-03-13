@@ -1,6 +1,4 @@
 #pragma once
-
-#include <filesystem>
 #include <optional>
 #include <typeinfo>
 #include <core.hpp>

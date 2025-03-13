@@ -8,7 +8,6 @@ namespace Tank
 	class Scene; class Model; class Camera; class Light; class DirLight; class PointLight;
 	class IShaderContainer; class ShaderSource;
 }
-
 namespace Tank::Editor
 {
 	class _Inspector final : public _Window

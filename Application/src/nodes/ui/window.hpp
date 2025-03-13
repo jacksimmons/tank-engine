@@ -1,10 +1,13 @@
 #pragma once
 #include "imgui.h"
-#include "nodes/ui/ui.hpp"
+#include "nodes/editor_node.hpp"
 
 namespace Tank::Editor
 {
-	class _Window : public UI
+	/// <summary>
+	/// Base class to render an ImGui window in the Editor.
+	/// </summary>
+	class _Window : public EditorNode
 	{
 		// Classes which can access the constructor (permitted subclasses)
 		friend class _Console;
@@ -20,7 +23,7 @@ namespace Tank::Editor
 	public:
 		virtual ~_Window() = default;
 
-		virtual void drawUI() override;
+		virtual void draw() override;
 		virtual void drawPanel() = 0;
 	};
 }
