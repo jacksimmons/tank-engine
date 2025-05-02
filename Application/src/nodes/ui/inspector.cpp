@@ -1,6 +1,3 @@
-#include <memory>
-#include <string>
-#include <filesystem>
 #include <optional>
 #include <imgui.h>
 #include <glm/gtx/euler_angles.hpp>
@@ -9,12 +6,10 @@
 #include "file.hpp"
 #include "widget.hpp"
 #include "shader.hpp"
-#include "scripting/script.hpp"
 #include "nodes/node.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/light.hpp"
 #include "nodes/camera.hpp"
-#include "nodes/ui/ui.hpp"
 #include "nodes/ui/console.hpp"
 #include "nodes/ui/inspector.hpp"
 #include "nodes/interfaces/shader_container.hpp"
@@ -76,92 +71,6 @@ namespace Tank::Editor
 				m_inspectedNode->setName(newName);
 			}
 		);
-
-		ImGui::TextColored(Tank::Colour::TITLE, "Scripts");
-		size_t scriptCount = m_inspectedNode->getScriptCount();
-		for (int i = 0; i < scriptCount; i++)
-		{
-			ImGui::Text(m_inspectedNode->getScript(i)->getFilename().c_str());
-		}
-		if (scriptCount == 0)
-		{
-			ImGui::Text("None");
-		}
-
-		// Display a button to change the active camera.
-		// Clicking on it loads a list of all Camera nodes descending from this scene.
-		if (ImGui::Button("Add Script##INSPECTOR_NODE_ADD_SCRIPT"))
-		{
-			ImGui::OpenPopup("##INSPECTOR_NODE_ADD_SCRIPT_LIST");
-		}
-		if (ImGui::BeginPopup("##INSPECTOR_NODE_ADD_SCRIPT_LIST"))
-		{
-			// List all non-added, non-system script files
-			for (auto &file : std::filesystem::recursive_directory_iterator(std::filesystem::path(ROOT_DIRECTORY) / "scripts"))
-			{
-				const auto &filepath = file.path();
-				size_t lastSlashIndex = filepath.string().find_last_of('\\');
-				std::string filename = filepath.string().substr(lastSlashIndex + 1, filepath.string().size() - lastSlashIndex + 1);
-
-				bool fileAllowed = true;
-
-				// Don't allow any internal scripts to be used (part of directory scripts/tank)
-				if (filepath.string().find((std::filesystem::path(ROOT_DIRECTORY) / "scripts" / "tank").string()) != std::string::npos)
-					fileAllowed = false;
-
-				// Don't allow the template to be used
-				if (filename == "template.lua") fileAllowed = false;
-				// Don't allow non-script files to be used
-				if (filename.find(".lua") == std::string::npos) fileAllowed = false;
-				// Don't allow already attached scripts to be used
-				for (size_t i = 0; i < m_inspectedNode->getScriptCount(); i++)
-				{
-					if (m_inspectedNode->getScript(i)->getFilename() == filepath.string())
-					{
-						fileAllowed = false;
-						break;
-					}
-				}
-
-				if (fileAllowed && ImGui::Button(filename.c_str()))
-				{
-					auto script = Script::createExistingScript(m_inspectedNode, Scene::getActiveScene()->getActiveCamera(), filepath.string());
-					if (script.has_value()) m_inspectedNode->addScript(std::move(script.value()));
-					ImGui::CloseCurrentPopup();
-				}
-			}
-
-			std::string scriptName = "script";
-			if (ImGui::Button("New Script"))
-			{
-				ImGui::OpenPopup("##INSPECTOR_NODE_NEW_SCRIPT");
-			}
-
-			// Popup for a New Script's name
-			if (ImGui::BeginPopup("##INSPECTOR_NODE_NEW_SCRIPT"))
-			{
-				// Update name for the New Script with a reference.
-				Widget::textInput("##INSPECTOR_NODE_NEW_SCRIPT_INPUT", "Script Name", [&scriptName](const std::string &name)
-				{
-					scriptName = name;
-				});
-
-				// When the user presses Enter, the New Script will be made and the popup closed.
-				if (ImGui::IsItemDeactivatedAfterEdit())
-				{
-					auto script = Script::createNewScript(m_inspectedNode, Scene::getActiveScene()->getActiveCamera(), scriptName + ".lua");
-					if (script.has_value()) m_inspectedNode->addScript(std::move(script.value()));
-					ImGui::CloseCurrentPopup();
-				}
-
-				// Show the user that .lua will be appended always.
-				ImGui::SameLine();
-				ImGui::Text(".lua");
-
-				ImGui::EndPopup();
-			}
-			ImGui::EndPopup();
-		}
 
 		if (ImGui::Button("<Snap To>"))
 		{

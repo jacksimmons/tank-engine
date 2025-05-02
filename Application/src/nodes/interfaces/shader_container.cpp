@@ -1,4 +1,3 @@
-#include <algorithm>
 #include "shader_container.hpp"
 
 

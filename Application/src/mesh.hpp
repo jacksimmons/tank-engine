@@ -1,22 +1,13 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <memory>
-#include <glm/glm.hpp>
-#include <shader.hpp>
+#include "shapes/vertex.hpp"
+
 
 
 namespace Tank
 {
-	struct Vertex
-	{
-		glm::vec3 position;
-		glm::vec3 normal;
-		glm::vec2 texCoords;
-	};
-
-
-	class Texture; class IMeshContainer;
+	class Texture;
+	class IMeshContainer;
+	class Shader;
 	class Mesh
 	{
 		friend class IMeshContainer;

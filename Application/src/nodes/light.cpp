@@ -1,4 +1,3 @@
-#include <string>
 #include "transform.hpp"
 #include "shader.hpp"
 #include "log.hpp"

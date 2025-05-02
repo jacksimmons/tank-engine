@@ -1,7 +1,5 @@
 #pragma once
-#include <functional>
-#include <vector>
-#include <tuple>
+#include "nodes/editor_node.hpp"
 #include "window.hpp"
 
 

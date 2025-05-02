@@ -1,9 +1,5 @@
 #pragma once
-#include <memory>
-#include <vector>
-#include <string>
 
-#include "glm/glm.hpp"
 #include "shader.hpp"
 #include "mesh.hpp"
 #include "texture.hpp"

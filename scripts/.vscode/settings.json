@@ -1,8 +1,0 @@
-{
-    "Lua.diagnostics.globals": [
-        "_transform",
-        "_camera",
-        "_camera_translate",
-        "_camera_rotate"
-    ]
-}

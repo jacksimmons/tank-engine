@@ -1,6 +1,4 @@
 #pragma once
-#include <memory>
-#include <iostream>
 #include "spdlog/spdlog.h"
 #include "core.hpp"
 

@@ -1,11 +1,10 @@
-#include <glm/glm.hpp>
+
 #include "nodes/node.hpp"
-#include "nodes/model.hpp"
-#include "nodes/scene.hpp"
 
 
 namespace Tank
 {
+	class Model;
 	class Shader;
 	class Scene;
 	class Light : public Node

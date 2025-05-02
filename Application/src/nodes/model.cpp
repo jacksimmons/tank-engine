@@ -1,17 +1,12 @@
-#include <iostream>
-#include <filesystem>
-#include <array>
-#include <memory>
 #include <format>
-#include <algorithm>
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/material.h>
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#include "assimp/material.h"
 
 #include "log.hpp"
 #include "texture.hpp"

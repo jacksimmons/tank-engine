@@ -1,5 +1,4 @@
-#include <vector>
-#include <functional>
+#include <glad/glad.h>
 #include "shader.hpp"
 
 
@@ -39,7 +38,7 @@ namespace Tank
 	}
 
 
-	bool Shader::attachShader(GLuint programID, ShaderSource &source)
+	bool Shader::attachShader(unsigned programID, ShaderSource &source)
 	{
 		std::string shaderContents;
 
@@ -71,7 +70,7 @@ namespace Tank
 	}
 
 
-	std::optional<unsigned> Shader::compileShader(const std::string &shaderContents, GLenum shaderType, const std::string &shaderTypeStr)
+	std::optional<unsigned> Shader::compileShader(const std::string &shaderContents, unsigned shaderType, const std::string &shaderTypeStr)
 	{
 		unsigned int shader;
 		shader = glCreateShader(shaderType);
@@ -91,5 +90,59 @@ namespace Tank
 			return {};
 		}
 		return shader;
+	}
+
+
+	int Shader::getLoc(const std::string &name) const
+	{
+		return glGetUniformLocation(m_id, name.c_str());
+	}
+
+
+	void Shader::use() const
+	{
+		glUseProgram(m_id);
+	}
+
+
+	void Shader::unuse() const
+	{
+		glUseProgram(0);
+	}
+
+
+	void Shader::setInt(const std::string &name, int value) const
+	{
+		glUniform1i(getLoc(name), value);
+	}
+
+
+	void Shader::setFloat(const std::string &name, float value) const
+	{
+		glUniform1f(getLoc(name), value);
+	}
+
+
+	void Shader::setVec3(const std::string &name, const glm::vec3 &value) const
+	{
+		glUniform3fv(getLoc(name), 1, &value[0]);
+	}
+
+
+	void Shader::setVec4(const std::string &name, const glm::vec4 &value) const
+	{
+		glUniform4fv(getLoc(name), 1, &value[0]);
+	}
+
+
+	void Shader::setMat3(const std::string &name, const glm::mat3 &value) const
+	{
+		glUniformMatrix3fv(getLoc(name), 1, GL_FALSE, glm::value_ptr(value));
+	}
+
+
+	void Shader::setMat4(const std::string &name, const glm::mat4 &value) const
+	{
+		glUniformMatrix4fv(getLoc(name), 1, GL_FALSE, glm::value_ptr(value));
 	}
 }

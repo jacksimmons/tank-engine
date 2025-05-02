@@ -1,11 +1,9 @@
 #pragma once
-#include <map>
-#include <vector>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
+
 #include "nodes/camera.hpp"
 
 
+struct GLFWWindow;
 namespace Tank
 {
 	enum class KeyState

@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include "mesh.hpp"
 #include "texture.hpp"
+#include "shader.hpp"
 
 
 namespace Tank

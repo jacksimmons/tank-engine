@@ -1,17 +1,18 @@
 #include "file.hpp"
+#include "log.hpp"
 
 
 namespace Tank
 {
 	namespace File
 	{
-		bool exists(std::filesystem::path fp)
+		bool exists(const std::filesystem::path &fp)
 		{
 			return std::filesystem::exists(fp);
 		}
 
 
-		bool readLines(std::filesystem::path fp, std::string &outStr)
+		bool readLines(const std::filesystem::path &fp, std::string &outStr)
 		{
 			if (!std::filesystem::exists(fp))
 			{
@@ -50,6 +51,35 @@ namespace Tank
 			{
 				return false;
 			}
+		}
+	
+	
+		char* readBytes(const std::filesystem::path &fp, int *outSize)
+		{
+			// ate: Seek to end of stream immediately after open
+			std::ifstream stream(fp, std::ios::binary | std::ios::ate);
+
+			if (!stream)
+			{
+				TE_CORE_ERROR("Failed to open file");
+				return nullptr;
+			}
+
+			std::streampos end = stream.tellg(); // Start at end of stream
+			stream.seekg(0, std::ios::beg); // Go to beginning
+			int size = end - stream.tellg();
+
+			if (size == 0)
+			{
+				return nullptr;
+			}
+
+			char *buf = new char[size];
+			stream.read(buf, size);
+			stream.close();
+
+			*outSize = size;
+			return buf;
 		}
 	}
 }

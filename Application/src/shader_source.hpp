@@ -1,6 +1,4 @@
 #pragma once
-#include <glad/glad.h>
-#include <filesystem>
 namespace fs = std::filesystem;
 
 
@@ -8,8 +6,8 @@ namespace Tank
 {
 	struct ShaderSource
 	{
-		GLenum glType;
-		GLuint glID;
+		unsigned glType;
+		unsigned glID;
 		fs::path location;
 		bool enabled;
 

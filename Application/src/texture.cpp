@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <glad/glad.h>
 #include "texture.hpp"
 #include "nodes/model.hpp"
 namespace fs = std::filesystem;

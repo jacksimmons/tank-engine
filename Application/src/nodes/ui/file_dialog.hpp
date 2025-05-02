@@ -1,7 +1,4 @@
 #pragma once
-#include <filesystem>
-#include <vector>
-#include <functional>
 #include "window.hpp"
 namespace fs = std::filesystem;
 

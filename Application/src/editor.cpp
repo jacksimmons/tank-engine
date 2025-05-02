@@ -1,7 +1,4 @@
-#include <string>
 #include <cmath>
-#include <iostream>
-#include <memory>
 #include <chrono>
 #include <format>
 
@@ -25,6 +22,7 @@
 #include "scene_serialisation.hpp"
 #include "widget.hpp"
 #include "static/time.hpp"
+#include "scripting/script_engine.hpp"
 #include "nodes/node.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/model.hpp"
@@ -36,7 +34,7 @@
 #include "nodes/ui/hierarchy.hpp"
 #include "nodes/ui/inspector.hpp"
 #include "nodes/ui/file_dialog.hpp"
-#include "scripting/script.hpp"
+#include "nodes/physics/physics_body.hpp"
 
 
 // Enable debug output
@@ -64,9 +62,21 @@ namespace Tank::Editor
 
 		initGL();
 		initImGui();
+		ScriptEngine::init();
 
 		m_system = std::make_unique<::Tank::Node>("Editor");
 		m_keyInput = nullptr;
+	}
+
+
+	EditorApp::~EditorApp()
+	{
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
+		glfwDestroyWindow(m_window);
+		glfwTerminate();
+		ScriptEngine::shutdown();
 	}
 
 
@@ -180,13 +190,17 @@ namespace Tank::Editor
 				object->getTransform()->setLocalTranslation({ 0, 0, 0 });
 				scene->addChild(std::move(object));
 
+				auto backpackPhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
 				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", sources, "backpack/backpack.obj"));
 				backpack->getTransform()->setLocalScale({ 100, 100, 100 });
-				backpack->getTransform()->setLocalTranslation({ 0, 0, 200 });
-				scene->addChild(std::move(backpack));
+				backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
+				backpackPhysics->addChild(std::move(backpack));
+				scene->addChild(std::move(backpackPhysics));
 
+				auto spritePhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
 				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", sources, std::string(ROOT_DIRECTORY) + "/textures/awesomeface.png"));
-				scene->addChild(std::move(sprite));
+				spritePhysics->addChild(std::move(sprite));
+				scene->addChild(std::move(spritePhysics));
 			}
 
 			loadScene(std::move(scene));
@@ -351,16 +365,6 @@ namespace Tank::Editor
 		{
 			Tank::Serialisation::saveScene(m_scene.get(), "test.scene");
 		}
-	}
-
-
-	EditorApp::~EditorApp()
-	{
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
-		glfwDestroyWindow(m_window);
-		glfwTerminate();
 	}
 }
 

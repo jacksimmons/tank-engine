@@ -1,6 +1,5 @@
-#include <vector>
+
 #include <typeinfo>
-#include <memory>
 #include <imgui.h>
 #include "log.hpp"
 #include "colours.hpp"
@@ -8,6 +7,7 @@
 #include "nodes/light.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/cube_map.hpp"
+#include "nodes/model.hpp"
 #include "nodes/sprite.hpp"
 #include "nodes/ui/console.hpp"
 #include "nodes/ui/hierarchy.hpp"

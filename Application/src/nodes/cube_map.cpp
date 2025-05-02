@@ -1,12 +1,11 @@
-#include <string>
-#include <array>
-#include <memory>
+
 #include <glad/glad.h>
-#include "cube_map.hpp"
-#include "scene.hpp"
-#include "texture.hpp"
 #include "log.hpp"
+#include "texture.hpp"
+#include "shader.hpp"
+#include "nodes/cube_map.hpp"
 #include "nodes/camera.hpp"
+#include "nodes/scene.hpp"
 
 
 namespace Tank

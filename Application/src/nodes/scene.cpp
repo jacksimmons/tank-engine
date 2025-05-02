@@ -1,5 +1,3 @@
-#include <stack>
-#include <iostream>
 #include "log.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/camera.hpp"

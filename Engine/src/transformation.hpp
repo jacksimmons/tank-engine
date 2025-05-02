@@ -1,5 +1,4 @@
 #pragma once
-#include <glm/glm.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
 
@@ -31,7 +30,7 @@ namespace Tank
 
 		inline const glm::vec3 getTranslation(const glm::mat4 &mat)
 		{
-			return mat[3];
+			return glm::vec3(mat[3]);
 		}
 		inline void setTranslation(glm::mat4 &mat, const glm::vec3 &trans)
 		{

@@ -1,6 +1,4 @@
 #include <format>
-#include <string>
-#include <nlohmann/json.hpp>
 #include "scene_serialisation.hpp"
 #include "file.hpp"
 #include "log.hpp"
@@ -10,8 +8,6 @@
 #include "nodes/light.hpp"
 #include "nodes/model.hpp"
 #include "nodes/scene.hpp"
-
-using json = nlohmann::json;
 
 
 namespace Tank

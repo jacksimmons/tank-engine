@@ -1,9 +1,7 @@
 #include <format>
-#include <functional>
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <stdio.h>
 
 #include "log.hpp"
 #include "framebuffer.hpp"
@@ -47,16 +45,14 @@ namespace Tank::Editor
 		glBlendFunc(GL_SRC_ALPHA, m_blendFuncScaleFactors);
 	}
 
-
-	void _SceneView::drawUI()
+	void _SceneView::draw()
 	{
 		int fbW = m_fb->getW(), fbH = m_fb->getH();
 
 		// Just sets default panel-window size.
 		ImGui::SetNextWindowSize(ImVec2(fbW + 10.0f, fbH + 10.0f), ImGuiCond_FirstUseEver);
-		_Window::drawUI();
+		_Window::draw();
 	}
-
 
 	void _SceneView::drawPanel()
 	{
@@ -80,31 +76,21 @@ namespace Tank::Editor
 		{
 			m_isInPlayMode = true;
 
-			// Hide all UI other than this SceneView.
-			for (auto &node : *getParent())
-			{
-				if (node.get() == this) continue;
-				node->setEnabled(false);
-			}
-			// Start all scripting.
+			// Enable all scripting (and disable all EditorNodes)
 			Scene *activeScene = Scene::getActiveScene();
-			activeScene->getActiveCamera()->setFreeLook(false);
+			//activeScene->getActiveCamera()->setFreeLook(false);
 			activeScene->startup();
-			
+			m_parent->startup();
 
 			if (ImGui::Button("Stop"))
 			{
 				m_isInPlayMode = false;
-				Scene *activeScene = Scene::getActiveScene();
-				activeScene->getActiveCamera()->setFreeLook(true);
-				activeScene->shutdown();
 
-				// Show all UI other than this SceneView.
-				for (auto &node : *getParent())
-				{
-					if (node.get() == this) continue;
-					node->setEnabled(true);
-				}
+				// Disable all scripting (and enable all EditorNodes)
+				Scene *activeScene = Scene::getActiveScene();
+				//activeScene->getActiveCamera()->setFreeLook(true);
+				activeScene->shutdown();
+				m_parent->shutdown();
 			}
 		}
 
@@ -124,6 +110,10 @@ namespace Tank::Editor
 		ImGui::EndChild();
 	}
 
+	void _SceneView::startup()
+	{
+		// Ignore EditorNode disabling behaviour
+	}
 
 	void _SceneView::update()
 	{
@@ -134,9 +124,13 @@ namespace Tank::Editor
 		m_fb->update();
 		glViewport(0, 0, m_sceneW, m_sceneH);
 
-		UI::update();
+		_Window::update();
 	}
 
+	void _SceneView::shutdown()
+	{
+		// Ignore EditorNode enabling behaviour
+	}
 
 	void _SceneView::rescale(int w, int h) const
 	{
@@ -147,7 +141,6 @@ namespace Tank::Editor
 		}
 	}
 
-	
 	void _SceneView::handleKeyInput()
 	{
 		if (!m_isFocussed) return;
@@ -211,7 +204,6 @@ namespace Tank::Editor
 			cam->rotate(glm::vec3(0.0f, 0.0f, -frameDelta * rotSpd));
 	}
 
-
 	void _SceneView::cyclePolygonMode()
 	{
 		switch (m_polygonMode)
@@ -233,7 +225,6 @@ namespace Tank::Editor
 
 		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
 	}
-
 
 	void _SceneView::cycleCullFaceMode()
 	{
@@ -258,7 +249,6 @@ namespace Tank::Editor
 		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
 	}
 
-
 	void _SceneView::cycleFrontFaceMode()
 	{
 		switch (m_frontFaceMode)
@@ -278,7 +268,6 @@ namespace Tank::Editor
 
 		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
 	}
-
 
 	void _SceneView::cycleDepthFuncComparisonMode()
 	{
