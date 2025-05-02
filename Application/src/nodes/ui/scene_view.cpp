@@ -328,7 +328,7 @@ namespace Tank::Editor
 		switch (m_blendFuncScaleFactors)
 		{
 		case GL_ONE_MINUS_SRC1_ALPHA:
-			m_blendFuncScaleFactors = GL_ONE;
+			m_blendFuncScaleFactors = GL_ZERO;
 			newName = enumToName[m_blendFuncScaleFactors];
 			break;
 		default:
