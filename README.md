@@ -1,5 +1,5 @@
 # Preview
-![image](https://github.com/user-attachments/assets/abf166eb-b493-4e20-9b9b-3dea4e6647ad)
+![image](https://github.com/user-attachments/assets/cdc3609c-a13f-4393-b11c-93826cc0753b)
 
 # Description
 A C++ graphics rendering application using OpenGL and the GUI framework "dear ImGUI".
