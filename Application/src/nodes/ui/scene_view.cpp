@@ -41,6 +41,10 @@ namespace Tank::Editor
 		m_depthFuncComparisonMode = GL_LESS;
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(m_depthFuncComparisonMode);
+
+		m_blendFuncScaleFactors = GL_ZERO;
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, m_blendFuncScaleFactors);
 	}
 
 
@@ -161,6 +165,8 @@ namespace Tank::Editor
 			cycleFrontFaceMode();
 		if (m_keyInput->getKeyState(GLFW_KEY_F4) == KeyState::Pressed)
 			cycleDepthFuncComparisonMode();
+		if (m_keyInput->getKeyState(GLFW_KEY_F5) == KeyState::Pressed)
+			cycleBlendFuncScaleFactors();
 
 		float frameDelta = Time::getFrameDelta();
 
@@ -303,6 +309,61 @@ namespace Tank::Editor
 		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(
 			Tank::Colour::INFO,
 			"Set GL depth func comparison to " + newMode
+		);
+	}
+
+	
+	void _SceneView::cycleBlendFuncScaleFactors()
+	{
+		std::map<GLenum, std::string> enumToName = {
+			{ GL_ZERO, "ZERO (0,0,0,0)" },
+			{ GL_ONE, "ONE (1,1,1,1)" },
+			{ GL_SRC_COLOR, "SRC_COLOR" },
+			{ GL_ONE_MINUS_SRC_COLOR, "1 - SRC_COLOR" },
+			{ GL_DST_COLOR, "DST_COLOR" },
+			{ GL_ONE_MINUS_DST_COLOR, "1 - DST_COLOR" },
+			{ GL_SRC_ALPHA, "SRC_ALPHA" },
+			{ GL_ONE_MINUS_SRC_ALPHA, "1 - SRC_ALPHA" },
+			{ GL_CONSTANT_COLOR, "CONSTANT_COLOR" },
+			{ GL_ONE_MINUS_CONSTANT_COLOR, "1 - CONSTANT_COLOR" },
+			{ GL_CONSTANT_ALPHA, "CONSTANT_ALPHA" },
+			{ GL_ONE_MINUS_CONSTANT_ALPHA, "1 - CONSTANT_ALPHA" },
+			{ GL_SRC_ALPHA_SATURATE, "SRC_ALPHA_SATURATE" },
+			{ GL_SRC1_COLOR, "SRC1_COLOR" },
+			{ GL_ONE_MINUS_SRC1_COLOR, "1 - SRC1_COLOR" },
+			{ GL_SRC1_ALPHA, "SRC1_ALPHA" },
+			{ GL_ONE_MINUS_SRC1_ALPHA, "1 - SRC1_ALPHA" }
+		};
+
+		std::string newName;
+		switch (m_blendFuncScaleFactors)
+		{
+		case GL_ONE_MINUS_SRC1_ALPHA:
+			m_blendFuncScaleFactors = GL_ONE;
+			newName = enumToName[m_blendFuncScaleFactors];
+			break;
+		default:
+			auto it = enumToName.find(m_blendFuncScaleFactors);
+			if (it != enumToName.end())
+			{
+				auto nextPair = *(++it);
+				m_blendFuncScaleFactors = nextPair.first;
+				newName = nextPair.second;
+			}
+			else
+			{
+				newName = enumToName[m_blendFuncScaleFactors] + " (Unable to modify)";
+			}
+
+			break;
+		}
+
+
+		glBlendFunc(GL_SRC_ALPHA, m_blendFuncScaleFactors);
+
+		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(
+			Tank::Colour::INFO,
+			"Set GL blend func comparison to " + newName
 		);
 	}
 }

@@ -148,7 +148,18 @@ namespace Tank::Editor
 					addNewNode(node, new CubeMap("CubeMap", sources));
 				}
 				if (ImGui::MenuItem("Point Light")) addNewNode(node, new PointLight());
-				if (ImGui::MenuItem("Directional Light")) addNewNode(node, new DirLight());
+				if (ImGui::MenuItem("Directional Light"))
+				{
+					ShaderSources sources;
+					sources.vertex.location = "shader.vert";
+					sources.fragment.location = "shader.frag";
+
+					auto icon = std::make_unique<Sprite>("Icon", sources, fs::path(ROOT_DIRECTORY) / "textures/dir_light_source.png");
+
+					DirLight *light = new DirLight();
+					light->addChild(std::move(icon));
+					addNewNode(node, light);
+				}
 				if (ImGui::MenuItem("Camera")) addNewNode(node, new Camera());
 
 				ImGui::EndMenu();

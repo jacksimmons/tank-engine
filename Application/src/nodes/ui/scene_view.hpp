@@ -23,6 +23,7 @@ namespace Tank::Editor
 		GLenum m_cullFaceMode;
 		GLenum m_frontFaceMode;
 		GLenum m_depthFuncComparisonMode;
+		GLenum m_blendFuncScaleFactors;
 
 		std::unique_ptr<Framebuffer> m_fb;
 		KeyInput *m_keyInput;
@@ -50,5 +51,6 @@ namespace Tank::Editor
 		void cycleCullFaceMode();
 		void cycleFrontFaceMode();
 		void cycleDepthFuncComparisonMode();
+		void cycleBlendFuncScaleFactors();
 	};
 }

@@ -60,7 +60,7 @@ namespace Tank
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		// Textures
-		float borderColour[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+		float borderColour[] = { 0.0f, 1.0f, 0.0f, 1.0f };
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColour);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

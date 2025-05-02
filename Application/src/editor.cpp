@@ -216,6 +216,7 @@ namespace Tank::Editor
 				GLFW_KEY_F2,
 				GLFW_KEY_F3,
 				GLFW_KEY_F4,
+				GLFW_KEY_F5,
 
 				GLFW_KEY_W,
 				GLFW_KEY_A,
