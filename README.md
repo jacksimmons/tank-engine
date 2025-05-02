@@ -4,21 +4,25 @@
 # Description
 A C++ graphics rendering application using OpenGL and the GUI framework "dear ImGUI".
 
-# Key features
+# Roadmap
+## UI/Editor
 - [x] Node-tree scene system, with the Scene as the root  
 - [x] Hierarchy window, displaying and allowing interaction with the Node tree  
 - [x] Inspector window, allowing modification of a Node or Node subclass  
 - [x] Scene View window, displaying the rendered scene in a container  
-- [ ] Console window, displaying debugging information  
-- [x] Script class, with a pure virtual update method  
-- [ ] Editor and Play mode distinction for Scripts
-- [ ] Project system for saving and loading progress  
-- [x] Skybox (cube-map texture rendered behind everything else)  
-- [x] Assimp model loading  
+- [x] Console window, displaying debugging information (WIP)
+- [x] Highlight selected Nodes using stencil buffer
 - [ ] Gizmos for Lights and Cameras to show their positions, with RGBA sprites  
-
-# Backlog
-- [ ] C# scripting  
+- [ ] Project system for saving and loading progress  
+## Scripting  
+- [x] Script class, with a pure virtual update method
+- [ ] Editor and Play mode distinction for Scripts
+## Physics
+- [x] Gravity physics
+## Models
+- [x] Assimp model loading
+## Scene Elements
+- [x] Skybox (cube-map texture rendered behind everything else)  
 
 # Use
 This repository uses submodules, so please use --recurse-submodules when git-cloning.  
