@@ -14,7 +14,11 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - [ ] Editor and Play mode distinction for Scripts
 - [ ] Project system for saving and loading progress  
 - [x] Skybox (cube-map texture rendered behind everything else)  
-- [x] Assimp model loading    
+- [x] Assimp model loading  
+- [ ] Gizmos for Lights and Cameras to show their positions, with RGBA sprites  
+
+# Backlog
+- [ ] C# scripting  
 
 # Use
 This repository uses submodules, so please use --recurse-submodules when git-cloning.  
