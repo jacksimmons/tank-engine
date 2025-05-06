@@ -35,7 +35,7 @@ namespace Tank
 
 
 	Light::Light(const std::string &name, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec) : Node(name),
-		m_ambient(amb), m_diffuse(diff), m_specular(spec), m_index(0)
+		m_ambient(amb), m_diffuse(diff), m_specular(spec)
 	{
 		m_scene = Scene::getActiveScene();
 	}
@@ -66,6 +66,21 @@ namespace Tank
 	}
 
 
+	std::string Light::getLightStruct()
+	{
+		auto lights = m_scene->getLights();
+		auto it = std::find(lights.begin(), lights.end(), this);
+		if (it != lights.end())
+		{
+			return m_lightArrayName + "[" + std::to_string(it - lights.begin()) + "]";
+		}
+		else
+		{
+			TE_CORE_ERROR("Failed to get light struct.");
+		}
+	}
+
+
 	json DirLight::serialise(DirLight *light)
 	{
 		json serialised = Light::serialise(light);
@@ -92,19 +107,18 @@ namespace Tank
 		m_type = "DirLight";
 		m_lightArrayName = "dirLights";
 
-		if (m_scene->getNumDirLights() >= 64)
+		if (m_scene->getNumLights(LightType::Directional) >= 64)
 		{
 			TE_CORE_WARN("Reached limit of DirLight lights; this light will not apply to shaders.");
 			return;
 		}
 
-		m_index = m_scene->addLight(this);
+		m_scene->addLight(this);
 	}
 
 
 	DirLight::~DirLight()
 	{
-		TE_CORE_INFO("Dir destructor called.");
 	}
 
 
@@ -123,19 +137,18 @@ namespace Tank
 		m_type = "PointLight";
 		m_lightArrayName = "pointLights";
 
-		if (m_scene->getNumPointLights() >= 64)
+		if (m_scene->getNumLights(LightType::Point) >= 64)
 		{
 			TE_CORE_WARN("Reached limit of PointLight lights; this light will not apply to shaders.");
 			return;
 		}
 
-		m_index = m_scene->addLight(this);
+		m_scene->addLight(this);
 	}
 
 
 	PointLight::~PointLight()
 	{
-		TE_CORE_INFO("Pt Destructor called");
 	}
 
 

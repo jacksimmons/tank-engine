@@ -49,7 +49,8 @@ namespace Tank
 
 	unsigned Scene::addLight(Light *light)
 	{
-		if (std::find(m_lights.begin(), m_lights.end(), light) != m_lights.end())
+		auto it = std::find(m_lights.begin(), m_lights.end(), light);
+		if (it != m_lights.end())
 		{
 			TE_CORE_WARN("Light has already been added to this scene.");
 		}
@@ -73,6 +74,39 @@ namespace Tank
 		{
 			TE_CORE_WARN("Light was not found in this scene.");
 		}
+	}
+
+
+	unsigned Scene::getNumLights(LightType type) const
+	{
+		unsigned cnt = 0;
+
+		switch (type)
+		{
+		case LightType::Any:
+			cnt = m_lights.size();
+			break;
+		case LightType::Point:
+			for (Light *light : m_lights)
+			{
+				if (dynamic_cast<PointLight*>(light))
+				{
+					cnt++;
+				}
+			}
+			break;
+		case LightType::Directional:
+			for (Light *light : m_lights)
+			{
+				if (dynamic_cast<DirLight*>(light))
+				{
+					cnt++;
+				}
+			}
+			break;
+		}
+
+		return cnt;
 	}
 
 

@@ -50,8 +50,8 @@ namespace Tank
 		{
 			light->updateShader(m_shader.get());
 		}
-		m_shader->setInt("num_dir_lights", scene->getNumDirLights());
-		m_shader->setInt("num_point_lights", scene->getNumPointLights());
+		m_shader->setInt("num_dir_lights", scene->getNumLights(LightType::Directional));
+		m_shader->setInt("num_point_lights", scene->getNumLights(LightType::Point));
 
 		for (unsigned i = 0; i < m_meshes.size(); i++)
 		{

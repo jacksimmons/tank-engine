@@ -8,6 +8,7 @@ namespace Tank
 	class Camera;
 	class Light;
 	class Shader;
+	enum class LightType;
 
 	namespace Editor { class _Hierarchy; }
 
@@ -54,8 +55,7 @@ namespace Tank
 		void removeLight(Light *);
 
 		std::vector<Light *> getLights() const { return m_lights; }
-		unsigned getNumDirLights() const { return m_numDirLights; }
-		unsigned getNumPointLights() const { return m_numPointLights; }
+		unsigned getNumLights(LightType type) const;
 		
 		virtual void update() override;
 	};

@@ -192,15 +192,7 @@ namespace Tank
 		m_shader->setMat4("VM", VM);
 		m_shader->setMat4("V", V);
 		m_shader->setMat4("VM_it", glm::inverseTranspose(VM));
-
-		auto scene = Scene::getActiveScene();
-		auto activeLights = scene->getLights();
-		for (Light *light : activeLights)
-		{
-			light->updateShader(m_shader.get());
-		}
-		m_shader->setInt("num_dir_lights", scene->getNumDirLights());
-		m_shader->setInt("num_point_lights", scene->getNumPointLights());
+		processLights();
 
 		for (unsigned i = 0; i < m_meshes.size(); i++)
 		{
@@ -208,6 +200,20 @@ namespace Tank
 		}
 		m_shader->unuse();
 		IOutlined::postdraw();
+	}
+
+
+	void Model::processLights()
+	{
+		auto scene = Scene::getActiveScene();
+		auto activeLights = scene->getLights();
+		for (Light *light : activeLights)
+		{
+			light->updateShader(m_shader.get());
+		}
+
+		m_shader->setInt("num_dir_lights", scene->getNumLights(LightType::Directional));
+		m_shader->setInt("num_point_lights", scene->getNumLights(LightType::Point));
 	}
 
 

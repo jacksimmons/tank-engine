@@ -7,6 +7,14 @@ namespace Tank
 	class Model;
 	class Shader;
 	class Scene;
+
+	enum class LightType
+	{
+		Any,
+		Point,
+		Directional
+	};
+
 	class Light : public Node
 	{
 	public:
@@ -20,7 +28,6 @@ namespace Tank
 		glm::vec3 m_ambient;
 		glm::vec3 m_diffuse;
 		glm::vec3 m_specular;
-		int m_index;
 		// Name of the array in GLSL containing all light structs.
 		std::string m_lightArrayName;
 		Light(
@@ -34,7 +41,7 @@ namespace Tank
 		virtual ~Light();
 
 		virtual void updateShader(Shader *);
-		std::string getLightStruct() { return m_lightArrayName + "[" + std::to_string(m_index) + "]"; };
+		std::string getLightStruct();
 
 		void setAmbient(glm::vec3 ambient) { m_ambient = ambient; }
 		glm::vec3 getAmbient() const { return m_ambient; }
@@ -57,10 +64,11 @@ namespace Tank
 		glm::vec3 m_direction;
 	public:
 		DirLight(const std::string &name = "DirLight",
-			glm::vec3 dir = { 0,0,1 },
-			glm::vec3 amb = { 1,1,1 },
-			glm::vec3 diff = { 1,1,1 },
-			glm::vec3 spec = { 1,1,1 });
+			glm::vec3 dir = { 0.0f, -1.0f, 0.0f },
+			glm::vec3 amb = { 0.02f, 0.02f, 0.02f },
+			glm::vec3 diff = { 0.2f, 0.2f, 0.2f },
+			glm::vec3 spec = { 0.1f, 0.1f, 0.1f }
+		);
 		~DirLight();
 
 		void updateShader(Shader *) override;
