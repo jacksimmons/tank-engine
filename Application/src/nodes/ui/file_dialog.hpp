@@ -34,6 +34,8 @@ namespace Tank::Editor
 		/// The directory the user starts at (a subdirectory of m_rootDirectory)
 		/// </summary>
 		fs::path m_startDirectory;
+
+		std::string m_searchTerm;
 		
 		_FileDialogTarget m_target;
 		_FileDialogCallback m_onTargetSelected;
@@ -46,6 +48,7 @@ namespace Tank::Editor
 
 		std::vector<_DirectoryResult> m_currentSubdirectories;
 		std::vector<_FileResult> m_currentDirectoryFiles;
+		std::vector<_FileResult> m_filesMatchingSearchTerm;
 
 		_FileDialog(const std::string &name,
 			const fs::path &rootDirectory,
@@ -61,7 +64,7 @@ namespace Tank::Editor
 		void drawTargetView();
 		void drawDirectoryFiles();
 		void drawSubdirectories();
-		void drawTargetSelectBar();
+		void drawTargetBar();
 	protected:
 		virtual void drawPanel() override;
 	public:

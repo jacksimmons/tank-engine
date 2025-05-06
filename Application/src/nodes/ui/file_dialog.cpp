@@ -15,7 +15,7 @@ namespace Tank::Editor
 		_FileDialogCallback onTargetSelected
 	) : _Window(name),
 		m_rootDirectory(rootDirectory), m_startDirectory(startDirectory), m_currentDirectory(startDirectory), m_target(target),
-		m_onTargetSelected(onTargetSelected)
+		m_onTargetSelected(onTargetSelected), m_searchTerm("")
 	{
 		// If current directory doesn't contain the root directory
 		if (m_startDirectory.string().find(m_rootDirectory.string()) == std::string::npos)
@@ -34,7 +34,7 @@ namespace Tank::Editor
 		drawTargetView();
 		ImGui::EndChild();
 
-		drawTargetSelectBar();
+		drawTargetBar();
 	}
 
 
@@ -86,6 +86,7 @@ namespace Tank::Editor
 	{
 		m_currentSubdirectories.clear();
 		m_currentDirectoryFiles.clear();
+		m_filesMatchingSearchTerm.clear();
 		
 		std::filesystem::directory_iterator dirIter;
 
@@ -109,6 +110,9 @@ namespace Tank::Editor
 				_FileResult file;
 				file.path = path;
 				file.name = path.filename().string();
+				// Check if its name contains the search term, if it doesn't then skip
+				if (m_searchTerm.length() > 0 && file.name.find(m_searchTerm) == std::string::npos) continue;
+
 				file.perms = fs::status(path).permissions();
 
 				m_currentDirectoryFiles.push_back(file);
@@ -179,12 +183,19 @@ namespace Tank::Editor
 	}
 
 
-	void _FileDialog::drawTargetSelectBar()
+	void _FileDialog::drawTargetBar()
 	{
-		ImGui::Text(m_targetSelected.string().c_str());
-		ImGui::SameLine();
+		std::string inputFieldHint;
+		if (!m_targetSelected.empty()) inputFieldHint = m_targetSelected.string();
+		else inputFieldHint = "Enter name...";
+		Widget::textInput("##FILE_DIALOG_SEARCH_TERM", inputFieldHint.c_str(), [this](const std::string &modified)
+		{
+			m_searchTerm = modified;
+			m_targetSelected = m_currentDirectory / m_searchTerm;
+		});
 
 		// If a target is selected, show "Select" button which will close the dialog when pressed.
+		ImGui::SameLine();
 		if (!m_targetSelected.empty() && ImGui::SmallButton("Select##FILE_DIALOG_TARGET_SELECT"))
 		{
 			m_onTargetSelected(m_targetSelected);
