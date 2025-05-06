@@ -208,14 +208,14 @@ namespace Tank::Editor
 
 		// Lights
 		{
-			std::string name = "DirLight";
-			auto light = std::make_unique<Tank::DirLight>(name,
-				glm::vec3{ 0.0f, -1.0f, 0.0f },
-				glm::vec3{ 0.02f, 0.02f, 0.02f },
-				glm::vec3{ 0.2f, 0.2f, 0.2f },
-				glm::vec3{ 0.1f, 0.1f, 0.1f }
-			);
-			m_scene->addChild(std::move(light));
+			//std::string name = "DirLight";
+			//auto light = std::make_unique<Tank::DirLight>(name,
+			//	glm::vec3{ 0.0f, -1.0f, 0.0f },
+			//	glm::vec3{ 0.02f, 0.02f, 0.02f },
+			//	glm::vec3{ 0.2f, 0.2f, 0.2f },
+			//	glm::vec3{ 0.1f, 0.1f, 0.1f }
+			//);
+			//m_scene->addChild(std::move(light));
 		}
 	}
 

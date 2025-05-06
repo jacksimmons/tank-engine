@@ -35,8 +35,6 @@ namespace Tank
 	private:
 		Camera *m_activeCamera;
 		std::vector<Light *> m_lights;
-		unsigned m_numDirLights = 0;
-		unsigned m_numPointLights = 0;
 
 		void onNodeDeleted(Node *deleted) noexcept;
 	public:

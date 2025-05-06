@@ -55,9 +55,6 @@ namespace Tank
 			TE_CORE_WARN("Light has already been added to this scene.");
 		}
 
-		if (dynamic_cast<DirLight*>(light)) m_numDirLights++;
-		if (dynamic_cast<PointLight*>(light)) m_numPointLights++;
-		
 		m_lights.push_back(light);
 		return m_lights.size() - 1;
 	}
@@ -86,22 +83,10 @@ namespace Tank
 		case LightType::Any:
 			cnt = m_lights.size();
 			break;
-		case LightType::Point:
+		default:
 			for (Light *light : m_lights)
 			{
-				if (dynamic_cast<PointLight*>(light))
-				{
-					cnt++;
-				}
-			}
-			break;
-		case LightType::Directional:
-			for (Light *light : m_lights)
-			{
-				if (dynamic_cast<DirLight*>(light))
-				{
-					cnt++;
-				}
+				if (light->getType() == type) cnt++;
 			}
 			break;
 		}

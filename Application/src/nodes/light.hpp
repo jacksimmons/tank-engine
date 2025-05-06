@@ -51,6 +51,8 @@ namespace Tank
 		
 		void setSpecular(glm::vec3 specular) { m_specular = specular; }
 		glm::vec3 getSpecular() const { return m_specular; }
+
+		LightType getType();
 	};
 
 
@@ -82,9 +84,9 @@ namespace Tank
 	{
 	public:
 		PointLight(const std::string &name = "PointLight",
-			glm::vec3 amb = { 1,1,1 },
-			glm::vec3 diff = { 1,1,1 },
-			glm::vec3 spec = { 1,1,1 });
+			glm::vec3 amb = { 0.1f, 0.1f, 0.1f },
+			glm::vec3 diff = { 0.1f, 0.1f, 0.1f },
+			glm::vec3 spec = { 0.1f, 0.1f, 0.1f });
 		~PointLight();
 
 		void updateShader(Shader *) override;

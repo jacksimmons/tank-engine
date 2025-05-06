@@ -72,12 +72,27 @@ namespace Tank
 		auto it = std::find(lights.begin(), lights.end(), this);
 		if (it != lights.end())
 		{
-			return m_lightArrayName + "[" + std::to_string(it - lights.begin()) + "]";
+			return m_lightArrayName + "[" + std::to_string(m_scene->getNumLights(getType())-1) + "]";
 		}
 		else
 		{
 			TE_CORE_ERROR("Failed to get light struct.");
 		}
+	}
+
+
+	LightType Light::getType()
+	{
+		if (dynamic_cast<PointLight*>(this))
+		{
+			return LightType::Point;
+		}
+		else if (dynamic_cast<DirLight*>(this))
+		{
+			return LightType::Directional;
+		}
+
+		return LightType::Any;
 	}
 
 
