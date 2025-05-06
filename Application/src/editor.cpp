@@ -60,12 +60,12 @@ namespace Tank::Editor
 			| ImGuiWindowFlags_NoBringToFrontOnFocus;
 		m_settings->windowSize = glm::ivec2(800, 600);
 
+		// Initialise UI
+		m_initUI = std::make_unique<Node>("Init");
+
 		initGL();
 		initImGui();
 		ScriptEngine::init();
-
-		m_system = std::make_unique<::Tank::Node>("Editor");
-		m_keyInput = nullptr;
 	}
 
 
@@ -149,20 +149,11 @@ namespace Tank::Editor
 	}
 
 
-	void EditorApp::preSceneSetup()
+	void EditorApp::loadScene(std::unique_ptr<Scene> scene)
 	{
-		m_system->removeChild(m_system->getChild("Hierarchy"));
-		m_system->removeChild(m_system->getChild("Inspector"));
-		m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));
-		m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
-	}
-
-
-	void EditorApp::loadScene(std::unique_ptr<::Tank::Scene> scene)
-	{
-		m_scene.reset();
-		m_scene = std::move(scene);
-		Scene::setActiveScene(m_scene.get());
+		m_system.reset();
+		m_system = std::make_unique<Node>("Editor");
+		m_system->addChild(std::move(scene));
 	}
 
 
@@ -186,23 +177,24 @@ namespace Tank::Editor
 				sources.vertex.location = "shader.vert";
 				sources.fragment.location = "shader.frag";
 
-				auto object = std::unique_ptr<Tank::Model>(new Model("Doom", sources, "doom/doom_E1M1.obj"));
+				auto object = std::unique_ptr<Tank::Model>(new Model("Doom", sources, std::string(ROOT_DIRECTORY) + "models/doom/doom_E1M1.obj"));
 				object->getTransform()->setLocalTranslation({ 0, 0, 0 });
 				scene->addChild(std::move(object));
 
 				auto backpackPhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
-				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", sources, "backpack/backpack.obj"));
+				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", sources, std::string(ROOT_DIRECTORY) + "models/backpack/backpack.obj"));
 				backpack->getTransform()->setLocalScale({ 100, 100, 100 });
 				backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
 				backpackPhysics->addChild(std::move(backpack));
 				scene->addChild(std::move(backpackPhysics));
 
 				auto spritePhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
-				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", sources, std::string(ROOT_DIRECTORY) + "/textures/awesomeface.png"));
+				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", sources, std::string(ROOT_DIRECTORY) + "textures/awesomeface.png"));
 				spritePhysics->addChild(std::move(sprite));
 				scene->addChild(std::move(spritePhysics));
 			}
 
+			Scene::setActiveScene(scene.get());
 			loadScene(std::move(scene));
 		}
 
@@ -249,6 +241,8 @@ namespace Tank::Editor
 
 		m_system->addChild(std::unique_ptr<_SceneView>(new _SceneView("SceneView", m_settings->windowSize, m_settings->windowSize, m_keyInput.get())));
 		m_system->addChild(std::unique_ptr<_Console>(new _Console("Console")));
+		m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));
+		m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
 	}
 
 
@@ -286,8 +280,17 @@ namespace Tank::Editor
 				m_keyInput->update();
 			}
 
+			// Draw init UI
+			if (m_initUI)
+			{
+				m_initUI->update();
+			}
+
 			// Draw all system UI (SceneView/Framebuffer draws the scene)
-			if (m_system) m_system->update();
+			if (m_system)
+			{
+				m_system->update();
+			}
 
 			ImGui::End();
 			ImGui::Render();
@@ -330,7 +333,6 @@ namespace Tank::Editor
 
 		if (newProject)
 		{
-			preSceneSetup();
 			loadDemoScene();
 			postSceneSetup();
 		}
@@ -352,18 +354,17 @@ namespace Tank::Editor
 							return;
 						}
 
-						preSceneSetup();
 						loadScene(std::move(scene));
 						postSceneSetup();
-						m_system->removeChild(m_system->getChild("Open Scene"));
+						m_initUI->removeChild(m_initUI->getChild("Open Scene"));
 					}
 				)
 			);
-			m_system->addChild(std::move(fileDialog));
+			m_initUI->addChild(std::move(fileDialog));
 		}
-		if (saveProject && m_scene)
+		if (saveProject && Scene::getActiveScene())
 		{
-			Tank::Serialisation::saveScene(m_scene.get(), "test.scene");
+			Tank::Serialisation::saveScene(Scene::getActiveScene(), "test.scene");
 		}
 	}
 }

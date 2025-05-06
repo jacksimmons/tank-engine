@@ -26,12 +26,12 @@ namespace Tank
 
 			GLFWwindow *m_window;
 
+			std::unique_ptr<Node> m_initUI;
 			/// <summary>
 			/// Root node for system UI (Hierarchy, Inspector, etc.)
 			/// </summary>
 			std::unique_ptr<Node> m_system;
 			std::unique_ptr<KeyInput> m_keyInput;
-			std::unique_ptr<Scene> m_scene;
 
 			std::unique_ptr<WindowSettings> m_settings;
 		public:
@@ -44,7 +44,6 @@ namespace Tank
 			~EditorApp();
 			void initGL();
 			void initImGui();
-			void preSceneSetup();
 			void loadScene(std::unique_ptr<Scene> scene);
 			void loadDemoScene();
 			void postSceneSetup();

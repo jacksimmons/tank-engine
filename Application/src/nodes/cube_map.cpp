@@ -13,7 +13,8 @@ namespace Tank
 	json CubeMap::serialise(CubeMap *cubeMap)
 	{
 		json serialised = Node::serialise(cubeMap);
-
+		serialised["cubeMap"] = cubeMap->m_texturePaths;
+		serialised["shader"] = Shader::serialise(*(cubeMap->m_shader));
 		return serialised;
 	}
 
@@ -21,7 +22,10 @@ namespace Tank
 	void CubeMap::deserialise(const json &serialised, CubeMap **targetPtr)
 	{
 		ShaderSources sources;
-		if (!(*targetPtr)) *targetPtr = new CubeMap(serialised["name"], sources);
+		sources.vertex.location = std::string{ serialised["shader"]["vert"] };
+		sources.fragment.location = std::string{ serialised["shader"]["frag"] };
+		sources.geometry.location = std::string{ serialised["shader"]["geom"] };
+		if (!(*targetPtr)) *targetPtr = new CubeMap(serialised["name"], sources, serialised["cubeMap"]);
 
 		Node *target = *targetPtr;
 		Node::deserialise(serialised, &target);

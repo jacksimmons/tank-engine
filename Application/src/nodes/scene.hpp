@@ -24,12 +24,14 @@ namespace Tank
 	private:
 		static Scene *s_activeScene;
 	public:
-		static Scene *getActiveScene() { return s_activeScene; }
-
-		/// <summary>
-		/// Set the active scene.
-		/// </summary>
-		static void setActiveScene(Scene *scene) { s_activeScene = scene; }
+		static Scene *getActiveScene()
+		{ 
+			return s_activeScene;
+		}
+		static void setActiveScene(Scene *scene)
+		{
+			s_activeScene = scene;
+		}
 
 		// Instance
 	private:

@@ -12,12 +12,9 @@ namespace Tank
 		}
 
 
-		bool readLines(const std::filesystem::path &fp, std::string &outStr)
+		ReadResult readLines(const std::filesystem::path &fp, std::string &outStr)
 		{
-			if (!std::filesystem::exists(fp))
-			{
-				return false;
-			}
+			if (!File::exists(fp)) return ReadResult::NoFile;
 
 			try
 			{
@@ -30,11 +27,11 @@ namespace Tank
 					contents.push_back('\n');
 				}
 				outStr = contents;
-				return true;
+				return ReadResult::Success;
 			}
 			catch (std::exception const)
 			{
-				return false;
+				return ReadResult::Error;
 			}
 		}
 

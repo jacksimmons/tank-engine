@@ -4,6 +4,28 @@
 
 namespace Tank
 {
+	json Shader::serialise(const Shader &shader)
+	{
+		json serialised;
+		serialised["id"] = shader.m_id;
+		serialised["vert"] = shader.m_sources.vertex.location;
+		serialised["frag"] = shader.m_sources.fragment.location;
+		serialised["geom"] = shader.m_sources.geometry.location;
+		return serialised;
+	}
+
+
+	Shader *Shader::deserialise(const json &serialised)
+	{
+		ShaderSources sources;
+		sources.vertex.location = std::string{ serialised["vert"] };
+		sources.fragment.location = std::string { serialised["frag"] };
+		sources.geometry.location = std::string{ serialised["geom"] };
+
+		return new Shader(serialised["id"], sources);
+	}
+
+
 	Shader::Shader(unsigned id, const ShaderSources &sources) : m_id(id), m_sources(sources)
 	{
 
@@ -58,7 +80,7 @@ namespace Tank
 
 	bool Shader::readShaderFile(const fs::path &shaderPath, std::string &shaderContents, const std::string &shaderType)
 	{
-		if (!File::readLines(std::filesystem::path(ROOT_DIRECTORY) / "shaders" / shaderPath, shaderContents))
+		if (File::readLines(std::filesystem::path(ROOT_DIRECTORY) / "shaders" / shaderPath, shaderContents) != File::ReadResult::Success)
 		{
 			std::string errMsg = "Failed to read " + shaderType + " shader: " + std::string(ROOT_DIRECTORY) +
 				std::string("/shaders/") + shaderPath.string();

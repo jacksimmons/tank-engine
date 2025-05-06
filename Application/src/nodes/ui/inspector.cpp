@@ -242,7 +242,7 @@ namespace Tank::Editor
 		);
 
 		std::string shaderContents;
-		if (File::readLines("shaders" / source.location, shaderContents))
+		if (File::readLines("shaders" / source.location, shaderContents) == File::ReadResult::Success)
 		{
 			// https://github.com/ocornut/imgui/issues/2429
 			ImGui::TextUnformatted(shaderContents.c_str());

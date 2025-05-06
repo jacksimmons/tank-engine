@@ -17,7 +17,7 @@ namespace Tank
 		Scene* loadScene(const std::filesystem::path &scenePath)
 		{
 			std::string sceneFile;
-			if (!File::readLines(scenePath, sceneFile))
+			if (File::readLines(scenePath, sceneFile) != File::ReadResult::Success)
 			{
 				TE_CORE_ERROR(std::format("Failed to deserialise from file {}", scenePath.string()));
 				return nullptr;
@@ -38,9 +38,10 @@ namespace Tank
 		void saveScene(Scene *scene, const std::filesystem::path &scenePath)
 		{
 			std::string sceneFile;
-			if (!File::readLines(scenePath, sceneFile))
+			if (File::readLines(scenePath, sceneFile) != File::ReadResult::Success)
 			{
 				TE_CORE_ERROR(std::format("Failed to serialise to file {}", scenePath.string()));
+				TE_CORE_INFO(File::readLines(scenePath, sceneFile) == File::ReadResult::NoFile);
 			}
 
 			// Write with pretty print (indent=4)

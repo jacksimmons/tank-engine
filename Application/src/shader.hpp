@@ -16,6 +16,9 @@ namespace Tank
 	/// </summary>
 	class Shader
 	{
+	public:
+		static json serialise(const Shader &shader);
+		static Shader *deserialise(const json &serialised);
 	private:
 		unsigned m_id;
 		ShaderSources m_sources;

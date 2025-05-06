@@ -22,8 +22,9 @@ namespace Tank
 {
 	json Model::serialise(Model *model)
 	{
-		json serialised = Node::serialise(model);
+		json serialised = IShaderContainer::serialise(model);
 		serialised["modelPath"] = model->m_modelDirectory + "/" + model->m_modelFile;
+		serialised["shader"] = Shader::serialise(*(model->m_shader));
 		return serialised;
 	}
 
@@ -31,9 +32,13 @@ namespace Tank
 	void Model::deserialise(const json &serialised, Model **targetPtr)
 	{
 		ShaderSources sources;
-		if (!(*targetPtr)) *targetPtr = new Model(serialised["name"], sources, serialised["modelPath"]);
-		Node *target = *targetPtr;
-		Node::deserialise(serialised, &target);
+		sources.vertex.location = std::string{ serialised["shader"]["vert"] };
+		sources.fragment.location = std::string{ serialised["shader"]["frag"] };
+		sources.geometry.location = std::string{ serialised["shader"]["geom"] };
+		if (!(*targetPtr)) *targetPtr = new Model("Model", sources, serialised["modelPath"]);
+
+		Node *node = *targetPtr;
+		Node::deserialise(serialised, &node);
 	}
 
 
@@ -41,13 +46,12 @@ namespace Tank
 		: IMeshContainer(name, sources)
 	{
 		m_type = "Model";
-		std::string fullModelPath = (std::string(ROOT_DIRECTORY) + "/Models/" + modelPath);
-		size_t indexOfLastSlash = fullModelPath.find_last_of("/");
-		m_modelDirectory = fullModelPath.substr(0, indexOfLastSlash);
-		m_modelFile = fullModelPath.substr(indexOfLastSlash + 1, (fullModelPath.length() - indexOfLastSlash) + 1);
+		size_t indexOfLastSlash = modelPath.find_last_of("/");
+		m_modelDirectory = modelPath.substr(0, indexOfLastSlash);
+		m_modelFile = modelPath.substr(indexOfLastSlash + 1, (modelPath.length() - indexOfLastSlash) + 1);
 
 		Assimp::Importer importer;
-		const aiScene *scene = importer.ReadFile(fullModelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene *scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{

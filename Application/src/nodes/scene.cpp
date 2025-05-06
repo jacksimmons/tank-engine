@@ -21,7 +21,8 @@ namespace Tank
 
 		Scene *scene = *targetPtr;
 		if (serialised["isActiveScene"]) Scene::setActiveScene(scene);
-
+		scene->setActiveCamera(dynamic_cast<Camera*>(scene->childFromTree(serialised["activeCam"])));
+		
 		Node *target = *targetPtr;
 		Node::deserialise(serialised, &target);
 	}
