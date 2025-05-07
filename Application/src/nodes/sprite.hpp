@@ -9,6 +9,11 @@ namespace Tank
 	class Sprite : public IMeshContainer
 	{
 	public:
+		virtual json serialise() override;
+		static void deserialise(const json &serialised, Sprite **targetPtr);
+	private:
+		fs::path m_spritePath;
+	public:
 		Sprite(const std::string &name,
 			ShaderSources &sources,
 			const fs::path &spritePath

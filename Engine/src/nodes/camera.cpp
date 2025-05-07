@@ -7,21 +7,21 @@
 
 namespace Tank
 {
-	json Camera::serialise(Camera *cam)
+	json Camera::serialise()
 	{
-		json serialised = Node::serialise(cam);
+		json serialised = Node::serialise();
 
-		serialised["projection"] = mat4::serialise(cam->m_P);
-		serialised["view"] = mat4::serialise(cam->m_V);
-		serialised["rotation"] = mat4::serialise(cam->m_R);
-		serialised["translation"] = mat4::serialise(cam->m_T);
+		serialised["projection"] = mat4::serialise(m_P);
+		serialised["view"] = mat4::serialise(m_V);
+		serialised["rotation"] = mat4::serialise(m_R);
+		serialised["translation"] = mat4::serialise(m_T);
 
-		serialised["eye"] = vec3::serialise(cam->m_eye);
-		serialised["centre"] = vec3::serialise(cam->m_centre);
-		serialised["up"] = vec3::serialise(cam->m_up);
+		serialised["eye"] = vec3::serialise(m_eye);
+		serialised["centre"] = vec3::serialise(m_centre);
+		serialised["up"] = vec3::serialise(m_up);
 
-		serialised["panSpd"] = cam->m_panSpeed;
-		serialised["rotSpd"] = cam->m_rotSpeed;
+		serialised["panSpd"] = m_panSpeed;
+		serialised["rotSpd"] = m_rotSpeed;
 
 		return serialised;
 	}

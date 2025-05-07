@@ -10,11 +10,11 @@
 
 namespace Tank
 {
-	json CubeMap::serialise(CubeMap *cubeMap)
+	json CubeMap::serialise()
 	{
-		json serialised = Node::serialise(cubeMap);
-		serialised["cubeMap"] = cubeMap->m_texturePaths;
-		serialised["shader"] = Shader::serialise(*(cubeMap->m_shader));
+		json serialised = Node::serialise();
+		serialised["cubeMap"] = m_texturePaths;
+		serialised["shader"] = Shader::serialise(*(m_shader));
 		return serialised;
 	}
 

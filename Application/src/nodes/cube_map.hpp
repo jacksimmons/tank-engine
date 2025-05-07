@@ -13,7 +13,7 @@ namespace Tank
 	{
 		// Serialisation
 	public:
-		static json serialise(CubeMap *skybox);
+		virtual json serialise() override;
 		static void deserialise(const json &serialised, CubeMap **targetPtr);
 
 	protected:

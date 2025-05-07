@@ -3,14 +3,15 @@
 #include <glm/mat4x4.hpp>
 #include "core.hpp"
 #include "transform.hpp"
+#include "serialisation/serialisable.hpp"
 
 
 namespace Tank
 {
-	class TANK_API Node
+	class TANK_API Node : public ISerialisable
 	{
 	public:
-		static json serialise(Node *node);
+		virtual json serialise();
 		static void deserialise(const json &serialised, Node **targetPtr);
 
 	private:

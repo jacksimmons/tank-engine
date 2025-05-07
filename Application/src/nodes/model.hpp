@@ -18,7 +18,7 @@ namespace Tank
 	class Model : public IMeshContainer
 	{
 	public:
-		static json serialise(Model *model);
+		virtual json serialise() override;
 		static void deserialise(const json &serialised, Model **targetPtr);
 
 	private:

@@ -7,25 +7,30 @@
 #include "nodes/light.hpp"
 #include "nodes/model.hpp"
 #include "nodes/scene.hpp"
+#include "nodes/sprite.hpp"
 
 
 namespace Tank
 {
 	namespace Serialisation
 	{
+		/// <summary>
+		/// Serialises generic Node into json.
+		/// </summary>
 		json serialise(Node *deserialised)
 		{
 			json serialised;
 			const std::string &type = ((Node*)deserialised)->getType();
 
-			if (type == "Node") serialised = Node::serialise((Node*)deserialised);
-			else if (type == "Camera") serialised = Camera::serialise((Camera*)deserialised);
-			else if (type == "CubeMap") serialised = CubeMap::serialise((CubeMap*)deserialised);
-			else if (type == "DirLight") serialised = DirLight::serialise((DirLight*)deserialised);
-			else if (type == "PointLight") serialised = PointLight::serialise((Light*)deserialised);
-			else if (type == "Model") serialised = Model::serialise((Model*)deserialised);
-			else if (type == "Scene") serialised = Scene::serialise((Scene*)deserialised);
-			else serialised = Node::serialise((Node*)deserialised);
+			if (type == "Node") serialised = ((Node*)deserialised)->serialise();
+			else if (type == "Camera") serialised = ((Camera*)deserialised)->serialise();
+			else if (type == "CubeMap") serialised = ((CubeMap*)deserialised)->serialise();
+			else if (type == "DirLight") serialised = ((DirLight*)deserialised)->serialise();
+			else if (type == "PointLight") serialised = ((Light*)deserialised)->serialise();
+			else if (type == "Model") serialised = ((Model*)deserialised)->serialise();
+			else if (type == "Scene") serialised = ((Scene*)deserialised)->serialise();
+			else if (type == "Sprite") serialised = ((Sprite*)deserialised)->serialise();
+			else TE_CORE_CRITICAL("Unsupported type attempted to be serialised: " + type);
 
 			std::vector<json> children;
 			for (auto &child : *(Node*)deserialised)
@@ -38,6 +43,10 @@ namespace Tank
 		}
 
 
+		/// <summary>
+		/// Deserialises generic Node json into a Node.
+		/// Allocations: +Node (return value).
+		/// </summary>
 		Node* deserialise(const json &serialised)
 		{
 			// Pointer to a Node* or subclass of. 
@@ -52,7 +61,8 @@ namespace Tank
 			else if (type == "PointLight") PointLight::deserialise(serialised, (Light**)&node);
 			else if (type == "Model") Model::deserialise(serialised, (Model**)&node);
 			else if (type == "Scene") Scene::deserialise(serialised, (Scene**)&node);
-			else Node::deserialise(serialised, &node);
+			else if (type == "Sprite") Sprite::deserialise(serialised, (Sprite**)&node);
+			else TE_CORE_CRITICAL("Unsupported type attempted to be deserialised: " + type);
 
 			for (const json &child : serialised["children"].get<std::vector<json>>())
 			{

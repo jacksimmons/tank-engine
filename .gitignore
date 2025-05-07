@@ -28,3 +28,6 @@ CMakeUserPresets.json
 *.vcxproj.filters
 *.sln
 compileData.*
+
+# Engine data
+**/*.scene

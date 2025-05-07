@@ -10,12 +10,12 @@
 
 namespace Tank
 {
-	json Light::serialise(Light *light)
+	json Light::serialise()
 	{
-		json serialised = Node::serialise(light);
-		serialised["ambient"] = vec3::serialise(light->getAmbient());
-		serialised["diffuse"] = vec3::serialise(light->getDiffuse());
-		serialised["specular"] = vec3::serialise(light->getSpecular());
+		json serialised = Node::serialise();
+		serialised["ambient"] = vec3::serialise(getAmbient());
+		serialised["diffuse"] = vec3::serialise(getDiffuse());
+		serialised["specular"] = vec3::serialise(getSpecular());
 		return serialised;
 	}
 
@@ -96,10 +96,10 @@ namespace Tank
 	}
 
 
-	json DirLight::serialise(DirLight *light)
+	json DirLight::serialise()
 	{
-		json serialised = Light::serialise(light);
-		serialised["direction"] = vec3::serialise(light->getDirection());
+		json serialised = Light::serialise();
+		serialised["direction"] = vec3::serialise(getDirection());
 		return serialised;
 	}
 

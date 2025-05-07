@@ -20,11 +20,11 @@
 
 namespace Tank
 {
-	json Model::serialise(Model *model)
+	json Model::serialise()
 	{
-		json serialised = IShaderContainer::serialise(model);
-		serialised["modelPath"] = model->m_modelDirectory + "/" + model->m_modelFile;
-		serialised["shader"] = Shader::serialise(*(model->m_shader));
+		json serialised = Node::serialise();
+		serialised["modelPath"] = m_modelDirectory + "/" + m_modelFile;
+		serialised["shader"] = Shader::serialise(*(m_shader));
 		return serialised;
 	}
 

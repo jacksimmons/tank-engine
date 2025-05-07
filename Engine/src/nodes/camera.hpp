@@ -2,6 +2,7 @@
 
 #include <glm/gtx/quaternion.hpp>
 #include "nodes/node.hpp"
+#include "serialisation/serialisable.hpp"
 #include "transformation.hpp"
 
 
@@ -9,9 +10,8 @@ namespace Tank
 {
 	class TANK_API Camera : public Node
 	{
-		// Serialisation
 	public:
-		static json serialise(Camera *cam);
+		virtual json serialise() override;
 		static void deserialise(const json &serialised, Camera **targetPtr);
 
 	private:

@@ -96,14 +96,12 @@ namespace Tank::Editor
 		// If item (node) is hovered and right-clicked...
 		if (ImGui::BeginPopupContextItem())
 		{
-			Node *parent = node->getParent();
-
-			// Render Delete button iff node has a parent (is not root).
+			// Render Delete button iff node is not the scene root.
 			// If Delete is rendered and pressed, this whole statement is true.
-			if (parent && ImGui::MenuItem("Delete Node"))
+			Scene *activeScene = Scene::getActiveScene();
+			if (node != activeScene && ImGui::MenuItem("Delete Node"))
 			{
-				auto scene = Tank::Scene::getActiveScene();
-				scene->onNodeDeleted(node);
+				activeScene->onNodeDeleted(node);
 
 				// Handle graceful degradation before node removal.
 				inspector->onNodeDeleted(node);

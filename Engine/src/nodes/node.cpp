@@ -5,14 +5,14 @@
 
 namespace Tank
 {
-	json Node::serialise(Node *node)
+	json Node::serialise()
 	{
 		json serialised;
-		serialised["name"] = node->m_name;
-		serialised["type"] = node->m_type;
-		serialised["enabled"] = node->m_enabled;
-		serialised["visible"] = node->m_visible;
-		serialised["transform"] = Transform::serialise(node->m_transform.get());
+		serialised["name"] = m_name;
+		serialised["type"] = m_type;
+		serialised["enabled"] = m_enabled;
+		serialised["visible"] = m_visible;
+		serialised["transform"] = Transform::serialise(m_transform.get());
 		return serialised;
 	}
 

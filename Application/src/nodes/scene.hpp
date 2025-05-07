@@ -12,12 +12,12 @@ namespace Tank
 
 	namespace Editor { class _Hierarchy; }
 
-	class Scene : public Node
+	class Scene : public Node, private ISerialisable
 	{
 		// The Hierarchy may modify elements of the scene (lights, nodes).
 		friend class Editor::_Hierarchy;
 	public:
-		static json serialise(Scene *scene);
+		virtual json serialise();
 		static void deserialise(const json &serialised, Scene **targetPtr);
 
 		// Static

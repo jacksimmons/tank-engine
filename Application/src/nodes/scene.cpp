@@ -6,11 +6,11 @@
 
 namespace Tank
 {
-	json Scene::serialise(Scene *scene)
+	json Scene::serialise()
 	{
-		json serialised = Node::serialise(scene);
-		serialised["activeCam"] = scene->treeFromChild(scene->getActiveCamera());
-		serialised["isActiveScene"] = Scene::getActiveScene() == scene;
+		json serialised = Node::serialise();
+		serialised["activeCam"] = treeFromChild(getActiveCamera());
+		serialised["isActiveScene"] = Scene::getActiveScene() == this;
 		return serialised;
 	}
 

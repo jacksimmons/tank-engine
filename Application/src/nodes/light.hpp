@@ -18,7 +18,7 @@ namespace Tank
 	class Light : public Node
 	{
 	public:
-		static json serialise(Light *light);
+		virtual json serialise() override;
 		static void deserialise(const json &serialised, Light **targetPtr);
 
 	protected:
@@ -59,7 +59,7 @@ namespace Tank
 	class DirLight : public Light
 	{
 	public:
-		static json serialise(DirLight *light);
+		virtual json serialise() override;
 		static void deserialise(const json &serialised, DirLight **targetPtr);
 
 	private:
