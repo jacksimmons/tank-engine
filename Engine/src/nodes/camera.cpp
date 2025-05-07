@@ -11,7 +11,6 @@ namespace Tank
 	{
 		json serialised = Node::serialise();
 
-		serialised["projection"] = mat4::serialise(m_P);
 		serialised["view"] = mat4::serialise(m_V);
 		serialised["rotation"] = mat4::serialise(m_R);
 		serialised["translation"] = mat4::serialise(m_T);
@@ -23,6 +22,9 @@ namespace Tank
 		serialised["panSpd"] = m_panSpeed;
 		serialised["rotSpd"] = m_rotSpeed;
 
+		serialised["cullNear"] = m_cullNear;
+		serialised["cullFar"] = m_cullFar;
+
 		return serialised;
 	}
 
@@ -32,7 +34,6 @@ namespace Tank
 		if (!(*targetPtr)) *targetPtr = new Camera();
 
 		Camera *camera = *targetPtr;
-		camera->m_P = mat4::deserialise(serialised["projection"]);
 		camera->m_V = mat4::deserialise(serialised["view"]);
 		camera->m_R = mat4::deserialise(serialised["rotation"]);
 		camera->m_T = mat4::deserialise(serialised["translation"]);
@@ -44,6 +45,10 @@ namespace Tank
 		camera->m_panSpeed = serialised["panSpd"];
 		camera->m_rotSpeed = serialised["rotSpd"];
 
+		camera->m_cullNear = serialised["cullNear"];
+		camera->m_cullFar = serialised["cullFar"];
+		camera->updateProj();
+
 		Node *target = *targetPtr;
 		Node::deserialise(serialised, &target);
 	}
@@ -54,8 +59,9 @@ namespace Tank
 		m_type = "Camera";
 
 		// Create a perspective projection for this camera.
-		float camFar = 10000.0f;
-		m_P = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, camFar);
+		m_cullNear = 0.1f;
+		m_cullFar = 10000.0f;
+		updateProj();
 		m_V = glm::mat4(1.0f);
 		m_R = glm::mat4(1.0f);
 		m_T = glm::mat4(1.0f);
@@ -69,6 +75,7 @@ namespace Tank
 
 		m_freeLook = true;
 	}
+
 
 	void Camera::setPosition(glm::vec3 pos)
 	{

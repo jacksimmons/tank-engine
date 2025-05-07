@@ -296,6 +296,21 @@ namespace Tank::Editor
 		{
 			camera->setRotSpeed(rotSpd);
 		}
+
+		ImGui::TextColored(Colour::TITLE, "Culling Distance");
+		float cullNear = camera->getCullNear();
+		ImGui::Text("Near"); ImGui::SameLine();
+		if (ImGui::InputFloat("##Inspector_Camera_CullNear", &cullNear))
+		{
+			camera->setCullNear(cullNear);
+		}
+
+		float cullFar = camera->getCullFar();
+		ImGui::Text("Far"); ImGui::SameLine();
+		if (ImGui::InputFloat("##Inspector_Camera_CullFar", &cullFar))
+		{
+			camera->setCullFar(cullFar);
+		}
 	}
 
 
