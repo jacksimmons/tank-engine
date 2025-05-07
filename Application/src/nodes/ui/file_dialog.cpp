@@ -30,11 +30,20 @@ namespace Tank::Editor
 		ImVec2 viewSize = ImGui::GetWindowSize();
 		viewSize.y -= 60;
 
-		ImGui::BeginChild("##FILE_DIALOG_VIEW", viewSize);
-		drawTargetView();
-		ImGui::EndChild();
+		if (ImGui::BeginChild("##FILE_DIALOG_VIEW", viewSize))
+		{
+			drawTargetView();
+			drawTargetBar();
 
-		drawTargetBar();
+			ImGui::EndChild();
+		}
+	}
+
+
+	void _FileDialog::closePanel()
+	{
+		m_onTargetSelected(m_targetSelected);
+		_Window::closePanel();
 	}
 
 
@@ -198,7 +207,7 @@ namespace Tank::Editor
 		ImGui::SameLine();
 		if (!m_targetSelected.empty() && ImGui::SmallButton("Select##FILE_DIALOG_TARGET_SELECT"))
 		{
-			m_onTargetSelected(m_targetSelected);
+			closePanel();
 		}
 	}
 }

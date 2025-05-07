@@ -20,12 +20,14 @@ namespace Tank
 		/// The same mesh may use a texture multiple times as well.
 		/// </summary>
 		std::vector<std::shared_ptr<Texture>> m_textures;
+
 	public:
 		Mesh(
 			const std::vector<Vertex> &vertices,
 			const std::vector<unsigned> &indices,
 			const std::vector<std::shared_ptr<Texture>> &textures
 		);
+		virtual ~Mesh() = default;
 		void draw(Shader *shader) const;
 	};
 }

@@ -14,7 +14,7 @@ namespace Tank
 	json Sprite::serialise()
 	{
 		json serialised = Node::serialise();
-		serialised["spritePath"] = m_spritePath.string();
+		serialised["texPath"] = m_texPath.string();
 		serialised["shader"] = Shader::serialise(*(m_shader));
 		return serialised;
 	}
@@ -26,7 +26,7 @@ namespace Tank
 		sources.vertex.location = std::string{ serialised["shader"]["vert"] };
 		sources.fragment.location = std::string{ serialised["shader"]["frag"] };
 		sources.geometry.location = std::string{ serialised["shader"]["geom"] };
-		if (!(*targetPtr)) *targetPtr = new Sprite(serialised["name"], sources, serialised["spritePath"]);
+		if (!(*targetPtr)) *targetPtr = new Sprite(serialised["name"], sources, serialised["texPath"]);
 
 		Node *target = *targetPtr;
 		Node::deserialise(serialised, &target);
@@ -35,14 +35,23 @@ namespace Tank
 
 	Sprite::Sprite(const std::string &name,
 		ShaderSources &sources,
-		const fs::path &spritePath)
-		: IMeshContainer(name, sources), m_spritePath(spritePath)
+		const fs::path &texPath)
+		: IMeshContainer(name, sources)
 	{
 		m_type = "Sprite";
-		const auto &tex = Texture::fromFile(spritePath.has_parent_path() ? spritePath.parent_path().string() : "", spritePath.filename().string(), "diffuse");
+
+		setTexPath(texPath);
+	}
+
+
+	void Sprite::setTexPath(const fs::path &texPath)
+	{
+		const auto &tex = Texture::fromFile(texPath.has_parent_path() ? texPath.parent_path().string() : "", texPath.filename().string(), "diffuse");
+		m_texPath = texPath;
 
 		if (tex.has_value())
 		{
+			m_meshes.clear();
 			m_meshes.push_back(QuadMesh({ tex.value() }));
 		}
 	}

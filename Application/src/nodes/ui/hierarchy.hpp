@@ -15,13 +15,16 @@ namespace Tank::Editor
 	private:
 		static std::vector<std::type_info> s_nodeTypes;
 
+		Node *m_currentRoot;
+		bool m_showEditorHierarchy;
+
 		// Methods
 	private:
 		/// <summary>
 		/// Draws a tree node for the node provided, then calls itself for each
 		/// of its children. Draws a leaf instead if no children.
 		/// </summary>
-		void drawTreeNode(Node *node, int *count) const;
+		void drawTreeNode(Node *node, int *count);
 
 		/// <summary>
 		/// Handles drawing for node context menus. A node context menu is
@@ -30,7 +33,7 @@ namespace Tank::Editor
 		/// = nullptr).
 		/// Returns true if the node survives, false if it is destroyed.
 		/// </summary>
-		bool drawNodeContextMenu(Node *node, _Inspector *inspector) const;
+		bool drawNodeContextMenu(Node *node, _Inspector *inspector);
 
 		/// <summary>
 		/// Adds a created node as a child of parent.

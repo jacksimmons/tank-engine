@@ -16,7 +16,8 @@ namespace Tank::Editor
 		friend class _Inspector;
 		friend class _SceneView;
 	private:
-		_Window(const std::string &name, const ImGuiWindowFlags &flags = ImGuiWindowFlags_None, bool autoScroll = false);
+		_Window(const std::string &name, const ImGuiWindowFlags &flags = ImGuiWindowFlags_None, bool canBeClosed = true, bool autoScroll = false);
+		bool m_canBeClosed;
 	protected:
 		ImGuiWindowFlags m_flags;
 		bool m_autoScroll;
@@ -25,5 +26,6 @@ namespace Tank::Editor
 
 		virtual void draw() override;
 		virtual void drawPanel() = 0;
+		virtual void closePanel();
 	};
 }

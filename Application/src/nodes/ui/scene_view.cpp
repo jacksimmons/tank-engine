@@ -17,7 +17,7 @@
 namespace Tank::Editor
 {
 	_SceneView::_SceneView(const std::string &name, glm::ivec2 sceneViewportSize, glm::ivec2 fbViewportSize, KeyInput *keyInput)
-		: _Window(name)
+		: _Window(name, ImGuiWindowFlags_None, false)
 	{
 		m_sceneW = sceneViewportSize.x, m_sceneH = sceneViewportSize.y;
 		m_fb = std::make_unique<Framebuffer>(fbViewportSize.x, fbViewportSize.y);

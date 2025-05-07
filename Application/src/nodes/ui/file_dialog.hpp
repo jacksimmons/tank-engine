@@ -9,8 +9,8 @@ namespace Tank::Editor
 	enum class _FileDialogTarget { Directory, File };
 	class _FileDialog final : public _Window
 	{
-		// Editor can instantiate these - Load/Save scene
 		friend class EditorApp;
+		friend class _Inspector;
 
 	private:
 		struct _DirectoryResult
@@ -67,6 +67,7 @@ namespace Tank::Editor
 		void drawTargetBar();
 	protected:
 		virtual void drawPanel() override;
+		virtual void closePanel() override;
 	public:
 		~_FileDialog() = default;
 	};

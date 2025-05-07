@@ -7,17 +7,20 @@
 #include "widget.hpp"
 #include "shader.hpp"
 #include "nodes/node.hpp"
+#include "nodes/editor_node.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/light.hpp"
 #include "nodes/camera.hpp"
+#include "nodes/sprite.hpp"
 #include "nodes/ui/console.hpp"
 #include "nodes/ui/inspector.hpp"
+#include "nodes/ui/file_dialog.hpp"
 #include "nodes/interfaces/shader_container.hpp"
 
 
 namespace Tank::Editor
 {
-	_Inspector::_Inspector(const std::string &name) : _Window(name)
+	_Inspector::_Inspector(const std::string &name) : _Window(name, ImGuiWindowFlags_None, false)
 	{
 		m_inspectedNode = nullptr;
 	}
@@ -30,7 +33,15 @@ namespace Tank::Editor
 			ImGui::TextColored(Tank::Colour::TITLE, "Type");
 			ImGui::Text(typeid(*m_inspectedNode).name());
 
-			drawNodeSection();
+			// Prevent users from modifying editor nodes, which would likely cause a crash.
+			if (EditorNode *editorNode = dynamic_cast<EditorNode *>(m_inspectedNode))
+			{
+				ImGui::Text("Modifying the editor is not supported.");
+			}
+			else
+			{
+				drawNodeSection();
+			}
 
 			// Draw Node subclass sections
 			if (Tank::Scene *scene = dynamic_cast<Tank::Scene *>(m_inspectedNode))
@@ -44,6 +55,9 @@ namespace Tank::Editor
 
 			if (Tank::Light *light = dynamic_cast<Tank::Light *>(m_inspectedNode))
 				drawLightSection(light);
+
+			if (Tank::Sprite *sprite = dynamic_cast<Tank::Sprite *>(m_inspectedNode))
+				drawSpriteSection(sprite);
 		}	
 	}
 
@@ -343,6 +357,40 @@ namespace Tank::Editor
 				dir->setDirection(newDirection);
 			}
 		);
+	}
+
+
+	void _Inspector::drawSpriteSection(Sprite *sprite)
+	{
+		ImGui::TextColored(Colour::TITLE, "Sprite Texture");
+		std::string texPath = sprite->getTexPath().string();
+		Widget::textInput(
+			"##Inspector_Sprite_Texture",
+			texPath,
+			[sprite](const std::string &modified)
+			{
+				sprite->setTexPath(modified);
+			},
+			texPath
+		);
+
+		ImGui::SameLine();
+		if (ImGui::SmallButton("..."))
+		{
+			m_parent->addChild(std::unique_ptr<_FileDialog>(
+			new _FileDialog(
+				"Load Texture File",
+				ROOT_DIRECTORY,
+				fs::path(texPath).parent_path(),
+				_FileDialogTarget::File,
+				[this, sprite](const fs::path &path)
+				{
+					// Only update the texture if user has selected a valid file
+					if (!path.has_filename()) return;
+					sprite->setTexPath(path);
+				}
+			)));
+		}
 	}
 
 

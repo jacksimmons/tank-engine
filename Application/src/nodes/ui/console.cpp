@@ -6,7 +6,7 @@
 
 namespace Tank::Editor
 {
-	_Console::_Console(const std::string &name) : _Window(name, ImGuiWindowFlags_None, true)
+	_Console::_Console(const std::string &name) : _Window(name, ImGuiWindowFlags_None, false, true)
 	{
 		m_commands.push_back({
 			.name = "help",

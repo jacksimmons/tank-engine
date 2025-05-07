@@ -196,18 +196,16 @@ namespace Tank::Editor
 
 			Scene::setActiveScene(scene.get());
 			loadScene(std::move(scene));
-		}
 
-		// Lights
-		{
-			//std::string name = "DirLight";
-			//auto light = std::make_unique<Tank::DirLight>(name,
-			//	glm::vec3{ 0.0f, -1.0f, 0.0f },
-			//	glm::vec3{ 0.02f, 0.02f, 0.02f },
-			//	glm::vec3{ 0.2f, 0.2f, 0.2f },
-			//	glm::vec3{ 0.1f, 0.1f, 0.1f }
-			//);
-			//m_scene->addChild(std::move(light));
+			// Lights can only be added after scene load
+			std::string name = "DirLight";
+			auto light = std::make_unique<Tank::DirLight>(name,
+				glm::vec3{ 0.0f, -1.0f, 0.0f },
+				glm::vec3{ 0.02f, 0.02f, 0.02f },
+				glm::vec3{ 0.2f, 0.2f, 0.2f },
+				glm::vec3{ 0.1f, 0.1f, 0.1f }
+			);
+			Scene::getActiveScene()->addChild(std::move(light));
 		}
 	}
 
@@ -280,17 +278,12 @@ namespace Tank::Editor
 				m_keyInput->update();
 			}
 
-			// Draw init UI
-			if (m_initUI)
-			{
-				m_initUI->update();
-			}
-
 			// Draw all system UI (SceneView/Framebuffer draws the scene)
 			if (m_system)
 			{
 				m_system->update();
 			}
+			m_initUI->update();
 
 			ImGui::End();
 			ImGui::Render();
@@ -336,42 +329,35 @@ namespace Tank::Editor
 			loadDemoScene();
 			postSceneSetup();
 		}
-		if (openProject)
+		if (openProject && !m_initUI->getChild("Open Scene"))
 		{
-			auto fileDialog = std::unique_ptr<_FileDialog>(
+			std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
 				new _FileDialog("Open Scene", std::filesystem::path(ROOT_DIRECTORY), std::filesystem::path(ROOT_DIRECTORY),
 					_FileDialogTarget::File,
 					[this](const std::filesystem::path &path)
 					{
 						std::unique_ptr<Tank::Scene> scene;
 
+						// Load scene if it was valid, and close the popup either way
 						if (Scene *rawScene = Tank::Serialisation::loadScene(path.string()))
 						{
 							scene = std::unique_ptr<Tank::Scene>(rawScene);
+							loadScene(std::move(scene));
+							postSceneSetup();
 						}
-						else
-						{
-							return;
-						}
-
-						loadScene(std::move(scene));
-						postSceneSetup();
-						m_initUI->removeChild(m_initUI->getChild("Open Scene"));
 					}
 				)
 			);
 			m_initUI->addChild(std::move(fileDialog));
 		}
-		if (saveProject && Scene::getActiveScene())
+		if (saveProject && Scene::getActiveScene() && !m_initUI->getChild("Save Scene"))
 		{
-			auto fileDialog = std::unique_ptr<_FileDialog>(
+			std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
 				new _FileDialog("Save Scene", std::filesystem::path(ROOT_DIRECTORY), std::filesystem::path(ROOT_DIRECTORY),
 					_FileDialogTarget::File,
 					[this](const std::filesystem::path &path)
 					{
-						TE_CORE_INFO(path.string());
 						Serialisation::saveScene(Scene::getActiveScene(), path);
-						m_initUI->removeChild(m_initUI->getChild("Save Scene"));
 					}
 				)
 			);

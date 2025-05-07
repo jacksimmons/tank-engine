@@ -16,17 +16,31 @@
 
 namespace Tank::Editor
 {
-	_Hierarchy::_Hierarchy(const std::string &name) : _Window(name)
+	_Hierarchy::_Hierarchy(const std::string &name) : _Window(name, ImGuiWindowFlags_None, false)
 	{
+		m_showEditorHierarchy = false;
+		m_currentRoot = Tank::Scene::getActiveScene();
 	}
 
 
 	void _Hierarchy::drawPanel()
 	{
-		Node *root = Tank::Scene::getActiveScene();
+		if (m_showEditorHierarchy)
+		{
+			while (true)
+			{
+				Node *parent = m_currentRoot->getParent();
+				if (parent) m_currentRoot = parent;
+				else break;
+			}
+		}
+		else
+		{
+			m_currentRoot = Tank::Scene::getActiveScene();
+		}
 
 		int count = 0;
-		drawTreeNode(root, &count);
+		drawTreeNode(m_currentRoot, &count);
 	}
 
 
@@ -34,7 +48,7 @@ namespace Tank::Editor
 	/// Generates buttons for all children of the current node, at a given
 	/// indentation depth (based on the generation depth).
 	/// </summary>
-	void _Hierarchy::drawTreeNode(Node *node, int *count) const
+	void _Hierarchy::drawTreeNode(Node *node, int *count)
 	{
 		// Base case.
 		if (!node) return;
@@ -51,6 +65,7 @@ namespace Tank::Editor
 		// Add node name to the tree, clicking on this node will set `nodeExpanded` to true if not a leaf node.
 		ImVec4 nodeNameCol = Colour::NORMAL;
 		if (!node->getEnabled()) nodeNameCol = Colour::DISABLED;
+		if (EditorNode *editorNode = dynamic_cast<EditorNode *>(node)) nodeNameCol = Colour::ERR;
 		
 		ImGui::PushStyleColor(ImGuiCol_Text, nodeNameCol);
 		bool nodeExpanded = ImGui::TreeNodeEx((node->getName() + "##" + std::to_string(*count)).c_str(), flags);
@@ -89,17 +104,19 @@ namespace Tank::Editor
 	}
 
 
-	bool _Hierarchy::drawNodeContextMenu(Node *node, _Inspector *inspector) const
+	bool _Hierarchy::drawNodeContextMenu(Node *node, _Inspector *inspector)
 	{
 		bool nodeSurvives = true;
 
 		// If item (node) is hovered and right-clicked...
 		if (ImGui::BeginPopupContextItem())
 		{
-			// Render Delete button iff node is not the scene root.
-			// If Delete is rendered and pressed, this whole statement is true.
 			Scene *activeScene = Scene::getActiveScene();
-			if (node != activeScene && ImGui::MenuItem("Delete Node"))
+			bool isEditorNode = false;
+			if (EditorNode *_ = dynamic_cast<EditorNode *>(node)) isEditorNode = true;
+			
+			// If the node is not the root, not the current scene, and not an editor node, allow deletion
+			if (node != m_currentRoot && node != activeScene && !isEditorNode && ImGui::MenuItem("Delete Node"))
 			{
 				activeScene->onNodeDeleted(node);
 
@@ -121,7 +138,14 @@ namespace Tank::Editor
 				nodeSurvives = false;
 			}
 
-			if (ImGui::BeginMenu("Add Child Node"))
+			// If the node is the root, allow toggling of editor node display
+			if (node == m_currentRoot && ImGui::MenuItem("Toggle Editor Hierarchy"))
+			{
+				m_showEditorHierarchy = !m_showEditorHierarchy;
+			}
+
+			// If the node is not an editor node, allow child creation
+			if (!isEditorNode && ImGui::BeginMenu("Add Child Node"))
 			{
 				if (ImGui::MenuItem("Node")) addNewNode(node, new Node());
 				if (ImGui::MenuItem("Sprite (2D)"))

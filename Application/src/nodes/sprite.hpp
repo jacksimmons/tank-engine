@@ -12,14 +12,16 @@ namespace Tank
 		virtual json serialise() override;
 		static void deserialise(const json &serialised, Sprite **targetPtr);
 	private:
-		fs::path m_spritePath;
+		fs::path m_texPath;
 	public:
 		Sprite(const std::string &name,
 			ShaderSources &sources,
-			const fs::path &spritePath
+			const fs::path &texPath
 		);
 		virtual ~Sprite() = default;
 
+		void setTexPath(const fs::path &texPath);
+		const fs::path& getTexPath() { return m_texPath; }
 		virtual void draw() override;
 	};
 }
