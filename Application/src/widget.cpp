@@ -12,7 +12,8 @@ namespace Tank
 
 		if (contents.length() > size)
 		{
-			TE_CORE_CRITICAL("Contents was too large!");
+			TE_CORE_CRITICAL("'contents' was too large!");
+			return;
 		}
 
 		strcpy(buf, contents.data());
@@ -23,7 +24,16 @@ namespace Tank
 	}
 
 
-	void Widget::vec3Input(const char *label, glm::vec3 current, std::function<void(const glm::vec3&)> onModified)
+	void Widget::floatInput(const char *label, float current, std::function<void(float)> onModified)
+	{
+		if (ImGui::InputFloat(label, &current))
+		{
+			onModified(current);
+		}
+	}
+
+
+	void Widget::vec3Input(const char *label, const glm::vec3 &current, std::function<void(const glm::vec3&)> onModified)
 	{
 		float currentArr[] = { current.x, current.y, current.z };
 		if (ImGui::InputFloat3(label, currentArr))

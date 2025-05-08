@@ -6,8 +6,7 @@
 namespace Tank
 {
 	class Scene; class Model; class Camera; class Light; class DirLight; class PointLight;
-	class Sprite;
-	class IShaderContainer; class ShaderSource;
+	class IShaderContainer; class ShaderSource; class IMeshContainer; class Sprite;
 }
 namespace Tank::Editor
 {
@@ -23,6 +22,7 @@ namespace Tank::Editor
 		void drawSceneSection(Scene *scene);
 		void drawShaderSection(IShaderContainer *shaders);
 		std::string drawShaderSourceSection(const std::string &sourceName, ShaderSource &source);
+		void drawMeshSection(IMeshContainer *meshes);
 		void drawCameraSection(Camera *camera);
 		void drawLightSection(Light *light);
 		void drawDirLightSection(DirLight *dir);

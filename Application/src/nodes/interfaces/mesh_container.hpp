@@ -17,12 +17,8 @@ namespace Tank
 	public:
 		virtual ~IMeshContainer() = default;
 
-		virtual void drawOutlineMeshes(Shader *outlineShader) override
-		{
-			for (unsigned i = 0; i < m_meshes.size(); i++)
-			{ // use
-				m_meshes[i].draw(outlineShader);
-			} // unuse
-		}
+		
+		const std::vector<Mesh> &getMeshes() const { return m_meshes; }
+		virtual void drawOutlineMeshes(Shader *outlineShader) override;
 	};
 }

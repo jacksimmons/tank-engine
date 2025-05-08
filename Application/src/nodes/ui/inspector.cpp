@@ -50,6 +50,9 @@ namespace Tank::Editor
 			if (Tank::IShaderContainer *shaders = dynamic_cast<Tank::IShaderContainer *>(m_inspectedNode))
 				drawShaderSection(shaders);
 
+			if (Tank::IMeshContainer *meshes = dynamic_cast<Tank::IMeshContainer *>(m_inspectedNode))
+				drawMeshSection(meshes);
+
 			if (Tank::Camera *camera = dynamic_cast<Tank::Camera *>(m_inspectedNode))
 				drawCameraSection(camera);
 
@@ -197,7 +200,7 @@ namespace Tank::Editor
 
 
 	/// <summary>
-	/// Draws inspector section that is present for all Models.
+	/// Draws inspector section that is present for all nodes with shaders.
 	/// </summary>
 	void _Inspector::drawShaderSection(IShaderContainer *shaders)
 	{
@@ -266,6 +269,37 @@ namespace Tank::Editor
 	}
 
 
+	void _Inspector::drawMeshSection(IMeshContainer *meshContainer)
+	{
+		if (ImGui::CollapsingHeader("Meshes##Inspector_Meshes"))
+		{
+			// Togglable info about all meshes
+			auto meshes = meshContainer->getMeshes();
+			for (int i = 0; i < meshes.size(); i++)
+			{
+				// Togglable info about this mesh
+				auto vertices = meshes[i].getVertices();
+				if (ImGui::CollapsingHeader(std::string{ "Mesh " + std::to_string(i) + " (" + std::to_string(vertices.size()) + " vertices)##Inspector_Mesh" }.c_str()))
+				{
+					// Display info about this mesh
+					auto indices = meshes[i].getIndices();
+
+					for (unsigned index : indices)
+					{
+						Vertex vertexThisIndex = vertices[index];
+						ImGui::Text("Position: "); ImGui::SameLine();
+						ImGui::Text(glm::to_string(vertexThisIndex.position).c_str()); ImGui::SameLine();
+						ImGui::Text("Normal: "); ImGui::SameLine();
+						ImGui::Text(glm::to_string(vertexThisIndex.normal).c_str()); ImGui::SameLine();
+						ImGui::Text("TexCoords: "); ImGui::SameLine();
+						ImGui::Text(glm::to_string(vertexThisIndex.texCoords).c_str());
+					}
+				}
+			}
+		}
+	}
+
+
 	/// <summary>
 	/// Draws inspector section that is present for all Cameras.
 	/// </summary>
@@ -284,33 +318,16 @@ namespace Tank::Editor
 		ImGui::Text(glm::to_string(up).c_str());
 
 		ImGui::TextColored(Colour::TITLE, "Camera Pan Speed");
-		float panSpd = camera->getPanSpeed();
-		if (ImGui::InputFloat("##Inspector_Camera_PanSpd", &panSpd))
-		{
-			camera->setPanSpeed(panSpd);
-		}
+		Widget::floatInput("##Inspector_Camera_PanSpd", camera->getPanSpeed(), [camera](float modified) { camera->setPanSpeed(modified); });
 
 		ImGui::TextColored(Colour::TITLE, "Camera Rotation Speed");
-		float rotSpd = camera->getRotSpeed();
-		if (ImGui::InputFloat("##Inspector_Camera_RotSpd", &rotSpd))
-		{
-			camera->setRotSpeed(rotSpd);
-		}
+		Widget::floatInput("##Inspector_Camera_RotSpd", camera->getRotSpeed(), [camera](float modified) { camera->setRotSpeed(modified); });
 
 		ImGui::TextColored(Colour::TITLE, "Culling Distance");
-		float cullNear = camera->getCullNear();
 		ImGui::Text("Near"); ImGui::SameLine();
-		if (ImGui::InputFloat("##Inspector_Camera_CullNear", &cullNear))
-		{
-			camera->setCullNear(cullNear);
-		}
-
-		float cullFar = camera->getCullFar();
+		Widget::floatInput("##Inspector_Camera_CullNear", camera->getCullNear(), [camera](float modified) { camera->setCullNear(modified); });
 		ImGui::Text("Far"); ImGui::SameLine();
-		if (ImGui::InputFloat("##Inspector_Camera_CullFar", &cullFar))
-		{
-			camera->setCullFar(cullFar);
-		}
+		Widget::floatInput("##Inspector_Camera_CullFar", camera->getCullFar(), [camera](float modified) { camera->setCullFar(modified); });
 	}
 
 
@@ -329,7 +346,6 @@ namespace Tank::Editor
 				light->setAmbient(newAmbient);
 			}
 		);
-		//ImGui::Text(glm::to_string(light->getAmbient()).c_str());
 
 		ImGui::TextColored(Colour::TITLE, "Diffuse Intensity (RGB)");
 		Widget::vec3Input(
@@ -340,7 +356,6 @@ namespace Tank::Editor
 				light->setDiffuse(newDiffuse);
 			}
 		);
-		//ImGui::Text(glm::to_string(light->getDiffuse()).c_str());
 
 		ImGui::TextColored(Colour::TITLE, "Specular Intensity (RGB)");
 		Widget::vec3Input(
@@ -351,7 +366,6 @@ namespace Tank::Editor
 				light->setSpecular(newSpecular);
 			}
 		);
-		//ImGui::Text(glm::to_string(light->getSpecular()).c_str());
 
 		// Draw Light subclass sections
 		if (DirLight *dir = dynamic_cast<DirLight *>(light))
