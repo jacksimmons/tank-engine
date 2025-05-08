@@ -6,7 +6,7 @@
 namespace Tank
 {
 	class Scene; class Model; class Camera; class Light; class DirLight; class PointLight;
-	class IShaderContainer; class ShaderSource; class IMeshContainer; class Sprite;
+	class IShaderContainer; class ShaderSource; class IMeshContainer; class Sprite; class Model;
 }
 namespace Tank::Editor
 {
@@ -27,6 +27,7 @@ namespace Tank::Editor
 		void drawLightSection(Light *light);
 		void drawDirLightSection(DirLight *dir);
 		void drawSpriteSection(Sprite *sprite);
+		void drawModelSection(Model *model);
 		void onNodeDeleted(Node *node);
 		void setInspectedNode(Node *node);
 	protected:

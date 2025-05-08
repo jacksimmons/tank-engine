@@ -26,6 +26,5 @@ namespace Tank::Editor
 
 		virtual void draw() override;
 		virtual void drawPanel() = 0;
-		virtual void closePanel();
 	};
 }

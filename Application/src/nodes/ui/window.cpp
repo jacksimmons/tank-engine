@@ -20,7 +20,8 @@ namespace Tank::Editor
 			else
 			{
 				ImGui::End();
-				return closePanel();
+				destroy();
+				return;
 			}
 
 			if (m_autoScroll)
@@ -29,11 +30,5 @@ namespace Tank::Editor
 			ImGui::End();
 		}
 		EditorNode::draw();
-	}
-
-
-	void _Window::closePanel()
-	{
-		m_parent->removeChild(this);
 	}
 }

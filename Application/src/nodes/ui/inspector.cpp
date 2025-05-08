@@ -12,6 +12,7 @@
 #include "nodes/light.hpp"
 #include "nodes/camera.hpp"
 #include "nodes/sprite.hpp"
+#include "nodes/model.hpp"
 #include "nodes/ui/console.hpp"
 #include "nodes/ui/inspector.hpp"
 #include "nodes/ui/file_dialog.hpp"
@@ -61,6 +62,9 @@ namespace Tank::Editor
 
 			if (Tank::Sprite *sprite = dynamic_cast<Tank::Sprite *>(m_inspectedNode))
 				drawSpriteSection(sprite);
+
+			if (Tank::Model *model = dynamic_cast<Tank::Model *>(m_inspectedNode))
+				drawModelSection(model);
 		}	
 	}
 
@@ -278,11 +282,11 @@ namespace Tank::Editor
 			for (int i = 0; i < meshes.size(); i++)
 			{
 				// Togglable info about this mesh
-				auto vertices = meshes[i].getVertices();
+				auto vertices = meshes[i]->getVertices();
 				if (ImGui::CollapsingHeader(std::string{ "Mesh " + std::to_string(i) + " (" + std::to_string(vertices.size()) + " vertices)##Inspector_Mesh" }.c_str()))
 				{
 					// Display info about this mesh
-					auto indices = meshes[i].getIndices();
+					auto indices = meshes[i]->getIndices();
 
 					for (unsigned index : indices)
 					{
@@ -398,6 +402,7 @@ namespace Tank::Editor
 			texPath,
 			[sprite](const std::string &modified)
 			{
+				if (fs::path{ modified } == sprite->getTexPath()) return;
 				sprite->setTexPath(modified);
 			},
 			texPath
@@ -406,19 +411,66 @@ namespace Tank::Editor
 		ImGui::SameLine();
 		if (ImGui::SmallButton("..."))
 		{
-			m_parent->addChild(std::unique_ptr<_FileDialog>(
-			new _FileDialog(
-				"Load Texture File",
-				ROOT_DIRECTORY,
-				fs::path(texPath).parent_path(),
-				_FileDialogTarget::File,
-				[this, sprite](const fs::path &path)
-				{
-					// Only update the texture if user has selected a valid file
-					if (!path.has_filename()) return;
-					sprite->setTexPath(path);
-				}
-			)));
+			std::string name = "Load Texture File";
+			if (!m_parent->getChild(name))
+			{
+				auto fileDialog = std::unique_ptr<_FileDialog>(
+					new _FileDialog(
+						name,
+						ROOT_DIRECTORY,
+						fs::path(texPath).parent_path(),
+						_FileDialogTarget::File,
+						[this, sprite](const fs::path &path)
+						{
+							// Only update the texture if user has selected a valid file
+							if (!path.has_filename()) return;
+							sprite->setTexPath(path);
+						}
+					));
+
+				m_parent->addChild(std::move(fileDialog));
+			}
+		}
+	}
+
+
+	void _Inspector::drawModelSection(Model *model)
+	{
+		ImGui::TextColored(Colour::TITLE, "Model File");
+		std::string modelPath = model->getModelPath().string();
+		Widget::textInput(
+			"##Inspector_Model_File",
+			modelPath,
+			[model](const std::string &modified)
+			{
+				if (fs::path{ modified } == model->getModelPath()) return;
+				model->setModelPath(modified);
+			},
+			modelPath
+		);
+
+		ImGui::SameLine();
+		if (ImGui::SmallButton("..."))
+		{
+			std::string name = "Load Model File";
+			if (!m_parent->getChild(name))
+			{
+				auto fileDialog = std::unique_ptr<_FileDialog>(
+					new _FileDialog(
+						name,
+						ROOT_DIRECTORY,
+						fs::path(modelPath).parent_path(),
+						_FileDialogTarget::File,
+						[this, model](const fs::path &path)
+						{
+							// Only update the model if user has selected a valid file
+							if (!path.has_filename()) return;
+							model->setModelPath(path);
+						}
+					));
+
+				m_parent->addChild(std::move(fileDialog));
+			}
 		}
 	}
 

@@ -23,7 +23,7 @@ namespace Tank
 	json Model::serialise()
 	{
 		json serialised = Node::serialise();
-		serialised["modelPath"] = m_modelDirectory + "/" + m_modelFile;
+		serialised["modelPath"] = getModelPath();
 		serialised["shader"] = Shader::serialise(*(m_shader));
 		return serialised;
 	}
@@ -46,6 +46,19 @@ namespace Tank
 		: IMeshContainer(name, sources)
 	{
 		m_type = "Model";
+		setModelPath(modelPath);
+	}
+
+
+	void Model::setModelPath(const fs::path &path)
+	{
+		m_meshes.clear();
+		std::string modelPath = path.string();
+
+		// Replace all backslashes with forward slashes
+		std::replace(modelPath.begin(), modelPath.end(), '\\', '/');
+
+		// Find the last forward slash, to distinguish between directory and filename
 		size_t indexOfLastSlash = modelPath.find_last_of("/");
 		m_modelDirectory = modelPath.substr(0, indexOfLastSlash);
 		m_modelFile = modelPath.substr(indexOfLastSlash + 1, (modelPath.length() - indexOfLastSlash) + 1);
@@ -59,7 +72,6 @@ namespace Tank
 			return;
 		}
 
-		TE_CORE_INFO(m_modelFile);
 		processNode(scene->mRootNode, scene);
 	}
 
@@ -70,7 +82,7 @@ namespace Tank
 		for (unsigned i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-			m_meshes.push_back(processMesh(mesh, scene));
+			m_meshes.push_back(std::move(processMesh(mesh, scene)));
 		}
 
 		// Recurse on child meshes
@@ -81,7 +93,7 @@ namespace Tank
 	}
 
 
-	Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
+	std::unique_ptr<Mesh> Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<unsigned> indices;
@@ -132,7 +144,7 @@ namespace Tank
 			m_shader->unuse();
 		}
 
-		return Mesh(vertices, indices, textures);
+		return std::make_unique<Mesh>(vertices, indices, textures);
 	}
 
 
@@ -160,7 +172,7 @@ namespace Tank
 
 			if (!skipLoading)
 			{
-				auto tex = Texture::fromFile(m_modelDirectory, str.C_Str(), typeName);
+				auto tex = Texture::fromFile(m_modelDirectory.string(), str.C_Str(), typeName);
 
 				if (tex.has_value())
 				{
@@ -170,7 +182,7 @@ namespace Tank
 				}
 				else
 				{
-					TE_CORE_ERROR(std::format("Unable to load texture {}/{}", m_modelDirectory, str.C_Str()));
+					TE_CORE_ERROR(std::format("Unable to load texture {}/{}", m_modelDirectory.string(), str.C_Str()));
 				}
 			}
 		}
@@ -200,7 +212,7 @@ namespace Tank
 
 		for (unsigned i = 0; i < m_meshes.size(); i++)
 		{
-			m_meshes[i].draw(m_shader.get());
+			m_meshes[i]->draw(m_shader.get());
 		}
 		m_shader->unuse();
 		IOutlined::postdraw();

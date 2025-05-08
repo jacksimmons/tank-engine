@@ -162,16 +162,17 @@ namespace Tank::Editor
 		// Create nodes
 		{
 			auto scene = std::make_unique<Tank::Scene>();
-			scene->addChild(std::make_unique<Tank::Camera>());
-
+			{
+				auto camera = std::make_unique<Tank::Camera>();
+				scene->setActiveCamera(dynamic_cast<Tank::Camera*>(camera.get()));
+				scene->addChild(std::move(camera));
+			}
 			{
 				ShaderSources sources;
 				sources.vertex.location = "skybox.vert";
 				sources.fragment.location = "skybox.frag";
 				scene->addChild(std::make_unique<Tank::CubeMap>("CubeMap", sources));
 			}
-			scene->setActiveCamera(dynamic_cast<Tank::Camera *>(scene->getChild("Camera")));
-
 			{
 				ShaderSources sources;
 				sources.vertex.location = "shader.vert";
@@ -241,6 +242,7 @@ namespace Tank::Editor
 		m_system->addChild(std::unique_ptr<_Console>(new _Console("Console")));
 		m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));
 		m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
+		m_system->preupdate();
 	}
 
 

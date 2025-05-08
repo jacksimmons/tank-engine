@@ -27,7 +27,7 @@ namespace Tank
 			const std::vector<unsigned> &indices,
 			const std::vector<std::shared_ptr<Texture>> &textures
 		);
-		virtual ~Mesh() = default;
+		virtual ~Mesh();
 
 
 		const std::vector<Vertex> &getVertices() const { return m_vertices; }

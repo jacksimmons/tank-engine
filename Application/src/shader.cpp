@@ -40,21 +40,13 @@ namespace Tank
 
 	std::optional<std::unique_ptr<Shader>> Shader::createShader(ShaderSources &sources)
 	{
-		std::string vsString, fsString, gsString;
 		unsigned progId = glCreateProgram();
-		std::vector<GLuint> shadersToDelete;
 
 		if (!attachShader(progId, sources.vertex)) return {};
 		if (!attachShader(progId, sources.fragment)) return {};
 		if (sources.geometry.enabled && !attachShader(progId, sources.geometry)) return {};
 
 		glLinkProgram(progId);
-
-		// Cleanup shaders
-		for (GLuint shader : shadersToDelete)
-		{
-			glDeleteProgram(shader);
-		}
 
 		return std::unique_ptr<Shader>(new Shader(progId, sources));
 	}

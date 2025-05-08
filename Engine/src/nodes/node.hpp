@@ -24,6 +24,9 @@ namespace Tank
 		/// If false, Node::draw isn't invoked for this Node only.
 		/// </summary>
 		bool m_visible = true;
+
+		std::vector<Node*> m_childrenAwaitingDisown;
+		std::vector<std::unique_ptr<Node>> m_childrenAwaitingAdopt;
 	protected:
 		std::string m_type;
 		std::unique_ptr<Transform> m_transform;
@@ -63,8 +66,6 @@ namespace Tank
 
 		// Add an existing child.
 		void addChild(std::unique_ptr<Node> child);
-		// Removes a child by rawptr, returns boolean of success.
-		bool removeChild(Node *child);
 		// Get first child whose name matches the provided name.
 		Node *getChild(std::string name) const;
 		// Get child by index.
@@ -93,7 +94,9 @@ namespace Tank
 		std::vector<int> treeFromChild(Node *child);
 
 		virtual void startup();
-		virtual void shutdown();
+		virtual void preupdate();
 		virtual void update();
+		virtual void shutdown();
+		void destroy() { m_parent->m_childrenAwaitingDisown.push_back(this); };
 	};
 }

@@ -52,7 +52,7 @@ namespace Tank
 		if (tex.has_value())
 		{
 			m_meshes.clear();
-			m_meshes.push_back(QuadMesh({ tex.value() }));
+			m_meshes.push_back(std::unique_ptr<QuadMesh>(new QuadMesh({ tex.value() })));
 		}
 	}
 
@@ -86,7 +86,7 @@ namespace Tank
 
 		for (unsigned i = 0; i < m_meshes.size(); i++)
 		{
-			m_meshes[i].draw(m_shader.get());
+			m_meshes[i]->draw(m_shader.get());
 		}
 		m_shader->unuse();
 		IOutlined::postdraw();

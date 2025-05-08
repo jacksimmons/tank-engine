@@ -9,7 +9,7 @@ namespace Tank
 	class IMeshContainer : public IShaderContainer
 	{
 	protected:
-		std::vector<Mesh> m_meshes;
+		std::vector<std::unique_ptr<Mesh>> m_meshes;
 		IMeshContainer(const std::string &name, ShaderSources &sources)
 			: IShaderContainer(name, sources)
 		{
@@ -18,7 +18,7 @@ namespace Tank
 		virtual ~IMeshContainer() = default;
 
 		
-		const std::vector<Mesh> &getMeshes() const { return m_meshes; }
+		std::vector<Mesh*> getMeshes() const;
 		virtual void drawOutlineMeshes(Shader *outlineShader) override;
 	};
 }

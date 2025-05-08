@@ -22,8 +22,8 @@ namespace Tank
 		static void deserialise(const json &serialised, Model **targetPtr);
 
 	private:
-		std::string m_modelDirectory;
-		std::string m_modelFile;
+		fs::path m_modelDirectory;
+		fs::path m_modelFile;
 	public:
 		Model(const std::string &name,
 			ShaderSources &sources,
@@ -31,10 +31,12 @@ namespace Tank
 		);
 		virtual ~Model() = default;
 
+		void setModelPath(const fs::path &path);
+		fs::path getModelPath() const { return m_modelDirectory / m_modelFile; }
 		virtual void draw() override;
 		virtual void update() override;
 		void processNode(aiNode *node, const aiScene *scene);
-		Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+		std::unique_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene);
 		void processLights();
 
 		std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);

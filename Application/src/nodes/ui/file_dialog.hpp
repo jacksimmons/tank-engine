@@ -67,8 +67,5 @@ namespace Tank::Editor
 		void drawTargetBar();
 	protected:
 		virtual void drawPanel() override;
-		virtual void closePanel() override;
-	public:
-		~_FileDialog() = default;
 	};
 }

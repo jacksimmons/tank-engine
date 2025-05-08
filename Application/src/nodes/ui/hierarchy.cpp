@@ -124,17 +124,7 @@ namespace Tank::Editor
 				inspector->onNodeDeleted(node);
 
 				// Detach child from its parent.
-				if (!node->getParent()->removeChild(node))
-				{
-					std::string line = "Hierarchy: Failed to remove child node from parent.";
-					dynamic_cast<_Console*>(getSibling("Console"))->addLine(
-						[this, line]()
-						{
-							ImGui::TextColored(Colour::ERR, line.c_str());
-						}
-					);
-				}
-
+				node->destroy();
 				nodeSurvives = false;
 			}
 

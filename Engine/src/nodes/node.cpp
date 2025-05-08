@@ -53,27 +53,7 @@ namespace Tank
 	void Node::addChild(std::unique_ptr<Node> child)
 	{
 		child->m_parent = this;
-		if (m_started)
-			child->startup();
-
-		m_children.push_back(std::move(child));
-	}
-
-	bool Node::removeChild(Node *child)
-	{
-		if (child != nullptr)
-		{
-			for (int i = 0; i < getChildCount(); i++)
-			{
-				if (m_children[i].get() == child)
-				{
-					m_children.erase(m_children.begin() + i);
-					return true;
-				}
-			}
-		}
-
-		return false;
+		m_childrenAwaitingAdopt.push_back(std::move(child));
 	}
 
 	Node *Node::getChild(std::string name) const
@@ -219,6 +199,24 @@ namespace Tank
 	}
 
 
+	void Node::preupdate()
+	{
+		// Disown all children waiting to be disowned
+		for (Node *toDisown : m_childrenAwaitingDisown)
+		{
+			m_children.erase(m_children.begin() + toDisown->getSiblingIndex());
+		}
+		m_childrenAwaitingDisown.clear();
+
+		// Adopt all children waiting to be adopted
+		for (auto it = m_childrenAwaitingAdopt.begin(); it != m_childrenAwaitingAdopt.end(); ++it)
+		{
+			m_children.push_back(std::move(*it));
+		}
+		m_childrenAwaitingAdopt.clear();
+	}
+
+
 	void Node::update()
 	{
 		if (!m_enabled) return;
@@ -229,9 +227,12 @@ namespace Tank
 		//	script->update();
 		//}
 
-		for (auto const &child : m_children)
+		preupdate();
+
+		// Recursively update
+		for (auto it = m_children.begin(); it != m_children.end(); ++it)
 		{
-			child->update();
+			(*it)->update();
 		}
 	}
 }

@@ -30,27 +30,20 @@ namespace Tank::Editor
 		ImVec2 viewSize = ImGui::GetWindowSize();
 		viewSize.y -= 60;
 
-		if (ImGui::BeginChild("##FILE_DIALOG_VIEW", viewSize))
+		if (ImGui::BeginChild(std::string{ getName() + "##FILE_DIALOG_VIEW" }.c_str(), viewSize))
 		{
 			drawTargetView();
 			drawTargetBar();
 
-			ImGui::EndChild();
 		}
-	}
-
-
-	void _FileDialog::closePanel()
-	{
-		m_onTargetSelected(m_targetSelected);
-		_Window::closePanel();
+		ImGui::EndChild();
 	}
 
 
 	void _FileDialog::drawTargetView()
 	{
 		// Setup table
-		if (!ImGui::BeginTable("##FILE_DIALOG_TABLE", 2))
+		if (!ImGui::BeginTable(std::string{ getName() + "##FILE_DIALOG_TABLE" }.c_str(), 2))
 		{
 			return;
 		}
@@ -197,7 +190,7 @@ namespace Tank::Editor
 		std::string inputFieldHint;
 		if (!m_targetSelected.empty()) inputFieldHint = m_targetSelected.string();
 		else inputFieldHint = "Enter name...";
-		Widget::textInput("##FILE_DIALOG_SEARCH_TERM", inputFieldHint.c_str(), [this](const std::string &modified)
+		Widget::textInput(std::string{ getName() + "##FILE_DIALOG_SEARCH_TERM" }.c_str(), inputFieldHint.c_str(), [this](const std::string &modified)
 		{
 			m_searchTerm = modified;
 			m_targetSelected = m_currentDirectory / m_searchTerm;
@@ -205,9 +198,10 @@ namespace Tank::Editor
 
 		// If a target is selected, show "Select" button which will close the dialog when pressed.
 		ImGui::SameLine();
-		if (!m_targetSelected.empty() && ImGui::SmallButton("Select##FILE_DIALOG_TARGET_SELECT"))
+		if (!m_targetSelected.empty() && ImGui::SmallButton(std::string{ "Select##FILE_DIALOG_TARGET_SELECT(" + getName() + ")" }.c_str()))
 		{
-			closePanel();
+			m_onTargetSelected(m_targetSelected);
+			destroy();
 		}
 	}
 }

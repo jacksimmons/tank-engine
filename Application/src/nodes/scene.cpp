@@ -40,10 +40,11 @@ namespace Tank
 
 	void Scene::update()
 	{
-		// Ignore rendering updates if no camera is active.
+		// Ignore updates if no camera is active.
 		if (!m_activeCamera || !m_activeCamera->getEnabled()) return;
-		m_activeCamera->update();
 
+		// Update camera, then the scene
+		m_activeCamera->update();
 		Node::update();
 	}
 
