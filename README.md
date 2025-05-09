@@ -13,7 +13,7 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - [x] Console window, displaying debugging information (WIP)
 - [x] Highlight selected Nodes using stencil buffer
 - [ ] Gizmos for Lights and Cameras to show their positions, with RGBA sprites  
-- [ ] Project system for saving and loading progress  
+- [x] Saving and loading of scenes  
 ## Scripting  
 - [x] Script class, with a pure virtual update method
 - [ ] Editor and Play mode distinction for Scripts
