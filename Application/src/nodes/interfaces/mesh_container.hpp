@@ -1,17 +1,17 @@
 #pragma once
-
 #include "mesh.hpp"
 #include "shader_container.hpp"
+#include "outlined.hpp"
 
 
 namespace Tank
 {
-	class IMeshContainer : public IShaderContainer
+	class IShaderContainer; class IOutlined;
+	class IMeshContainer : public IShaderContainer, public IOutlined
 	{
 	protected:
 		std::vector<std::unique_ptr<Mesh>> m_meshes;
-		IMeshContainer(const std::string &name, ShaderSources &sources)
-			: IShaderContainer(name, sources)
+		IMeshContainer(ShaderSources &sources) : IShaderContainer(sources), IOutlined()
 		{
 		}
 	public:

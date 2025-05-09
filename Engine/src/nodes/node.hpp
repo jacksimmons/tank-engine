@@ -3,7 +3,7 @@
 #include <glm/mat4x4.hpp>
 #include "core.hpp"
 #include "transform.hpp"
-#include "serialisation/serialisable.hpp"
+#include "nodes/interfaces/serialisable.hpp"
 
 
 namespace Tank

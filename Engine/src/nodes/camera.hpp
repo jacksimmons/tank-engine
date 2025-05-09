@@ -2,7 +2,6 @@
 
 #include <glm/gtx/quaternion.hpp>
 #include "nodes/node.hpp"
-#include "serialisation/serialisable.hpp"
 #include "transformation.hpp"
 
 

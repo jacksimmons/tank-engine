@@ -43,7 +43,7 @@ namespace Tank
 
 
 	Model::Model(const std::string &name, ShaderSources &sources, const std::string &modelPath)
-		: IMeshContainer(name, sources)
+		: Node(name), IMeshContainer(sources)
 	{
 		m_type = "Model";
 		setModelPath(modelPath);
@@ -215,7 +215,7 @@ namespace Tank
 			m_meshes[i]->draw(m_shader.get());
 		}
 		m_shader->unuse();
-		IOutlined::postdraw();
+		IOutlined::postdraw(m_transform.get());
 	}
 
 

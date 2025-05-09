@@ -48,12 +48,6 @@ namespace Tank::Editor
 			if (Tank::Scene *scene = dynamic_cast<Tank::Scene *>(m_inspectedNode))
 				drawSceneSection(scene);
 
-			if (Tank::IShaderContainer *shaders = dynamic_cast<Tank::IShaderContainer *>(m_inspectedNode))
-				drawShaderSection(shaders);
-
-			if (Tank::IMeshContainer *meshes = dynamic_cast<Tank::IMeshContainer *>(m_inspectedNode))
-				drawMeshSection(meshes);
-
 			if (Tank::Camera *camera = dynamic_cast<Tank::Camera *>(m_inspectedNode))
 				drawCameraSection(camera);
 
@@ -65,6 +59,12 @@ namespace Tank::Editor
 
 			if (Tank::Model *model = dynamic_cast<Tank::Model *>(m_inspectedNode))
 				drawModelSection(model);
+
+			if (Tank::IShaderContainer *shaders = dynamic_cast<Tank::IShaderContainer *>(m_inspectedNode))
+				drawShaderSection(shaders);
+
+			if (Tank::IMeshContainer *meshes = dynamic_cast<Tank::IMeshContainer *>(m_inspectedNode))
+				drawMeshSection(meshes);
 		}	
 	}
 
@@ -275,7 +275,7 @@ namespace Tank::Editor
 
 	void _Inspector::drawMeshSection(IMeshContainer *meshContainer)
 	{
-		if (ImGui::CollapsingHeader("Meshes##Inspector_Meshes"))
+		if (ImGui::CollapsingHeader("Show Meshes##Inspector_Meshes"))
 		{
 			// Togglable info about all meshes
 			auto meshes = meshContainer->getMeshes();

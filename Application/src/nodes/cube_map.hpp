@@ -1,6 +1,7 @@
 #pragma once
 #include "tepch.hpp"
 #include "nodes/node.hpp"
+#include "nodes/interfaces/shader_container.hpp"
 #include "shader_source.hpp"
 
 
@@ -9,7 +10,7 @@ namespace Tank
 	class Node;
 	class Texture;
 	class Shader;
-	class CubeMap : public Node
+	class CubeMap : public Node, public IShaderContainer
 	{
 		// Serialisation
 	public:
@@ -19,7 +20,6 @@ namespace Tank
 	protected:
 		unsigned m_vao;
 		unsigned m_vbo;
-		std::unique_ptr<Shader> m_shader;
 		std::shared_ptr<Texture> m_texture;
 		std::array<std::string, 6> m_texturePaths;
 	public:

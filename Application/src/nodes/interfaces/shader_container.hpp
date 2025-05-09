@@ -1,7 +1,6 @@
 #pragma once
-
 #include "shader.hpp"
-#include "outlined.hpp"
+#include "nodes/node.hpp"
 
 
 namespace Tank
@@ -12,7 +11,7 @@ namespace Tank
 	/// <summary>
 	/// An interface for an object containing (currently one) shaders.
 	/// </summary>
-	class IShaderContainer : public IOutlined
+	class IShaderContainer
 	{
 		// Allow Inspector to read shaders.
 		friend class Editor::_Inspector;
@@ -30,9 +29,7 @@ namespace Tank
 	protected:
 		std::unique_ptr<Shader> m_shader;
 
-		IShaderContainer(const std::string &name, ShaderSources &sources);
-
-		virtual void draw() override;
+		IShaderContainer(ShaderSources &sources);
 	public:
 		virtual ~IShaderContainer() = default;
 

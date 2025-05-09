@@ -8,7 +8,7 @@
 
 namespace Tank
 {
-	IOutlined::IOutlined(const std::string &name, const glm::vec4 &outlineCol) : Node(name)
+	IOutlined::IOutlined(const glm::vec4 &outlineCol)
 	{
 		ShaderSources sources;
 		sources.vertex.location = "shader.vert";
@@ -53,7 +53,7 @@ namespace Tank
 	/// testing. Then draw a scaled-up version of the object, in
 	/// a block colour.
 	/// </summary>
-	void IOutlined::postdraw()
+	void IOutlined::postdraw(Transform *transform)
 	{
 		if (!m_outlineEnabled) return;
 
@@ -67,11 +67,11 @@ namespace Tank
 
 		// Setup uniforms
 		Camera *cam = Scene::getActiveScene()->getActiveCamera();
-		const glm::vec3 scale = m_transform->getLocalScale();
-		const glm::vec3 trans = m_transform->getLocalTranslation();
-		m_transform->setLocalScale(scale * 1.025f);
-		m_outlineShader->setMat4("PVM", cam->getProj() * cam->getView() * m_transform->getWorldModelMatrix());
-		m_transform->setLocalScale(scale);
+		const glm::vec3 scale = transform->getLocalScale();
+		const glm::vec3 trans = transform->getLocalTranslation();
+		transform->setLocalScale(scale * 1.025f);
+		m_outlineShader->setMat4("PVM", cam->getProj() * cam->getView() * transform->getWorldModelMatrix());
+		transform->setLocalScale(scale);
 
 		drawOutlineMeshes(m_outlineShader.get());
 

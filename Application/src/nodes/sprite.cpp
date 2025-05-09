@@ -36,7 +36,7 @@ namespace Tank
 	Sprite::Sprite(const std::string &name,
 		ShaderSources &sources,
 		const fs::path &texPath)
-		: IMeshContainer(name, sources)
+		: Node(name), IMeshContainer(sources)
 	{
 		m_type = "Sprite";
 
@@ -49,9 +49,9 @@ namespace Tank
 		const auto &tex = Texture::fromFile(texPath.has_parent_path() ? texPath.parent_path().string() : "", texPath.filename().string(), "diffuse");
 		m_texPath = texPath;
 
+		m_meshes.clear();
 		if (tex.has_value())
 		{
-			m_meshes.clear();
 			m_meshes.push_back(std::unique_ptr<QuadMesh>(new QuadMesh({ tex.value() })));
 		}
 	}
@@ -89,6 +89,6 @@ namespace Tank
 			m_meshes[i]->draw(m_shader.get());
 		}
 		m_shader->unuse();
-		IOutlined::postdraw();
+		IOutlined::postdraw(m_transform.get());
 	}
 }

@@ -15,7 +15,7 @@ namespace Tank
 	/// <summary>
 	/// A class which can load 3D models using Assimp.
 	/// </summary>
-	class Model : public IMeshContainer
+	class Model : public Node, public IMeshContainer
 	{
 	public:
 		virtual json serialise() override;

@@ -6,13 +6,13 @@ namespace Tank
 	std::vector<std::weak_ptr<Texture>> IShaderContainer::s_loadedTextures;
 
 
-	IShaderContainer::IShaderContainer(
-		const std::string &name,
-		ShaderSources &sources) : IOutlined(name)
+	IShaderContainer::IShaderContainer(ShaderSources &sources)
 	{
 		auto maybeShader = Shader::createShader(sources);
 		if (maybeShader.has_value())
 			m_shader = std::move(maybeShader.value());
+		else
+			TE_CORE_ERROR("Failed to load shader.");
 	}
 
 
@@ -27,11 +27,6 @@ namespace Tank
 			if (s_loadedTextures[index].expired()) s_loadedTextures.erase(s_loadedTextures.begin() + index);
 			else index++;
 		}
-	}
-
-
-	void IShaderContainer::draw()
-	{
 	}
 
 

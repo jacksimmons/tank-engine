@@ -1,25 +1,25 @@
 #pragma once
 
 #include "shader.hpp"
-#include "nodes/node.hpp"
+#include "transform.hpp"
 
 
 namespace Tank
 {
-	class Mesh;
-	class IOutlined : public Node
+	class Mesh; class Transform;
+	class IOutlined
 	{
 	private:
 		std::unique_ptr<Shader> m_outlineShader;
 		bool m_outlineEnabled;
 	protected:
-		IOutlined(const std::string &name, const glm::vec4 &outlineCol = { 0.5f, 0, 0, 1 });
+		IOutlined(const glm::vec4 &outlineCol = { 0.5f, 0, 0, 1 });
 	public:
 		virtual ~IOutlined() = default;
 
 		void setOutlineEnabled(bool enabled) noexcept { m_outlineEnabled = enabled; }
 		void predraw();
-		void postdraw();
+		void postdraw(Transform *transform);
 
 		/// <summary>
 		/// Called as part of postdraw.
