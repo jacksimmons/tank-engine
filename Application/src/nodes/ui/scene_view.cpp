@@ -40,9 +40,10 @@ namespace Tank::Editor
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(m_depthFuncComparisonMode);
 
-		m_blendFuncScaleFactors = GL_ZERO;
+		m_blendFuncSFactor = GL_SRC_ALPHA;
+		m_blendFuncDFactor = GL_ONE_MINUS_SRC_ALPHA;
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, m_blendFuncScaleFactors);
+		glBlendFunc(m_blendFuncSFactor, m_blendFuncDFactor);
 	}
 
 	void _SceneView::draw()
@@ -159,7 +160,9 @@ namespace Tank::Editor
 		if (m_keyInput->getKeyState(GLFW_KEY_F4) == KeyState::Pressed)
 			cycleDepthFuncComparisonMode();
 		if (m_keyInput->getKeyState(GLFW_KEY_F5) == KeyState::Pressed)
-			cycleBlendFuncScaleFactors();
+			cycleBlendFuncFactor(m_blendFuncSFactor, "sfactor");
+		if (m_keyInput->getKeyState(GLFW_KEY_F6) == KeyState::Pressed)
+			cycleBlendFuncFactor(m_blendFuncDFactor, "dfactor");
 
 		float frameDelta = Time::getFrameDelta();
 
@@ -302,7 +305,7 @@ namespace Tank::Editor
 	}
 
 	
-	void _SceneView::cycleBlendFuncScaleFactors()
+	void _SceneView::cycleBlendFuncFactor(GLenum &factor, const std::string &name)
 	{
 		std::map<GLenum, std::string> enumToName = {
 			{ GL_ZERO, "ZERO (0,0,0,0)" },
@@ -325,34 +328,33 @@ namespace Tank::Editor
 		};
 
 		std::string newName;
-		switch (m_blendFuncScaleFactors)
+		switch (factor)
 		{
 		case GL_ONE_MINUS_SRC1_ALPHA:
-			m_blendFuncScaleFactors = GL_ZERO;
-			newName = enumToName[m_blendFuncScaleFactors];
+			factor = GL_ZERO;
+			newName = enumToName[factor];
 			break;
 		default:
-			auto it = enumToName.find(m_blendFuncScaleFactors);
+			auto it = enumToName.find(factor);
 			if (it != enumToName.end())
 			{
 				auto nextPair = *(++it);
-				m_blendFuncScaleFactors = nextPair.first;
+				factor = nextPair.first;
 				newName = nextPair.second;
 			}
 			else
 			{
-				newName = enumToName[m_blendFuncScaleFactors] + " (Unable to modify)";
+				newName = enumToName[factor] + " (Unable to modify)";
 			}
 
 			break;
 		}
 
-
-		glBlendFunc(GL_SRC_ALPHA, m_blendFuncScaleFactors);
+		glBlendFunc(GL_SRC_ALPHA, factor);
 
 		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(
 			Tank::Colour::INFO,
-			"Set GL blend func comparison to " + newName
+			"Set GL blend func " + name + " to " + newName
 		);
 	}
 }

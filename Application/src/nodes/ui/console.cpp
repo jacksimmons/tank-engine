@@ -22,7 +22,8 @@ namespace Tank::Editor
 						"F2 - Cycle glCullFace [=BACK], FRONT, FRONT_AND_BACK\n"
 						"F3 - Cycle glFrontFace (winding order) [=CCW], CW\n"
 						"F4 - Cycle glDepthFunc comparison [=LESS], NEVER, ALWAYS, LEQUAL, EQUAL, GREATER, GEQUAL, NOTEQUAL\n"
-						"F5 - Cycle glBlendFunc scale factor [=ZERO], ONE, ...\n"
+						"F5 - Cycle glBlendFunc sfactor ZERO, ONE, ...\n"
+						"F6 - Cycle glBlendFunc dfactor ZERO, ONE, ...\n"
 						"(x)AD (y)WS (z)QE - Camera pan, axis in brackets\n"
 						"(x)JL (y)IK (z)UO - Camera rotation, axis in brackets\n"
 					);
