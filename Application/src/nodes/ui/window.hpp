@@ -1,13 +1,14 @@
 #pragma once
 #include "imgui.h"
-#include "nodes/editor_node.hpp"
+#include "nodes/interfaces/editor_only.hpp"
+
 
 namespace Tank::Editor
 {
 	/// <summary>
 	/// Base class to render an ImGui window in the Editor.
 	/// </summary>
-	class _Window : public EditorNode
+	class _Window : public Node
 	{
 		// Classes which can access the constructor (permitted subclasses)
 		friend class _Console;

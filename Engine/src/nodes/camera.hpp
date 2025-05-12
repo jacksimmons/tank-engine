@@ -1,8 +1,9 @@
 #pragma once
 
 #include <glm/gtx/quaternion.hpp>
-#include "nodes/node.hpp"
 #include "transformation.hpp"
+#include "nodes/node.hpp"
+#include "nodes/interfaces/editor_only.hpp"
 
 
 namespace Tank
@@ -66,8 +67,6 @@ namespace Tank
 		glm::vec3 getTransformedCentre() const;
 		glm::vec3 getTransformedEye() const;
 		glm::vec3 getTransformedUp() const;
-
-
 
 		void setPanSpeed(float speed) noexcept { m_panSpeed = speed; }
 		float getPanSpeed() const noexcept { return m_panSpeed; }

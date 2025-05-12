@@ -7,7 +7,6 @@
 #include "widget.hpp"
 #include "shader.hpp"
 #include "nodes/node.hpp"
-#include "nodes/editor_node.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/light.hpp"
 #include "nodes/camera.hpp"
@@ -16,6 +15,7 @@
 #include "nodes/ui/console.hpp"
 #include "nodes/ui/inspector.hpp"
 #include "nodes/ui/file_dialog.hpp"
+#include "nodes/interfaces/editor_only.hpp"
 #include "nodes/interfaces/shader_container.hpp"
 
 
@@ -35,7 +35,7 @@ namespace Tank::Editor
 			ImGui::Text(typeid(*m_inspectedNode).name());
 
 			// Prevent users from modifying editor nodes, which would likely cause a crash.
-			if (EditorNode *editorNode = dynamic_cast<EditorNode *>(m_inspectedNode))
+			if (m_inspectedNode->isEditorControlled())
 			{
 				ImGui::Text("Modifying the editor is not supported.");
 			}

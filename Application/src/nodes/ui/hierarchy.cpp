@@ -65,7 +65,7 @@ namespace Tank::Editor
 		// Add node name to the tree, clicking on this node will set `nodeExpanded` to true if not a leaf node.
 		ImVec4 nodeNameCol = Colour::NORMAL;
 		if (!node->getEnabled()) nodeNameCol = Colour::DISABLED;
-		if (EditorNode *editorNode = dynamic_cast<EditorNode *>(node)) nodeNameCol = Colour::ERR;
+		if (node->isEditorControlled()) nodeNameCol = Colour::ERR;
 		
 		ImGui::PushStyleColor(ImGuiCol_Text, nodeNameCol);
 		bool nodeExpanded = ImGui::TreeNodeEx((node->getName() + "##" + std::to_string(*count)).c_str(), flags);
@@ -112,11 +112,10 @@ namespace Tank::Editor
 		if (ImGui::BeginPopupContextItem())
 		{
 			Scene *activeScene = Scene::getActiveScene();
-			bool isEditorNode = false;
-			if (EditorNode *_ = dynamic_cast<EditorNode *>(node)) isEditorNode = true;
+			bool isEditorControlled = node->isEditorControlled();
 			
 			// If the node is not the root, not the current scene, and not an editor node, allow deletion
-			if (node != m_currentRoot && node != activeScene && !isEditorNode && ImGui::MenuItem("Delete Node"))
+			if (node != m_currentRoot && node != activeScene && !isEditorControlled && ImGui::MenuItem("Delete Node"))
 			{
 				activeScene->onNodeDeleted(node);
 
@@ -135,7 +134,7 @@ namespace Tank::Editor
 			}
 
 			// If the node is not an editor node, allow child creation
-			if (!isEditorNode && ImGui::BeginMenu("Add Child Node"))
+			if (!isEditorControlled && ImGui::BeginMenu("Add Child Node"))
 			{
 				if (ImGui::MenuItem("Node")) addNewNode(node, new Node());
 				if (ImGui::MenuItem("Sprite (2D)"))
@@ -160,18 +159,7 @@ namespace Tank::Editor
 					addNewNode(node, new CubeMap("CubeMap", sources));
 				}
 				if (ImGui::MenuItem("Point Light")) addNewNode(node, new PointLight());
-				if (ImGui::MenuItem("Directional Light"))
-				{
-					ShaderSources sources;
-					sources.vertex.location = "shader.vert";
-					sources.fragment.location = "shader.frag";
-
-					auto icon = std::make_unique<Sprite>("Icon", sources, fs::path(ROOT_DIRECTORY) / "textures/dir_light_source.png");
-
-					DirLight *light = new DirLight();
-					light->addChild(std::move(icon));
-					addNewNode(node, light);
-				}
+				if (ImGui::MenuItem("Directional Light")) addNewNode(node, new DirLight());
 				if (ImGui::MenuItem("Camera")) addNewNode(node, new Camera());
 
 				ImGui::EndMenu();

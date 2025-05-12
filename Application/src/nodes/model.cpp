@@ -193,6 +193,8 @@ namespace Tank
 
 	void Model::draw()
 	{
+		if (!getVisibility()) return;
+
 		IOutlined::predraw();
 		m_shader->use();
 

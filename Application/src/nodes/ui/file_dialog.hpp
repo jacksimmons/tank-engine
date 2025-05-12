@@ -1,6 +1,5 @@
 #pragma once
 #include "window.hpp"
-namespace fs = std::filesystem;
 
 
 namespace Tank::Editor

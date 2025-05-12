@@ -1,5 +1,5 @@
-
-#include "nodes/node.hpp"
+#pragma once
+#include "nodes/interfaces/editor_only.hpp"
 
 
 namespace Tank
@@ -7,6 +7,8 @@ namespace Tank
 	class Model;
 	class Shader;
 	class Scene;
+	class ShaderSources;
+	class ShaderSource;
 
 	enum class LightType
 	{
@@ -15,12 +17,11 @@ namespace Tank
 		Directional
 	};
 
-	class Light : public Node
+	class Light : public IEditorOnly
 	{
 	public:
 		virtual json serialise() override;
 		static void deserialise(const json &serialised, Light **targetPtr);
-
 	protected:
 		// The scene this light applies to shaders within. Responsibility lies in the Light class
 		// to call m_scene->updateShaders() after changes to the light occur.

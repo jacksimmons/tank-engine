@@ -59,6 +59,8 @@ namespace Tank
 
 	void Sprite::draw()
 	{
+		if (!getVisibility()) return;
+
 		IOutlined::predraw();
 		m_shader->use();
 
@@ -90,5 +92,7 @@ namespace Tank
 		}
 		m_shader->unuse();
 		IOutlined::postdraw(m_transform.get());
+
+		Node::draw();
 	}
 }

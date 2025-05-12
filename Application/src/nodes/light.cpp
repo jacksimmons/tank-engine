@@ -34,10 +34,18 @@ namespace Tank
 	}
 
 
-	Light::Light(const std::string &name, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec) : Node(name),
+	Light::Light(const std::string &name, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec) :
+		IEditorOnly(name),
 		m_ambient(amb), m_diffuse(diff), m_specular(spec)
 	{
 		m_scene = Scene::getActiveScene();
+
+		ShaderSources sources;
+		sources.vertex.location = "shader.vert";
+		sources.fragment.location = "shader.frag";
+
+		auto gizmo = std::make_unique<Sprite>("Gizmo", sources, fs::path(ROOT_DIRECTORY) / "textures/dir_light_source.png");
+		addChild(std::move(gizmo));
 	}
 
 

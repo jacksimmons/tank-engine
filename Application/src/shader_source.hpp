@@ -26,6 +26,12 @@ namespace Tank
 
 
 		ShaderSources();
+		ShaderSources(ShaderSource vertex, ShaderSource fragment, ShaderSource geometry)
+		{
+			this->vertex = vertex;
+			this->fragment = fragment;
+			this->geometry = geometry;
+		}
 		ShaderSources(const ShaderSources &original);
 		bool operator==(const ShaderSources &other);
 	};

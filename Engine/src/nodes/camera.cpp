@@ -54,7 +54,8 @@ namespace Tank
 	}
 
 
-	Camera::Camera(const std::string &name, glm::vec3 eye, glm::vec3 centre, glm::vec3 up) : Node(name)
+	Camera::Camera(const std::string &name, glm::vec3 eye, glm::vec3 centre, glm::vec3 up) :
+		Node(name)
 	{
 		m_type = "Camera";
 

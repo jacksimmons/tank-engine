@@ -4,11 +4,18 @@
 #include "core.hpp"
 #include "transform.hpp"
 #include "nodes/interfaces/serialisable.hpp"
+#include "nodes/interfaces/scriptable.hpp"
 
 
 namespace Tank
 {
-	class TANK_API Node : public ISerialisable
+	/// <summary>
+	/// An object which exists in the Node hierarchy. It has a parent (or is the root),
+	/// and any number of children.
+	/// 
+	/// Nodes can be serialised and deserialised.
+	/// </summary>
+	class TANK_API Node : public ISerialisable, public IScriptable
 	{
 	public:
 		virtual json serialise();
@@ -33,8 +40,12 @@ namespace Tank
 		Node *m_parent;
 		std::vector<std::unique_ptr<Node>> m_children;
 		bool m_started = false;
-	protected:
-		virtual void draw();
+
+		/// <summary>
+		/// If true, this is controlled by the editor: the Hierarchy and Inspector are
+		/// unable to edit this node.
+		/// </summary>
+		bool m_isEditorControlled = false;
 	public:
 		Node(const std::string &name = "Node");
 		virtual ~Node() = default;
@@ -50,6 +61,8 @@ namespace Tank
 		void setName(const std::string &name) noexcept { m_name = name; }
 		constexpr const std::string& getName() const noexcept { return m_name; }
 		std::string getPath() const;
+
+		constexpr bool isEditorControlled() const { return m_isEditorControlled; }
 
 		constexpr void setParent(Node *parent) noexcept { m_parent = parent; }
 		constexpr Node *getParent() const noexcept { return m_parent; }
@@ -95,6 +108,7 @@ namespace Tank
 
 		virtual void startup();
 		virtual void preupdate();
+		virtual void draw();
 		virtual void update();
 		virtual void shutdown();
 		void destroy() { m_parent->m_childrenAwaitingDisown.push_back(this); };

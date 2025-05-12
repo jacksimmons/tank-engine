@@ -5,9 +5,10 @@
 namespace Tank::Editor
 {
 	_Window::_Window(const std::string &name, const ImGuiWindowFlags &flags, bool canBeClosed, bool autoScroll)
-		: EditorNode(name), m_canBeClosed(canBeClosed), m_autoScroll(autoScroll)
+		: Node(name), m_canBeClosed(canBeClosed), m_autoScroll(autoScroll)
 	{
 		m_flags = flags | ImGuiWindowFlags_NoCollapse;
+		m_isEditorControlled = true;
 	}
 
 
@@ -29,6 +30,6 @@ namespace Tank::Editor
 
 			ImGui::End();
 		}
-		EditorNode::draw();
+		Node::draw();
 	}
 }
