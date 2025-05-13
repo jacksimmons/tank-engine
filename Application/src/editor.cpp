@@ -22,7 +22,6 @@
 #include "scene_serialisation.hpp"
 #include "widget.hpp"
 #include "static/time.hpp"
-#include "scripting/script_engine.hpp"
 #include "nodes/node.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/model.hpp"
@@ -65,7 +64,6 @@ namespace Tank::Editor
 
 		initGL();
 		initImGui();
-		ScriptEngine::init();
 	}
 
 
@@ -76,7 +74,6 @@ namespace Tank::Editor
 		ImGui::DestroyContext();
 		glfwDestroyWindow(m_window);
 		glfwTerminate();
-		ScriptEngine::shutdown();
 	}
 
 
@@ -89,15 +86,17 @@ namespace Tank::Editor
 		}
 
 		// Set GL version hint
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+		const int GL_MAJOR = 4;
+		const int GL_MINOR = 6;
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_MAJOR);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_MINOR);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 		m_window = glfwCreateWindow(m_settings->windowSize.x, m_settings->windowSize.y, (char *)"TankEngine", nullptr, nullptr);
 		if (m_window == nullptr)
 		{
-			TE_CORE_CRITICAL("GLFW failed to create window.");
+			TE_CORE_CRITICAL(std::format("GLFW failed to create window. Does your machine support OpenGL version {}.{}?", GL_MAJOR, GL_MINOR));
 			glfwTerminate();
 			return;
 		}

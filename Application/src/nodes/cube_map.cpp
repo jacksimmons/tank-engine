@@ -1,5 +1,5 @@
-
 #include <glad/glad.h>
+#include "tepch.hpp"
 #include "log.hpp"
 #include "texture.hpp"
 #include "shader.hpp"

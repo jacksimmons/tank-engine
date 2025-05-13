@@ -6,7 +6,6 @@
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
-#include "assimp/material.h"
 
 #include "log.hpp"
 #include "texture.hpp"
