@@ -1,5 +1,5 @@
-
 #include <glad/glad.h>
+#include "tepch.hpp"
 #include "log.hpp"
 #include "texture.hpp"
 #include "shader.hpp"
@@ -50,7 +50,7 @@ namespace Tank
 		m_shader->use();
 		{
 			int texNum = Texture::getTexCount();
-			auto tex = Texture::cubeMapFromFile(std::string(ROOT_DIRECTORY) + "/textures", textureNames, "cubeMap");
+			auto tex = Texture::cubeMapFromFile(fs::current_path() / "textures", textureNames, "cubeMap");
 			if (tex.has_value())
 			{
 				m_texture = tex.value();

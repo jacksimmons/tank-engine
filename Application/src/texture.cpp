@@ -9,8 +9,8 @@ namespace Tank
 	unsigned Texture::s_numTextures = 0;
 
 
-	Texture::Texture(GLuint texID, GLenum texTarget, const std::string &texType, const std::string &directory, const std::string &filename) :
-		m_texID(texID), m_texTarget(texTarget), m_texType(texType), m_directory(directory), m_filename(filename)
+	Texture::Texture(GLuint texID, GLenum texTarget, const std::string &texType, const fs::path &path) :
+		m_texID(texID), m_texTarget(texTarget), m_texType(texType), m_path(path)
 	{
 		s_numTextures++;
 	}
@@ -25,7 +25,7 @@ namespace Tank
 	}
 
 
-	std::optional<std::shared_ptr<Texture>> Texture::fromFile(const std::string &directory, const std::string &filename, const std::string &texType)
+	std::optional<std::shared_ptr<Texture>> Texture::fromFile(const fs::path &path, const std::string &texType)
 	{
 		//GLint maxTextureUnits;
 		//glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
@@ -36,12 +36,12 @@ namespace Tank
 		//}
 
 		int w, h, numChannels;
-		unsigned char *data = stbi_load((directory + "/" + filename).c_str(), &w, &h, &numChannels, 0); // +stbi1
+		unsigned char *data = stbi_load(path.string().c_str(), &w, &h, &numChannels, 0); // +stbi1
 
 		if (!data)
 		{
 			TE_CORE_ERROR("Failed to load texture from image. File:");
-			TE_CORE_ERROR(std::string(directory) + "/" + filename);
+			TE_CORE_ERROR(path.string());
 			stbi_image_free(data); // -stbi1
 			return {};
 		}
@@ -68,13 +68,13 @@ namespace Tank
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		TE_CORE_INFO(std::format("Added GL_TEXTURE_2D texture {} with ID {}.", filename, texID));
+		TE_CORE_INFO(std::format("Added GL_TEXTURE_2D texture {} with ID {}.", path.filename().string(), texID));
 
-		return std::shared_ptr<Texture>(new Texture(texID, GL_TEXTURE_2D, texType, directory, filename));
+		return std::shared_ptr<Texture>(new Texture(texID, GL_TEXTURE_2D, texType, path));
 	}
 
 
-	std::optional<std::shared_ptr<Texture>> Texture::cubeMapFromFile(const std::string &directory, const std::array<std::string, 6> &filenames,
+	std::optional<std::shared_ptr<Texture>> Texture::cubeMapFromFile(const fs::path &directory, const std::array<std::string, 6> &filenames,
 		const std::string &texType)
 	{
 		//GLint maxTextureUnits;
@@ -87,7 +87,7 @@ namespace Tank
 		for (int i = 0; i < 6; i++)
 		{
 			int w, h, numChannels;
-			unsigned char *data = stbi_load((directory + "/" + filenames[i]).c_str(), &w, &h, &numChannels, 0); // +stbi1
+			unsigned char *data = stbi_load((directory / filenames[i]).string().c_str(), &w, &h, &numChannels, 0); // +stbi1
 
 			if (!data)
 			{
@@ -117,8 +117,8 @@ namespace Tank
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-		TE_CORE_INFO(std::format("Added GL_TEXTURE_CUBE_MAP texture (first: {}/{}) with name {}", directory, filenames[0], texID));
+		TE_CORE_INFO(std::format("Added GL_TEXTURE_CUBE_MAP texture (first: {}/{}) with name {}", directory.string(), filenames[0], texID));
 
-		return std::shared_ptr<Texture>(new Texture(texID, GL_TEXTURE_CUBE_MAP, texType, directory, filenames[0]));
+		return std::shared_ptr<Texture>(new Texture(texID, GL_TEXTURE_CUBE_MAP, texType, directory / filenames[0]));
 	}
 }

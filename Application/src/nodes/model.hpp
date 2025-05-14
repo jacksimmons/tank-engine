@@ -4,10 +4,10 @@
 #include "mesh.hpp"
 #include "texture.hpp"
 #include "interfaces/mesh_container.hpp"
-
+#include "assimp/material.h"
 
 struct aiNode; struct aiScene; struct aiMesh;
-struct aiMaterial; enum aiTextureType;
+struct aiMaterial;
 namespace Tank
 {
 	class Texture;
@@ -27,7 +27,7 @@ namespace Tank
 	public:
 		Model(const std::string &name,
 			ShaderSources &sources,
-			const std::string &modelPath
+			const fs::path &modelPath
 		);
 		virtual ~Model() = default;
 
