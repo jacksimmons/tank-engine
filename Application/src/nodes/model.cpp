@@ -41,7 +41,7 @@ namespace Tank
 	}
 
 
-	Model::Model(const std::string &name, ShaderSources &sources, const std::string &modelPath)
+	Model::Model(const std::string &name, ShaderSources &sources, const fs::path &modelPath)
 		: Node(name), IMeshContainer(sources)
 	{
 		m_type = "Model";
@@ -161,7 +161,7 @@ namespace Tank
 			for (unsigned j = 0; j < loadedTextures.size(); j++)
 			{
 				std::shared_ptr<Texture> loadedTex = loadedTextures[j];
-				if (std::strcmp(loadedTex->getFilename().data(), str.C_Str()) == 0)
+				if (loadedTex->getPath().filename() == str.C_Str())
 				{
 					textures.push_back(loadedTex);
 					skipLoading = true;
@@ -171,7 +171,7 @@ namespace Tank
 
 			if (!skipLoading)
 			{
-				auto tex = Texture::fromFile(m_modelDirectory.string(), str.C_Str(), typeName);
+				auto tex = Texture::fromFile(m_modelDirectory / str.C_Str(), typeName);
 
 				if (tex.has_value())
 				{

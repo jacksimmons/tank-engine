@@ -9,47 +9,50 @@ workspace "TankEngine"
     filter { "configurations:Release" }
 	optimize "On"
 
-    project "Engine"
+project "Engine"
 	kind "SharedLib"
 	language "C++"
 	cppdialect "c++20"
 	targetdir "Builds/bin/%{prj.name}/%{cfg.longname}"
 	objdir "Builds/obj/%{prj.name}/%{cfg.longname}"
 
-        defines {
-                "TANK_DLL",
-                "GLM_ENABLE_EXPERIMENTAL",
-                "FMT_UNICODE=0",
-                "ROOT_DIRECTORY=\"%{wks.location}\""
-        }
+	defines {
+		"TANK_DLL",
+		"GLM_ENABLE_EXPERIMENTAL",
+		"FMT_UNICODE=0"
+	}
 
-        includedirs {
-                "include",
-                "include/glm",
-                "%{prj.name}/include",
-                "%{prj.name}/src",
-                "%{prj.name}" -- for pch
-        }
-        pchheader "%{prj.name}/tepch.hpp"
-        pchsource "%{prj.name}/application.cpp"
-        files {
+	includedirs {
+		"include",
+		"include/glm",
+		"%{prj.name}/include",
+		"%{prj.name}/src",
+		"%{prj.name}" -- for pch
+	}
+
+	files {
 		"%{prj.name}/src/**.hpp",
 		"%{prj.name}/src/**.cpp"
 	}
-        libdirs {
+
+	libdirs {
 		"lib",
-                "%{prj.name}/lib"
-	}
-        links {
-                "assimp5"
+		"%{prj.name}/lib"
 	}
 
+	-- PCH
+	pchheader "tepch.hpp"
+	pchsource "%{prj.name}/src/application.cpp"
+	filter { "action:vs*" }
+		buildoptions { "/FI tepch.hpp" }
+
+	-- Copy DLL into Application outdir
 	postbuildcommands {
 		"mkdir -p " .. appDir,
 		"{COPYFILE} %[%{cfg.buildtarget.relpath}] %[" .. appDir .. "/%{cfg.buildtarget.name}]"
 	}
 
-    project "Application"
+project "Application"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "c++20"
@@ -58,12 +61,8 @@ workspace "TankEngine"
 
 	defines {
 		"GLM_ENABLE_EXPERIMENTAL",
-		"FMT_UNICODE=0",
-		"ROOT_DIRECTORY=\"%{wks.location}\"",
-		"APP_DIRECTORY=\"%{prj.location}\""
+		"FMT_UNICODE=0"
 	}
-
-        pchheader "Engine/tepch.hpp"
 
 	includedirs {
 		"include",
@@ -72,26 +71,22 @@ workspace "TankEngine"
 		"%{prj.name}/src",
 		"Engine/src",
 		"Engine", -- for pch
-                "%{prj.name}/include/imgui",
-                "%{prj.name}/include/imgui/backends",
-                "vendor/mono/include"
+		"%{prj.name}/include/imgui",
+		"%{prj.name}/include/imgui/backends",
+		"vendor/mono/include"
 	}
-
-        files {
-                "%{prj.name}/src/**.hpp",
-                "%{prj.name}/src/**.cpp",
+	
+	files {
+		"%{prj.name}/src/**.hpp",
+		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/include/imgui/imgui*.cpp",
 		"%{prj.name}/include/imgui/backends/imgui_impl_glfw.cpp",
 		"%{prj.name}/include/imgui/backends/imgui_impl_opengl3.cpp",
 		"%{prj.name}/include/glad/glad.cpp"
-        }
+	}
 
-	local glfwDir = ""
-	local glfwLib = ""
-	filter { "system:not windows" }
-		glfwDir = "%{prj.name}/lib/glfw/lib-gcc"
-		glfwName = "libglfw3.so"
-
+	-- Library directories
+	local glfwDir = "%{prj.name}/lib/glfw/lib-" .. _ACTION
 	libdirs {
 		"lib",
 		"%{prj.name}/lib",
@@ -99,18 +94,28 @@ workspace "TankEngine"
 		glfwDir
 	}
 
+	-- Library links
 	links {
 		"Engine",
 		"glfw3",
-		"assimp5",
 --		"mono-2.0-sgen"
 	}
 
+	-- Platform-specific links
 	filter { "system:windows" }
-		links { "OpenGL32", "glfw3dll" }
+		links { "assimp-vc143-mt", "OpenGL32" }
 	filter { "system:not windows" }
-		links { "GL" }
-        
-        prebuildcommands {
-	        "{COPYFILE} %[" .. glfwDir .. "/" .. glfwName .. "] %[" .. appDir .. "/" .. glfwName .. "]"
-        }
+		links { "assimp5", "GL" }
+
+	-- PCH
+	pchheader "tepch.hpp"
+	pchsource "Engine/src/application.cpp"
+	filter { "action:vs*" }
+		buildoptions { "/FI tepch.hpp" }
+    
+	-- Copy dependency DLLs into outdir
+	postbuildcommands {
+		"{COPYDIR} %[" .. glfwDir .. "] %[" .. appDir .. "]",
+		"{COPYDIR} %[lib] %[" .. appDir .. "]",
+		"{COPYDIR} %[%{prj.name}/lib] %[" .. appDir .. "]"
+	}

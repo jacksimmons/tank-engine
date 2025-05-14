@@ -44,7 +44,7 @@ namespace Tank
 		sources.vertex.location = "shader.vert";
 		sources.fragment.location = "shader.frag";
 
-		auto gizmo = std::make_unique<Sprite>("Gizmo", sources, fs::path(ROOT_DIRECTORY) / "textures/dir_light_source.png");
+		auto gizmo = std::make_unique<Sprite>("Gizmo", sources, fs::current_path() / "textures" / "dir_light_source.png");
 		addChild(std::move(gizmo));
 	}
 

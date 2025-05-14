@@ -177,19 +177,19 @@ namespace Tank::Editor
 				sources.vertex.location = "shader.vert";
 				sources.fragment.location = "shader.frag";
 
-				auto object = std::unique_ptr<Tank::Model>(new Model("Doom", sources, std::string(ROOT_DIRECTORY) + "models/doom/doom_E1M1.obj"));
+				auto object = std::unique_ptr<Tank::Model>(new Model("Doom", sources, fs::current_path() / "models/doom/doom_E1M1.obj"));
 				object->getTransform()->setLocalTranslation({ 0, 0, 0 });
 				scene->addChild(std::move(object));
 
 				auto backpackPhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
-				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", sources, std::string(ROOT_DIRECTORY) + "models/backpack/backpack.obj"));
+				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", sources, fs::current_path() / "models/backpack/backpack.obj"));
 				backpack->getTransform()->setLocalScale({ 100, 100, 100 });
 				backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
 				backpackPhysics->addChild(std::move(backpack));
 				scene->addChild(std::move(backpackPhysics));
 
 				auto spritePhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
-				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", sources, std::string(ROOT_DIRECTORY) + "textures/awesomeface.png"));
+				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", sources, fs::current_path() / "textures/awesomeface.png"));
 				spritePhysics->addChild(std::move(sprite));
 				scene->addChild(std::move(spritePhysics));
 			}
@@ -334,7 +334,7 @@ namespace Tank::Editor
 		if (openProject && !m_initUI->getChild("Open Scene"))
 		{
 			std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-				new _FileDialog("Open Scene", std::filesystem::path(ROOT_DIRECTORY), std::filesystem::path(ROOT_DIRECTORY),
+				new _FileDialog("Open Scene", fs::current_path(), fs::current_path(),
 					_FileDialogTarget::File,
 					[this](const std::filesystem::path &path)
 					{
@@ -355,7 +355,7 @@ namespace Tank::Editor
 		if (saveProject && Scene::getActiveScene() && !m_initUI->getChild("Save Scene"))
 		{
 			std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-				new _FileDialog("Save Scene", std::filesystem::path(ROOT_DIRECTORY), std::filesystem::path(ROOT_DIRECTORY),
+				new _FileDialog("Save Scene", fs::current_path(), fs::current_path(),
 					_FileDialogTarget::File,
 					[this](const std::filesystem::path &path)
 					{

@@ -417,7 +417,7 @@ namespace Tank::Editor
 				auto fileDialog = std::unique_ptr<_FileDialog>(
 					new _FileDialog(
 						name,
-						ROOT_DIRECTORY,
+						fs::current_path(),
 						fs::path(texPath).parent_path(),
 						_FileDialogTarget::File,
 						[this, sprite](const fs::path &path)
@@ -458,7 +458,7 @@ namespace Tank::Editor
 				auto fileDialog = std::unique_ptr<_FileDialog>(
 					new _FileDialog(
 						name,
-						ROOT_DIRECTORY,
+						fs::current_path(),
 						fs::path(modelPath).parent_path(),
 						_FileDialogTarget::File,
 						[this, model](const fs::path &path)

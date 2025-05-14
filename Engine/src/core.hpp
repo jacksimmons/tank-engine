@@ -3,12 +3,12 @@
 
 // MSVC
 #if defined(_MSC_VER)
-#	define EXPORT __declspec(dllexport)
-#	define IMPORT __declspec(dllimport)
+#	define TANK_EXPORT __declspec(dllexport)
+#	define TANK_IMPORT __declspec(dllimport)
 // GCC
 #elif defined(__GNUC__)
-#	define EXPORT __attribute__((visibility("default")))
-#	define IMPORT
+#	define TANK_EXPORT __attribute__((visibility("default")))
+#	define TANK_IMPORT
 // Other
 #else
 #	pragma error This compiler is not supported.
@@ -16,7 +16,7 @@
 
 
 #ifdef TANK_DLL
-#	define TANK_API EXPORT
+#	define TANK_API TANK_EXPORT
 #else
-#	define TANK_API IMPORT
+#	define TANK_API TANK_IMPORT
 #endif
