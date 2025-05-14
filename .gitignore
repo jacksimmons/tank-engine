@@ -1,15 +1,10 @@
 .vs/
 *.dir/
-bin/*
-out/*
-Engine/bin/*
-Engine/out/*
-Release/
-Debug/
 x64/
 x32/
 **/*.vcxproj*
 *.pc
+*.make
 
 CMakeLists.txt.user
 CMakeCache.txt
@@ -28,6 +23,9 @@ CMakeUserPresets.json
 *.vcxproj.filters
 *.sln
 compileData.*
+
+# Builds
+Builds/*
 
 # Engine data
 **/*.scene

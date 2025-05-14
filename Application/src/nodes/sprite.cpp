@@ -46,7 +46,7 @@ namespace Tank
 
 	void Sprite::setTexPath(const fs::path &texPath)
 	{
-		const auto &tex = Texture::fromFile(texPath.has_parent_path() ? texPath.parent_path().string() : "", texPath.filename().string(), "diffuse");
+		const auto &tex = Texture::fromFile(texPath, "diffuse");
 		m_texPath = texPath;
 
 		m_meshes.clear();

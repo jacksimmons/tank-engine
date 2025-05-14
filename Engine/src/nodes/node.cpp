@@ -86,6 +86,7 @@ namespace Tank
 			if (getSibling(i) == this)
 				return i;
 		}
+		return -1;
 	}
 
 
