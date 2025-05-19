@@ -1,5 +1,5 @@
 workspace "TankEngine"
-    local appDir = "Builds/bin/Application/%{cfg.longname}"
+    local appDir = "Builds\\bin\\Application\\%{cfg.longname}"
 
     configurations { "Debug", "Release" }
     architecture "x86_64"
@@ -48,7 +48,7 @@ project "Engine"
 
 	-- Copy DLL into Application outdir
 	postbuildcommands {
-		"mkdir -p " .. appDir,
+		"{MKDIR} " .. appDir,
 		"{COPYFILE} %[%{cfg.buildtarget.relpath}] %[" .. appDir .. "/%{cfg.buildtarget.name}]"
 	}
 
