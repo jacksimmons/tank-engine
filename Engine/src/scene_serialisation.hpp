@@ -9,7 +9,7 @@ namespace Tank
 	namespace Serialisation
 	{
 		// Load a scene from disk, and gain ownership of it.
-		Scene* loadScene(const std::filesystem::path &scenePath);
-		void saveScene(Scene *scene, const std::filesystem::path &scenePath);
+		TANK_API Scene* loadScene(const std::filesystem::path &scenePath);
+		TANK_API void	saveScene(Scene *scene, const std::filesystem::path &scenePath);
 	}
 }

@@ -10,7 +10,7 @@ namespace Tank
 	class Node;
 	class Texture;
 	class Shader;
-	class CubeMap : public Node, public IShaderContainer
+	class TANK_API CubeMap : public Node, public IShaderContainer
 	{
 		// Serialisation
 	public:

@@ -6,7 +6,7 @@ namespace fs = std::filesystem;
 
 namespace Tank
 {
-	class Sprite : public Node, public IMeshContainer
+	class TANK_API Sprite : public Node, public IMeshContainer
 	{
 	public:
 		virtual json serialise() override;

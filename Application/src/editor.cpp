@@ -11,7 +11,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#define STB_IMAGE_IMPLEMENTATION
 #include "editor.hpp"
 #include "key_input.hpp"
 #include "shader.hpp"

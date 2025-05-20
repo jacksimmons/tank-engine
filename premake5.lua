@@ -19,7 +19,9 @@ project "Engine"
 	defines {
 		"TANK_DLL",
 		"GLM_ENABLE_EXPERIMENTAL",
-		"FMT_UNICODE=0"
+		"FMT_UNICODE=0",
+		"GLAD_GLAPI_EXPORT",
+		"GLAD_GLAPI_EXPORT_BUILD"
 	}
 
 	includedirs {
@@ -31,6 +33,7 @@ project "Engine"
 	}
 
 	files {
+		"include/glad/glad.cpp",
 		"%{prj.name}/src/**.hpp",
 		"%{prj.name}/src/**.cpp"
 	}
@@ -39,6 +42,12 @@ project "Engine"
 		"lib",
 		"%{prj.name}/lib"
 	}
+
+	-- Platform-specific links
+	filter { "system:windows" }
+		links { "assimp-vc143-mt", "OpenGL32" }
+	filter { "system:not windows" }
+		links { "assimp5", "GL" }
 
 	-- PCH
 	pchheader "tepch.hpp"
@@ -61,7 +70,8 @@ project "Application"
 
 	defines {
 		"GLM_ENABLE_EXPERIMENTAL",
-		"FMT_UNICODE=0"
+		"FMT_UNICODE=0",
+		"GLAD_GLAPI_EXPORT"
 	}
 
 	includedirs {
@@ -81,8 +91,7 @@ project "Application"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/include/imgui/imgui*.cpp",
 		"%{prj.name}/include/imgui/backends/imgui_impl_glfw.cpp",
-		"%{prj.name}/include/imgui/backends/imgui_impl_opengl3.cpp",
-		"%{prj.name}/include/glad/glad.cpp"
+		"%{prj.name}/include/imgui/backends/imgui_impl_opengl3.cpp"
 	}
 
 	-- Library directories
@@ -101,15 +110,9 @@ project "Application"
 --		"mono-2.0-sgen"
 	}
 
-	-- Platform-specific links
-	filter { "system:windows" }
-		links { "assimp-vc143-mt", "OpenGL32" }
-	filter { "system:not windows" }
-		links { "assimp5", "GL" }
-
 	-- PCH
 	pchheader "tepch.hpp"
-	pchsource "Engine/src/application.cpp"
+	pchsource "%{prj.name}/src/editor.cpp"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
     

@@ -7,7 +7,7 @@
 namespace Tank
 {
 	class IShaderContainer; class IOutlined;
-	class IMeshContainer : public IShaderContainer, public IOutlined
+	class TANK_API IMeshContainer : public IShaderContainer, public IOutlined
 	{
 	protected:
 		std::vector<std::unique_ptr<Mesh>> m_meshes;

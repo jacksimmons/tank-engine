@@ -1,7 +1,8 @@
 #include <glad/glad.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #include "texture.hpp"
 #include "nodes/model.hpp"
-namespace fs = std::filesystem;
 
 
 namespace Tank
@@ -25,6 +26,12 @@ namespace Tank
 	}
 
 
+	void Texture::initSTBI()
+	{
+		stbi_set_flip_vertically_on_load(1);
+	}
+
+
 	std::optional<std::shared_ptr<Texture>> Texture::fromFile(const fs::path &path, const std::string &texType)
 	{
 		//GLint maxTextureUnits;
@@ -34,6 +41,8 @@ namespace Tank
 		//	TE_CORE_ERROR("Max texture units surpassed.");
 		//	return {};
 		//}
+
+		initSTBI();
 
 		int w, h, numChannels;
 		unsigned char *data = stbi_load(path.string().c_str(), &w, &h, &numChannels, 0); // +stbi1
@@ -80,6 +89,8 @@ namespace Tank
 		//GLint maxTextureUnits;
 		//glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
 		//if (s_numTextures >= (GLuint)maxTextureUnits) return {};
+
+		initSTBI();
 
 		GLuint texID;
 		glGenTextures(1, &texID);

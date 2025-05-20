@@ -7,7 +7,7 @@
 namespace Tank
 {
 	class Mesh; class Transform;
-	class IOutlined
+	class TANK_API IOutlined
 	{
 	private:
 		std::unique_ptr<Shader> m_outlineShader;

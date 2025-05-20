@@ -6,16 +6,12 @@
 namespace Tank
 {
 	class Texture;
-	namespace Editor { class _Inspector; }
 
 	/// <summary>
 	/// An interface for an object containing (currently one) shaders.
 	/// </summary>
-	class IShaderContainer
+	class TANK_API IShaderContainer
 	{
-		// Allow Inspector to read shaders.
-		friend class Editor::_Inspector;
-
 	private:
 		// Non-owning reference to all loaded textures. Once all owners of a texture are
 		// destroyed, the corresponding entry in this vector becomes invalid.
@@ -34,7 +30,7 @@ namespace Tank
 		virtual ~IShaderContainer() = default;
 
 		void setShader(std::unique_ptr<Shader> shader) { m_shader = std::move(shader); };
-		Shader *getShader() const { return m_shader.get(); }
+		const Shader &getShader() const { return *m_shader; }
 
 		static std::vector<std::shared_ptr<Texture>> getLoadedTextures();
 		static void addLoadedTexture(std::weak_ptr<Texture> texture);

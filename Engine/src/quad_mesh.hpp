@@ -4,7 +4,7 @@
 
 namespace Tank
 {
-	class QuadMesh : public Mesh
+	class TANK_API QuadMesh : public Mesh
 	{
 	private:
 		static std::vector<Vertex> s_vertices;

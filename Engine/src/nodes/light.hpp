@@ -17,7 +17,7 @@ namespace Tank
 		Directional
 	};
 
-	class Light : public IEditorOnly
+	class TANK_API Light : public IEditorOnly
 	{
 	public:
 		virtual json serialise() override;
@@ -57,7 +57,7 @@ namespace Tank
 	};
 
 
-	class DirLight : public Light
+	class TANK_API DirLight : public Light
 	{
 	public:
 		virtual json serialise() override;
@@ -81,7 +81,7 @@ namespace Tank
 	};
 
 
-	class PointLight : public Light
+	class TANK_API PointLight : public Light
 	{
 	public:
 		PointLight(const std::string &name = "PointLight",

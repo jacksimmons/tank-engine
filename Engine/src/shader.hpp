@@ -14,7 +14,7 @@ namespace Tank
 	/// A Shader represents a shader program in OpenGL.
 	/// Consists of all parts of the rendering pipeline.
 	/// </summary>
-	class Shader
+	class TANK_API Shader
 	{
 	public:
 		static json serialise(const Shader &shader);

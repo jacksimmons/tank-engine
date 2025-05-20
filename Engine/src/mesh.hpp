@@ -8,7 +8,7 @@ namespace Tank
 	class Texture;
 	class IMeshContainer;
 	class Shader;
-	class Mesh
+	class TANK_API Mesh
 	{
 		friend class IMeshContainer;
 	private:

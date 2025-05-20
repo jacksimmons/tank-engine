@@ -1,10 +1,9 @@
 #pragma once
-namespace fs = std::filesystem;
 
 
 namespace Tank
 {
-	struct ShaderSource
+	struct TANK_API ShaderSource
 	{
 		unsigned glType;
 		unsigned glID;
@@ -18,7 +17,7 @@ namespace Tank
 	};
 
 
-	struct ShaderSources
+	struct TANK_API ShaderSources
 	{
 		ShaderSource vertex;
 		ShaderSource fragment;

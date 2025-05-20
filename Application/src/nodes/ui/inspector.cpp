@@ -208,7 +208,7 @@ namespace Tank::Editor
 	/// </summary>
 	void _Inspector::drawShaderSection(IShaderContainer *shaders)
 	{
-		const ShaderSources &sources = shaders->getShader()->getShaderSources();
+		const ShaderSources &sources = shaders->getShader().getShaderSources();
 		ShaderSources copy = ShaderSources(sources);
 
 		{
