@@ -36,11 +36,11 @@ public:
 
     void set_color(level::level_enum color_level, string_view_t color);
     void set_color_mode(color_mode mode);
-    bool should_color() const;
+    bool should_color();
 
     void log(const details::log_msg &msg) override;
     void flush() override;
-    void set_pattern(const std::string &pattern) final override;
+    void set_pattern(const std::string &pattern) final;
     void set_formatter(std::unique_ptr<spdlog::formatter> sink_formatter) override;
 
     // Formatting codes
@@ -84,9 +84,8 @@ private:
     bool should_do_colors_;
     std::unique_ptr<spdlog::formatter> formatter_;
     std::array<std::string, level::n_levels> colors_;
-    void set_color_mode_(color_mode mode);
-    void print_ccode_(const string_view_t &color_code) const;
-    void print_range_(const memory_buf_t &formatted, size_t start, size_t end) const;
+    void print_ccode_(const string_view_t &color_code);
+    void print_range_(const memory_buf_t &formatted, size_t start, size_t end);
     static std::string to_string_(const string_view_t &sv);
 };
 

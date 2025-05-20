@@ -1,5 +1,29 @@
+local function includeGlfw()
+	local glfwDir = "lib/glfw/lib-" .. _ACTION
+	libdirs { glfwDir }
+	links { "glfw3" }
+	return glfwDir;
+end
+
+
+local function includeAssimp()
+	filter { "system:windows" }
+		links { "assimp-vc143-mt" }
+	filter { "system:not windows" }
+		links { "assimp5" }
+end
+
+
+local function includeOpenGL()
+	filter { "system:windows" }
+		links { "OpenGL32" }
+	filter { "system:not windows" }
+		links { "GL" }
+end
+
+
 workspace "TankEngine"
-    local appDir = "Builds\\bin\\Application\\%{cfg.longname}"
+    local editorDir = "Builds/bin/Editor/%{cfg.longname}"
 
     configurations { "Debug", "Release" }
     architecture "x86_64"
@@ -27,27 +51,30 @@ project "Engine"
 	includedirs {
 		"include",
 		"include/glm",
+		"include/imgui",
+		"include/imgui/backends",
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		"%{prj.name}" -- for pch
 	}
 
 	files {
+		"include/imgui/imgui*.cpp",
+		"include/imgui/backends/imgui_impl_glfw.cpp",
+		"include/imgui/backends/imgui_impl_opengl3.cpp",
 		"include/glad/glad.cpp",
 		"%{prj.name}/src/**.hpp",
 		"%{prj.name}/src/**.cpp"
 	}
 
+	-- Libraries
 	libdirs {
 		"lib",
-		"%{prj.name}/lib"
+		"%{prj.name}/lib",
 	}
-
-	-- Platform-specific links
-	filter { "system:windows" }
-		links { "assimp-vc143-mt", "OpenGL32" }
-	filter { "system:not windows" }
-		links { "assimp5", "GL" }
+	local glfwDir = includeGlfw()
+	includeAssimp()
+	includeOpenGL()
 
 	-- PCH
 	pchheader "tepch.hpp"
@@ -55,13 +82,14 @@ project "Engine"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
 
-	-- Copy DLL into Application outdir
+	-- Copy DLL into Editor outdir
 	postbuildcommands {
-		"{MKDIR} " .. appDir,
-		"{COPYFILE} %[%{cfg.buildtarget.relpath}] %[" .. appDir .. "/%{cfg.buildtarget.name}]"
+		"{MKDIR} " .. editorDir,
+		"{COPYDIR} %[" .. glfwDir .. "] %[%{cfg.buildtarget.directory}]",
+		"{COPYDIR} %[%{cfg.buildtarget.directory}] %[" .. editorDir .. "]"
 	}
 
-project "Application"
+project "Editor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "c++20"
@@ -77,36 +105,29 @@ project "Application"
 	includedirs {
 		"include",
 		"include/glm",
+		"include/imgui",
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		"Engine/src",
 		"Engine", -- for pch
-		"%{prj.name}/include/imgui",
-		"%{prj.name}/include/imgui/backends",
 		"vendor/mono/include"
 	}
 	
 	files {
+		"include/imgui/imgui*.cpp",
 		"%{prj.name}/src/**.hpp",
 		"%{prj.name}/src/**.cpp",
-		"%{prj.name}/include/imgui/imgui*.cpp",
-		"%{prj.name}/include/imgui/backends/imgui_impl_glfw.cpp",
-		"%{prj.name}/include/imgui/backends/imgui_impl_opengl3.cpp"
 	}
 
-	-- Library directories
-	local glfwDir = "%{prj.name}/lib/glfw/lib-" .. _ACTION
+	-- Libraries
 	libdirs {
 		"lib",
 		"%{prj.name}/lib",
 --		"vendor/mono/lib/%{cfg.buildtarget.name}",
-		glfwDir
 	}
-
-	-- Library links
+	includeGlfw()
 	links {
 		"Engine",
-		"glfw3",
 --		"mono-2.0-sgen"
 	}
 
@@ -118,7 +139,5 @@ project "Application"
     
 	-- Copy dependency DLLs into outdir
 	postbuildcommands {
-		"{COPYDIR} %[" .. glfwDir .. "] %[" .. appDir .. "]",
-		"{COPYDIR} %[lib] %[" .. appDir .. "]",
-		"{COPYDIR} %[%{prj.name}/lib] %[" .. appDir .. "]"
+		"{COPYDIR} %[%{prj.name}/lib] %[" .. editorDir .. "]"
 	}

@@ -4,7 +4,7 @@
 #include "mesh.hpp"
 #include "texture.hpp"
 #include "interfaces/mesh_container.hpp"
-#include "assimp/material.h"
+
 
 struct aiNode; struct aiScene; struct aiMesh;
 struct aiMaterial;
@@ -38,7 +38,7 @@ namespace Tank
 		void processNode(aiNode *node, const aiScene *scene);
 		std::unique_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene);
 		void processLights();
-
-		std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
+		
+		std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, int assimpTextureType, std::string typeName);
 	};
 }

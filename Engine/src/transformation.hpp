@@ -48,16 +48,4 @@ namespace Tank
 			return T_OP * rot * T_PO;
 		}
 	}
-
-	namespace quat
-	{
-		inline glm::quat fromAngleAxis(glm::vec3 angles, glm::vec3 xAxis = { 1,0,0 },
-			glm::vec3 yAxis = { 0,1,0 }, glm::vec3 zAxis = { 0,0,1 })
-		{
-			glm::quat x = glm::angleAxis(angles.x, xAxis);
-			glm::quat y = glm::angleAxis(angles.y, yAxis);
-			glm::quat z = glm::angleAxis(angles.z, zAxis);
-			return z * y * x;
-		}
-	}
 }

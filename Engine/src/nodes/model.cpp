@@ -6,6 +6,7 @@
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
+#include "assimp/material.h"
 
 #include "log.hpp"
 #include "texture.hpp"
@@ -147,9 +148,12 @@ namespace Tank
 	}
 
 
-	std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+	std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat, int assimpTexType, std::string typeName)
 	{
+		aiTextureType type = (aiTextureType)assimpTexType;
+
 		std::vector<std::shared_ptr<Texture>> textures;
+
 		for (unsigned i = 0; i < mat->GetTextureCount(type); i++)
 		{
 			aiString str;
