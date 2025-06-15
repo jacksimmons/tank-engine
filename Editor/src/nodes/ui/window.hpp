@@ -1,10 +1,18 @@
 #pragma once
 #include "imgui.h"
-#include "nodes/interfaces/editor_only.hpp"
+#include "nodes/node.hpp"
 
 
 namespace Tank::Editor
 {
+	struct WindowOpts
+	{
+		ImGuiWindowFlags flags;
+		bool closeable;
+		bool autoScroll;
+	};
+
+
 	/// <summary>
 	/// Base class to render an ImGui window in the Editor.
 	/// </summary>
@@ -17,11 +25,9 @@ namespace Tank::Editor
 		friend class _Inspector;
 		friend class _SceneView;
 	private:
-		_Window(const std::string &name, const ImGuiWindowFlags &flags = ImGuiWindowFlags_None, bool canBeClosed = true, bool autoScroll = false);
-		bool m_canBeClosed;
+		_Window(const std::string &name, const WindowOpts &opts);
 	protected:
-		ImGuiWindowFlags m_flags;
-		bool m_autoScroll;
+		WindowOpts m_opts;
 	public:
 		virtual ~_Window() = default;
 

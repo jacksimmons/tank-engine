@@ -16,7 +16,7 @@ namespace Tank::Editor
 	private:
 		Node *m_inspectedNode;
 
-		_Inspector(const std::string &name);
+		_Inspector(const std::string &name = "Inspector");
 		void drawNodeSection();
 		void drawSceneSection(Scene *scene);
 		void drawShaderSection(IShaderContainer *shaders);

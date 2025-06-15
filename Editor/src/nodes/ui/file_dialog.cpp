@@ -8,12 +8,19 @@ namespace fs = std::filesystem;
 
 namespace Tank::Editor
 {
+	const WindowOpts WINDOW_OPTS = {
+		ImGuiWindowFlags_None,
+		true,
+		false
+	};
+
+
 	_FileDialog::_FileDialog(const std::string &name,
 		const std::filesystem::path &rootDirectory,
 		const std::filesystem::path &startDirectory,
 		_FileDialogTarget target,
 		_FileDialogCallback onTargetSelected
-	) : _Window(name),
+	) : _Window(name, WINDOW_OPTS),
 		m_rootDirectory(rootDirectory), m_startDirectory(startDirectory), m_currentDirectory(startDirectory), m_target(target),
 		m_onTargetSelected(onTargetSelected), m_searchTerm("")
 	{
@@ -77,7 +84,7 @@ namespace Tank::Editor
 		}
 
 		drawSubdirectories();
-		drawDirectoryFiles();
+		if (m_target == _FileDialogTarget::File) drawDirectoryFiles();
 
 		ImGui::EndTable();
 	}

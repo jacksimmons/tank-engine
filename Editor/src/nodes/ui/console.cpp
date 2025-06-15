@@ -6,7 +6,14 @@
 
 namespace Tank::Editor
 {
-	_Console::_Console(const std::string &name) : _Window(name, ImGuiWindowFlags_None, false, true)
+	const WindowOpts WINDOW_OPTS = {
+		ImGuiWindowFlags_None,
+		true,
+		true
+	};
+
+
+	_Console::_Console(const std::string &name) : _Window(name, WINDOW_OPTS)
 	{
 		m_commands.push_back({
 			.name = "help",
@@ -16,7 +23,6 @@ namespace Tank::Editor
 					ImGui::TextColored(
 						Colour::INFO,
 						"--- Global Keybinds ---\n"
-						"ESC - Quit\n"
 						"--- SceneView Keybinds ---\n"
 						"F1 - Cycle glPolygonMode [=FILL], LINE, POINT\n"
 						"F2 - Cycle glCullFace [=BACK], FRONT, FRONT_AND_BACK\n"

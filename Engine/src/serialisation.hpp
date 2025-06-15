@@ -9,6 +9,9 @@ namespace Tank
 {
 	namespace Serialisation
 	{
+		json serialiseProject(Node *project);
+		Node* deserialiseProject(const json &serialised);
+
 		json serialise(Node *deserialised);
 		Node* deserialise(const json &serialised);
 	}

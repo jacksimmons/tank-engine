@@ -21,7 +21,15 @@
 
 namespace Tank::Editor
 {
-	_Inspector::_Inspector(const std::string &name) : _Window(name, ImGuiWindowFlags_None, false)
+	const WindowOpts WINDOW_OPTS = {
+		ImGuiWindowFlags_None,
+		true,
+		false
+	};
+
+
+	_Inspector::_Inspector(const std::string &name)
+		: _Window(name, WINDOW_OPTS)
 	{
 		m_inspectedNode = nullptr;
 	}

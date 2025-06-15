@@ -16,7 +16,15 @@
 
 namespace Tank::Editor
 {
-	_Hierarchy::_Hierarchy(const std::string &name) : _Window(name, ImGuiWindowFlags_None, false)
+	const WindowOpts WINDOW_OPTS = {
+		ImGuiWindowFlags_None,
+		true,
+		false
+	};
+
+
+	_Hierarchy::_Hierarchy(const std::string &name)
+		: _Window(name, WINDOW_OPTS)
 	{
 		m_showEditorHierarchy = false;
 		m_currentRoot = Tank::Scene::getActiveScene();
@@ -77,6 +85,7 @@ namespace Tank::Editor
 			!ImGui::IsItemToggledOpen() &&
 			ImGui::IsItemFocused() &&
 			!ImGui::IsMouseDown(ImGuiMouseButton_Left) &&
+			inspector &&
 			inspector->getInspectedNode() != node)
 		{
 			inspector->setInspectedNode(node);

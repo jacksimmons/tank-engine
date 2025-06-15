@@ -15,6 +15,8 @@ namespace Tank
 		class EditorApp : public Application
 		{
 		private:
+			static std::vector<std::string> s_windowNames;
+
 			std::unique_ptr<Node> m_initUI;
 			/// <summary>
 			/// Root node for system UI (Hierarchy, Inspector, etc.)
@@ -27,7 +29,6 @@ namespace Tank
 			void loadScene(std::unique_ptr<Scene> scene);
 			void loadDemoScene();
 			void postSceneSetup();
-			void drawMainMenuBar();
 		protected:
 			virtual void step() override;
 			virtual void handleKeyInput() override;

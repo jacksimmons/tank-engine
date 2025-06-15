@@ -18,7 +18,6 @@ namespace Tank::Editor
 		bool m_showEditorHierarchy;
 
 		// Methods
-	private:
 		/// <summary>
 		/// Draws a tree node for the node provided, then calls itself for each
 		/// of its children. Draws a leaf instead if no children.
@@ -39,7 +38,7 @@ namespace Tank::Editor
 		/// </summary>
 		void addNewNode(Node *parent, Node *heapAllocatedNode) const;
 
-		_Hierarchy(const std::string &name);
+		_Hierarchy(const std::string &name = "Hierarchy");
 	protected:
 		/// <summary>
 		/// Generates buttons for all children of the current node, at a given

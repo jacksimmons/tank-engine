@@ -8,9 +8,5 @@ namespace Tank
 	/// </summary>
 	class Asset : public Node
 	{
-	private:
-
-	public:
-
 	};
 }

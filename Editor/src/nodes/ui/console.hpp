@@ -17,7 +17,7 @@ namespace Tank::Editor
 		std::vector<std::function<void()>> m_lines;
 		std::vector<ConsoleCommand> m_commands;
 
-		_Console(const std::string &name);
+		_Console(const std::string &name = "Console");
 	public:
 		virtual void drawPanel() override;
 

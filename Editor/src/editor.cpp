@@ -24,11 +24,20 @@
 #include "nodes/ui/hierarchy.hpp"
 #include "nodes/ui/inspector.hpp"
 #include "nodes/ui/file_dialog.hpp"
+#include "nodes/ui/main_menu_bar.hpp"
 #include "nodes/physics/physics_body.hpp"
 
 
 namespace Tank::Editor
 {
+	std::vector<std::string> EditorApp::s_windowNames = {
+		"Hierarchy",
+		"Inspector",
+		"SceneView",
+		"Console"
+	};
+
+
 	EditorApp::EditorApp() : Application(
 		{
 			GLFW_KEY_F1,
@@ -50,7 +59,7 @@ namespace Tank::Editor
 			GLFW_KEY_K,
 			GLFW_KEY_L,
 			GLFW_KEY_U,
-			GLFW_KEY_O
+			GLFW_KEY_O,
 		}
 	)
 	{
@@ -59,6 +68,95 @@ namespace Tank::Editor
 
 		// Initialise UI
 		m_initUI = std::make_unique<Node>("Init");
+		m_initUI->addChild(
+			std::unique_ptr<_MainMenuBar>(new _MainMenuBar("MainMenuBar",
+			{
+				{
+					"File",
+					[]() { return true; },
+					{
+						{
+							"New Project",
+							[]() { return true; },
+							[this]()
+							{
+								loadDemoScene();
+								postSceneSetup();
+							}
+						},
+						{
+							"Open Project",
+							[this]() { return !m_initUI->getChild("Open Project"); },
+							[this]()
+							{
+								std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
+									new _FileDialog("Open Project", fs::current_path(), fs::current_path(),
+										_FileDialogTarget::Directory,
+										[this](const std::filesystem::path &path)
+										{
+											std::unique_ptr<Tank::Scene> scene;
+
+											// Load scene if it was valid, and close the popup either way
+											if (Scene *rawScene = Tank::Serialisation::loadScene(path.string()))
+											{
+												scene = std::unique_ptr<Tank::Scene>(rawScene);
+												loadScene(std::move(scene));
+												postSceneSetup();
+											}
+										}
+									)
+								);
+								m_initUI->addChild(std::move(fileDialog));
+							}
+						},
+						{
+							"Save Project",
+							[this]() { return Scene::getActiveScene() && !m_initUI->getChild("Save Project"); },
+							[this]()
+							{
+								std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
+									new _FileDialog("Save Project", fs::current_path(), fs::current_path(),
+										_FileDialogTarget::Directory,
+										[this](const std::filesystem::path &path)
+										{
+											Serialisation::saveScene(Scene::getActiveScene(), path);
+										}
+									)
+								);
+								m_initUI->addChild(std::move(fileDialog));
+							}
+						}
+					},
+				},
+
+				{
+					"Window",
+					[]() { return Scene::getActiveScene(); },
+					{
+						{
+							"Hierarchy",
+							[this]() { return !m_system->getChild("Hierarchy"); },
+							[this]() { m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy())); }
+						},
+						{
+							"Inspector",
+							[this]() { return !m_system->getChild("Inspector"); },
+							[this]() { m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector())); }
+						},
+						{
+							"SceneView",
+							[this]() { return !m_system->getChild("SceneView"); },
+							//[this]() { m_system->addChild(std::make_unique<_SceneView>(); }
+						},
+						{
+							"Console",
+							[this]() { return !m_system->getChild("Console"); },
+							[this]() { m_system->addChild(std::unique_ptr<_Console>(new _Console())); }
+						}
+					}
+				}
+			}))
+		);
 	}
 
 
@@ -141,9 +239,6 @@ namespace Tank::Editor
 
 	void EditorApp::step()
 	{
-		// Draw File, Edit, etc...
-		drawMainMenuBar();
-
 		// Draw all system UI (SceneView/Framebuffer draws the scene)
 		if (m_system)
 		{
@@ -161,65 +256,6 @@ namespace Tank::Editor
 			return;
 		}
 		((_SceneView*)m_system->getChild("SceneView"))->handleKeyInput();
-	}
-
-
-	void EditorApp::drawMainMenuBar()
-	{
-		bool newProject = false;
-		bool openProject = false;
-		bool saveProject = false;
-		if (ImGui::BeginMainMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
-			{
-				ImGui::MenuItem("New Project", "", &newProject);
-				ImGui::MenuItem("Open Project", "", &openProject);
-				ImGui::MenuItem("Save Project", "", &saveProject);
-				ImGui::EndMenu();
-			}
-		}
-		ImGui::EndMainMenuBar();
-
-		if (newProject)
-		{
-			loadDemoScene();
-			postSceneSetup();
-		}
-		if (openProject && !m_initUI->getChild("Open Scene"))
-		{
-			std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-				new _FileDialog("Open Scene", fs::current_path(), fs::current_path(),
-					_FileDialogTarget::File,
-					[this](const std::filesystem::path &path)
-					{
-						std::unique_ptr<Tank::Scene> scene;
-
-						// Load scene if it was valid, and close the popup either way
-						if (Scene *rawScene = Tank::Serialisation::loadScene(path.string()))
-						{
-							scene = std::unique_ptr<Tank::Scene>(rawScene);
-							loadScene(std::move(scene));
-							postSceneSetup();
-						}
-					}
-				)
-			);
-			m_initUI->addChild(std::move(fileDialog));
-		}
-		if (saveProject && Scene::getActiveScene() && !m_initUI->getChild("Save Scene"))
-		{
-			std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-				new _FileDialog("Save Scene", fs::current_path(), fs::current_path(),
-					_FileDialogTarget::File,
-					[this](const std::filesystem::path &path)
-					{
-						Serialisation::saveScene(Scene::getActiveScene(), path);
-					}
-				)
-			);
-			m_initUI->addChild(std::move(fileDialog));
-		}
 	}
 }
 
