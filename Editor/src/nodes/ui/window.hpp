@@ -24,6 +24,7 @@ namespace Tank::Editor
 		friend class _Hierarchy;
 		friend class _Inspector;
 		friend class _SceneView;
+		friend class _Profiler;
 	private:
 		_Window(const std::string &name, const WindowOpts &opts);
 	protected:

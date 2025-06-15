@@ -25,6 +25,7 @@
 #include "nodes/ui/inspector.hpp"
 #include "nodes/ui/file_dialog.hpp"
 #include "nodes/ui/main_menu_bar.hpp"
+#include "nodes/ui/profiler.hpp"
 #include "nodes/physics/physics_body.hpp"
 
 
@@ -152,6 +153,11 @@ namespace Tank::Editor
 							"Console",
 							[this]() { return !m_system->getChild("Console"); },
 							[this]() { m_system->addChild(std::unique_ptr<_Console>(new _Console())); }
+						},
+						{
+							"Profiler",
+							[this]() { return !m_system->getChild("Profiler"); },
+							[this]() { m_system->addChild(std::unique_ptr<_Profiler>(new _Profiler())); }
 						}
 					}
 				}
