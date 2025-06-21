@@ -12,6 +12,8 @@
 #include "nodes/ui/console.hpp"
 #include "nodes/ui/hierarchy.hpp"
 #include "nodes/ui/inspector.hpp"
+#include "nodes/physics/collider.hpp"
+#include "shapes/collision_sphere.hpp"
 
 
 namespace Tank::Editor
@@ -170,6 +172,14 @@ namespace Tank::Editor
 				if (ImGui::MenuItem("Point Light")) addNewNode(node, new PointLight());
 				if (ImGui::MenuItem("Directional Light")) addNewNode(node, new DirLight());
 				if (ImGui::MenuItem("Camera")) addNewNode(node, new Camera());
+				if (ImGui::BeginMenu("Collider"))
+				{
+					if (ImGui::MenuItem("Sphere")) addNewNode(node, new Collider(
+						"Collider: Sphere",
+						std::make_unique<CollisionSphere>(node->getTransform(), 3, false)
+					));
+					ImGui::EndMenu();
+				}
 
 				ImGui::EndMenu();
 			}

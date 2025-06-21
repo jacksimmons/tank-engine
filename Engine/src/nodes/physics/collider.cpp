@@ -23,10 +23,14 @@ namespace Tank
 
 	void Collider::update()
 	{
-	}
-
-	bool Collider::isColliding(const Collider &other)
-	{
-		return false;
+		// Check for any collisions with other colliders
+		for (Collider *collider : s_instances)
+		{
+			if (collider == this) continue;
+			if (m_shape->contains(collider->getTransform()->getLocalTranslation()))
+			{
+				TE_CORE_INFO(std::format("Collision: Offender {}, Recipient {}", collider->getName(), getName()));
+			}
+		}
 	}
 }

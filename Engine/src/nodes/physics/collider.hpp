@@ -12,7 +12,6 @@ namespace Tank
 	private:
 		std::unique_ptr<CollisionShape> m_shape;
 
-		virtual bool isColliding(const Collider &other);
 	public:
 		Collider(const std::string &name, std::unique_ptr<CollisionShape> shape);
 		virtual ~Collider();
