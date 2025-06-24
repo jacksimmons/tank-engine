@@ -1,6 +1,5 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include "application.hpp"
@@ -156,7 +155,6 @@ namespace Tank
 				// Decay input states (comes after handleKeyInput)
 				m_keyInput->update();
 			}
-
 			step();
 
 			ImGui::End();

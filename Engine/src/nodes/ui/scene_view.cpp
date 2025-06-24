@@ -4,18 +4,15 @@
 #include <GLFW/glfw3.h>
 
 #include "log.hpp"
-#include "framebuffer.hpp"
 #include "key_input.hpp"
 #include "colours.hpp"
 #include "static/time.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/camera.hpp"
 #include "nodes/ui/scene_view.hpp"
-#include "nodes/ui/console.hpp"
-#include "nodes/ui/inspector.hpp"
 
 
-namespace Tank::Editor
+namespace Tank
 {
 	const WindowOpts WINDOW_OPTS = {
 		ImGuiWindowFlags_None,
@@ -24,8 +21,8 @@ namespace Tank::Editor
 	};
 
 
-	_SceneView::_SceneView(const std::string &name, glm::ivec2 sceneViewportSize, glm::ivec2 fbViewportSize, KeyInput *keyInput)
-		: _Window(name, WINDOW_OPTS)
+	_SceneView::_SceneView(const std::string &name, glm::ivec2 sceneViewportSize, glm::ivec2 fbViewportSize, KeyInput *keyInput, bool isPlayer)
+		: _Window(name, WINDOW_OPTS), m_isPlayer(isPlayer)
 	{
 		m_sceneW = sceneViewportSize.x, m_sceneH = sceneViewportSize.y;
 		m_fb = std::make_unique<Framebuffer>(fbViewportSize.x, fbViewportSize.y);
@@ -67,7 +64,8 @@ namespace Tank::Editor
 	{
 		int fbW = m_fb->getW(), fbH = m_fb->getH();
 
-		ImGui::BeginChild("SceneRender");
+		// If this window is the Player, then render to the root ImGui window.
+		if (!m_isPlayer) ImGui::BeginChild("SceneRender");
 		m_isFocussed = ImGui::IsWindowFocused();
 
 		ImVec2 wsize = ImGui::GetWindowSize();
@@ -81,17 +79,17 @@ namespace Tank::Editor
 		ImTextureID imTex = (ImTextureID)(intptr_t)m_fb->getTexColBuf();
 
 		// Play mode button (once clicked, hide the button and replace it with Stop)
-		if (m_isInPlayMode || ImGui::Button("Play"))
+		// Only display "Play" if not in Play Mode.
+		if (m_isPlayer || m_isInPlayMode || ImGui::Button("Play"))
 		{
 			m_isInPlayMode = true;
-
 			// Enable all scripting (and disable all EditorNodes)
 			Scene *activeScene = Scene::getActiveScene();
-			//activeScene->getActiveCamera()->setFreeLook(false);
 			activeScene->startup();
-			m_parent->startup();
+			if (m_parent) m_parent->startup();
 
-			if (ImGui::Button("Stop"))
+			// Only display "Stop", and allow its use, if not always in Play Mode.
+			if (!m_isPlayer && ImGui::Button("Stop"))
 			{
 				m_isInPlayMode = false;
 
@@ -99,7 +97,7 @@ namespace Tank::Editor
 				Scene *activeScene = Scene::getActiveScene();
 				//activeScene->getActiveCamera()->setFreeLook(true);
 				activeScene->shutdown();
-				m_parent->shutdown();
+				if (m_parent) m_parent->shutdown();
 			}
 		}
 
@@ -116,7 +114,7 @@ namespace Tank::Editor
 		ImGui::Text(m_fpsDisplayLastText.c_str());
 
 		ImGui::Image(imTex, fbsize, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
-		ImGui::EndChild();
+		if (!m_isPlayer) ImGui::EndChild();
 	}
 
 	void _SceneView::startup()
@@ -234,7 +232,7 @@ namespace Tank::Editor
 		std::string line = std::format("Set GL polygon mode to {}",
 			m_polygonMode == GL_FILL ? "FILL" : (m_polygonMode == GL_POINT ? "POINT" : "LINE"));
 
-		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
+		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
 	}
 
 	void _SceneView::cycleCullFaceMode()
@@ -257,7 +255,7 @@ namespace Tank::Editor
 		std::string line = std::format("Set GL cull face mode to {}",
 			m_cullFaceMode == GL_BACK ? "BACK" : (m_cullFaceMode == GL_FRONT ? "FRONT" : "FRONT_AND_BACK"));
 
-		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
+		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
 	}
 
 	void _SceneView::cycleFrontFaceMode()
@@ -277,7 +275,7 @@ namespace Tank::Editor
 		std::string line = std::format("Set GL front face mode (winding order) to {}",
 			m_frontFaceMode == GL_CCW ? "CCW" : "CW");
 
-		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
+		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
 	}
 
 	void _SceneView::cycleDepthFuncComparisonMode()
@@ -306,10 +304,10 @@ namespace Tank::Editor
 
 		glDepthFunc(m_depthFuncComparisonMode);
 
-		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(
-			Tank::Colour::INFO,
-			"Set GL depth func comparison to " + newMode
-		);
+		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(
+		//	Tank::Colour::INFO,
+		//	"Set GL depth func comparison to " + newMode
+		//);
 	}
 
 	
@@ -360,9 +358,9 @@ namespace Tank::Editor
 
 		glBlendFunc(GL_SRC_ALPHA, factor);
 
-		dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(
-			Tank::Colour::INFO,
-			"Set GL blend func " + name + " to " + newName
-		);
+		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(
+		//	Tank::Colour::INFO,
+		//	"Set GL blend func " + name + " to " + newName
+		//);
 	}
 }

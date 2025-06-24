@@ -2,7 +2,7 @@
 #include "log.hpp"
 
 
-namespace Tank::Editor
+namespace Tank
 {
 	_Window::_Window(const std::string &name, const WindowOpts &opts)
 		: Node(name), m_opts(opts)

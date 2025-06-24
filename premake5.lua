@@ -1,29 +1,17 @@
-local function includeGlfw()
-	local glfwDir = "lib/glfw/lib-" .. _ACTION
-	libdirs { glfwDir }
-	links { "glfw3" }
-	return glfwDir;
-end
-
-
-local function includeAssimp()
-	filter { "system:windows" }
-		links { "assimp-vc143-mt" }
-	filter { "system:not windows" }
-		links { "assimp5" }
-end
+require "premake.project"
+require "premake.command"
+require "premake.links"
 
 
 local function includeOpenGL()
-	filter { "system:windows" }
-		links { "OpenGL32" }
-	filter { "system:not windows" }
-		links { "GL" }
+
 end
 
 
 workspace "TankEngine"
+	local engineDir = "Builds/bin/Engine/%{cfg.longname}"
     local editorDir = "Builds/bin/Editor/%{cfg.longname}"
+    local playerDir = "Builds/bin/Player/%{cfg.longname}"
 
     configurations { "Debug", "Release" }
     architecture "x86_64"
@@ -35,10 +23,8 @@ workspace "TankEngine"
 
 project "Engine"
 	kind "SharedLib"
-	language "C++"
-	cppdialect "c++23"
-	targetdir "Builds/bin/%{prj.name}/%{cfg.longname}"
-	objdir "Builds/obj/%{prj.name}/%{cfg.longname}"
+	PrjUseCpp()
+	PrjObjAndTargetDir()
 
 	defines {
 		"TANK_DLL",
@@ -67,14 +53,17 @@ project "Engine"
 		"%{prj.name}/src/**.cpp"
 	}
 
-	-- Libraries
+	-- Library dirs
 	libdirs {
-		"lib",
-		"%{prj.name}/lib",
+		"lib"
 	}
-	local glfwDir = includeGlfw()
-	includeAssimp()
-	includeOpenGL()
+	LibDirWithPostCopy("%{prj.name}/lib", engineDir)
+	LibDirGLFWPostCopy(_ACTION, engineDir)
+	
+	-- Linked libraries
+	LinkGLFW()
+	LinkOpenGL()
+	LinkAssimpPostCopy("lib", engineDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
@@ -82,19 +71,14 @@ project "Engine"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
 
-	-- Copy DLL into Editor outdir
-	postbuildcommands {
-		"{MKDIR} " .. editorDir,
-		"{COPYDIR} %[" .. glfwDir .. "] %[%{cfg.buildtarget.directory}]",
-		"{COPYDIR} %[%{cfg.buildtarget.directory}] %[" .. editorDir .. "]"
-	}
+	-- Copy bin and libs into all applicable outdirs
+	PostCopyDir(engineDir, editorDir)
+	PostCopyDir(engineDir, playerDir)
 
 project "Editor"
 	kind "ConsoleApp"
-	language "C++"
-	cppdialect "c++23"
-	targetdir "Builds/bin/%{prj.name}/%{cfg.longname}"
-	objdir "Builds/obj/%{prj.name}/%{cfg.longname}"
+	PrjUseCpp()
+	PrjObjAndTargetDir()
 
 	defines {
 		"GLM_ENABLE_EXPERIMENTAL",
@@ -119,25 +103,62 @@ project "Editor"
 		"%{prj.name}/src/**.cpp",
 	}
 
-	-- Libraries
+	-- Library dirs
 	libdirs {
 		"lib",
-		"%{prj.name}/lib",
---		"vendor/mono/lib/%{cfg.buildtarget.name}",
 	}
-	includeGlfw()
+	LibDirWithPostCopy("%{prj.name}/lib", editorDir)
+	LibDirGLFWPostCopy(_ACTION, editorDir)
+
+	-- Linked libraries
 	links {
 		"Engine",
 --		"mono-2.0-sgen"
 	}
+	LinkGLFW(_ACTION, editorDir)
+	LinkAssimpPostCopy("lib", editorDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
 	pchsource "%{prj.name}/src/editor.cpp"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
-    
-	-- Copy dependency DLLs into outdir
-	postbuildcommands {
-		"{COPYDIR} %[%{prj.name}/lib] %[" .. editorDir .. "]"
+
+project "Player"
+	kind "ConsoleApp"
+	PrjUseCpp()
+	PrjObjAndTargetDir()
+
+	defines {
+		"GLM_ENABLE_EXPERIMENTAL",
+		"FMT_UNICODE=0",
+		"GLAD_GLAPI_EXPORT"
+	}
+	
+	files {
+		"include/imgui/imgui*.cpp",
+		"%{prj.name}/src/**.hpp",
+		"%{prj.name}/src/**.cpp",
+	}
+
+	includedirs {
+		"include",
+		"include/glm",
+		"include/imgui",
+		"%{prj.name}/include",
+		"%{prj.name}/src",
+		"Engine/src",
+		"Engine", -- for pch
+	}
+
+	-- Library dirs
+	libdirs {
+		"lib",
+	}
+	LibDirWithPostCopy("%{prj.name}/lib", playerDir)
+
+	-- Linked libraries
+	LinkAssimpPostCopy("lib", playerDir)
+	links {
+		"Engine"
 	}
