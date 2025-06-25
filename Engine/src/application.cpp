@@ -125,6 +125,28 @@ namespace Tank
 	}
 
 
+	void Application::beginImGui(ImGuiIO &io)
+	{
+		// Draw UI
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		ImGui::SetNextWindowPos(ImVec2(0, 20));
+		ImGui::SetNextWindowSize(io.DisplaySize);
+
+		ImGui::Begin("##Main", nullptr, m_settings.mainWinFlags);
+	}
+
+
+	void Application::endImGui()
+	{
+		ImGui::End();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+
 	void Application::run()
 	{
 		ImGuiIO &io = ImGui::GetIO();
@@ -139,15 +161,7 @@ namespace Tank
 
 			glfwPollEvents();
 
-			// Draw UI
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplGlfw_NewFrame();
-			ImGui::NewFrame();
-
-			ImGui::SetNextWindowPos(ImVec2(0, 20));
-			ImGui::SetNextWindowSize(io.DisplaySize);
-
-			ImGui::Begin("##Main", nullptr, m_settings.mainWinFlags);
+			beginImGui(io);
 
 			if (m_keyInput)
 			{
@@ -155,11 +169,12 @@ namespace Tank
 				// Decay input states (comes after handleKeyInput)
 				m_keyInput->update();
 			}
-			step();
 
-			ImGui::End();
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			uiStep();
+
+			endImGui();
+
+			step();
 
 			// Double buffering
 			glfwSwapBuffers(m_window);

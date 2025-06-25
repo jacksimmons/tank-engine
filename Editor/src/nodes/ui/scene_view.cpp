@@ -12,7 +12,7 @@
 #include "nodes/ui/scene_view.hpp"
 
 
-namespace Tank
+namespace Tank::Editor
 {
 	const WindowOpts WINDOW_OPTS = {
 		ImGuiWindowFlags_None,

@@ -1,4 +1,5 @@
 #pragma once
+#include <imgui/imgui.h>
 #include "tepch.hpp"
 #include "core.hpp"
 
@@ -29,7 +30,10 @@ namespace Tank
 		void initImGui();
 	protected:
 		virtual void handleKeyInput() = 0;
-		virtual void step() = 0;
+		void beginImGui(ImGuiIO &io);
+		void endImGui();
+		virtual void uiStep() {};
+		virtual void step() {};
 
 		Application(const std::vector<int> &registeredKeys);
 	public:

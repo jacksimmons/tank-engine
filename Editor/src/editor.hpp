@@ -30,7 +30,7 @@ namespace Tank
 			void loadDemoScene();
 			void postSceneSetup();
 		protected:
-			virtual void step() override;
+			virtual void uiStep() override;
 			virtual void handleKeyInput() override;
 		};
 	}

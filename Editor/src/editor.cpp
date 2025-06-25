@@ -243,7 +243,7 @@ namespace Tank::Editor
 	}
 
 
-	void EditorApp::step()
+	void EditorApp::uiStep()
 	{
 		// Draw all system UI (SceneView/Framebuffer draws the scene)
 		if (m_system)

@@ -83,7 +83,8 @@ project "Editor"
 	defines {
 		"GLM_ENABLE_EXPERIMENTAL",
 		"FMT_UNICODE=0",
-		"GLAD_GLAPI_EXPORT"
+		"GLAD_GLAPI_EXPORT",
+		"TANK_IMGUI"
 	}
 
 	includedirs {
@@ -136,7 +137,6 @@ project "Player"
 	}
 	
 	files {
-		"include/imgui/imgui*.cpp",
 		"%{prj.name}/src/**.hpp",
 		"%{prj.name}/src/**.cpp",
 	}
@@ -144,7 +144,6 @@ project "Player"
 	includedirs {
 		"include",
 		"include/glm",
-		"include/imgui",
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		"Engine/src",
