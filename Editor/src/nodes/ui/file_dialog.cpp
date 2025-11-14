@@ -65,6 +65,7 @@ namespace Tank::Editor
 			if (ImGui::Button("../"))
 			{
 				m_currentDirectory = m_currentDirectory.parent_path();
+				TE_CORE_INFO(m_currentDirectory.string());
 				ImGui::EndTable();
 				return;
 			}
@@ -150,11 +151,7 @@ namespace Tank::Editor
 			ImGui::TableNextColumn();
 			if (ImGui::Selectable(subdir.path.string().c_str()))
 			{
-				// If directory is the target type, select when clicked once.
-				if (m_target == _FileDialogTarget::Directory)
-					m_targetSelected = subdir.path;
-
-				// The directory is entered either way.
+				// Update current directory.
 				m_currentDirectory = subdir.path;
 			}
 
@@ -179,7 +176,7 @@ namespace Tank::Editor
 			if (ImGui::Selectable(file.path.string().c_str()))
 			{
 				if (m_target == _FileDialogTarget::File)
-					m_targetSelected = file.path;
+					m_currentTarget = file.path;
 			}
 
 			// Type
@@ -193,21 +190,30 @@ namespace Tank::Editor
 
 	void _FileDialog::drawTargetBar()
 	{
+		// If the current target is non-empty
 		std::string inputFieldHint;
-		if (!m_targetSelected.empty()) inputFieldHint = m_targetSelected.string();
+		if (!getCurrentTarget().empty()) inputFieldHint = getCurrentTarget().string();
 		else inputFieldHint = "Enter name...";
 		Widget::textInput(std::string{ getName() + "##FILE_DIALOG_SEARCH_TERM" }.c_str(), inputFieldHint.c_str(), [this](const std::string &modified)
 		{
 			m_searchTerm = modified;
-			m_targetSelected = m_currentDirectory / m_searchTerm;
+			m_currentTarget = m_currentDirectory / m_searchTerm;
 		});
 
 		// If a target is selected, show "Select" button which will close the dialog when pressed.
 		ImGui::SameLine();
-		if (!m_targetSelected.empty() && ImGui::SmallButton(std::string{ "Select##FILE_DIALOG_TARGET_SELECT(" + getName() + ")" }.c_str()))
+		if (!getCurrentTarget().empty() && ImGui::SmallButton(std::string{ "Select##FILE_DIALOG_TARGET_SELECT(" + getName() + ")" }.c_str()))
 		{
-			m_onTargetSelected(m_targetSelected);
+			// Select the current directory as a target, when target is a directory.
+			// Otherwise, select the current target.
+			m_onTargetSelected(getCurrentTarget());
 			destroy();
 		}
+	}
+
+
+	fs::path _FileDialog::getCurrentTarget() const
+	{
+		return m_target == _FileDialogTarget::Directory ? m_currentDirectory : m_currentTarget;
 	}
 }

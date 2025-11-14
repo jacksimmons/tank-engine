@@ -21,14 +21,11 @@ static void GLAPIENTRY msgCallback(GLenum source,
 
 namespace Tank
 {
-	Application::Application(const std::vector<int> &registeredKeys)
+	Application::Application(const std::vector<int> &registeredKeys, ImGuiSettings settings)
 	{
 		m_windowSize = glm::ivec2(800, 600);
-		m_settings.configFlags = ImGuiConfigFlags_DockingEnable;
-		m_settings.mainWinFlags = ImGuiWindowFlags_NoResize
-			| ImGuiWindowFlags_NoCollapse
-			| ImGuiWindowFlags_NoTitleBar // No blue bar
-			| ImGuiWindowFlags_NoBringToFrontOnFocus;
+		m_settings.configFlags = settings.configFlags;
+		m_settings.mainWinFlags = ImGuiWindowFlags_NoResize | settings.mainWinFlags;
 
 		initGLFW();
 		initGLAD();

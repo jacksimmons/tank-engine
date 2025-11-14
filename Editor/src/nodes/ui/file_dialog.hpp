@@ -38,7 +38,7 @@ namespace Tank::Editor
 		
 		_FileDialogTarget m_target;
 		_FileDialogCallback m_onTargetSelected;
-		fs::path m_targetSelected;
+		fs::path m_currentTarget;
 
 		/// <summary>
 		/// The current navigated-to directory (a subdirectory of m_rootDirectory)
@@ -64,6 +64,8 @@ namespace Tank::Editor
 		void drawDirectoryFiles();
 		void drawSubdirectories();
 		void drawTargetBar();
+
+		fs::path getCurrentTarget() const;
 	protected:
 		virtual void drawPanel() override;
 	};

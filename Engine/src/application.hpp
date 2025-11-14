@@ -17,12 +17,12 @@ namespace Tank
 	class TANK_API Application
 	{
 	private:
-		ImGuiSettings m_settings;
 		ImGuiContext *m_context;
 		glm::ivec2 m_windowSize;
 		GLFWwindow *m_window;
 	protected:
 		std::unique_ptr<KeyInput> m_keyInput;
+		ImGuiSettings m_settings;
 
 	private:
 		void initGLFW();
@@ -35,7 +35,10 @@ namespace Tank
 		virtual void uiStep() {};
 		virtual void step() {};
 
-		Application(const std::vector<int> &registeredKeys);
+		Application(const std::vector<int> &registeredKeys, const ImGuiSettings settings = {
+			0,
+			0
+		});
 	public:
 		virtual ~Application();
 

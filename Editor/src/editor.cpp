@@ -61,6 +61,13 @@ namespace Tank::Editor
 			GLFW_KEY_L,
 			GLFW_KEY_U,
 			GLFW_KEY_O,
+		},
+		{
+			ImGuiConfigFlags_DockingEnable,
+			ImGuiWindowFlags_NoResize
+			| ImGuiWindowFlags_NoCollapse
+			| ImGuiWindowFlags_NoTitleBar
+			| ImGuiWindowFlags_NoBringToFrontOnFocus
 		}
 	)
 	{
@@ -91,19 +98,22 @@ namespace Tank::Editor
 							[this]()
 							{
 								std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-									new _FileDialog("Open Project", fs::current_path(), fs::current_path(),
+									new _FileDialog("Open Project", "", fs::current_path(),
 										_FileDialogTarget::Directory,
 										[this](const std::filesystem::path &path)
 										{
-											std::unique_ptr<Tank::Scene> scene;
+											//std::unique_ptr<Tank::Scene> scene;
 
-											// Load scene if it was valid, and close the popup either way
-											if (Scene *rawScene = Tank::Serialisation::loadScene(path.string()))
-											{
-												scene = std::unique_ptr<Tank::Scene>(rawScene);
-												loadScene(std::move(scene));
-												postSceneSetup();
-											}
+											//// Load scene if it was valid, and close the popup either way
+											//if (Scene *rawScene = Tank::Serialisation::loadScene(path.string()))
+											//{
+											//	scene = std::unique_ptr<Tank::Scene>(rawScene);
+											//	loadScene(std::move(scene));
+											//	postSceneSetup();
+											//}
+
+											loadDemoScene();
+											postSceneSetup();
 										}
 									)
 								);
