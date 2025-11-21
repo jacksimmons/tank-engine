@@ -99,21 +99,18 @@ namespace Tank::Editor
 							{
 								std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
 									new _FileDialog("Open Project", "", fs::current_path(),
-										_FileDialogTarget::Directory,
+										_FileDialogTarget::File,
 										[this](const std::filesystem::path &path)
 										{
-											//std::unique_ptr<Tank::Scene> scene;
+											std::unique_ptr<Tank::Scene> scene;
 
-											//// Load scene if it was valid, and close the popup either way
-											//if (Scene *rawScene = Tank::Serialisation::loadScene(path.string()))
-											//{
-											//	scene = std::unique_ptr<Tank::Scene>(rawScene);
-											//	loadScene(std::move(scene));
-											//	postSceneSetup();
-											//}
-
-											loadDemoScene();
-											postSceneSetup();
+											// Load scene if it was valid, and close the popup either way
+											if (Scene *rawScene = Tank::Serialisation::loadScene(path.string()))
+											{
+												scene = std::unique_ptr<Tank::Scene>(rawScene);
+												loadScene(std::move(scene));
+												postSceneSetup();
+											}
 										}
 									)
 								);
@@ -127,7 +124,7 @@ namespace Tank::Editor
 							{
 								std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
 									new _FileDialog("Save Project", fs::current_path(), fs::current_path(),
-										_FileDialogTarget::Directory,
+										_FileDialogTarget::File,
 										[this](const std::filesystem::path &path)
 										{
 											Serialisation::saveScene(Scene::getActiveScene(), path);
