@@ -26,7 +26,17 @@ namespace Tank
 		public:
 			virtual ~_Window() = default;
 
+			/// <summary>
+			/// Inherited draw method from Node. Calls drawPanel.
+			/// </summary>
 			virtual void draw() override;
+
+			/// <summary>
+			/// [ABSTRACT]
+			/// All draw logic for the window goes in here.
+			/// This function is called between an ImGui::Begin
+			/// and an ImGui::End.
+			/// </summary>
 			virtual void drawPanel() = 0;
 		};
 	}

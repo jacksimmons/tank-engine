@@ -344,7 +344,7 @@ namespace Tank::Editor
 			auto it = enumToName.find(factor);
 			if (it != enumToName.end())
 			{
-				auto nextPair = *(++it);
+				auto &nextPair = *(++it);
 				factor = nextPair.first;
 				newName = nextPair.second;
 			}

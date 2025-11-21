@@ -3,15 +3,15 @@ require "premake.command"
 require "premake.links"
 
 
-local function includeOpenGL()
-
-end
-
-
 workspace "TankEngine"
-	local engineDir = "Builds/bin/Engine/%{cfg.longname}"
-    local editorDir = "Builds/bin/Editor/%{cfg.longname}"
-    local playerDir = "Builds/bin/Player/%{cfg.longname}"
+	local engineName = "TankEngine"
+	local editorName = "TankEditor"
+	local playerName = "TankPlayer"
+
+	local binDir = "Builds/bin"
+	local engineDir = binDir .. string.format("/%s", engineName) .. "/%{cfg.longname}"
+	local editorDir = binDir .. string.format("/%s", editorName) .. "/%{cfg.longname}"
+	local playerDir = binDir .. string.format("/%s", playerName) .. "/%{cfg.longname}"
 
     configurations { "Debug", "Release" }
     architecture "x86_64"
@@ -21,7 +21,7 @@ workspace "TankEngine"
     filter { "configurations:Release" }
 	optimize "On"
 
-project "Engine"
+project "TankEngine"
 	kind "SharedLib"
 	PrjUseCpp()
 	PrjObjAndTargetDir()
@@ -75,7 +75,7 @@ project "Engine"
 	PostCopyDir(engineDir, editorDir)
 	PostCopyDir(engineDir, playerDir)
 
-project "Editor"
+project "TankEditor"
 	kind "ConsoleApp"
 	PrjUseCpp()
 	PrjObjAndTargetDir()
@@ -93,8 +93,8 @@ project "Editor"
 		"include/imgui",
 		"%{prj.name}/include",
 		"%{prj.name}/src",
-		"Engine/src",
-		"Engine", -- for pch
+		engineName .. "/src",
+		engineName, -- for pch
 		"vendor/mono/include"
 	}
 	
@@ -113,7 +113,7 @@ project "Editor"
 
 	-- Linked libraries
 	links {
-		"Engine",
+		engineName
 --		"mono-2.0-sgen"
 	}
 	LinkGLFW(_ACTION, editorDir)
@@ -125,7 +125,7 @@ project "Editor"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
 
-project "Player"
+project "TankPlayer"
 	kind "ConsoleApp"
 	PrjUseCpp()
 	PrjObjAndTargetDir()
@@ -146,8 +146,8 @@ project "Player"
 		"include/glm",
 		"%{prj.name}/include",
 		"%{prj.name}/src",
-		"Engine/src",
-		"Engine", -- for pch
+		engineName .. "/src",
+		engineName, -- for pch
 	}
 
 	-- Library dirs
@@ -159,5 +159,5 @@ project "Player"
 	-- Linked libraries
 	LinkAssimpPostCopy("lib", playerDir)
 	links {
-		"Engine"
+		engineName
 	}

@@ -1,1 +1,0 @@
-Time Node - Stores position of its children in a vector every variable N seconds (incl. start pt).
