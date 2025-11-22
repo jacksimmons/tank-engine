@@ -41,3 +41,17 @@ function LinkAssimpPostCopy(srcdir, destdir)
 	PostCopyFile(assimpFile, srcdir, destdir)
 	links { assimpFile }
 end
+
+
+-- Links freetype, and adds a postbuildcommand to copy after building.
+function LinkFreetypePostCopy(srcdir, destdir)
+	local freetypeFile
+	if os.target() == "windows" then
+		freetypeFile = "freetype"
+	else
+		freetypeFile = "TODO"
+
+	PostCopyFile(freetypeFile, srcdir, destdir)
+	links { "freetype" }
+	end
+end

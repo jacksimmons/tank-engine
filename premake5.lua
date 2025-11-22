@@ -64,6 +64,7 @@ project "TankEngine"
 	LinkGLFW()
 	LinkOpenGL()
 	LinkAssimpPostCopy("lib", engineDir)
+	LinkFreetypePostCopy("lib", engineDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
