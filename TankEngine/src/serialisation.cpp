@@ -8,6 +8,7 @@
 #include "nodes/model.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/sprite.hpp"
+#include "reflection/node_factory.hpp"
 
 
 namespace Tank
@@ -47,26 +48,21 @@ namespace Tank
 		/// Deserialises generic Node json into a Node.
 		/// Allocations: +Node (return value).
 		/// </summary>
-		Node* deserialise(const json &serialised)
+		Node* deserialise(const json &serialised, Reflect::NodeFactory *factory)
 		{
 			// Pointer to a Node* or subclass of. 
 			Node *node = nullptr;
 			const std::string &type = serialised["type"];
 
 			// +Node
-			if (type == "Node") Node::deserialise(serialised, &node);
-			else if (type == "Camera") Camera::deserialise(serialised, (Camera**)&node);
-			else if (type == "CubeMap") CubeMap::deserialise(serialised, (CubeMap**)&node);
-			else if (type == "DirLight") DirLight::deserialise(serialised, (DirLight**)&node);
-			else if (type == "PointLight") PointLight::deserialise(serialised, (Light**)&node);
+			if (type == "CubeMap") CubeMap::deserialise(serialised, (CubeMap**)&node);
 			else if (type == "Model") Model::deserialise(serialised, (Model**)&node);
-			else if (type == "Scene") Scene::deserialise(serialised, (Scene**)&node);
 			else if (type == "Sprite") Sprite::deserialise(serialised, (Sprite**)&node);
-			else TE_CORE_CRITICAL("Unsupported type attempted to be deserialised: " + type);
+			else node = factory->create(serialised);
 
 			for (const json &child : serialised["children"].get<std::vector<json>>())
 			{
-				node->addChild(std::unique_ptr<Node>(deserialise(child)));
+				node->addChild(std::unique_ptr<Node>(deserialise(child, factory)));
 			}
 
 			// Post-tree instantiation (after all children have been deserialised)

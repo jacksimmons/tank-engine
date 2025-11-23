@@ -1,11 +1,12 @@
 #pragma once
-
 #include "interfaces/mesh_container.hpp"
 namespace fs = std::filesystem;
 
 
 namespace Tank
 {
+	namespace Reflect { class NodeFactory; }
+
 	class TANK_API Sprite : public Node, public IMeshContainer
 	{
 	public:

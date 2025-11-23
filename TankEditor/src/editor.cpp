@@ -105,7 +105,7 @@ namespace Tank::Editor
 											std::unique_ptr<Tank::Scene> scene;
 
 											// Load scene if it was valid, and close the popup either way
-											if (Scene *rawScene = Tank::Serialisation::loadScene(path.string()))
+											if (Scene *rawScene = Tank::Serialisation::loadScene(path.string(), m_nodeFactory.get()))
 											{
 												scene = std::unique_ptr<Tank::Scene>(rawScene);
 												loadScene(std::move(scene));

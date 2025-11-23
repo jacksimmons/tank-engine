@@ -14,6 +14,8 @@ struct ImGuiSettings
 namespace Tank
 {
 	class KeyInput;
+	namespace Reflect { class NodeFactory; }
+
 	class TANK_API Application
 	{
 	private:
@@ -22,6 +24,7 @@ namespace Tank
 		GLFWwindow *m_window;
 	protected:
 		std::unique_ptr<KeyInput> m_keyInput;
+		std::unique_ptr<Reflect::NodeFactory> m_nodeFactory;
 		ImGuiSettings m_settings;
 
 	private:

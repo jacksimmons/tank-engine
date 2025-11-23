@@ -7,12 +7,10 @@
 
 namespace Tank
 {
+	namespace Reflect { class NodeFactory; }
 	namespace Serialisation
 	{
-		json serialiseProject(Node *project);
-		Node* deserialiseProject(const json &serialised);
-
 		json serialise(Node *deserialised);
-		Node* deserialise(const json &serialised);
+		Node* deserialise(const json &serialised, Reflect::NodeFactory *factory);
 	}
 }

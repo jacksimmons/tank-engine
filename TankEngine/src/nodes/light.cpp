@@ -10,30 +10,6 @@
 
 namespace Tank
 {
-	json Light::serialise()
-	{
-		json serialised = Node::serialise();
-		serialised["ambient"] = vec3::serialise(getAmbient());
-		serialised["diffuse"] = vec3::serialise(getDiffuse());
-		serialised["specular"] = vec3::serialise(getSpecular());
-		return serialised;
-	}
-
-
-	void Light::deserialise(const json &serialised, Light **targetPtr)
-	{
-		if (!(*targetPtr)) *targetPtr = new Light();
-
-		Light *light = *targetPtr;
-		light->setAmbient(vec3::deserialise(serialised["ambient"]));
-		light->setDiffuse(vec3::deserialise(serialised["diffuse"]));
-		light->setSpecular(vec3::deserialise(serialised["specular"]));
-
-		Node *target = *targetPtr;
-		Node::deserialise(serialised, &target);
-	}
-
-
 	Light::Light(const std::string &name, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec) :
 		IEditorOnly(name),
 		m_ambient(amb), m_diffuse(diff), m_specular(spec)
@@ -46,6 +22,14 @@ namespace Tank
 
 		auto gizmo = std::make_unique<Sprite>("Gizmo", sources, fs::current_path() / "textures" / "dir_light_source.png");
 		addChild(std::move(gizmo));
+
+		// Add the light to scene
+		if (m_scene->getNumLights(getType()) >= 64)
+		{
+			TE_CORE_WARN(std::format("Reached limit of {} lights; this light will not apply to shaders.", m_type));
+			return;
+		}
+		m_scene->addLight(this);
 	}
 
 
@@ -104,39 +88,11 @@ namespace Tank
 	}
 
 
-	json DirLight::serialise()
-	{
-		json serialised = Light::serialise();
-		serialised["direction"] = vec3::serialise(getDirection());
-		return serialised;
-	}
-
-
-	void DirLight::deserialise(const json &serialised, DirLight **targetPtr)
-	{
-		if (!(*targetPtr)) *targetPtr = new DirLight();
-
-		DirLight *dirLight = *targetPtr;
-		dirLight->setDirection(vec3::deserialise(serialised["direction"]));
-
-		Light *target = *targetPtr;
-		Light::deserialise(serialised, &target);
-	}
-
-
 	DirLight::DirLight(const std::string &name, glm::vec3 dir, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec)
 		: Light(name, amb, diff, spec), m_direction(dir)
 	{
 		m_type = "DirLight";
 		m_lightArrayName = "dirLights";
-
-		if (m_scene->getNumLights(LightType::Directional) >= 64)
-		{
-			TE_CORE_WARN("Reached limit of DirLight lights; this light will not apply to shaders.");
-			return;
-		}
-
-		m_scene->addLight(this);
 	}
 
 
@@ -159,14 +115,6 @@ namespace Tank
 	{
 		m_type = "PointLight";
 		m_lightArrayName = "pointLights";
-
-		if (m_scene->getNumLights(LightType::Point) >= 64)
-		{
-			TE_CORE_WARN("Reached limit of PointLight lights; this light will not apply to shaders.");
-			return;
-		}
-
-		m_scene->addLight(this);
 	}
 
 
@@ -185,4 +133,37 @@ namespace Tank
 
 		Light::updateShader(shader);
 	}
+}
+
+
+json Tank::Light::serialise()
+{
+	json serialised = Node::serialise();
+	serialised["ambient"] = vec3::serialise(getAmbient());
+	serialised["diffuse"] = vec3::serialise(getDiffuse());
+	serialised["specular"] = vec3::serialise(getSpecular());
+	return serialised;
+}
+
+void Tank::Light::deserialise(const json &serialised)
+{
+	setAmbient(vec3::deserialise(serialised["ambient"]));
+	setDiffuse(vec3::deserialise(serialised["diffuse"]));
+	setSpecular(vec3::deserialise(serialised["specular"]));
+
+	Node::deserialise(serialised);
+}
+
+
+json Tank::DirLight::serialise()
+{
+	json serialised = Light::serialise();
+	serialised["direction"] = vec3::serialise(getDirection());
+	return serialised;
+}
+
+void Tank::DirLight::deserialise(const json &serialised)
+{
+	setDirection(vec3::deserialise(serialised["direction"]));
+	Light::deserialise(serialised);
 }

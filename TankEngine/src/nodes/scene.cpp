@@ -6,28 +6,6 @@
 
 namespace Tank
 {
-	json Scene::serialise()
-	{
-		json serialised = Node::serialise();
-		serialised["activeCam"] = treeFromChild(getActiveCamera());
-		serialised["isActiveScene"] = Scene::getActiveScene() == this;
-		return serialised;
-	}
-
-
-	void Scene::deserialise(const json &serialised, Scene **targetPtr)
-	{
-		if (!(*targetPtr)) *targetPtr = new Scene();
-
-		Scene *scene = *targetPtr;
-		if (serialised["isActiveScene"]) Scene::setActiveScene(scene);
-		scene->setActiveCamera(dynamic_cast<Camera*>(scene->childFromTree(serialised["activeCam"])));
-		
-		Node *target = *targetPtr;
-		Node::deserialise(serialised, &target);
-	}
-
-
 	Scene *Scene::s_activeScene = nullptr;
 
 
@@ -105,4 +83,21 @@ namespace Tank
 			return;
 		}
 	}
+}
+
+
+json Tank::Scene::serialise()
+{
+	json serialised = Node::serialise();
+	serialised["activeCam"] = treeFromChild(getActiveCamera());
+	serialised["isActiveScene"] = Scene::getActiveScene() == this;
+	return serialised;
+}
+
+void Tank::Scene::deserialise(const json &serialised)
+{
+	if (serialised["isActiveScene"]) Scene::setActiveScene(this);
+	setActiveCamera(dynamic_cast<Camera*>(childFromTree(serialised["activeCam"])));
+
+	Node::deserialise(serialised);
 }

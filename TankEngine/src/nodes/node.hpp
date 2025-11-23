@@ -19,7 +19,7 @@ namespace Tank
 	{
 	public:
 		virtual json serialise();
-		static void deserialise(const json &serialised, Node **targetPtr);
+		virtual void deserialise(const json &serialised);
 
 	private:
 		std::string m_name;

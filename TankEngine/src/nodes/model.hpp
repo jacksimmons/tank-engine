@@ -11,6 +11,7 @@ struct aiMaterial;
 namespace Tank
 {
 	class Texture;
+	namespace Reflect { class NodeFactory; }
 
 	/// <summary>
 	/// A class which can load 3D models using Assimp.

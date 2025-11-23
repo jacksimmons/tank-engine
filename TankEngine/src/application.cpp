@@ -6,6 +6,14 @@
 #include "key_input.hpp"
 #include "log.hpp"
 #include "static/time.hpp"
+#include "nodes/node.hpp"
+#include "nodes/scene.hpp"
+#include "nodes/camera.hpp"
+#include "nodes/light.hpp"
+#include "nodes/sprite.hpp"
+#include "nodes/model.hpp"
+#include "nodes/cube_map.hpp"
+#include "reflection/node_factory.hpp"
 
 
 // Enable debug output
@@ -23,6 +31,14 @@ namespace Tank
 {
 	Application::Application(const std::vector<int> &registeredKeys, ImGuiSettings settings)
 	{
+		// Init reflection
+		m_nodeFactory = std::make_unique<Reflect::NodeFactory>();
+		m_nodeFactory->registerClass<Node>("Node");
+		m_nodeFactory->registerClass<Scene>("Scene");
+		m_nodeFactory->registerClass<Camera>("Camera");
+		m_nodeFactory->registerClass<DirLight>("DirLight");
+		m_nodeFactory->registerClass<PointLight>("PointLight");
+
 		m_windowSize = glm::ivec2(800, 600);
 		m_settings.configFlags = settings.configFlags;
 		m_settings.mainWinFlags = ImGuiWindowFlags_NoResize | settings.mainWinFlags;

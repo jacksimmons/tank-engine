@@ -8,13 +8,14 @@
 #include "nodes/light.hpp"
 #include "nodes/model.hpp"
 #include "nodes/scene.hpp"
+#include "reflection/node_factory.hpp"
 
 
 namespace Tank
 {
 	namespace Serialisation
 	{
-		Scene* loadScene(const std::filesystem::path &scenePath)
+		Scene* loadScene(const std::filesystem::path &scenePath, Reflect::NodeFactory *factory)
 		{
 			std::string sceneFile;
 			if (File::readLines(scenePath, sceneFile) != File::ReadResult::Success)
@@ -25,7 +26,7 @@ namespace Tank
 
 			json serialised = json::parse(sceneFile);
 			
-			if (Scene *scene = dynamic_cast<Scene*>(deserialise(serialised)))
+			if (Scene *scene = dynamic_cast<Scene*>(deserialise(serialised, factory)))
 			{
 				return scene;
 			}

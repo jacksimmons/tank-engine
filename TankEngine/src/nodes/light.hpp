@@ -21,7 +21,8 @@ namespace Tank
 	{
 	public:
 		virtual json serialise() override;
-		static void deserialise(const json &serialised, Light **targetPtr);
+		virtual void deserialise(const json &ser) override;
+
 	protected:
 		// The scene this light applies to shaders within. Responsibility lies in the Light class
 		// to call m_scene->updateShaders() after changes to the light occur.
@@ -61,7 +62,7 @@ namespace Tank
 	{
 	public:
 		virtual json serialise() override;
-		static void deserialise(const json &serialised, DirLight **targetPtr);
+		virtual void deserialise(const json &ser) override;
 
 	private:
 		glm::vec3 m_direction;

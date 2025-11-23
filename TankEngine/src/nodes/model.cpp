@@ -17,6 +17,8 @@
 #include "nodes/camera.hpp"
 #include "nodes/light.hpp"
 
+#include "../reflection/node_factory.hpp"
+
 
 namespace Tank
 {
@@ -38,7 +40,7 @@ namespace Tank
 		if (!(*targetPtr)) *targetPtr = new Model("Model", sources, serialised["modelPath"]);
 
 		Node *node = *targetPtr;
-		Node::deserialise(serialised, &node);
+		node->deserialise(serialised);
 	}
 
 

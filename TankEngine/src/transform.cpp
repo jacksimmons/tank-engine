@@ -18,13 +18,11 @@ namespace Tank
 	}
 
 
-	std::unique_ptr<Transform> Transform::deserialise(const json &serialised, Node *owner)
+	void Transform::deserialise(const json &serialised, Transform *transform)
 	{
-		auto transform = std::make_unique<Transform>(owner);
 		transform->setLocalRotation(quat::deserialise(serialised["rotation"]));
 		transform->setLocalScale(vec3::deserialise(serialised["scale"]));
 		transform->setLocalTranslation(vec3::deserialise(serialised["translation"]));
-		return std::move(transform);
 	}
 
 

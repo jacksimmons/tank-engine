@@ -17,9 +17,9 @@ namespace Tank
 		// The Hierarchy may modify elements of the scene (lights, nodes).
 		friend class Editor::_Hierarchy;
 	public:
-		virtual json serialise();
-		static void deserialise(const json &serialised, Scene **targetPtr);
-
+		virtual json serialise() override;
+		virtual void deserialise(const json &ser) override;
+		
 		// Static
 	private:
 		static Scene *s_activeScene;

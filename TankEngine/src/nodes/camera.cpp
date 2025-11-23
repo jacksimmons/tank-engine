@@ -7,53 +7,6 @@
 
 namespace Tank
 {
-	json Camera::serialise()
-	{
-		json serialised = Node::serialise();
-
-		serialised["view"] = mat4::serialise(m_V);
-		serialised["rotation"] = mat4::serialise(m_R);
-		serialised["translation"] = mat4::serialise(m_T);
-
-		serialised["eye"] = vec3::serialise(m_eye);
-		serialised["centre"] = vec3::serialise(m_centre);
-		serialised["up"] = vec3::serialise(m_up);
-
-		serialised["panSpd"] = m_panSpeed;
-		serialised["rotSpd"] = m_rotSpeed;
-
-		serialised["cullNear"] = m_cullNear;
-		serialised["cullFar"] = m_cullFar;
-
-		return serialised;
-	}
-
-
-	void Camera::deserialise(const json &serialised, Camera **targetPtr)
-	{
-		if (!(*targetPtr)) *targetPtr = new Camera();
-
-		Camera *camera = *targetPtr;
-		camera->m_V = mat4::deserialise(serialised["view"]);
-		camera->m_R = mat4::deserialise(serialised["rotation"]);
-		camera->m_T = mat4::deserialise(serialised["translation"]);
-
-		camera->m_eye = vec3::deserialise(serialised["eye"]);
-		camera->m_centre = vec3::deserialise(serialised["centre"]);
-		camera->m_up = vec3::deserialise(serialised["up"]);
-
-		camera->m_panSpeed = serialised["panSpd"];
-		camera->m_rotSpeed = serialised["rotSpd"];
-
-		camera->m_cullNear = serialised["cullNear"];
-		camera->m_cullFar = serialised["cullFar"];
-		camera->updateProj();
-
-		Node *target = *targetPtr;
-		Node::deserialise(serialised, &target);
-	}
-
-
 	Camera::Camera(const std::string &name, glm::vec3 eye, glm::vec3 centre, glm::vec3 up) :
 		Node(name)
 	{
@@ -135,4 +88,46 @@ namespace Tank
 		glm::vec3 t_up = getTransformedUp();
 		m_V = getTransform()->getWorldModelMatrix() * glm::lookAt(t_eye, t_centre, t_up);
 	}
+}
+
+
+json Tank::Camera::serialise()
+{
+	json serialised = Node::serialise();
+
+	serialised["view"] = mat4::serialise(m_V);
+	serialised["rotation"] = mat4::serialise(m_R);
+	serialised["translation"] = mat4::serialise(m_T);
+
+	serialised["eye"] = vec3::serialise(m_eye);
+	serialised["centre"] = vec3::serialise(m_centre);
+	serialised["up"] = vec3::serialise(m_up);
+
+	serialised["panSpd"] = m_panSpeed;
+	serialised["rotSpd"] = m_rotSpeed;
+
+	serialised["cullNear"] = m_cullNear;
+	serialised["cullFar"] = m_cullFar;
+
+	return serialised;
+}
+
+void Tank::Camera::deserialise(const json &serialised)
+{
+	m_V = mat4::deserialise(serialised["view"]);
+	m_R = mat4::deserialise(serialised["rotation"]);
+	m_T = mat4::deserialise(serialised["translation"]);
+
+	m_eye = vec3::deserialise(serialised["eye"]);
+	m_centre = vec3::deserialise(serialised["centre"]);
+	m_up = vec3::deserialise(serialised["up"]);
+
+	m_panSpeed = serialised["panSpd"];
+	m_rotSpeed = serialised["rotSpd"];
+
+	m_cullNear = serialised["cullNear"];
+	m_cullFar = serialised["cullFar"];
+	updateProj();
+
+	Node::deserialise(serialised);
 }

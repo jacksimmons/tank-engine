@@ -13,7 +13,7 @@ namespace Tank
 		friend class Node;
 	public:
 		static json serialise(Transform *deserialised);
-		static std::unique_ptr<Transform> deserialise(const json &serialised, Node *owner);
+		static void deserialise(const json &serialised, Transform *transform);
 
 	private:
 		// Entire transformation

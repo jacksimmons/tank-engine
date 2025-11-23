@@ -6,6 +6,7 @@
 #include "nodes/cube_map.hpp"
 #include "nodes/camera.hpp"
 #include "nodes/scene.hpp"
+#include "../reflection/node_factory.hpp"
 
 
 namespace Tank
@@ -28,7 +29,7 @@ namespace Tank
 		if (!(*targetPtr)) *targetPtr = new CubeMap(serialised["name"], sources, serialised["cubeMap"]);
 
 		Node *target = *targetPtr;
-		Node::deserialise(serialised, &target);
+		target->deserialise(serialised);
 	}
 
 

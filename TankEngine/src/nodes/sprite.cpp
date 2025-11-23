@@ -6,6 +6,7 @@
 #include "light.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/camera.hpp"
+#include "../reflection/node_factory.hpp"
 namespace fs = std::filesystem;
 
 
@@ -29,7 +30,7 @@ namespace Tank
 		if (!(*targetPtr)) *targetPtr = new Sprite(serialised["name"], sources, serialised["texPath"]);
 
 		Node *target = *targetPtr;
-		Node::deserialise(serialised, &target);
+		target->deserialise(serialised);
 	}
 
 

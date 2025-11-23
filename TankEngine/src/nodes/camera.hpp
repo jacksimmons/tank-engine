@@ -1,5 +1,4 @@
 #pragma once
-
 #include <glm/gtx/quaternion.hpp>
 #include "transformation.hpp"
 #include "nodes/node.hpp"
@@ -8,13 +7,17 @@
 
 namespace Tank
 {
+	namespace Reflect { class NodeFactory; }
+
+
 	class TANK_API Camera : public Node
 	{
 	public:
 		virtual json serialise() override;
-		static void deserialise(const json &serialised, Camera **targetPtr);
+		virtual void deserialise(const json &ser) override;
 
 	private:
+		friend class Reflect::NodeFactory;
 		// Projection properties
 		float m_cullNear;
 		float m_cullFar;

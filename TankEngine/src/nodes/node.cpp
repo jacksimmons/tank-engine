@@ -5,31 +5,6 @@
 
 namespace Tank
 {
-	json Node::serialise()
-	{
-		json serialised;
-		serialised["name"] = m_name;
-		serialised["type"] = m_type;
-		serialised["enabled"] = m_enabled;
-		serialised["visible"] = m_visible;
-		serialised["transform"] = Transform::serialise(m_transform.get());
-		return serialised;
-	}
-
-
-	void Node::deserialise(const json &serialised, Node **targetPtr)
-	{
-		if (!(*targetPtr)) *targetPtr = new Node();
-
-		Node *target = *targetPtr;
-		target->setName(serialised["name"]);
-		target->setEnabled(serialised["enabled"]);
-		target->setVisibility(serialised["visible"]);
-		auto trans = Transform::deserialise(serialised["transform"], target);
-		target->m_transform = std::move(trans);
-	}
-
-
 	Node::Node(const std::string &name)
 	{
 		m_type = "Node";
@@ -236,4 +211,24 @@ namespace Tank
 			(*it)->update();
 		}
 	}
+}
+
+
+json Tank::Node::serialise()
+{
+	json serialised;
+	serialised["name"] = m_name;
+	serialised["type"] = m_type;
+	serialised["enabled"] = m_enabled;
+	serialised["visible"] = m_visible;
+	serialised["transform"] = Transform::serialise(m_transform.get());
+	return serialised;
+}
+
+void Tank::Node::deserialise(const json &serialised)
+{
+	setName(serialised["name"]);
+	setEnabled(serialised["enabled"]);
+	setVisibility(serialised["visible"]);
+	Transform::deserialise(serialised["transform"], getTransform());
 }
