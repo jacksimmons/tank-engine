@@ -1,8 +1,8 @@
 #pragma once
 #include "tepch.hpp"
-#include "nodes/node.hpp"
-#include "nodes/interfaces/shader_container.hpp"
 #include "shader_source.hpp"
+#include "nodes/node.hpp"
+#include <nodes/interfaces/shader_container.hpp>
 
 
 namespace Tank
@@ -11,6 +11,7 @@ namespace Tank
 	class Texture;
 	class Shader;
 	namespace Reflect { class NodeFactory; }
+
 	class TANK_API CubeMap : public Node, public IShaderContainer
 	{
 		// Serialisation
@@ -24,8 +25,9 @@ namespace Tank
 		std::shared_ptr<Texture> m_texture;
 		std::array<std::string, 6> m_texturePaths;
 	public:
-		CubeMap(const std::string &name,
-			ShaderSources &sources,
+		CubeMap(
+			const std::string &name = "CubeMap",
+			ShaderSources *sources = nullptr,
 			const std::array<std::string, 6> &textureNames = { "skybox/right.jpg", "skybox/left.jpg", "skybox/bottom.jpg", "skybox/top.jpg", "skybox/front.jpg", "skybox/back.jpg" }
 		);
 

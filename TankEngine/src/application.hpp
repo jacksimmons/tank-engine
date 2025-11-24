@@ -24,7 +24,7 @@ namespace Tank
 		GLFWwindow *m_window;
 	protected:
 		std::unique_ptr<KeyInput> m_keyInput;
-		std::unique_ptr<Reflect::NodeFactory> m_nodeFactory;
+		std::unique_ptr<Reflect::NodeFactory> m_factory;
 		ImGuiSettings m_settings;
 
 	private:

@@ -58,8 +58,8 @@ namespace Tank::Editor
 			tryDrawSection<Light>();
 			tryDrawSection<Sprite>();
 			tryDrawSection<Model>();
-			tryDrawSection<IShaderContainer>();
 			tryDrawSection<IMeshContainer>();
+			tryDrawSection<IShaderContainer>();
 		}
 	}
 
@@ -70,8 +70,9 @@ namespace Tank::Editor
 		// If the node can be casted to this node subtype, then draw using the subtype inspector.
 		if (T *t = dynamic_cast<T *>(m_inspectedNode))
 		{
-			_NodeInspector<T> inspector = _NodeInspector<T>(t, this);
-			inspector.draw();
+			m_nodeInspector.reset();
+			m_nodeInspector = std::make_unique<_NodeInspector<T>>(t, this);
+			m_nodeInspector->draw();
 		}
 	}
 

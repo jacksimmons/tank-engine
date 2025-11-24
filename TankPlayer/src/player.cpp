@@ -66,19 +66,19 @@ namespace Tank
 				sources.vertex.location = "shader.vert";
 				sources.fragment.location = "shader.frag";
 
-				auto object = std::unique_ptr<Tank::Model>(new Model("Doom", sources, fs::current_path() / "models/doom/doom_E1M1.obj"));
+				auto object = std::unique_ptr<Tank::Model>(new Model("Doom", fs::current_path() / "models/doom/doom_E1M1.obj", &sources));
 				object->getTransform()->setLocalTranslation({ 0, 0, 0 });
 				scene->addChild(std::move(object));
 
 				auto backpackPhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
-				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", sources, fs::current_path() / "models/backpack/backpack.obj"));
+				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", fs::current_path() / "models/backpack/backpack.obj", &sources));
 				backpack->getTransform()->setLocalScale({ 100, 100, 100 });
 				backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
 				backpackPhysics->addChild(std::move(backpack));
 				scene->addChild(std::move(backpackPhysics));
 
 				auto spritePhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
-				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", sources, fs::current_path() / "textures/awesomeface.png"));
+				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", fs::current_path() / "textures/awesomeface.png", &sources));
 				spritePhysics->addChild(std::move(sprite));
 				scene->addChild(std::move(spritePhysics));
 			}

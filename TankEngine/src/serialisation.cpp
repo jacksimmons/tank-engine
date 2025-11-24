@@ -56,8 +56,6 @@ namespace Tank
 
 			// +Node
 			if (type == "CubeMap") CubeMap::deserialise(serialised, (CubeMap**)&node);
-			else if (type == "Model") Model::deserialise(serialised, (Model**)&node);
-			else if (type == "Sprite") Sprite::deserialise(serialised, (Sprite**)&node);
 			else node = factory->create(serialised);
 
 			for (const json &child : serialised["children"].get<std::vector<json>>())

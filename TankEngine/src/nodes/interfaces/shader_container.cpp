@@ -1,3 +1,5 @@
+#include <shader_source.hpp>
+#include <shader.hpp>
 #include "shader_container.hpp"
 
 
@@ -6,8 +8,25 @@ namespace Tank
 	std::vector<std::weak_ptr<Texture>> IShaderContainer::s_loadedTextures;
 
 
-	IShaderContainer::IShaderContainer(ShaderSources &sources)
+	IShaderContainer::IShaderContainer(ShaderSources *pSources)
 	{
+		initShaderContainer(pSources);
+	}
+
+
+	void IShaderContainer::initShaderContainer(ShaderSources *pSources)
+	{
+		ShaderSources sources;
+		if (pSources)
+		{
+			sources = *pSources;
+		}
+		else
+		{
+			sources.vertex.location = "shader.vert";
+			sources.fragment.location = "shader.frag";
+		}
+
 		auto maybeShader = Shader::createShader(sources);
 		if (maybeShader.has_value())
 			m_shader = std::move(maybeShader.value());
@@ -45,7 +64,7 @@ namespace Tank
 		return textures;
 	}
 
-	
+
 	void IShaderContainer::addLoadedTexture(std::weak_ptr<Texture> texture)
 	{
 		s_loadedTextures.push_back(texture);

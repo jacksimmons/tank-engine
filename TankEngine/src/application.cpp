@@ -32,12 +32,15 @@ namespace Tank
 	Application::Application(const std::vector<int> &registeredKeys, ImGuiSettings settings)
 	{
 		// Init reflection
-		m_nodeFactory = std::make_unique<Reflect::NodeFactory>();
-		m_nodeFactory->registerClass<Node>("Node");
-		m_nodeFactory->registerClass<Scene>("Scene");
-		m_nodeFactory->registerClass<Camera>("Camera");
-		m_nodeFactory->registerClass<DirLight>("DirLight");
-		m_nodeFactory->registerClass<PointLight>("PointLight");
+		m_factory = std::make_unique<Reflect::NodeFactory>();
+		m_factory->registerClass<Node>("Node");
+		m_factory->registerClass<Scene>("Scene");
+		m_factory->registerClass<Camera>("Camera");
+		m_factory->registerClass<DirLight>("DirLight");
+		m_factory->registerClass<PointLight>("PointLight");
+		m_factory->registerClass<Sprite>("Sprite");
+		m_factory->registerClass<Model>("Model");
+		m_factory->registerClass<CubeMap>("CubeMap");
 
 		m_windowSize = glm::ivec2(800, 600);
 		m_settings.configFlags = settings.configFlags;

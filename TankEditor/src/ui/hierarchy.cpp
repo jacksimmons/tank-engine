@@ -150,27 +150,9 @@ namespace Tank::Editor
 			{
 				if (ImGui::MenuItem("Node")) addNewNode(node, new Node());
 				if (ImGui::MenuItem("Text")) addNewNode(node, new Text());
-				if (ImGui::MenuItem("Sprite (2D)"))
-				{
-					ShaderSources sources;
-					sources.vertex.location = "shader.vert";
-					sources.fragment.location = "shader.frag";
-					addNewNode(node, new Sprite("Sprite", sources, "textures/awesomeface.png"));
-				}
-				if (ImGui::MenuItem("Model (3D)"))
-				{
-					ShaderSources sources;
-					sources.vertex.location = "shader.vert";
-					sources.fragment.location = "shader.frag";
-					addNewNode(node, new Model("Model", sources, "backpack/backpack.obj"));
-				}
-				if (ImGui::MenuItem("Skybox (CubeMap)"))
-				{
-					ShaderSources sources;
-					sources.vertex.location = "skybox.vert";
-					sources.fragment.location = "skybox.frag";
-					addNewNode(node, new CubeMap("CubeMap", sources));
-				}
+				if (ImGui::MenuItem("Sprite (2D)")) addNewNode(node, new Sprite());
+				if (ImGui::MenuItem("Model (3D)")) addNewNode(node, new Model());
+				if (ImGui::MenuItem("Skybox (CubeMap)")) addNewNode(node, new CubeMap());
 				if (ImGui::MenuItem("Point Light")) addNewNode(node, new PointLight());
 				if (ImGui::MenuItem("Directional Light")) addNewNode(node, new DirLight());
 				if (ImGui::MenuItem("Camera")) addNewNode(node, new Camera());

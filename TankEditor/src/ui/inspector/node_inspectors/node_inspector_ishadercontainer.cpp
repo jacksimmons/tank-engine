@@ -1,7 +1,8 @@
 #include <imgui.h>
 #include <colours.hpp>
+#include <file.hpp>
 #include <widget.hpp>
-#include <shader_source.hpp>
+#include <shader.hpp>
 #include <nodes/interfaces/shader_container.hpp>
 #include "node_inspector.hpp"
 
@@ -9,9 +10,9 @@
 namespace Tank
 {
 	/// <summary>
-	/// Draws section for a single shader source (e.g. frag shader).
-	/// </summary>
-	static std::string drawShaderSourceSection(const std::string &sourceName, ShaderSource &source)
+/// Draws section for a single shader source (e.g. frag shader).
+/// </summary>
+	static std::string drawShaderSourceSection(const std::string &sourceName, const ShaderSource &source)
 	{
 		std::string retPath;
 
@@ -46,28 +47,22 @@ namespace Tank::Editor
 		const ShaderSources &sources = m_node->getShader().getShaderSources();
 		ShaderSources copy = ShaderSources(sources);
 
+		std::string vertLoc = drawShaderSourceSection("Vertex", copy.vertex);
+		if (!vertLoc.empty())
 		{
-			std::string loc = drawShaderSourceSection("Vertex", copy.vertex);
-			if (!loc.empty())
-			{
-				copy.vertex.location = loc;
-			}
+			copy.vertex.location = vertLoc;
 		}
 
+		std::string fragLoc = drawShaderSourceSection("Fragment", copy.fragment);
+		if (!fragLoc.empty())
 		{
-			std::string loc = drawShaderSourceSection("Fragment", copy.fragment);
-			if (!loc.empty())
-			{
-				copy.fragment.location = loc;
-			}
+			copy.fragment.location = fragLoc;
 		}
 
+		std::string geomLoc = drawShaderSourceSection("Geometry", copy.geometry);
+		if (!geomLoc.empty())
 		{
-			std::string loc = drawShaderSourceSection("Geometry", copy.geometry);
-			if (!loc.empty())
-			{
-				copy.geometry.location = loc;
-			}
+			copy.geometry.location = geomLoc;
 		}
 
 		if (copy != sources)

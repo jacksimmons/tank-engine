@@ -6,6 +6,7 @@
 #include "nodes/cube_map.hpp"
 #include "nodes/camera.hpp"
 #include "nodes/scene.hpp"
+#include <nodes/interfaces/shader_container.hpp>
 #include "../reflection/node_factory.hpp"
 
 
@@ -15,7 +16,7 @@ namespace Tank
 	{
 		json serialised = Node::serialise();
 		serialised["cubeMap"] = m_texturePaths;
-		serialised["shader"] = Shader::serialise(*(m_shader));
+		serialised["shader"] = Shader::serialise(getShader());
 		return serialised;
 	}
 
@@ -26,14 +27,14 @@ namespace Tank
 		sources.vertex.location = std::string{ serialised["shader"]["vert"] };
 		sources.fragment.location = std::string{ serialised["shader"]["frag"] };
 		sources.geometry.location = std::string{ serialised["shader"]["geom"] };
-		if (!(*targetPtr)) *targetPtr = new CubeMap(serialised["name"], sources, serialised["cubeMap"]);
+		if (!(*targetPtr)) *targetPtr = new CubeMap(serialised["name"], &sources, serialised["cubeMap"]);
 
 		Node *target = *targetPtr;
 		target->deserialise(serialised);
 	}
 
 
-	CubeMap::CubeMap(const std::string &name, ShaderSources &sources, const std::array<std::string, 6> &textureNames)
+	CubeMap::CubeMap(const std::string &name, ShaderSources *sources, const std::array<std::string, 6> &textureNames)
 		: Node(name), IShaderContainer(sources)
 	{
 		m_type = "CubeMap";
@@ -48,14 +49,15 @@ namespace Tank
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-		m_shader->use();
+		const Shader &shader = getShader();
+		shader.use();
 		{
 			int texNum = Texture::getTexCount();
 			auto tex = Texture::cubeMapFromFile(fs::current_path() / "textures", textureNames, "cubeMap");
 			if (tex.has_value())
 			{
 				m_texture = tex.value();
-				m_shader->setInt("cubeMap", texNum);
+				shader.setInt("cubeMap", texNum);
 				TE_CORE_INFO(std::format("Set cubeMap to {}, first filename {}", texNum, textureNames[0]));
 			}
 			else
@@ -63,7 +65,7 @@ namespace Tank
 				TE_CORE_ERROR(std::format("GL_TEXTURE_CUBE_MAP Tex number {} uniform was not set.", texNum));
 			}
 		}
-		m_shader->unuse();
+		shader.unuse();
 	}
 
 
@@ -72,18 +74,19 @@ namespace Tank
 	/// </summary>
 	void CubeMap::draw()
 	{
-		m_shader->use();
+		const Shader &shader = getShader();
+		shader.use();
 		
 		// Bind all owned texture objects
 		int texTarget = m_texture->getTexTarget();
 		int texID = m_texture->getTexID();
 		glActiveTexture(GL_TEXTURE0);
-		m_shader->setInt("cubeMap", 0);
+		shader.setInt("cubeMap", 0);
 		glBindTexture(texTarget, texID);
 
 		Camera *cam = Scene::getActiveScene()->getActiveCamera();
-		m_shader->setMat4("view", glm::mat4(glm::mat3(cam->getView())));
-		m_shader->setMat4("proj", cam->getProj());
+		shader.setMat4("view", glm::mat4(glm::mat3(cam->getView())));
+		shader.setMat4("proj", cam->getProj());
 
 		glDepthMask(GL_FALSE);
 		glBindVertexArray(m_vao);
@@ -91,7 +94,7 @@ namespace Tank
 		glBindVertexArray(0);
 		glDepthMask(GL_TRUE);
 
-		m_shader->unuse();
+		shader.unuse();
 
 		Node::draw();
 	}

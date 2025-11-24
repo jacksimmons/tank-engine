@@ -20,7 +20,7 @@ namespace Tank
 		sources.vertex.location = "shader.vert";
 		sources.fragment.location = "shader.frag";
 
-		auto gizmo = std::make_unique<Sprite>("Gizmo", sources, fs::current_path() / "textures" / "dir_light_source.png");
+		auto gizmo = std::make_unique<Sprite>("Gizmo", fs::current_path() / "textures" / "dir_light_source.png", &sources);
 		addChild(std::move(gizmo));
 
 		// Add the light to scene
@@ -40,20 +40,20 @@ namespace Tank
 	}
 
 
-	void Light::updateShader(Shader *shader)
+	void Light::updateShader(const Shader &shader)
 	{
 		std::string str = getLightStruct();
 		if (getEnabled())
 		{
-			shader->setVec3(str + ".Ia", m_ambient);
-			shader->setVec3(str + ".Id", m_diffuse);
-			shader->setVec3(str + ".Is", m_specular);
+			shader.setVec3(str + ".Ia", m_ambient);
+			shader.setVec3(str + ".Id", m_diffuse);
+			shader.setVec3(str + ".Is", m_specular);
 		}
 		else
 		{
-			shader->setVec3(str + ".Ia", glm::vec3(0.0f));
-			shader->setVec3(str + ".Id", glm::vec3(0.0f));
-			shader->setVec3(str + ".Is", glm::vec3(0.0f));
+			shader.setVec3(str + ".Ia", glm::vec3(0.0f));
+			shader.setVec3(str + ".Id", glm::vec3(0.0f));
+			shader.setVec3(str + ".Is", glm::vec3(0.0f));
 		}
 	}
 
@@ -101,10 +101,10 @@ namespace Tank
 	}
 
 
-	void DirLight::updateShader(Shader *shader)
+	void DirLight::updateShader(const Shader &shader)
 	{
 		std::string str = getLightStruct();
-		shader->setVec3(str + ".dir", m_direction);
+		shader.setVec3(str + ".dir", m_direction);
 
 		Light::updateShader(shader);
 	}
@@ -123,13 +123,13 @@ namespace Tank
 	}
 
 
-	void PointLight::updateShader(Shader *shader)
+	void PointLight::updateShader(const Shader &shader)
 	{
 		std::string str = getLightStruct();
-		shader->setVec3(str + ".pos", mat4::getTranslation(getTransform()->getWorldModelMatrix()));
-		shader->setFloat(str + ".constant", 1.0f);
-		shader->setFloat(str + ".linear", 0.0f);
-		shader->setFloat(str + ".quadratic", 0.0f);
+		shader.setVec3(str + ".pos", mat4::getTranslation(getTransform()->getWorldModelMatrix()));
+		shader.setFloat(str + ".constant", 1.0f);
+		shader.setFloat(str + ".linear", 0.0f);
+		shader.setFloat(str + ".quadratic", 0.0f);
 
 		Light::updateShader(shader);
 	}

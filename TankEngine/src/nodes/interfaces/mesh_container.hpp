@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 #include "mesh.hpp"
 #include "shader_container.hpp"
 #include "outlined.hpp"
@@ -6,12 +7,16 @@
 
 namespace Tank
 {
-	class IShaderContainer; class IOutlined;
-	class TANK_API IMeshContainer : public IShaderContainer, public IOutlined
+	class IShaderContainer;
+	class IOutlined;
+	
+	class TANK_API IMeshContainer : public IOutlined, public IShaderContainer
 	{
 	protected:
 		std::vector<std::unique_ptr<Mesh>> m_meshes;
-		IMeshContainer(ShaderSources &sources) : IShaderContainer(sources), IOutlined()
+
+
+		IMeshContainer(ShaderSources *sources) : IOutlined(), IShaderContainer(sources)
 		{
 		}
 	public:

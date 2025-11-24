@@ -1,5 +1,6 @@
 #pragma once
 #include "ui/window.hpp"
+#include "node_inspectors/node_inspector.hpp"
 
 
 namespace Tank
@@ -15,6 +16,7 @@ namespace Tank::Editor
 		friend class _Hierarchy;
 	private:
 		Node *m_inspectedNode;
+		std::unique_ptr<_NodeInspectorBase> m_nodeInspector;
 
 		_Inspector(const std::string &name = "Inspector");
 		template <class T>

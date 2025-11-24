@@ -16,31 +16,32 @@ namespace Tank
 	{
 		json serialised = Node::serialise();
 		serialised["texPath"] = m_texPath.string();
-		serialised["shader"] = Shader::serialise(*(m_shader));
+		serialised["shader"] = Shader::serialise(getShader());
 		return serialised;
 	}
 
 
-	void Sprite::deserialise(const json &serialised, Sprite **targetPtr)
+	void Sprite::deserialise(const json &serialised)
 	{
 		ShaderSources sources;
 		sources.vertex.location = std::string{ serialised["shader"]["vert"] };
 		sources.fragment.location = std::string{ serialised["shader"]["frag"] };
 		sources.geometry.location = std::string{ serialised["shader"]["geom"] };
-		if (!(*targetPtr)) *targetPtr = new Sprite(serialised["name"], sources, serialised["texPath"]);
 
-		Node *target = *targetPtr;
-		target->deserialise(serialised);
+		initShaderContainer(&sources);
+		setTexPath(serialised["texPath"]);
+		
+		Node::deserialise(serialised);
 	}
 
 
-	Sprite::Sprite(const std::string &name,
-		ShaderSources &sources,
-		const fs::path &texPath)
-		: Node(name), IMeshContainer(sources)
+	Sprite::Sprite(
+		const std::string &name,
+		const fs::path &texPath,
+		ShaderSources *sources
+	): Node(name), IMeshContainer(sources)
 	{
 		m_type = "Sprite";
-
 		setTexPath(texPath);
 	}
 
@@ -55,6 +56,10 @@ namespace Tank
 		{
 			m_meshes.push_back(std::unique_ptr<QuadMesh>(new QuadMesh({ tex.value() })));
 		}
+		else
+		{
+			TE_CORE_ERROR(std::format("Couldn't decode texture at {}", texPath.string()));
+		}
 	}
 
 
@@ -63,37 +68,42 @@ namespace Tank
 		if (!getVisibility()) return;
 
 		IOutlined::predraw();
-		m_shader->use();
 
-		m_shader->setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
-		m_shader->setFloat("material.Ns", 32.0f);
+		const Shader &shader = getShader();
+		shader.use();
+		
+		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
+		shader.setFloat("material.Ns", 32.0f);
 
 		auto cam = Scene::getActiveScene()->getActiveCamera();
 		auto P = cam->getProj();
 		auto V = cam->getView();
 		auto M = Node::getTransform()->getWorldModelMatrix();
 		auto VM = V * M;
-		m_shader->setMat4("PVM", P * VM);
-		m_shader->setMat4("VM", VM);
-		m_shader->setMat4("V", V);
-		m_shader->setMat4("VM_it", glm::inverseTranspose(VM));
+		
+		shader.setMat4("PVM", P * VM);
+		shader.setMat4("VM", VM);
+		shader.setMat4("V", V);
+		shader.setMat4("VM_it", glm::inverseTranspose(VM));
 
 		auto scene = Scene::getActiveScene();
 		auto activeLights = scene->getLights();
 		for (Light *light : activeLights)
 		{
-			light->updateShader(m_shader.get());
+			light->updateShader(shader);
 		}
-		m_shader->setInt("num_dir_lights", scene->getNumLights(LightType::Directional));
-		m_shader->setInt("num_point_lights", scene->getNumLights(LightType::Point));
+		
+		shader.setInt("num_dir_lights", scene->getNumLights(LightType::Directional));
+		shader.setInt("num_point_lights", scene->getNumLights(LightType::Point));
 
 		for (unsigned i = 0; i < m_meshes.size(); i++)
 		{
-			m_meshes[i]->draw(m_shader.get());
+			m_meshes[i]->draw(shader);
 		}
-		m_shader->unuse();
-		IOutlined::postdraw(m_transform.get());
 
+		shader.unuse();
+		
+		IOutlined::postdraw(m_transform.get());
 		Node::draw();
 	}
 }

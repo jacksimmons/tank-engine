@@ -26,25 +26,26 @@ namespace Tank
 	{
 		json serialised = Node::serialise();
 		serialised["modelPath"] = getModelPath();
-		serialised["shader"] = Shader::serialise(*(m_shader));
+		serialised["shader"] = Shader::serialise(getShader());
 		return serialised;
 	}
 
 
-	void Model::deserialise(const json &serialised, Model **targetPtr)
+	void Model::deserialise(const json &serialised)
 	{
 		ShaderSources sources;
 		sources.vertex.location = std::string{ serialised["shader"]["vert"] };
 		sources.fragment.location = std::string{ serialised["shader"]["frag"] };
 		sources.geometry.location = std::string{ serialised["shader"]["geom"] };
-		if (!(*targetPtr)) *targetPtr = new Model("Model", sources, serialised["modelPath"]);
 
-		Node *node = *targetPtr;
-		node->deserialise(serialised);
+		initShaderContainer(&sources);
+		setModelPath(serialised["modelPath"]);
+
+		Node::deserialise(serialised);
 	}
 
 
-	Model::Model(const std::string &name, ShaderSources &sources, const fs::path &modelPath)
+	Model::Model(const std::string &name, const fs::path &modelPath, ShaderSources *sources)
 		: Node(name), IMeshContainer(sources)
 	{
 		m_type = "Model";
@@ -135,7 +136,7 @@ namespace Tank
 		// Materials
 		if (mesh->mMaterialIndex >= 0)
 		{
-			m_shader->use();
+			getShader().use();
 			aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
 			auto diffuse = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
@@ -143,7 +144,7 @@ namespace Tank
 
 			auto specular = loadMaterialTextures(material, aiTextureType_SPECULAR, "specular");
 			textures.insert(textures.end(), specular.begin(), specular.end());
-			m_shader->unuse();
+			getShader().unuse();
 		}
 
 		return std::make_unique<Mesh>(vertices, indices, textures);
@@ -201,27 +202,31 @@ namespace Tank
 		if (!getVisibility()) return;
 
 		IOutlined::predraw();
-		m_shader->use();
-
-		m_shader->setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
-		m_shader->setFloat("material.Ns", 32.0f);
+		const Shader &shader = getShader();
+		
+		shader.use();
+		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
+		shader.setFloat("material.Ns", 32.0f);
 
 		auto cam = Scene::getActiveScene()->getActiveCamera();
 		auto P = cam->getProj();
 		auto V = cam->getView();
 		auto M = Node::getTransform()->getWorldModelMatrix();
 		auto VM = V * M;
-		m_shader->setMat4("PVM", P * VM);
-		m_shader->setMat4("VM", VM);
-		m_shader->setMat4("V", V);
-		m_shader->setMat4("VM_it", glm::inverseTranspose(VM));
+		
+		shader.setMat4("PVM", P * VM);
+		shader.setMat4("VM", VM);
+		shader.setMat4("V", V);
+		shader.setMat4("VM_it", glm::inverseTranspose(VM));
+		
 		processLights();
 
 		for (unsigned i = 0; i < m_meshes.size(); i++)
 		{
-			m_meshes[i]->draw(m_shader.get());
+			m_meshes[i]->draw(shader);
 		}
-		m_shader->unuse();
+		shader.unuse();
+
 		IOutlined::postdraw(m_transform.get());
 	}
 
@@ -230,13 +235,15 @@ namespace Tank
 	{
 		auto scene = Scene::getActiveScene();
 		auto activeLights = scene->getLights();
+
+		const Shader &shader = getShader();
 		for (Light *light : activeLights)
 		{
-			light->updateShader(m_shader.get());
+			light->updateShader(shader);
 		}
 
-		m_shader->setInt("num_dir_lights", scene->getNumLights(LightType::Directional));
-		m_shader->setInt("num_point_lights", scene->getNumLights(LightType::Point));
+		shader.setInt("num_dir_lights", scene->getNumLights(LightType::Directional));
+		shader.setInt("num_point_lights", scene->getNumLights(LightType::Point));
 	}
 
 

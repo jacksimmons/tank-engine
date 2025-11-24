@@ -18,7 +18,7 @@ namespace Tank
 	{
 		for (unsigned i = 0; i < m_meshes.size(); i++)
 		{ // use
-			m_meshes[i]->draw(outlineShader);
+			m_meshes[i]->draw(*outlineShader);
 		} // unuse
 	}
 }

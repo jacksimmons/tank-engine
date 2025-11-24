@@ -105,7 +105,7 @@ namespace Tank::Editor
 											std::unique_ptr<Tank::Scene> scene;
 
 											// Load scene if it was valid, and close the popup either way
-											if (Scene *rawScene = Tank::Serialisation::loadScene(path.string(), m_nodeFactory.get()))
+											if (Scene *rawScene = Tank::Serialisation::loadScene(path.string(), m_factory.get()))
 											{
 												scene = std::unique_ptr<Tank::Scene>(rawScene);
 												loadScene(std::move(scene));
@@ -200,26 +200,26 @@ namespace Tank::Editor
 				ShaderSources sources;
 				sources.vertex.location = "skybox.vert";
 				sources.fragment.location = "skybox.frag";
-				scene->addChild(std::make_unique<Tank::CubeMap>("CubeMap", sources));
+				scene->addChild(std::make_unique<Tank::CubeMap>("CubeMap", &sources));
 			}
 			{
 				ShaderSources sources;
 				sources.vertex.location = "shader.vert";
 				sources.fragment.location = "shader.frag";
 
-				auto object = std::unique_ptr<Tank::Model>(new Model("Doom", sources, fs::current_path() / "models/doom/doom_E1M1.obj"));
+				auto object = std::unique_ptr<Tank::Model>(new Model("Doom", fs::current_path() / "models/doom/doom_E1M1.obj", &sources));
 				object->getTransform()->setLocalTranslation({ 0, 0, 0 });
 				scene->addChild(std::move(object));
 
 				auto backpackPhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
-				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", sources, fs::current_path() / "models/backpack/backpack.obj"));
+				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", fs::current_path() / "models/backpack/backpack.obj", &sources));
 				backpack->getTransform()->setLocalScale({ 100, 100, 100 });
 				backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
 				backpackPhysics->addChild(std::move(backpack));
 				scene->addChild(std::move(backpackPhysics));
 
 				auto spritePhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
-				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", sources, fs::current_path() / "textures/awesomeface.png"));
+				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", fs::current_path() / "textures/awesomeface.png", &sources));
 				spritePhysics->addChild(std::move(sprite));
 				scene->addChild(std::move(spritePhysics));
 			}

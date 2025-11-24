@@ -42,7 +42,7 @@ namespace Tank
 		// Virtual destructor so derived class destructors are always used.
 		virtual ~Light();
 
-		virtual void updateShader(Shader *);
+		virtual void updateShader(const Shader &);
 		std::string getLightStruct();
 
 		void setAmbient(glm::vec3 ambient) { m_ambient = ambient; }
@@ -75,7 +75,7 @@ namespace Tank
 		);
 		~DirLight();
 
-		void updateShader(Shader *) override;
+		void updateShader(const Shader &) override;
 
 		void setDirection(glm::vec3 direction) { m_direction = direction; }
 		glm::vec3 getDirection() const { return m_direction; }
@@ -91,6 +91,6 @@ namespace Tank
 			glm::vec3 spec = { 0.1f, 0.1f, 0.1f });
 		~PointLight();
 
-		void updateShader(Shader *) override;
+		void updateShader(const Shader &) override;
 	};
 }

@@ -34,6 +34,6 @@ namespace Tank
 		const std::vector<unsigned> &getIndices() const { return m_indices; }
 
 
-		void draw(Shader *shader) const;
+		void draw(const Shader &shader) const;
 	};
 }

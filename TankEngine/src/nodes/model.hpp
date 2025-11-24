@@ -1,5 +1,5 @@
 #pragma once
-
+#include <nodes/node.hpp>
 #include "shader.hpp"
 #include "mesh.hpp"
 #include "texture.hpp"
@@ -20,15 +20,16 @@ namespace Tank
 	{
 	public:
 		virtual json serialise() override;
-		static void deserialise(const json &serialised, Model **targetPtr);
+		void deserialise(const json &serialised);
 
 	private:
 		fs::path m_modelDirectory;
 		fs::path m_modelFile;
 	public:
-		Model(const std::string &name,
-			ShaderSources &sources,
-			const fs::path &modelPath
+		Model(
+			const std::string &name = "Model",
+			const fs::path &modelPath = "models/backpack/backpack.obj",
+			ShaderSources *sources = nullptr
 		);
 		virtual ~Model() = default;
 

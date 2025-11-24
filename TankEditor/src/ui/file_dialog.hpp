@@ -50,13 +50,6 @@ namespace Tank::Editor
 		std::vector<_FileResult> m_currentDirectoryFiles;
 		std::vector<_FileResult> m_filesMatchingSearchTerm;
 
-		_FileDialog(const std::string &name,
-			const fs::path &rootDirectory,
-			const fs::path &startDirectory,
-			_FileDialogTarget target,
-			_FileDialogCallback onTargetSelected
-		);
-
 		/// <summary>
 		/// Updates m_currentSubdirectories and m_currentDirectoryFiles.
 		/// </summary>
@@ -69,5 +62,12 @@ namespace Tank::Editor
 		fs::path getCurrentTarget() const;
 	protected:
 		virtual void drawPanel() override;
+	public:
+		_FileDialog(const std::string &name,
+			const fs::path &rootDirectory,
+			const fs::path &startDirectory,
+			_FileDialogTarget target,
+			_FileDialogCallback onTargetSelected
+		);
 	};
 }
