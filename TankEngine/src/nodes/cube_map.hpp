@@ -17,7 +17,7 @@ namespace Tank
 		// Serialisation
 	public:
 		virtual json serialise() override;
-		static void deserialise(const json &serialised, CubeMap **targetPtr);
+		virtual void deserialise(const json &serialised) override;
 
 	protected:
 		unsigned m_vao;
@@ -31,6 +31,7 @@ namespace Tank
 			const std::array<std::string, 6> &textureNames = { "skybox/right.jpg", "skybox/left.jpg", "skybox/bottom.jpg", "skybox/top.jpg", "skybox/front.jpg", "skybox/back.jpg" }
 		);
 
+		void setTexPaths(const std::array<std::string, 6> &texPaths);
 		virtual void draw() override;
 
 	private:

@@ -54,10 +54,7 @@ namespace Tank
 			Node *node = nullptr;
 			const std::string &type = serialised["type"];
 
-			// +Node
-			if (type == "CubeMap") CubeMap::deserialise(serialised, (CubeMap**)&node);
-			else node = factory->create(serialised);
-
+			node = factory->create(serialised);
 			for (const json &child : serialised["children"].get<std::vector<json>>())
 			{
 				node->addChild(std::unique_ptr<Node>(deserialise(child, factory)));

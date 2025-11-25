@@ -21,16 +21,16 @@ namespace Tank
 	}
 
 
-	void CubeMap::deserialise(const json &serialised, CubeMap **targetPtr)
+	void CubeMap::deserialise(const json &serialised)
 	{
 		ShaderSources sources;
 		sources.vertex.location = std::string{ serialised["shader"]["vert"] };
 		sources.fragment.location = std::string{ serialised["shader"]["frag"] };
 		sources.geometry.location = std::string{ serialised["shader"]["geom"] };
-		if (!(*targetPtr)) *targetPtr = new CubeMap(serialised["name"], &sources, serialised["cubeMap"]);
 
-		Node *target = *targetPtr;
-		target->deserialise(serialised);
+		initShaderContainer(&sources);
+		setTexPaths(serialised["cubeMap"]);
+		Node::deserialise(serialised);
 	}
 
 
@@ -38,7 +38,6 @@ namespace Tank
 		: Node(name), IShaderContainer(sources)
 	{
 		m_type = "CubeMap";
-		m_texturePaths = textureNames;
 
 		glGenVertexArrays(1, &m_vao);
 		glGenBuffers(1, &m_vbo);
@@ -49,20 +48,27 @@ namespace Tank
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
+		setTexPaths(textureNames);
+	}
+
+
+	void CubeMap::setTexPaths(const std::array<std::string, 6> &texPaths)
+	{
+		m_texturePaths = texPaths;
 		const Shader &shader = getShader();
+
 		shader.use();
 		{
 			int texNum = Texture::getTexCount();
-			auto tex = Texture::cubeMapFromFile(fs::current_path() / "textures", textureNames, "cubeMap");
+			auto tex = Texture::cubeMapFromFile(fs::current_path() / "textures", m_texturePaths, "cubeMap");
 			if (tex.has_value())
 			{
 				m_texture = tex.value();
-				shader.setInt("cubeMap", texNum);
-				TE_CORE_INFO(std::format("Set cubeMap to {}, first filename {}", texNum, textureNames[0]));
+				shader.setInt("cubeMap", 0);
 			}
 			else
 			{
-				TE_CORE_ERROR(std::format("GL_TEXTURE_CUBE_MAP Tex number {} uniform was not set.", texNum));
+				TE_CORE_ERROR("Failed to create CubeMap.");
 			}
 		}
 		shader.unuse();
@@ -81,7 +87,6 @@ namespace Tank
 		int texTarget = m_texture->getTexTarget();
 		int texID = m_texture->getTexID();
 		glActiveTexture(GL_TEXTURE0);
-		shader.setInt("cubeMap", 0);
 		glBindTexture(texTarget, texID);
 
 		Camera *cam = Scene::getActiveScene()->getActiveCamera();
