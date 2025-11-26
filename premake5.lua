@@ -162,3 +162,9 @@ project "TankPlayer"
 	links {
 		engineName
 	}
+
+	-- PCH
+	pchheader "tepch.hpp"
+	pchsource "%{prj.name}/src/player.cpp"
+	filter { "action:vs*" }
+		buildoptions { "/FI tepch.hpp" }
