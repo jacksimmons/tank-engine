@@ -159,7 +159,6 @@ namespace Tank
 	{
 		ImGui::End();
 		ImGui::Render();
-		// @todo Exception thrown at 0x00007FFFC0C92214 (igxelpicd64.dll) in TankEditor.exe: 0xC0000005: Access violation writing location 0x0000000000000018.
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 

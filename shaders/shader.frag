@@ -71,6 +71,8 @@ void main()
         result += calcPointLight(pointLights[i], norm_normal, frag_pos);
     }
 
+    if (result.a < 0.1) discard;
+
     frag_colour = result;
 }
 
