@@ -15,13 +15,6 @@ namespace Tank
 	{
 		m_scene = Scene::getActiveScene();
 
-		ShaderSources sources;
-		sources.vertex.location = "shader.vert";
-		sources.fragment.location = "shader.frag";
-
-		auto gizmo = std::make_unique<Sprite>("Gizmo", fs::current_path() / "textures" / "dir_light_source.png", &sources);
-		addChild(std::move(gizmo));
-
 		// Add the light to scene
 		if (m_scene->getNumLights(getType()) >= 64)
 		{
@@ -29,6 +22,9 @@ namespace Tank
 			return;
 		}
 		m_scene->addLight(this);
+
+		auto gizmo = std::make_unique<Sprite>("Gizmo", fs::current_path() / "textures/gizmo/dir_light.png");
+		addChild(std::move(gizmo));
 	}
 
 

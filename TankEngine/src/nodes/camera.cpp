@@ -3,6 +3,7 @@
 #include "transformation.hpp"
 #include "static/glm_serialise.hpp"
 #include "nodes/camera.hpp"
+#include <nodes/sprite.hpp>
 
 
 namespace Tank
@@ -28,6 +29,9 @@ namespace Tank
 		m_rotSpeed = 5;
 
 		m_freeLook = true;
+
+		auto gizmo = std::make_unique<Sprite>("Gizmo", fs::current_path() / "textures/gizmo/camera.png");
+		addChild(std::move(gizmo));
 	}
 
 
