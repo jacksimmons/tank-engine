@@ -1,16 +1,15 @@
 #pragma once
 #include <nodes/node.hpp>
-#include "shader.hpp"
-#include "mesh.hpp"
-#include "texture.hpp"
-#include "interfaces/mesh_container.hpp"
+#include <nodes/interfaces/mesh_container.hpp>
 
 
 struct aiNode; struct aiScene; struct aiMesh;
 struct aiMaterial;
 namespace Tank
 {
+	class Mesh;
 	class Texture;
+	struct ShaderSources;
 	namespace Reflect { class NodeFactory; }
 
 	/// <summary>

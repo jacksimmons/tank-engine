@@ -7,11 +7,10 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp/material.h"
-
+#include <mesh.hpp>
 #include "log.hpp"
 #include "texture.hpp"
 #include "shader.hpp"
-#include "transform.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/model.hpp"
 #include "nodes/camera.hpp"
@@ -211,7 +210,7 @@ namespace Tank
 		auto cam = Scene::getActiveScene()->getActiveCamera();
 		auto P = cam->getProj();
 		auto V = cam->getView();
-		auto M = Node::getTransform()->getWorldModelMatrix();
+		auto M = getTransform()->getWorldModelMatrix();
 		auto VM = V * M;
 		
 		shader.setMat4("PVM", P * VM);

@@ -20,18 +20,7 @@ namespace Tank
 		/// </summary>
 		json serialise(Node *deserialised)
 		{
-			json serialised;
-			const std::string &type = ((Node*)deserialised)->getType();
-
-			if (type == "Node") serialised = ((Node*)deserialised)->serialise();
-			else if (type == "Camera") serialised = ((Camera*)deserialised)->serialise();
-			else if (type == "CubeMap") serialised = ((CubeMap*)deserialised)->serialise();
-			else if (type == "DirLight") serialised = ((DirLight*)deserialised)->serialise();
-			else if (type == "PointLight") serialised = ((Light*)deserialised)->serialise();
-			else if (type == "Model") serialised = ((Model*)deserialised)->serialise();
-			else if (type == "Scene") serialised = ((Scene*)deserialised)->serialise();
-			else if (type == "Sprite") serialised = ((Sprite*)deserialised)->serialise();
-			else TE_CORE_CRITICAL("Unsupported type attempted to be serialised: " + type);
+			json serialised = deserialised->serialise();
 
 			std::vector<json> children;
 			for (auto &child : *(Node*)deserialised)
@@ -54,7 +43,7 @@ namespace Tank
 			Node *node = nullptr;
 			const std::string &type = serialised["type"];
 
-			node = factory->create(serialised);
+			node = factory->deserialise(serialised);
 			for (const json &child : serialised["children"].get<std::vector<json>>())
 			{
 				node->addChild(std::unique_ptr<Node>(deserialise(child, factory)));

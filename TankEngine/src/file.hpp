@@ -1,7 +1,4 @@
 #pragma once
-#include <fstream>
-#include <exception>
-#include "core.hpp"
 
 
 namespace Tank

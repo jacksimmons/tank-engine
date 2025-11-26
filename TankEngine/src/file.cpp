@@ -1,3 +1,5 @@
+#include <exception>
+#include <fstream>
 #include "file.hpp"
 #include "log.hpp"
 

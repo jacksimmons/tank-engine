@@ -12,8 +12,6 @@ namespace Tank::Editor
 		
 		// Fields
 	private:
-		static std::vector<std::type_info> s_nodeTypes;
-
 		Node *m_currentRoot;
 		bool m_showEditorHierarchy;
 

@@ -1,12 +1,12 @@
 #include <glad/glad.h>
-#include "tepch.hpp"
+#include <nodes/cube_map.hpp>
+#include <nodes/camera.hpp>
+#include <nodes/scene.hpp>
+#include <nodes/interfaces/shader_container.hpp>
+#include <shader_source.hpp>
 #include "log.hpp"
 #include "texture.hpp"
 #include "shader.hpp"
-#include "nodes/cube_map.hpp"
-#include "nodes/camera.hpp"
-#include "nodes/scene.hpp"
-#include <nodes/interfaces/shader_container.hpp>
 #include "../reflection/node_factory.hpp"
 
 

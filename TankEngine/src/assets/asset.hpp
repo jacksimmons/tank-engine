@@ -1,12 +1,12 @@
-#pragma once
-#include "nodes/node.hpp"
-
-
-namespace Tank
-{
-	/// <summary>
-	/// </summary>
-	class Asset : public Node
-	{
-	};
-}
+//#pragma once
+//#include "nodes/node.hpp"
+//
+//
+//namespace Tank
+//{
+//	/// <summary>
+//	/// </summary>
+//	class Asset : public Node
+//	{
+//	};
+//}

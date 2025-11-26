@@ -1,8 +1,4 @@
 #pragma once
-#include "spdlog/spdlog.h"
-#include "core.hpp"
-
-
 namespace Tank
 {
 	class TANK_API Log

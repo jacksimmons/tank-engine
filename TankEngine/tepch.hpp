@@ -1,4 +1,4 @@
-// Precompiled header
+// Standard Library Algorithms
 #include <iostream>
 #include <memory>
 #include <algorithm>
@@ -6,6 +6,7 @@
 #include <chrono>
 #include <filesystem>
 
+// Standard Library Datatypes
 #include <string>
 #include <array>
 #include <vector>
@@ -14,9 +15,13 @@
 #include <unordered_map>
 #include <utility>
 
+// Dependencies
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 namespace fs = std::filesystem;
 #include "glm/glm.hpp"
+#include "spdlog/spdlog.h"
 
-#include "core.hpp"
+// Tank
+#include <core.hpp>
+#include <transform.hpp>

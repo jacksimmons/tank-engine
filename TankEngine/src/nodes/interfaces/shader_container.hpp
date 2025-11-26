@@ -3,7 +3,7 @@
 namespace Tank
 {
 	class Texture;
-	class ShaderSources;
+	struct ShaderSources;
 	class Shader;
 
 	/// <summary>

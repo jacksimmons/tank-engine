@@ -1,7 +1,5 @@
 #pragma once
-
 #include "shader.hpp"
-#include "transform.hpp"
 
 
 namespace Tank

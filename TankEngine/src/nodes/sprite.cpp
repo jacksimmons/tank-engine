@@ -78,7 +78,7 @@ namespace Tank
 		auto cam = Scene::getActiveScene()->getActiveCamera();
 		auto P = cam->getProj();
 		auto V = cam->getView();
-		auto M = Node::getTransform()->getWorldModelMatrix();
+		auto M = getTransform()->getWorldModelMatrix();
 		auto VM = V * M;
 		
 		shader.setMat4("PVM", P * VM);

@@ -1,7 +1,5 @@
 #pragma once
 #include <imgui/imgui.h>
-#include "tepch.hpp"
-#include "core.hpp"
 
 
 struct ImGuiSettings

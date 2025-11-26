@@ -1,7 +1,5 @@
 #pragma once
-#include "tepch.hpp"
-#include "shader_source.hpp"
-#include "nodes/node.hpp"
+#include <nodes/node.hpp>
 #include <nodes/interfaces/shader_container.hpp>
 
 
@@ -10,6 +8,7 @@ namespace Tank
 	class Node;
 	class Texture;
 	class Shader;
+	struct ShaderSource;
 	namespace Reflect { class NodeFactory; }
 
 	class TANK_API CubeMap : public Node, public IShaderContainer

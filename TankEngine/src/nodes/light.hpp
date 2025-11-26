@@ -1,5 +1,5 @@
 #pragma once
-#include "nodes/interfaces/editor_only.hpp"
+#include <nodes/interfaces/editor_only.hpp>
 
 
 namespace Tank
@@ -7,7 +7,7 @@ namespace Tank
 	class Model;
 	class Shader;
 	class Scene;
-	class ShaderSources;
+	struct ShaderSources;
 	class ShaderSource;
 
 	enum class LightType

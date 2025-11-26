@@ -1,5 +1,5 @@
 #pragma once
-#include "nodes/node.hpp"
+#include <nodes/node.hpp>
 
 
 namespace Tank

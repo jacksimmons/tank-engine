@@ -1,6 +1,5 @@
 #include "node.hpp"
 #include "log.hpp"
-#include "transform.hpp"
 
 
 namespace Tank
@@ -22,6 +21,12 @@ namespace Tank
 		}
 
 		return std::string("");
+	}
+
+
+	Transform *Node::getTransform() const
+	{
+		return m_transform.get();
 	}
 
 

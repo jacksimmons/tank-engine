@@ -12,27 +12,12 @@ namespace Tank
 		{
 			typedef void *(*constructor_t)();
 
-			/// <summary>
-			/// Map type from class name to constructor.
-			/// </summary>
-			typedef std::map<std::string, constructor_t> class_map_t;
+			typedef std::map<std::string, constructor_t> name_to_class_t;
 
 		private:
-			class_map_t m_classMap;
+			name_to_class_t m_nameToClassMap;
 
 
-			/// <summary>
-			/// (Optionally) Gets the constructor matching the name provided.
-			/// </summary>
-			/// <param name="name">The name of the constructor's class.</param>
-			/// <returns>(Optional) The constructor.</returns>
-			std::optional<constructor_t> tryGetClass(std::string const &name)
-			{
-				class_map_t::iterator it = m_classMap.find(name);
-				if (it == m_classMap.end()) return {};
-				return it->second;
-			}
-		public:
 			/// <summary>
 			/// An abstract zero-arg constructor.
 			/// </summary>
@@ -43,7 +28,19 @@ namespace Tank
 			}
 
 			/// <summary>
-			/// Registers a class name, by mapping it to a personal constructor.
+			/// (Optionally) Gets the constructor matching the name provided.
+			/// </summary>
+			/// <param name="name">The name of the constructor's class.</param>
+			/// <returns>(Optional) The constructor.</returns>
+			std::optional<constructor_t> tryGetClass(std::string const &name)
+			{
+				name_to_class_t::iterator it = m_nameToClassMap.find(name);
+				if (it == m_nameToClassMap.end()) return {};
+				return it->second;
+			}
+		public:
+			/// <summary>
+			/// Registers a name-class pair.
 			/// </summary>
 			/// <typeparam name="T">The type of the class.</typeparam>
 			/// <param name="name">The name given to the class.</param>
@@ -51,33 +48,19 @@ namespace Tank
 			void registerClass(std::string const &name)
 			{
 				constructor_t constructor = &NodeFactory::construct<T>;
-				m_classMap.insert(std::make_pair(name, constructor));
+				m_nameToClassMap.insert(std::make_pair(name, constructor));
 			}
 
 
+			// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+			//           Deserialisation
+			// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 			/// <summary>
 			/// Constructs the registered class matching the given name (or causes a critical error).
 			/// Then deserialises it.
 			/// </summary>
 			/// <returns>The constructed object, or nullptr.</returns>
-			Node *create(const json &serialised)
-			{
-				// Deduce type
-				std::string type = serialised["type"];
-
-				auto classType = tryGetClass(type);
-				if (!classType.has_value())
-				{
-					TE_CORE_CRITICAL(std::format("Failed to construct {}: no class found", type));
-					return nullptr;
-				}
-
-				constructor_t constructor = classType.value();
-
-				Node *node = (Node *)constructor();
-				node->deserialise(serialised);
-				return node;
-			}
+			Node *deserialise(const json &serialised);
 		};
 	}
 }

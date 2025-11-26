@@ -140,7 +140,7 @@
             "shader": {
                 "frag": "skybox.frag",
                 "geom": ".",
-                "id": 1,
+                "id": 5,
                 "vert": "skybox.vert"
             },
             "transform": {
@@ -172,7 +172,7 @@
             "shader": {
                 "frag": "shader.frag",
                 "geom": ".",
-                "id": 5,
+                "id": 13,
                 "vert": "shader.vert"
             },
             "transform": {
@@ -206,7 +206,7 @@
                     "shader": {
                         "frag": "shader.frag",
                         "geom": ".",
-                        "id": 11,
+                        "id": 21,
                         "vert": "shader.vert"
                     },
                     "transform": {
@@ -263,7 +263,7 @@
                     "shader": {
                         "frag": "shader.frag",
                         "geom": ".",
-                        "id": 17,
+                        "id": 29,
                         "vert": "shader.vert"
                     },
                     "texPath": "C:\\Git\\tank-engine\\textures/awesomeface.png",
@@ -306,7 +306,7 @@
                 "translation": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 2.0
+                    "z": 0.0
                 }
             },
             "type": "Node",
@@ -326,7 +326,39 @@
                     "shader": {
                         "frag": "shader.frag",
                         "geom": ".",
-                        "id": 23,
+                        "id": 34,
+                        "vert": "shader.vert"
+                    },
+                    "texPath": "C:\\Git\\tank-engine\\textures\\dir_light_source.png",
+                    "transform": {
+                        "rotation": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "translation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    "type": "Sprite",
+                    "visible": true
+                },
+                {
+                    "children": [],
+                    "enabled": true,
+                    "name": "Gizmo",
+                    "shader": {
+                        "frag": "shader.frag",
+                        "geom": ".",
+                        "id": 43,
                         "vert": "shader.vert"
                     },
                     "texPath": "C:\\Git\\tank-engine\\textures\\dir_light_source.png",
@@ -388,6 +420,31 @@
                 }
             },
             "type": "DirLight",
+            "visible": true
+        },
+        {
+            "children": [],
+            "enabled": true,
+            "name": "Node",
+            "transform": {
+                "rotation": {
+                    "w": 1.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "translation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "type": "Node",
             "visible": true
         }
     ],

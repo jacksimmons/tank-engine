@@ -1,8 +1,7 @@
 #pragma once
 #include <glm/gtx/quaternion.hpp>
+#include <nodes/node.hpp>
 #include "transformation.hpp"
-#include "nodes/node.hpp"
-#include "nodes/interfaces/editor_only.hpp"
 
 
 namespace Tank
@@ -17,7 +16,6 @@ namespace Tank
 		virtual void deserialise(const json &ser) override;
 
 	private:
-		friend class Reflect::NodeFactory;
 		// Projection properties
 		float m_cullNear;
 		float m_cullFar;

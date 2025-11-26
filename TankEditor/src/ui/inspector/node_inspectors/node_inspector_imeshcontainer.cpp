@@ -1,5 +1,6 @@
 #include <imgui.h>
 #include <nodes/interfaces/mesh_container.hpp>
+#include <shapes/vertex.hpp>
 #include "node_inspector.hpp"
 
 

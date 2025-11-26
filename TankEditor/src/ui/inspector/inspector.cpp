@@ -1,7 +1,6 @@
 #include <optional>
 #include <imgui.h>
 #include <glm/gtx/euler_angles.hpp>
-#include "transform.hpp"
 #include "colours.hpp"
 #include "file.hpp"
 #include "widget.hpp"
@@ -70,6 +69,7 @@ namespace Tank::Editor
 		// If the node can be casted to this node subtype, then draw using the subtype inspector.
 		if (T *t = dynamic_cast<T *>(m_inspectedNode))
 		{
+			// @todo This doesn't persist long enough for file dialogs to work
 			m_nodeInspector.reset();
 			m_nodeInspector = std::make_unique<_NodeInspector<T>>(t, this);
 			m_nodeInspector->draw();

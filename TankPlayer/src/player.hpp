@@ -15,7 +15,6 @@ namespace Tank
 	public:
 		Player();
 		~Player();
-		void loadDemoScene();
 	protected:
 		virtual void step() override;
 		virtual void handleKeyInput() override;

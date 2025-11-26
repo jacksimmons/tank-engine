@@ -2,6 +2,7 @@
 #include "mesh.hpp"
 #include "texture.hpp"
 #include "shader.hpp"
+#include "shapes/vertex.hpp"
 
 
 namespace Tank
@@ -48,6 +49,9 @@ namespace Tank
 	}
 
 
+	// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	//			  Methods
+	// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 	void Mesh::draw(const Shader &shader) const
 	{
 		unsigned int diffuseIdx = 0;

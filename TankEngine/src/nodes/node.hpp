@@ -1,14 +1,12 @@
 #pragma once
-
-#include <glm/mat4x4.hpp>
-#include "core.hpp"
-#include "transform.hpp"
 #include "nodes/interfaces/serialisable.hpp"
 #include "nodes/interfaces/scriptable.hpp"
 
 
 namespace Tank
 {
+	class Transform;
+
 	/// <summary>
 	/// An object which exists in the Node hierarchy. It has a parent (or is the root),
 	/// and any number of children.
@@ -67,7 +65,7 @@ namespace Tank
 		constexpr void setParent(Node *parent) noexcept { m_parent = parent; }
 		constexpr Node *getParent() const noexcept { return m_parent; }
 
-		Transform *getTransform() const { return m_transform.get(); }
+		Transform *getTransform() const;
 
 		size_t getChildCount() const noexcept { return m_children.size(); }
 		typedef std::vector<std::unique_ptr<Node>>::iterator iterator;
