@@ -10,8 +10,8 @@
 namespace Tank
 {
 	/// <summary>
-/// Draws section for a single shader source (e.g. frag shader).
-/// </summary>
+	/// Draws section for a single shader source (e.g. frag shader).
+	/// </summary>
 	static std::string drawShaderSourceSection(const std::string &sourceName, const ShaderSource &source)
 	{
 		std::string retPath;

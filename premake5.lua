@@ -1,6 +1,7 @@
 require "premake.project"
 require "premake.command"
 require "premake.links"
+require "premake.outdir"
 
 
 workspace "TankEngine"
@@ -8,18 +9,32 @@ workspace "TankEngine"
 	local editorName = "TankEditor"
 	local playerName = "TankPlayer"
 
-	local binDir = "Builds/bin"
-	local engineDir = binDir .. string.format("/%s", engineName) .. "/%{cfg.longname}"
-	local editorDir = binDir .. string.format("/%s", editorName) .. "/%{cfg.longname}"
-	local playerDir = binDir .. string.format("/%s", playerName) .. "/%{cfg.longname}"
+	local binDir = BinDir()
+	local engineDir = binDir .. string.format("%s", engineName) .. "/%{cfg.longname}"
+	local editorDir = binDir .. string.format("%s", editorName) .. "/%{cfg.longname}"
+	local playerDir = binDir .. string.format("%s", playerName) .. "/%{cfg.longname}"
 
     configurations { "Debug", "Release" }
-    architecture "x86_64"
+	architecture "x86_64"
 
     filter { "configurations:Debug" }
 	symbols "On"
     filter { "configurations:Release" }
 	optimize "On"
+
+
+-- project "TankCSharpBindings"
+-- 	kind "SharedLib"
+-- 	PrjUseCSharp()
+-- 	PrjObjAndTargetDir()
+
+-- 	includedirs {
+-- 		"%{prj.name}/Source"
+-- 	}
+
+-- 	files {
+-- 		"%{prj.name}/Source/*.cs"
+-- 	}
 
 project "TankEngine"
 	kind "SharedLib"
@@ -168,3 +183,12 @@ project "TankPlayer"
 	pchsource "%{prj.name}/src/player.cpp"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
+
+
+-- require "TankCSharpHost.premake5"
+-- group "TankCSharpHost"
+-- 	project "NativeHost"
+-- 		NativeHostProject()
+-- 	project "DotNetLib"
+-- 		DotNetLibProject()
+-- group ""

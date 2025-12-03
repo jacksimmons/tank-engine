@@ -13,7 +13,7 @@ namespace Tank
 
 
 	PhysicsBody::PhysicsBody(const std::string &name, float mass)
-		: m_mass(mass), Node(name)
+		: Node(name), IMass(mass)
 	{
 		s_instances.push_back(this);
 	}
@@ -71,11 +71,11 @@ namespace Tank
 		if (glm::all(glm::epsilonEqual(sep, {}, Physics::EPSILON)))
 			force = {};
 		else
-			force = glm::normalize(sep) * getGravityScalar(glm::length(sep), other->m_mass);
+			force = glm::normalize(sep) * getGravityScalar(glm::length(sep), other->getMass());
 
 		// Apply F = dp / dt
 		glm::vec3 changeInMomentum = force * dt;
-		m_velocities[bodyIndex] += (changeInMomentum / m_mass);
+		m_velocities[bodyIndex] += (changeInMomentum / getMass());
 
 		// Snap to other centre, if we would pass over it this frame
 		if (glm::length(sep) < (glm::length(m_velocities[bodyIndex]) * dt))
@@ -91,7 +91,7 @@ namespace Tank
 	float PhysicsBody::getGravityScalar(float distance, float otherMass) const
 	{
 		// F = Gm1m2/(r*r)
-		float f = (Physics::G * m_mass * otherMass) / (distance * distance);
+		float f = (Physics::G * getMass() * otherMass) / (distance * distance);
 		return f;
 	}
 }

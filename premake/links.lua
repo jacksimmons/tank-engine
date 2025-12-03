@@ -50,8 +50,8 @@ function LinkFreetypePostCopy(srcdir, destdir)
 		freetypeFile = "freetype"
 	else
 		freetypeFile = "TODO"
+	end
 
 	PostCopyFile(freetypeFile, srcdir, destdir)
 	links { "freetype" }
-	end
 end

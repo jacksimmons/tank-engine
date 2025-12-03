@@ -27,7 +27,6 @@ compileData.*
 # VSCode
 .vscode/
 
-
 # Compile Score
 *.scor
 
@@ -36,3 +35,9 @@ Builds/*
 
 # Engine data
 **/*.scene
+
+# Most of the Dotnet SDK
+**/lib/**/packs
+**/lib/**/sdk*
+**/lib/**/shared
+**/lib/**/templates
