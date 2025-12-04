@@ -101,12 +101,12 @@ namespace Tank::Editor
 										_FileDialogTarget::File,
 										[this](const std::filesystem::path &path)
 										{
-											std::unique_ptr<Tank::Scene> scene;
+											std::unique_ptr<::Tank::Scene> scene;
 
 											// Load scene if it was valid, and close the popup either way
-											if (Scene *rawScene = Tank::Serialisation::loadScene(path.string(), m_factory.get()))
+											if (Scene *rawScene = ::Tank::Serialisation::loadScene(path.string(), m_factory.get()))
 											{
-												scene = std::unique_ptr<Tank::Scene>(rawScene);
+												scene = std::unique_ptr<::Tank::Scene>(rawScene);
 												loadScene(std::move(scene));
 												postSceneSetup();
 											}
@@ -189,36 +189,36 @@ namespace Tank::Editor
 	{
 		// Create nodes
 		{
-			auto scene = std::make_unique<Tank::Scene>();
+			auto scene = std::make_unique<::Tank::Scene>();
 			{
-				auto camera = std::make_unique<Tank::Camera>();
-				scene->setActiveCamera(dynamic_cast<Tank::Camera*>(camera.get()));
+				auto camera = std::make_unique<::Tank::Camera>();
+				scene->setActiveCamera(dynamic_cast<::Tank::Camera*>(camera.get()));
 				scene->addChild(std::move(camera));
 			}
 			{
 				ShaderSources sources;
 				sources.vertex.location = "skybox.vert";
 				sources.fragment.location = "skybox.frag";
-				scene->addChild(std::make_unique<Tank::CubeMap>("CubeMap", &sources));
+				scene->addChild(std::make_unique<::Tank::CubeMap>("CubeMap", &sources));
 			}
 			{
 				ShaderSources sources;
 				sources.vertex.location = "shader.vert";
 				sources.fragment.location = "shader.frag";
 
-				auto object = std::unique_ptr<Tank::Model>(new Model("Doom", fs::current_path() / "models/doom/doom_E1M1.obj", &sources));
+				auto object = std::unique_ptr<::Tank::Model>(new Model("Doom", fs::current_path() / "models/doom/doom_E1M1.obj", &sources));
 				object->getTransform()->setLocalTranslation({ 0, 0, 0 });
 				scene->addChild(std::move(object));
 
-				auto backpackPhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
-				auto backpack = std::unique_ptr<Tank::Model>(new Model("Backpack", fs::current_path() / "models/backpack/backpack.obj", &sources));
+				auto backpackPhysics = std::unique_ptr<::Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
+				auto backpack = std::unique_ptr<::Tank::Model>(new Model("Backpack", fs::current_path() / "models/backpack/backpack.obj", &sources));
 				backpack->getTransform()->setLocalScale({ 100, 100, 100 });
 				backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
 				backpackPhysics->addChild(std::move(backpack));
 				scene->addChild(std::move(backpackPhysics));
 
-				auto spritePhysics = std::unique_ptr<Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
-				auto sprite = std::unique_ptr<Tank::Sprite>(new Sprite("Sprite", fs::current_path() / "textures/awesomeface.png", &sources));
+				auto spritePhysics = std::unique_ptr<::Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
+				auto sprite = std::unique_ptr<::Tank::Sprite>(new Sprite("Sprite", fs::current_path() / "textures/awesomeface.png", &sources));
 				spritePhysics->addChild(std::move(sprite));
 				scene->addChild(std::move(spritePhysics));
 			}
@@ -228,7 +228,7 @@ namespace Tank::Editor
 
 			// Lights can only be added after scene load
 			std::string name = "DirLight";
-			auto light = std::make_unique<Tank::DirLight>(name,
+			auto light = std::make_unique<::Tank::DirLight>(name,
 				glm::vec3{ 0.0f, -1.0f, 0.0f },
 				glm::vec3{ 0.02f, 0.02f, 0.02f },
 				glm::vec3{ 0.2f, 0.2f, 0.2f },
@@ -244,6 +244,7 @@ namespace Tank::Editor
 		m_system->addChild(std::unique_ptr<_SceneView>(new _SceneView("SceneView", getWindowSize(), getWindowSize(), m_keyInput.get())));
 		m_system->addChild(std::unique_ptr<_Console>(new _Console("Console")));
 		m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));
+		m_system->forEachDescendant([](::Tank::Node *node) { TE_CORE_INFO(node->getName()); });
 		m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
 		m_system->preupdate();
 	}

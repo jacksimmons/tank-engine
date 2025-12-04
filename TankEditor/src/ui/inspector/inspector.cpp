@@ -14,6 +14,7 @@
 #include "nodes/ui/text.hpp"
 #include "ui/console.hpp"
 #include "ui/file_dialog.hpp"
+#include "ui/hierarchy.hpp"
 #include "ui/inspector/inspector.hpp"
 #include "nodes/interfaces/editor_only.hpp"
 #include "nodes/interfaces/shader_container.hpp"
@@ -33,6 +34,57 @@ namespace Tank::Editor
 		: _Window(name, WINDOW_OPTS)
 	{
 		m_inspectedNode = nullptr;
+	}
+
+
+	void _Inspector::onAdopted()
+	{
+		// Setup handlers for Hierarchy events
+		_Hierarchy *hierarchy = (_Hierarchy*)getSibling("Hierarchy");
+
+		/// <summary>
+		/// Handle removing outline shader for the currently selected node, and applying
+		/// outline shader to the new selected node.
+		/// Then update the inspected node variable.
+		/// </summary>
+		hierarchy->handleOnNodeSelected([this](Node *node)
+		{
+			if (m_inspectedNode)
+			{
+				// Disable outline for current inspected node (if necessary)
+				if (IOutlined *inspectedOutline = dynamic_cast<IOutlined*>(m_inspectedNode))
+				{
+					inspectedOutline->setOutlineEnabled(false);
+				}
+			}
+
+			// Enable outline for new inspected node (if necessary)
+			if (IOutlined *ioutlined = dynamic_cast<IOutlined*>(node))
+			{
+				ioutlined->setOutlineEnabled(true);
+			}
+
+			m_inspectedNode = node;
+		});
+
+		/// <summary>
+		/// Recurse over all descendants of node, and if any match to the inspected
+		/// node, set the inspected node to nullptr (to reflect the deletion).
+		/// </summary>
+		hierarchy->handleOnNodeDeleted([this](Node *node)
+		{
+			node->forEachDescendant(
+				[this](Node *node)
+				{
+					if (node == m_inspectedNode)
+						m_inspectedNode = nullptr;
+				},
+				[this]()
+				{
+					return m_inspectedNode == nullptr;
+				}
+			);
+		});
 	}
 
 
@@ -74,49 +126,5 @@ namespace Tank::Editor
 			m_nodeInspector = std::make_unique<_NodeInspector<T>>(t, this);
 			m_nodeInspector->draw();
 		}
-	}
-
-
-	/// <summary>
-	/// Recurse over all descendants of node, and if any match to the inspected
-	/// node, set the inspected node to nullptr (to reflect the deletion).
-	/// </summary>
-	void _Inspector::onNodeDeleted(Node *node)
-	{
-		node->forEachDescendant(
-			[this](Node *node)
-			{
-				if (node == m_inspectedNode)
-					m_inspectedNode = nullptr;
-			},
-			[this]()
-			{
-				return m_inspectedNode == nullptr;
-			}
-		);
-	}
-
-
-	/// <summary>
-	/// Sets the inspected node for the inspector.
-	/// </summary>
-	void _Inspector::setInspectedNode(Node *node)
-	{
-		if (m_inspectedNode)
-		{
-			// Disable outline for prev inspected node (if necessary)
-			if (IOutlined *inspectedOutline = dynamic_cast<IOutlined*>(m_inspectedNode))
-			{
-				inspectedOutline->setOutlineEnabled(false);
-			}
-		}
-
-		// Enable outline for new inspected node (if necessary)
-		if (IOutlined *ioutlined = dynamic_cast<IOutlined*>(node))
-		{
-			ioutlined->setOutlineEnabled(true);
-		}
-
-		m_inspectedNode = node;
 	}
 }

@@ -13,7 +13,6 @@ namespace Tank::Editor
 	class _Inspector final : public _Window
 	{
 		friend class EditorApp;
-		friend class _Hierarchy;
 	private:
 		Node *m_inspectedNode;
 		std::unique_ptr<_NodeInspectorBase> m_nodeInspector;
@@ -21,11 +20,10 @@ namespace Tank::Editor
 		_Inspector(const std::string &name = "Inspector");
 		template <class T>
 		void tryDrawSection();
-		void onNodeDeleted(Node *node);
-		void setInspectedNode(Node *node);
 	protected:
 		virtual void drawPanel() override;
 	public:
+		virtual void onAdopted() override;
 		Node *getInspectedNode() const noexcept { return m_inspectedNode; }
 	};
 }

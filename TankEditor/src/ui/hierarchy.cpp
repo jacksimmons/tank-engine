@@ -11,7 +11,6 @@
 #include "nodes/ui/text.hpp"
 #include "ui/console.hpp"
 #include "ui/hierarchy.hpp"
-#include "ui/inspector/inspector.hpp"
 #include "nodes/physics/collider.hpp"
 #include "shapes/collision_sphere.hpp"
 
@@ -30,6 +29,9 @@ namespace Tank::Editor
 	{
 		m_showEditorHierarchy = false;
 		m_currentRoot = Tank::Scene::getActiveScene();
+
+		m_onNodeSelected = std::make_unique<Event<Node*>>();
+		m_onNodeDeleted = std::make_unique<Event<Node*>>();
 	}
 
 
@@ -63,7 +65,6 @@ namespace Tank::Editor
 		// Base case.
 		if (!node) return;
 
-		_Inspector *inspector = (_Inspector*)getSibling("Inspector");
 		size_t childCount = node->getChildCount();
 
 		// Determine if leaf node.
@@ -86,15 +87,14 @@ namespace Tank::Editor
 		if (
 			!ImGui::IsItemToggledOpen() &&
 			ImGui::IsItemFocused() &&
-			!ImGui::IsMouseDown(ImGuiMouseButton_Left) &&
-			inspector &&
-			inspector->getInspectedNode() != node)
+			!ImGui::IsMouseDown(ImGuiMouseButton_Left)
+		)
 		{
-			inspector->setInspectedNode(node);
+			m_onNodeSelected->invoke(node);
 		}
 
 		// Draw the right-click options, if user is right-clicking and hovering. If node gets deleted here, return.
-		if (!drawNodeContextMenu(node, inspector)) goto cleanup;
+		if (!drawNodeContextMenu(node)) goto cleanup;
 
 		// If node was clicked on in the tree, display its children (and further descendants if their parent has previously been expanded).
 		if (nodeExpanded)
@@ -115,7 +115,7 @@ namespace Tank::Editor
 	}
 
 
-	bool _Hierarchy::drawNodeContextMenu(Node *node, _Inspector *inspector)
+	bool _Hierarchy::drawNodeContextMenu(Node *node)
 	{
 		bool nodeSurvives = true;
 
@@ -132,7 +132,7 @@ namespace Tank::Editor
 				activeScene->onNodeDeleted(node);
 
 				// Handle graceful degradation before node removal.
-				inspector->onNodeDeleted(node);
+				m_onNodeDeleted->invoke(node);
 
 				// Detach child from its parent.
 				node->destroy();

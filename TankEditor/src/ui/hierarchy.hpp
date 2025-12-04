@@ -1,6 +1,7 @@
 #pragma once
 #include <type_traits>
 #include "ui/window.hpp"
+#include "events/event.hpp"
 
 
 namespace Tank::Editor
@@ -14,6 +15,8 @@ namespace Tank::Editor
 	private:
 		Node *m_currentRoot;
 		bool m_showEditorHierarchy;
+		std::unique_ptr<Event<Node*>> m_onNodeSelected;
+		std::unique_ptr<Event<Node*>> m_onNodeDeleted;
 
 		// Methods
 		/// <summary>
@@ -29,7 +32,7 @@ namespace Tank::Editor
 		/// = nullptr).
 		/// Returns true if the node survives, false if it is destroyed.
 		/// </summary>
-		bool drawNodeContextMenu(Node *node, _Inspector *inspector);
+		bool drawNodeContextMenu(Node *node);
 
 		/// <summary>
 		/// Adds a created node as a child of parent.
@@ -43,5 +46,8 @@ namespace Tank::Editor
 		/// indentation depth (based on the generation depth).
 		/// </summary>
 		virtual void drawPanel() override;
+	public:
+		void handleOnNodeSelected(EventHandler<Node*> handler) { m_onNodeSelected->registerHandler(handler); }
+		void handleOnNodeDeleted(EventHandler<Node*> handler) { m_onNodeDeleted->registerHandler(handler); }
 	};
 }

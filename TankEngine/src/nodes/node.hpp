@@ -1,4 +1,5 @@
 #pragma once
+#include <events/event.hpp>
 #include "nodes/interfaces/serialisable.hpp"
 #include "nodes/interfaces/scriptable.hpp"
 
@@ -32,6 +33,8 @@ namespace Tank
 
 		std::vector<Node*> m_childrenAwaitingDisown;
 		std::vector<std::unique_ptr<Node>> m_childrenAwaitingAdopt;
+
+		std::unique_ptr<Event<Node*>> m_onChildAdded;
 	protected:
 		std::string m_type;
 		std::unique_ptr<Transform> m_transform;
@@ -47,6 +50,8 @@ namespace Tank
 	public:
 		Node(const std::string &name = "Node");
 		virtual ~Node() = default;
+
+		virtual void onAdopted() {}
 
 		constexpr const std::string& getType() const noexcept { return m_type; }
 
@@ -110,5 +115,7 @@ namespace Tank
 		virtual void update();
 		virtual void shutdown();
 		void destroy() { m_parent->m_childrenAwaitingDisown.push_back(this); };
+
+		const Event<Node*> &getOnChildAdded() { return *m_onChildAdded; }
 	};
 }

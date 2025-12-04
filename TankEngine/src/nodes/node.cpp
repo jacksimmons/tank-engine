@@ -10,6 +10,8 @@ namespace Tank
 		m_name = name;
 		m_transform = std::make_unique<Transform>(this);
 		m_parent = nullptr;
+
+		m_onChildAdded = std::make_unique<Event<Node*>>();
 	}
 
 
@@ -193,6 +195,9 @@ namespace Tank
 		for (auto it = m_childrenAwaitingAdopt.begin(); it != m_childrenAwaitingAdopt.end(); ++it)
 		{
 			m_children.push_back(std::move(*it));
+			Node *node = m_children.back().get();
+			m_onChildAdded->invoke(node);
+			node->onAdopted();
 		}
 		m_childrenAwaitingAdopt.clear();
 	}
