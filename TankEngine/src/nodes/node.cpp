@@ -1,5 +1,6 @@
 #include "node.hpp"
 #include "log.hpp"
+#include "events/event_manager.hpp"
 
 
 namespace Tank
@@ -10,8 +11,6 @@ namespace Tank
 		m_name = name;
 		m_transform = std::make_unique<Transform>(this);
 		m_parent = nullptr;
-
-		m_onChildAdded = std::make_unique<Event<Node*>>();
 	}
 
 
@@ -187,6 +186,7 @@ namespace Tank
 		// Disown all children waiting to be disowned
 		for (Node *toDisown : m_childrenAwaitingDisown)
 		{
+			EventManager::getEvent<Node*>("NodeDisowned")->invoke(toDisown);
 			m_children.erase(m_children.begin() + toDisown->getSiblingIndex());
 		}
 		m_childrenAwaitingDisown.clear();
@@ -196,8 +196,7 @@ namespace Tank
 		{
 			m_children.push_back(std::move(*it));
 			Node *node = m_children.back().get();
-			m_onChildAdded->invoke(node);
-			node->onAdopted();
+			EventManager::getEvent<Node*>("NodeAdopted")->invoke(node);
 		}
 		m_childrenAwaitingAdopt.clear();
 	}

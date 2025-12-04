@@ -11,8 +11,15 @@ namespace Tank
 	using EventHandler = std::function<void(TArgs...)>;
 
 
+	class BaseEvent
+	{
+	public:
+		virtual ~BaseEvent() = default;
+	};
+
+
 	template <class ...TArgs>
-	class Event
+	class Event : public BaseEvent
 	{
 	protected:
 		std::vector<EventHandler<TArgs...>> m_handlers;

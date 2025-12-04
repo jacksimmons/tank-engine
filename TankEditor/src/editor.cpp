@@ -11,6 +11,7 @@
 #include "log.hpp"
 #include "scene_serialisation.hpp"
 #include "widget.hpp"
+#include <events/event_manager.hpp>
 #include "nodes/node.hpp"
 #include "nodes/camera.hpp"
 #include "nodes/scene.hpp"
@@ -26,6 +27,7 @@
 #include "ui/main_menu_bar.hpp"
 #include "ui/profiler.hpp"
 #include "nodes/physics/physics_body.hpp"
+#include "events/event_manager.hpp"
 
 
 namespace Tank::Editor
@@ -70,6 +72,10 @@ namespace Tank::Editor
 		}
 	)
 	{
+		// Register editor-specific events
+		EventManager::addEvent("Hierarchy.NodeSelected", new Event<Node*>());
+		EventManager::addEvent("Hierarchy.NodeDeleted", new Event<Node*>());
+
 		// Set the ImGui context, over DLL boundary
 		ImGui::SetCurrentContext(getContext());
 

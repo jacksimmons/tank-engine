@@ -13,6 +13,7 @@
 #include "nodes/sprite.hpp"
 #include "nodes/model.hpp"
 #include "nodes/cube_map.hpp"
+#include "events/event_manager.hpp"
 #include "reflection/node_factory.hpp"
 
 
@@ -41,6 +42,10 @@ namespace Tank
 		m_factory->registerClass<Sprite>("Sprite");
 		m_factory->registerClass<Model>("Model");
 		m_factory->registerClass<CubeMap>("CubeMap");
+
+		// Init events
+		EventManager::addEvent("NodeAdopted", new Event<Node*>());
+		EventManager::addEvent("NodeDisowned", new Event<Node*>());
 
 		m_windowSize = glm::ivec2(800, 600);
 		m_settings.configFlags = settings.configFlags;

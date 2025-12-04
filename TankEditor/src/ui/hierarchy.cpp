@@ -2,6 +2,7 @@
 #include <imgui.h>
 #include "log.hpp"
 #include "colours.hpp"
+#include <events/event_manager.hpp>
 #include "nodes/camera.hpp"
 #include "nodes/light.hpp"
 #include "nodes/scene.hpp"
@@ -29,9 +30,6 @@ namespace Tank::Editor
 	{
 		m_showEditorHierarchy = false;
 		m_currentRoot = Tank::Scene::getActiveScene();
-
-		m_onNodeSelected = std::make_unique<Event<Node*>>();
-		m_onNodeDeleted = std::make_unique<Event<Node*>>();
 	}
 
 
@@ -90,7 +88,7 @@ namespace Tank::Editor
 			!ImGui::IsMouseDown(ImGuiMouseButton_Left)
 		)
 		{
-			m_onNodeSelected->invoke(node);
+			EventManager::getEvent<Node*>("Hierarchy.NodeSelected")->invoke(node);
 		}
 
 		// Draw the right-click options, if user is right-clicking and hovering. If node gets deleted here, return.
@@ -132,7 +130,7 @@ namespace Tank::Editor
 				activeScene->onNodeDeleted(node);
 
 				// Handle graceful degradation before node removal.
-				m_onNodeDeleted->invoke(node);
+				EventManager::getEvent<Node*>("Hierarchy.NodeDeleted")->invoke(node);
 
 				// Detach child from its parent.
 				node->destroy();

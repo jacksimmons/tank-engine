@@ -5,6 +5,7 @@
 #include "file.hpp"
 #include "widget.hpp"
 #include "shader.hpp"
+#include <events/event_manager.hpp>
 #include "nodes/node.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/light.hpp"
@@ -34,20 +35,13 @@ namespace Tank::Editor
 		: _Window(name, WINDOW_OPTS)
 	{
 		m_inspectedNode = nullptr;
-	}
-
-
-	void _Inspector::onAdopted()
-	{
-		// Setup handlers for Hierarchy events
-		_Hierarchy *hierarchy = (_Hierarchy*)getSibling("Hierarchy");
 
 		/// <summary>
 		/// Handle removing outline shader for the currently selected node, and applying
 		/// outline shader to the new selected node.
 		/// Then update the inspected node variable.
 		/// </summary>
-		hierarchy->handleOnNodeSelected([this](Node *node)
+		EventManager::getEvent<Node*>("Hierarchy.NodeSelected")->registerHandler([this](Node *node)
 		{
 			if (m_inspectedNode)
 			{
@@ -71,7 +65,7 @@ namespace Tank::Editor
 		/// Recurse over all descendants of node, and if any match to the inspected
 		/// node, set the inspected node to nullptr (to reflect the deletion).
 		/// </summary>
-		hierarchy->handleOnNodeDeleted([this](Node *node)
+		EventManager::getEvent<Node*>("Hierarchy.NodeDeleted")->registerHandler([this](Node *node)
 		{
 			node->forEachDescendant(
 				[this](Node *node)

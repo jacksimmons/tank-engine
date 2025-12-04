@@ -15,8 +15,6 @@ namespace Tank::Editor
 	private:
 		Node *m_currentRoot;
 		bool m_showEditorHierarchy;
-		std::unique_ptr<Event<Node*>> m_onNodeSelected;
-		std::unique_ptr<Event<Node*>> m_onNodeDeleted;
 
 		// Methods
 		/// <summary>
@@ -46,8 +44,5 @@ namespace Tank::Editor
 		/// indentation depth (based on the generation depth).
 		/// </summary>
 		virtual void drawPanel() override;
-	public:
-		void handleOnNodeSelected(EventHandler<Node*> handler) { m_onNodeSelected->registerHandler(handler); }
-		void handleOnNodeDeleted(EventHandler<Node*> handler) { m_onNodeDeleted->registerHandler(handler); }
 	};
 }

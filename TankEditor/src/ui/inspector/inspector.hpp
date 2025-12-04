@@ -23,7 +23,6 @@ namespace Tank::Editor
 	protected:
 		virtual void drawPanel() override;
 	public:
-		virtual void onAdopted() override;
 		Node *getInspectedNode() const noexcept { return m_inspectedNode; }
 	};
 }
