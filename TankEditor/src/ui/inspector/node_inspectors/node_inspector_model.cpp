@@ -1,10 +1,16 @@
-#include <imgui.h>
-#include <colours.hpp>
-#include <widget.hpp>
-#include <nodes/model.hpp>
-#include "node_inspector.hpp"
+#include <filesystem>
 #include "../inspector.hpp"
-#include "../../file_dialog.hpp"
+#include "node_inspector.hpp"
+#include <colours.hpp>
+#include <events/event.hpp>
+#include <events/event_manager.hpp>
+#include <imgui.h>
+#include <nodes/model.hpp>
+#include "ui/file_dialog.hpp"
+#include <widget.hpp>
+
+
+const std::string g_name = "Load Model File";
 
 
 namespace Tank::Editor
@@ -27,22 +33,14 @@ namespace Tank::Editor
 		ImGui::SameLine();
 		if (ImGui::SmallButton("..."))
 		{
-			std::string name = "Load Model File";
-			if (!m_inspector->getSibling(name))
+			if (!m_inspector->getSibling(g_name))
 			{
-				auto fileDialog = std::unique_ptr<_FileDialog>(
-					new _FileDialog(
-						name,
-						fs::current_path(),
-						fs::path(modelPath).parent_path(),
-						_FileDialogTarget::File,
-						[this](const fs::path &path)
-						{
-							// Only update the model if user has selected a valid file
-							if (!path.has_filename()) return;
-							m_node->setModelPath(path);
-						}
-					));
+				auto fileDialog = std::make_unique<_FileDialog>(
+					g_name,
+					fs::current_path(),
+					fs::path(modelPath).parent_path(),
+					_FileDialogTarget::File
+				);
 
 				m_inspector->getParent()->addChild(std::move(fileDialog));
 			}

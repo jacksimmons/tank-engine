@@ -4,14 +4,14 @@
 
 namespace Tank::Editor
 {
-	typedef std::function<void(const fs::path &)> _FileDialogCallback;
-	enum class _FileDialogTarget { Directory, File };
+	enum class _FileDialogTarget
+	{
+		Directory,
+		File
+	};
+
 	class _FileDialog final : public _Window
 	{
-		friend class EditorApp;
-		friend class _Inspector;
-		template <class _NI> friend class _NodeInspector;
-
 	private:
 		struct _DirectoryResult
 		{
@@ -38,7 +38,6 @@ namespace Tank::Editor
 		std::string m_searchTerm;
 		
 		_FileDialogTarget m_target;
-		_FileDialogCallback m_onTargetSelected;
 		fs::path m_currentTarget;
 
 		/// <summary>
@@ -63,11 +62,11 @@ namespace Tank::Editor
 	protected:
 		virtual void drawPanel() override;
 	public:
-		_FileDialog(const std::string &name,
+		_FileDialog(
+			const std::string &name,
 			const fs::path &rootDirectory,
 			const fs::path &startDirectory,
-			_FileDialogTarget target,
-			_FileDialogCallback onTargetSelected
+			_FileDialogTarget target
 		);
 	};
 }

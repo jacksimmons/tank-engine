@@ -16,8 +16,6 @@
 #include "nodes/camera.hpp"
 #include "nodes/light.hpp"
 
-#include "../reflection/node_factory.hpp"
-
 
 namespace Tank
 {

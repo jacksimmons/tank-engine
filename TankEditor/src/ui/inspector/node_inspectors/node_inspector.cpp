@@ -1,8 +1,6 @@
 #include <imgui.h>
 #include <widget.hpp>
 #include <colours.hpp>
-#include <file.hpp>
-#include <shader_source.hpp>
 #include <nodes/node.hpp>
 #include <nodes/camera.hpp>
 #include <nodes/scene.hpp>

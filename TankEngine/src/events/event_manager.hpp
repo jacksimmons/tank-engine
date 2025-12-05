@@ -1,4 +1,5 @@
 #pragma once
+#include <log.hpp>
 #include "event.hpp"
 
 
@@ -28,7 +29,15 @@ namespace Tank
 			else
 			{
 				TE_CORE_ERROR(std::format("Failed to cast with provided type for key {}", id));
+				return nullptr;
 			}
+		}
+	
+		template <class ...TArgs>
+		static void invokeEvent(const std::string &id, TArgs&&... args)
+		{
+			Event<TArgs...> *event = EventManager::getEvent<TArgs...>(id);
+			event->invoke(std::forward<TArgs>(args)...);
 		}
 	};
 }

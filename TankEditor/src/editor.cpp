@@ -1,16 +1,11 @@
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
 
 #include "editor.hpp"
 #include "shader.hpp"
-#include "texture.hpp"
-#include "framebuffer.hpp"
 #include "log.hpp"
 #include "scene_serialisation.hpp"
-#include "widget.hpp"
 #include <events/event_manager.hpp>
 #include "nodes/node.hpp"
 #include "nodes/camera.hpp"
@@ -27,7 +22,6 @@
 #include "ui/main_menu_bar.hpp"
 #include "ui/profiler.hpp"
 #include "nodes/physics/physics_body.hpp"
-#include "events/event_manager.hpp"
 
 
 namespace Tank::Editor
@@ -72,9 +66,36 @@ namespace Tank::Editor
 		}
 	)
 	{
-		// Register editor-specific events
+		// Add editor-specific events
 		EventManager::addEvent("Hierarchy.NodeSelected", new Event<Node*>());
 		EventManager::addEvent("Hierarchy.NodeDeleted", new Event<Node*>());
+		EventManager::addEvent("FileDialog.ItemSelected", new Event<_FileDialog*, fs::path>());
+
+		// Register file dialog event handlers
+		EventManager::getEvent<_FileDialog*, fs::path>("FileDialog.ItemSelected")
+		->registerHandler(
+			[this](_FileDialog *dialog, const std::filesystem::path &path)
+			{
+				const std::string &name = dialog->getName();
+
+				if (name == "Open Project")
+				{
+					std::unique_ptr<::Tank::Scene> scene;
+
+					// Load scene if it was valid, and close the popup either way
+					if (Scene *rawScene = ::Tank::Serialisation::loadScene(path.string(), m_factory.get()))
+					{
+						scene = std::unique_ptr<::Tank::Scene>(rawScene);
+						loadScene(std::move(scene));
+						postSceneSetup();
+					}
+				}
+				else if (name == "Save Project")
+				{
+					Serialisation::saveScene(Scene::getActiveScene(), path);
+				}
+			}
+		);
 
 		// Set the ImGui context, over DLL boundary
 		ImGui::SetCurrentContext(getContext());
@@ -103,21 +124,7 @@ namespace Tank::Editor
 							[this]()
 							{
 								std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-									new _FileDialog("Open Project", "", fs::current_path(),
-										_FileDialogTarget::File,
-										[this](const std::filesystem::path &path)
-										{
-											std::unique_ptr<::Tank::Scene> scene;
-
-											// Load scene if it was valid, and close the popup either way
-											if (Scene *rawScene = ::Tank::Serialisation::loadScene(path.string(), m_factory.get()))
-											{
-												scene = std::unique_ptr<::Tank::Scene>(rawScene);
-												loadScene(std::move(scene));
-												postSceneSetup();
-											}
-										}
-									)
+									new _FileDialog("Open Project", "", fs::current_path(), _FileDialogTarget::File)
 								);
 								m_initUI->addChild(std::move(fileDialog));
 							}
@@ -128,13 +135,7 @@ namespace Tank::Editor
 							[this]()
 							{
 								std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-									new _FileDialog("Save Project", fs::current_path(), fs::current_path(),
-										_FileDialogTarget::File,
-										[this](const std::filesystem::path &path)
-										{
-											Serialisation::saveScene(Scene::getActiveScene(), path);
-										}
-									)
+									new _FileDialog("Save Project", fs::current_path(), fs::current_path(), _FileDialogTarget::File)
 								);
 								m_initUI->addChild(std::move(fileDialog));
 							}

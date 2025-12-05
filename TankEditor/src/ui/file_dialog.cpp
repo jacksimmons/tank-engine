@@ -1,9 +1,9 @@
 #include <imgui.h>
-#include "log.hpp"
+#include <events/event_manager.hpp>
+#include <log.hpp>
 #include "file_dialog.hpp"
 #include "colours.hpp"
 #include "widget.hpp"
-namespace fs = std::filesystem;
 
 
 namespace Tank::Editor
@@ -15,14 +15,17 @@ namespace Tank::Editor
 	};
 
 
-	_FileDialog::_FileDialog(const std::string &name,
+	_FileDialog::_FileDialog(
+		const std::string &name,
 		const std::filesystem::path &rootDirectory,
 		const std::filesystem::path &startDirectory,
-		_FileDialogTarget target,
-		_FileDialogCallback onTargetSelected
+		_FileDialogTarget target
 	) : _Window(name, WINDOW_OPTS),
-		m_rootDirectory(rootDirectory), m_startDirectory(startDirectory), m_currentDirectory(startDirectory), m_target(target),
-		m_onTargetSelected(onTargetSelected), m_searchTerm("")
+		m_rootDirectory(rootDirectory),
+		m_startDirectory(startDirectory),
+		m_currentDirectory(startDirectory),
+		m_target(target),
+		m_searchTerm("")
 	{
 		// If current directory doesn't contain the root directory
 		if (m_startDirectory.string().find(m_rootDirectory.string()) == std::string::npos)
@@ -206,7 +209,7 @@ namespace Tank::Editor
 		{
 			// Select the current directory as a target, when target is a directory.
 			// Otherwise, select the current target.
-			m_onTargetSelected(getCurrentTarget());
+			EventManager::invokeEvent("FileDialog.ItemSelected", this, getCurrentTarget());
 			destroy();
 		}
 	}

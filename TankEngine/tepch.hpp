@@ -5,6 +5,7 @@
 #include <functional>
 #include <chrono>
 #include <filesystem>
+#include <type_traits>
 
 // Standard Library Datatypes
 #include <string>

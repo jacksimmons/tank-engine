@@ -15,11 +15,12 @@ namespace Tank::Editor
 		friend class EditorApp;
 	private:
 		Node *m_inspectedNode;
-		std::unique_ptr<_NodeInspectorBase> m_nodeInspector;
+		std::vector<std::unique_ptr<_NodeInspectorBase>> m_nodeInspectors;
 
 		_Inspector(const std::string &name = "Inspector");
+
 		template <class T>
-		void tryDrawSection();
+		void tryAddSection();
 	protected:
 		virtual void drawPanel() override;
 	public:

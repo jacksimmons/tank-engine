@@ -2,9 +2,13 @@
 #include <colours.hpp>
 #include <widget.hpp>
 #include <nodes/sprite.hpp>
+#include <events/event_manager.hpp>
 #include "../inspector.hpp"
-#include "../../file_dialog.hpp"
+#include "ui/file_dialog.hpp"
 #include "node_inspector.hpp"
+
+
+const std::string g_name = "Load Texture File";
 
 
 namespace Tank::Editor
@@ -30,21 +34,14 @@ namespace Tank::Editor
 		ImGui::SameLine();
 		if (ImGui::SmallButton("..."))
 		{
-			std::string name = "Load Texture File";
-			if (!m_inspector->getSibling(name))
+			if (!m_inspector->getSibling(g_name))
 			{
 				auto fileDialog = std::unique_ptr<_FileDialog>(
 					new _FileDialog(
-						name,
+						g_name,
 						fs::current_path(),
 						fs::path(texPath).parent_path(),
-						_FileDialogTarget::File,
-						[this](const fs::path &path)
-						{
-							// Only update the texture if user has selected a valid file
-							if (!path.has_filename()) return;
-							m_node->setTexPath(path);
-						}
+						_FileDialogTarget::File
 					));
 
 				m_inspector->getParent()->addChild(std::move(fileDialog));

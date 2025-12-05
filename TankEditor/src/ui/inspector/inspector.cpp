@@ -1,25 +1,26 @@
-#include <optional>
-#include <imgui.h>
-#include <glm/gtx/euler_angles.hpp>
 #include "colours.hpp"
 #include "file.hpp"
-#include "widget.hpp"
-#include "shader.hpp"
-#include <events/event_manager.hpp>
+#include "node_inspectors/node_inspector.hpp"
+#include "nodes/camera.hpp"
+#include "nodes/interfaces/editor_only.hpp"
+#include "nodes/interfaces/shader_container.hpp"
+#include "nodes/light.hpp"
+#include "nodes/model.hpp"
 #include "nodes/node.hpp"
 #include "nodes/scene.hpp"
-#include "nodes/light.hpp"
-#include "nodes/camera.hpp"
 #include "nodes/sprite.hpp"
-#include "nodes/model.hpp"
 #include "nodes/ui/text.hpp"
+#include "shader.hpp"
 #include "ui/console.hpp"
 #include "ui/file_dialog.hpp"
 #include "ui/hierarchy.hpp"
 #include "ui/inspector/inspector.hpp"
-#include "nodes/interfaces/editor_only.hpp"
-#include "nodes/interfaces/shader_container.hpp"
-#include "node_inspectors/node_inspector.hpp"
+#include "widget.hpp"
+#include <events/event_manager.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <imgui.h>
+#include <nodes/interfaces/mesh_container.hpp>
+#include <optional>
 
 
 namespace Tank::Editor
@@ -41,7 +42,8 @@ namespace Tank::Editor
 		/// outline shader to the new selected node.
 		/// Then update the inspected node variable.
 		/// </summary>
-		EventManager::getEvent<Node*>("Hierarchy.NodeSelected")->registerHandler([this](Node *node)
+		auto onNodeSelected = EventManager::getEvent<Node*>("Hierarchy.NodeSelected");
+		onNodeSelected->registerHandler([this](Node *node)
 		{
 			if (m_inspectedNode)
 			{
@@ -58,14 +60,27 @@ namespace Tank::Editor
 				ioutlined->setOutlineEnabled(true);
 			}
 
+			// Set the inspected node, before trying to setup node inspectors
 			m_inspectedNode = node;
+
+			// Now setup a node inspector, for each type which has one.
+			m_nodeInspectors.clear(); // Clear beforehand
+			tryAddSection<Node>();
+			tryAddSection<Scene>();
+			tryAddSection<Camera>();
+			tryAddSection<Light>();
+			tryAddSection<Sprite>();
+			tryAddSection<Model>();
+			tryAddSection<IMeshContainer>();
+			tryAddSection<IShaderContainer>();
 		});
 
 		/// <summary>
 		/// Recurse over all descendants of node, and if any match to the inspected
 		/// node, set the inspected node to nullptr (to reflect the deletion).
 		/// </summary>
-		EventManager::getEvent<Node*>("Hierarchy.NodeDeleted")->registerHandler([this](Node *node)
+		auto onNodeDeleted = EventManager::getEvent<Node*>("Hierarchy.NodeDeleted");
+		onNodeDeleted->registerHandler([this](Node *node)
 		{
 			node->forEachDescendant(
 				[this](Node *node)
@@ -96,29 +111,26 @@ namespace Tank::Editor
 				return;
 			}
 
-			// Draw a section for each subtype the node belongs to.
-			tryDrawSection<Node>();
-			tryDrawSection<Scene>();
-			tryDrawSection<Camera>();
-			tryDrawSection<Light>();
-			tryDrawSection<Sprite>();
-			tryDrawSection<Model>();
-			tryDrawSection<IMeshContainer>();
-			tryDrawSection<IShaderContainer>();
+			// Draw all node inspector sections
+			for (const auto &nodeInspector : m_nodeInspectors)
+			{
+				nodeInspector->draw();
+			}
+		}
+		else
+		{
+			m_nodeInspectors.clear();
 		}
 	}
 
 
 	template <class T>
-	void _Inspector::tryDrawSection()
+	void _Inspector::tryAddSection()
 	{
 		// If the node can be casted to this node subtype, then draw using the subtype inspector.
 		if (T *t = dynamic_cast<T *>(m_inspectedNode))
 		{
-			// @todo This doesn't persist long enough for file dialogs to work
-			m_nodeInspector.reset();
-			m_nodeInspector = std::make_unique<_NodeInspector<T>>(t, this);
-			m_nodeInspector->draw();
+			m_nodeInspectors.push_back(std::make_unique<_NodeInspector<T>>(t, this));
 		}
 	}
 }

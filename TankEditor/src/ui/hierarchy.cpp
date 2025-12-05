@@ -85,7 +85,7 @@ namespace Tank::Editor
 		if (
 			!ImGui::IsItemToggledOpen() &&
 			ImGui::IsItemFocused() &&
-			!ImGui::IsMouseDown(ImGuiMouseButton_Left)
+			ImGui::IsMouseReleased(ImGuiMouseButton_Left)
 		)
 		{
 			EventManager::getEvent<Node*>("Hierarchy.NodeSelected")->invoke(node);
