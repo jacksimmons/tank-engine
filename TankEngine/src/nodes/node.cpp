@@ -46,7 +46,7 @@ namespace Tank
 			std::string baseName = m_name;
 			std::string dupeName;
 
-			// Try each of NAME (1), NAME (2), ... until we reach NAME (NUM_CHILDREN)
+			// Try each of NAME (1), NAME (2), ... NAME (NUM_SIBLINGS - 1)
 			for (dupeIndex = 0; dupeIndex < m_parent->m_children.size(); dupeIndex++)
 			{
 				dupeName = std::format("{} ({})", baseName, dupeIndex);
@@ -54,7 +54,7 @@ namespace Tank
 				if (findSiblingWithSameName() == nullptr) break;
 			}
 
-			// If even NAME (NUM_CHILDREN - 1) didn't work, we have a problem
+			// If even NAME (NUM_SIBLINGS - 1) didn't work, we have a problem
 			if (dupeIndex == m_parent->m_children.size())
 			{
 				TE_CORE_CRITICAL(std::format("[Infinite loop error] Tried to assign a node a duplicate identifier. Tried (0), ..., ({})", dupeIndex - 1));
