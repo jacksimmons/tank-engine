@@ -34,10 +34,10 @@ namespace Tank
 		}
 	
 		template <class ...TArgs>
-		static void invokeEvent(const std::string &id, TArgs&&... args)
+		static void invokeEvent(const std::string &id, TArgs... args)
 		{
 			Event<TArgs...> *event = EventManager::getEvent<TArgs...>(id);
-			event->invoke(std::forward<TArgs>(args)...);
+			event->invoke(args...);
 		}
 	};
 }

@@ -70,6 +70,7 @@ namespace Tank::Editor
 		EventManager::addEvent("Hierarchy.NodeSelected", new Event<Node*>());
 		EventManager::addEvent("Hierarchy.NodeDeleted", new Event<Node*>());
 		EventManager::addEvent("FileDialog.ItemSelected", new Event<_FileDialog*, fs::path>());
+		EventManager::addEvent("Console.AddColouredLine", new Event<std::string, ImColor>());
 
 		// Register file dialog event handlers
 		EventManager::getEvent<_FileDialog*, fs::path>("FileDialog.ItemSelected")

@@ -88,7 +88,7 @@ namespace Tank::Editor
 			ImGui::IsMouseReleased(ImGuiMouseButton_Left)
 		)
 		{
-			EventManager::getEvent<Node*>("Hierarchy.NodeSelected")->invoke(node);
+			EventManager::invokeEvent("Hierarchy.NodeSelected", node);
 		}
 
 		// Draw the right-click options, if user is right-clicking and hovering. If node gets deleted here, return.
@@ -130,7 +130,7 @@ namespace Tank::Editor
 				activeScene->onNodeDeleted(node);
 
 				// Handle graceful degradation before node removal.
-				EventManager::getEvent<Node*>("Hierarchy.NodeDeleted")->invoke(node);
+				EventManager::invokeEvent("Hierarchy.NodeDeleted", node);
 
 				// Detach child from its parent.
 				node->destroy();

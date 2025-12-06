@@ -238,7 +238,7 @@ namespace Tank
 		// Disown all children waiting to be disowned
 		for (Node *toDisown : m_childrenAwaitingDisown)
 		{
-			EventManager::getEvent<Node*>("NodeDisowned")->invoke(toDisown);
+			EventManager::invokeEvent<Node*>("NodeDisowned", toDisown);
 			m_children.erase(m_children.begin() + toDisown->getSiblingIndex());
 		}
 		m_childrenAwaitingDisown.clear();
@@ -250,7 +250,7 @@ namespace Tank
 			Node *node = m_children.back().get();
 			// setName sets name to NAME (0) if any siblings share its name (then NAME (1) if NAME (0) already exists, etc...)
 			node->setName(node->m_name);
-			EventManager::getEvent<Node*>("NodeAdopted")->invoke(node);
+			EventManager::invokeEvent<Node*>("NodeAdopted", node);
 		}
 		m_childrenAwaitingAdopt.clear();
 	}

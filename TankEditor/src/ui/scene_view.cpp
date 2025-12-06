@@ -2,14 +2,13 @@
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include "log.hpp"
+#include <events/event_manager.hpp>
 #include "key_input.hpp"
-#include "colours.hpp"
 #include "static/time.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/camera.hpp"
 #include "ui/scene_view.hpp"
+#include <colours.hpp>
 
 
 namespace Tank::Editor
@@ -232,7 +231,7 @@ namespace Tank::Editor
 		std::string line = std::format("Set GL polygon mode to {}",
 			m_polygonMode == GL_FILL ? "FILL" : (m_polygonMode == GL_POINT ? "POINT" : "LINE"));
 
-		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
+		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
 	}
 
 	void _SceneView::cycleCullFaceMode()
@@ -255,7 +254,7 @@ namespace Tank::Editor
 		std::string line = std::format("Set GL cull face mode to {}",
 			m_cullFaceMode == GL_BACK ? "BACK" : (m_cullFaceMode == GL_FRONT ? "FRONT" : "FRONT_AND_BACK"));
 
-		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
+		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
 	}
 
 	void _SceneView::cycleFrontFaceMode()
@@ -275,7 +274,7 @@ namespace Tank::Editor
 		std::string line = std::format("Set GL front face mode (winding order) to {}",
 			m_frontFaceMode == GL_CCW ? "CCW" : "CW");
 
-		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(Tank::Colour::INFO, line);
+		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
 	}
 
 	void _SceneView::cycleDepthFuncComparisonMode()
@@ -304,10 +303,8 @@ namespace Tank::Editor
 
 		glDepthFunc(m_depthFuncComparisonMode);
 
-		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(
-		//	Tank::Colour::INFO,
-		//	"Set GL depth func comparison to " + newMode
-		//);
+		std::string line = "Set GL depth func comparison to " + newMode;
+		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
 	}
 
 	
@@ -358,9 +355,7 @@ namespace Tank::Editor
 
 		glBlendFunc(GL_SRC_ALPHA, factor);
 
-		// @todo dynamic_cast<_Console*>(getSibling("Console"))->addColouredTextLine(
-		//	Tank::Colour::INFO,
-		//	"Set GL blend func " + name + " to " + newName
-		//);
+		std::string line = "Set GL blend func " + name + " to " + newName;
+		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
 	}
 }
