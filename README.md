@@ -4,34 +4,43 @@
 # Description
 A C++ graphics rendering application using OpenGL and the GUI framework "dear ImGUI".
 
-# Roadmap
-## UI/Editor
+# Roadmap/Features
+## Editor: UI
 - [x] Node-tree scene system, with the Scene as the root  
 - [x] Hierarchy window, displaying and allowing interaction with the Node tree  
 - [x] Inspector window, allowing modification of a Node or Node subclass  
 - [x] Scene View window, displaying the rendered scene in a container  
-- [x] Console window, displaying debugging information (WIP)
+- [ ] Console window, displaying debugging information (WIP)
 - [x] Highlight selected Nodes using stencil buffer
-- [ ] Gizmos for Lights and Cameras to show their positions, with RGBA sprites  
-- [x] Saving and loading of scenes  
-## Scripting  
+- [ ] Gizmos for Lights and Cameras to show their positions, with RGBA sprites (WIP)
+- [x] Saving and loading of scenes
+## Engine: Nodes
+- [x] Scene node
+- [x] Camera node
+- [ ] Text rendering node
+- [x] 2D Sprite node using stb_image
+- [x] 3D Model node using Assimp
+- [x] Skybox (cube-map texture rendered behind everything else)
+- [x] Directional Light node
+- [ ] Point Light node (untested)
+## Engine: Utils
+- [x] Event System for variadic generic events (e.g. `Event<Node*, int, int>`)
+- [x] Factory + JSON serialisation
+## Engine: C# Scripting  
 - [x] Script class, with a pure virtual update method
 - [ ] Editor and Play mode distinction for Scripts
-## Physics
-- [x] Gravity physics
-## Models
-- [x] Assimp model loading
-## Scene Elements
-- [x] Skybox (cube-map texture rendered behind everything else)  
+## Engine: Physics
+- [x] Planetary gravity physics
 
-# Use
-Note: This repository uses submodules, so please use --recurse-submodules when git-cloning.  
+# Project Setup
+- This repository uses submodules, so please use --recurse-submodules when git-cloning.    
+- No binaries are located in this repo, so instead use premake5 to generate them.
+- Premake binaries for Windows/Linux are included in the `premake` folder, but you may want/need to use your own version.  
+- Example build command (Windows): `./premake/premake5 vs2022`.  
 
-Build project files with cmake (cmake .) in the root directory.  
-- cmake 3.12 or newer is required.
-
-Example: Visual Studio 2022
-- To run, change the startup project to Application, then press F5.  
+# Project Building
+- Build the `TankEditor` project for the Editor (UI).
+- Build the `TankPlayer` project for the Standalone Player (no UI).
 
 # Modules Used
 [Dear ImGui](https://github.com/ocornut/imgui)  
