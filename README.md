@@ -10,7 +10,7 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - [x] Hierarchy window, displaying and allowing interaction with the Node tree  
 - [x] Inspector window, allowing modification of a Node or Node subclass  
 - [x] Scene View window, displaying the rendered scene in a container  
-- [ ] Console window, displaying debugging information (WIP)
+- [x] Console window, displaying debugging information
 - [x] Highlight selected Nodes using stencil buffer
 - [ ] Gizmos for Lights and Cameras to show their positions, with RGBA sprites (WIP)
 - [x] Saving and loading of scenes
