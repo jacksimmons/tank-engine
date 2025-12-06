@@ -24,7 +24,7 @@ namespace Tank
 		);
 		virtual ~Sprite() = default;
 
-		void setTexPath(const fs::path &texPath);
+		bool setTexPath(const fs::path &texPath);
 		const fs::path& getTexPath() { return m_texPath; }
 		virtual void draw() override;
 	};

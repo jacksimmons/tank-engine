@@ -46,7 +46,7 @@ namespace Tank
 	}
 
 
-	void Sprite::setTexPath(const fs::path &texPath)
+	bool Sprite::setTexPath(const fs::path &texPath)
 	{
 		const auto &tex = Texture::fromFile(texPath, "diffuse");
 		m_texPath = texPath;
@@ -55,10 +55,12 @@ namespace Tank
 		if (tex.has_value())
 		{
 			m_meshes.push_back(std::unique_ptr<QuadMesh>(new QuadMesh({ tex.value() })));
+			return true;
 		}
 		else
 		{
 			TE_CORE_ERROR(std::format("Couldn't decode texture at {}", texPath.string()));
+			return false;
 		}
 	}
 

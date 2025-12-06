@@ -43,20 +43,19 @@ namespace Tank
 						if (dialog->getName() == "Load Model File")
 						{
 							if (!path.has_filename()) return;
-							m_node->setModelPath(path);
+							dynamic_cast<Model*>(m_node)->setModelPath(path);
 						}
 					});
 				}
 				else if constexpr (std::is_same_v<T, Sprite>)
 				{
-					TE_CORE_INFO(dynamic_cast<Sprite*>(node)->getTexPath().string());
 					onItemSelected->registerHandler([this](_FileDialog *dialog, const fs::path &path)
 					{
 						if (dialog->getName() == "Load Texture File")
 						{
 							// Only update the texture if user has selected a valid file
 							if (!path.has_filename()) return;
-							m_node->setTexPath(path);
+							dynamic_cast<Sprite*>(m_node)->setTexPath(path);
 						}
 					});
 				}

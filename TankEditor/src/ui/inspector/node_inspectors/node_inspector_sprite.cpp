@@ -44,7 +44,7 @@ namespace Tank::Editor
 						_FileDialogTarget::File
 					));
 
-				m_inspector->getParent()->addChild(std::move(fileDialog));
+				m_inspector->addChild(std::move(fileDialog));
 			}
 		}
 	}

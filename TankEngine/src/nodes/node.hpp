@@ -82,6 +82,22 @@ namespace Tank
 		Node *getChild(std::string name) const;
 		// Get child by index.
 		Node *getChild(int index) const;
+		// Get first child of type (if any).
+		template <class T>
+		std::vector<T*> getChildrenOfType() const
+		{
+			std::vector<T*> results;
+			for (const auto &child : m_children)
+			{
+				if (T *t = dynamic_cast<T*>(child.get()))
+				{
+					results.push_back(t);
+				}
+			}
+
+			return results;
+		}
+
 		// Get first sibling whose name matches the provided name.
 		Node *getSibling(std::string name) const { return getParent()->getChild(name); }
 		// Get sibling by index.

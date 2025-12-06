@@ -73,6 +73,12 @@ namespace Tank::Editor
 			tryAddSection<Model>();
 			tryAddSection<IMeshContainer>();
 			tryAddSection<IShaderContainer>();
+
+			// Close all file dialog children
+			for (_FileDialog *fd : getChildrenOfType<_FileDialog>())
+			{
+				fd->destroy();
+			}
 		});
 
 		/// <summary>
