@@ -1,5 +1,4 @@
 #pragma once
-#include <events/event.hpp>
 #include "nodes/interfaces/serialisable.hpp"
 #include "nodes/interfaces/scriptable.hpp"
 
@@ -57,7 +56,7 @@ namespace Tank
 		constexpr void setVisibility(bool visible) noexcept { m_visible = visible; }
 		constexpr bool getVisibility() const noexcept { return m_visible; }
 
-		void setName(const std::string &name) noexcept { m_name = name; }
+		void setName(const std::string &name) noexcept;
 		constexpr const std::string& getName() const noexcept { return m_name; }
 		std::string getPath() const;
 
@@ -98,6 +97,9 @@ namespace Tank
 			return results;
 		}
 
+		// Get all siblings.
+		template <class T>
+		std::vector<T*> getSiblingsOfType() const { return m_parent->getChildrenOfType<T>(); }
 		// Get first sibling whose name matches the provided name.
 		Node *getSibling(std::string name) const { return getParent()->getChild(name); }
 		// Get sibling by index.

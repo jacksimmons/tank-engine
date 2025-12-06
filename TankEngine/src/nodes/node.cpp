@@ -14,6 +14,58 @@ namespace Tank
 	}
 
 
+	void Node::setName(const std::string &name) noexcept
+	{
+		m_name = name;
+
+		// Get a vector of all sibling names
+		std::vector<std::string> siblingNames;
+		for (const auto *sibling : getSiblingsOfType<Node>())
+		{
+			if (sibling == this) continue;
+			siblingNames.push_back(sibling->m_name);
+		}
+
+		std::vector<Node*> siblings = getSiblingsOfType<Node>();
+		std::function<Node*()> findSiblingWithSameName = [this, &siblings]()
+		{
+			auto it = std::find_if(siblings.begin(), siblings.end(),
+			[this](const Node *sibling)
+			{
+				return this != sibling && sibling->m_name == m_name;
+			});
+
+			if (it != siblings.end()) return *it;
+			return (Node*)nullptr;
+		};
+
+		// If a sibling already uses this name, add a (1) [or (2) or (3) ... if necessary]
+		if (findSiblingWithSameName() != nullptr)
+		{
+			int dupeIndex;
+			std::string baseName = m_name;
+			std::string dupeName;
+
+			// Try each of NAME (1), NAME (2), ... until we reach NAME (NUM_CHILDREN)
+			for (dupeIndex = 0; dupeIndex < m_parent->m_children.size(); dupeIndex++)
+			{
+				dupeName = std::format("{} ({})", baseName, dupeIndex);
+				m_name = dupeName;
+				if (findSiblingWithSameName() == nullptr) break;
+			}
+
+			// If even NAME (NUM_CHILDREN - 1) didn't work, we have a problem
+			if (dupeIndex == m_parent->m_children.size())
+			{
+				TE_CORE_CRITICAL(std::format("[Infinite loop error] Tried to assign a node a duplicate identifier. Tried (0), ..., ({})", dupeIndex - 1));
+			}
+
+			m_name = dupeName;
+		}
+		TE_CORE_INFO(m_name);
+	}
+
+
 	std::string Node::getPath() const
 	{
 		if (m_parent)
@@ -196,6 +248,8 @@ namespace Tank
 		{
 			m_children.push_back(std::move(*it));
 			Node *node = m_children.back().get();
+			// setName sets name to NAME (0) if any siblings share its name (then NAME (1) if NAME (0) already exists, etc...)
+			node->setName(node->m_name);
 			EventManager::getEvent<Node*>("NodeAdopted")->invoke(node);
 		}
 		m_childrenAwaitingAdopt.clear();
