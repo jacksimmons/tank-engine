@@ -5,15 +5,6 @@
 A C++ graphics rendering application using OpenGL and the GUI framework "dear ImGUI".
 
 # Roadmap/Features
-## Editor: UI
-- [x] Node-tree scene system, with the Scene as the root  
-- [x] Hierarchy window, displaying and allowing interaction with the Node tree  
-- [x] Inspector window, allowing modification of a Node or Node subclass  
-- [x] Scene View window, displaying the rendered scene in a container  
-- [x] Console window, displaying debugging information
-- [x] Highlight selected Nodes using stencil buffer
-- [ ] Gizmos for Lights and Cameras to show their positions, with RGBA sprites (WIP)
-- [x] Saving and loading of scenes
 ## Engine: Nodes
 - [x] Scene node
 - [x] Camera node
@@ -26,11 +17,21 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 ## Engine: Utils
 - [x] Event System for variadic generic events (e.g. `Event<Node*, int, int>`)
 - [x] Factory + JSON serialisation
+## Engine: Physics
+- [x] Planetary gravity physics
 ## Engine: C# Scripting  
 - [x] Script class, with a pure virtual update method
 - [ ] Editor and Play mode distinction for Scripts
-## Engine: Physics
-- [x] Planetary gravity physics
+- [ ] C# integration
+## Editor: UI
+- [x] Node-tree scene system, with the Scene as the root  
+- [x] Hierarchy window, displaying and allowing interaction with the Node tree  
+- [x] Inspector window, allowing modification of a Node or Node subclass  
+- [x] Scene View window, displaying the rendered scene in a container  
+- [x] Console window, displaying debugging information
+- [x] Highlight selected Nodes using stencil buffer
+- [ ] Gizmos for Lights and Cameras to show their positions, with RGBA sprites (WIP)
+- [x] Saving and loading of scenes
 
 # Project Setup
 - This repository uses submodules, so please use --recurse-submodules when git-cloning.    
