@@ -10,7 +10,7 @@
 namespace Tank
 {
 	Light::Light(const std::string &name, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec) :
-		IEditorOnly(name),
+		Node(name),
 		m_ambient(amb), m_diffuse(diff), m_specular(spec)
 	{
 		m_scene = Scene::getActiveScene();

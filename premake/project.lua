@@ -1,8 +1,14 @@
 local subDir = "%{prj.name}/%{cfg.shortname}"
 local groupSubDir = "%{prj.group}/%{prj.name}/%{cfg.shortname}"
 
+function PrjUseC()
+    language "C"
+    cdialect "c23"
+end
+
+
 function PrjUseCpp()
-  language "C++"
+    language "C++"
 	cppdialect "c++23"
 end
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <nodes/interfaces/editor_only.hpp>
+#include <nodes/node.hpp>
 
 
 namespace Tank
@@ -17,7 +17,7 @@ namespace Tank
 		Directional
 	};
 
-	class TANK_API Light : public IEditorOnly
+	class TANK_API Light : public Node
 	{
 	public:
 		virtual json serialise() override;

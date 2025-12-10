@@ -1,6 +1,5 @@
 #pragma once
-#include "scriptable.hpp"
-#include "nodes/node.hpp"
+#include <nodes/node.hpp>
 
 
 namespace Tank
@@ -11,7 +10,7 @@ namespace Tank
 	/// 
 	/// @todo Toggling enable/disable of a parent may break this system.
 	/// </summary>
-	class TANK_API IEditorOnly : public Node
+	class IEditorOnly : public Node
 	{
 	protected:
 		IEditorOnly(const std::string &name);

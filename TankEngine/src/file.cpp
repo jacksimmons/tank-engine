@@ -14,7 +14,7 @@ namespace Tank
 		}
 
 
-		ReadResult readLines(const std::filesystem::path &fp, std::string &outStr)
+		ReadResult readLines(const std::filesystem::path &fp, std::string &outStr) noexcept
 		{
 			if (!File::exists(fp)) return ReadResult::NoFile;
 

@@ -24,8 +24,17 @@ namespace Tank
 				return nullptr;
 			}
 
-			json serialised = json::parse(sceneFile);
-			
+			json serialised;
+			try
+			{
+				serialised = json::parse(sceneFile);
+			}
+			catch (std::exception e)
+			{
+				TE_CORE_ERROR(std::format("Couldn't parse {} into JSON.", scenePath.string()));
+				return nullptr;
+			}
+
 			if (Scene *scene = dynamic_cast<Scene*>(deserialise(serialised, factory)))
 			{
 				return scene;

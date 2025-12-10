@@ -2,43 +2,30 @@
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
 #include <glm/glm.hpp>
-#include <variant>
 #include "log.hpp"
 #include "file.hpp"
-#include "json.hpp"
-#include "serialisation.hpp"
 #include "nodes/node.hpp"
-#include "scripting/script.hpp"
-#include "static/glm_serialise.hpp"
+#include "script.hpp"
+#include "script_manager.hpp"
 
 
 namespace Tank
 {
 	std::optional<std::unique_ptr<Script>> Script::createScript(Node *node, std::string filename)
 	{
-		// Load script (.lua) file
-		std::string scriptLines;
-		std::filesystem::path scriptPath = std::filesystem::path(ROOT_DIRECTORY) / "Scripts" / filename;
-		if (!File::readLines(scriptPath, scriptLines))
-		{
-			TE_CORE_ERROR(std::string("Script did not exist: ") + scriptPath.string());
-			return {};
-		}
+		// Try to load lua file
+		std::filesystem::path scriptPath = std::filesystem::path() / "Scripts" / filename;
+		ScriptData data = ScriptManager::addScript(scriptPath);
+		if (data.getContents() == "") return {};
 
-		Script *script = new Script(node, filename, scriptLines);
+		// Interpret script with sol2
+		Script *script = new Script(node, filename, data.getContents());
 		return std::unique_ptr<Script>(script);
 	}
 
 
 	void Script::update()
 	{
-		// ! Remove this !
-		std::filesystem::path scriptPath = std::filesystem::path(ROOT_DIRECTORY) / "Scripts" / m_filename;
-		if (!File::readLines(scriptPath, m_scriptLines))
-		{
-			TE_CORE_ERROR(std::string("Script did not exist: ") + scriptPath.string());
-		}
-
 		// Setup lua script
 		sol::state lua;
 		lua.open_libraries(sol::lib::base, sol::lib::package);

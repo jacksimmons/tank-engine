@@ -175,7 +175,7 @@ namespace Tank
 		auto frameEnd = std::clock();
 		float lastFrameDelta = 0;
 
-		// ===== MAINLOOP =====
+		// =-=-=-= MAINLOOP =-=-=-=
 		while (!glfwWindowShouldClose(m_window))
 		{
 			frameStart = std::clock();

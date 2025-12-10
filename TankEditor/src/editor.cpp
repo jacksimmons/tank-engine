@@ -81,12 +81,10 @@ namespace Tank::Editor
 
 				if (name == "Open Project")
 				{
-					std::unique_ptr<::Tank::Scene> scene;
-
 					// Load scene if it was valid, and close the popup either way
 					if (Scene *rawScene = ::Tank::Serialisation::loadScene(path.string(), m_factory.get()))
 					{
-						scene = std::unique_ptr<::Tank::Scene>(rawScene);
+						std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
 						loadScene(std::move(scene));
 						postSceneSetup();
 					}
@@ -214,9 +212,10 @@ namespace Tank::Editor
 				sources.vertex.location = "shader.vert";
 				sources.fragment.location = "shader.frag";
 
-				auto object = std::unique_ptr<::Tank::Model>(new Model("Doom", fs::current_path() / "models/doom/doom_E1M1.obj", &sources));
-				object->getTransform()->setLocalTranslation({ 0, 0, 0 });
-				scene->addChild(std::move(object));
+				auto doom = std::unique_ptr<::Tank::Model>(new Model("Doom", fs::current_path() / "models/doom/doom_E1M1.obj", &sources));
+				doom->addScript(Script::createScript(doom.get(), "test.lua").value());
+				doom->getTransform()->setLocalTranslation({ 0, 0, 0 });
+				scene->addChild(std::move(doom));
 
 				auto backpackPhysics = std::unique_ptr<::Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
 				auto backpack = std::unique_ptr<::Tank::Model>(new Model("Backpack", fs::current_path() / "models/backpack/backpack.obj", &sources));
@@ -256,7 +255,7 @@ namespace Tank::Editor
 		m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
 		m_system->preupdate();
 	}
-
+	
 
 	void EditorApp::uiStep()
 	{
@@ -273,7 +272,6 @@ namespace Tank::Editor
 	{
 		if (!m_system)
 		{
-			TE_CORE_WARN("handleKeyInput: System not initialised. Returning");
 			return;
 		}
 		((_SceneView*)m_system->getChild("SceneView"))->handleKeyInput();

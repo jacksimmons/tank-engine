@@ -256,17 +256,27 @@ namespace Tank
 	}
 
 
+	void Node::addScript(std::unique_ptr<Script> script)
+	{
+		m_scripts.push_back(std::move(script));
+	}
+
+
 	void Node::update()
 	{
 		if (!m_enabled) return;
 		if (m_visible) draw();
 
-		//for (auto const &script : m_scripts)
-		//{
-		//	script->update();
-		//}
-
 		preupdate();
+
+		// Handle scripts
+		if (m_started)
+		{
+			for (const auto &script : m_scripts)
+			{
+				script->update();
+			}
+		}
 
 		// Recursively update
 		for (auto it = m_children.begin(); it != m_children.end(); ++it)

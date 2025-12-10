@@ -1,6 +1,7 @@
 #pragma once
 #include "nodes/interfaces/serialisable.hpp"
 #include "nodes/interfaces/scriptable.hpp"
+#include "scripting/script.hpp"
 
 
 namespace Tank
@@ -37,6 +38,7 @@ namespace Tank
 		std::unique_ptr<Transform> m_transform;
 		Node *m_parent;
 		std::vector<std::unique_ptr<Node>> m_children;
+		std::vector<std::unique_ptr<Script>> m_scripts;
 		bool m_started = false;
 
 		/// <summary>
@@ -99,7 +101,11 @@ namespace Tank
 
 		// Get all siblings.
 		template <class T>
-		std::vector<T*> getSiblingsOfType() const { return m_parent->getChildrenOfType<T>(); }
+		std::vector<T*> getSiblingsOfType() const
+		{
+			if (m_parent == nullptr) return std::vector<T*>();
+			return m_parent->getChildrenOfType<T>();
+		}
 		// Get first sibling whose name matches the provided name.
 		Node *getSibling(std::string name) const { return getParent()->getChild(name); }
 		// Get sibling by index.
@@ -122,6 +128,8 @@ namespace Tank
 		/// Builds a descendant tree traversal up to `this`, from a child of `this`.
 		/// </summary>
 		std::vector<int> treeFromChild(Node *child);
+
+		void addScript(std::unique_ptr<Script>);
 
 		virtual void startup();
 		virtual void preupdate();

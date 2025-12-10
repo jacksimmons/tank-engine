@@ -29,6 +29,12 @@ function LinkGLFW()
 end
 
 
+-- Links Lua.
+function LinkLua()
+	links { "Lua" }
+end
+
+
 -- Links Assimp, and adds a postbuildcommand to copy after building.
 function LinkAssimpPostCopy(srcdir, destdir)
 	local assimpFile

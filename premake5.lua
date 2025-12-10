@@ -10,9 +10,9 @@ workspace "TankEngine"
 	local playerName = "TankPlayer"
 
 	local binDir = BinDir()
-	local engineDir = binDir .. string.format("%s", engineName) .. "/%{cfg.longname}"
-	local editorDir = binDir .. string.format("%s", editorName) .. "/%{cfg.longname}"
-	local playerDir = binDir .. string.format("%s", playerName) .. "/%{cfg.longname}"
+	local engineDir = binDir .. engineName .. "/%{cfg.longname}"
+	local editorDir = binDir .. editorName .. "/%{cfg.longname}"
+	local playerDir = binDir .. playerName .. "/%{cfg.longname}"
 
     configurations { "Debug", "Release" }
 	architecture "x86_64"
@@ -36,6 +36,20 @@ workspace "TankEngine"
 -- 		"%{prj.name}/Source/*.cs"
 -- 	}
 
+project "Lua"
+	local luaDir = binDir .. "Lua/%{cfg.longname}"
+	kind "StaticLib"
+	PrjUseC()
+	PrjObjAndTargetDir()
+
+	includedirs {
+		engineName .. "/include/lua"
+	}
+
+	files {
+		engineName .. "/include/lua/*.c"
+	}
+
 project "TankEngine"
 	kind "SharedLib"
 	PrjUseCpp()
@@ -54,7 +68,9 @@ project "TankEngine"
 		"include/glm",
 		"include/imgui",
 		"include/imgui/backends",
+		"include/lua",
 		"%{prj.name}/include",
+		"%{prj.name}/include/lua",
 		"%{prj.name}/src",
 		"%{prj.name}" -- for pch
 	}
@@ -72,10 +88,12 @@ project "TankEngine"
 	libdirs {
 		"lib"
 	}
+	LibDirWithPostCopy(luaDir, engineDir)
 	LibDirWithPostCopy("%{prj.name}/lib", engineDir)
 	LibDirGLFWPostCopy(_ACTION, engineDir)
 	
 	-- Linked libraries
+	LinkLua()
 	LinkGLFW()
 	LinkOpenGL()
 	LinkAssimpPostCopy("lib", engineDir)
