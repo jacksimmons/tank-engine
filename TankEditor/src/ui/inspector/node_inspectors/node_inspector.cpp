@@ -4,6 +4,7 @@
 #include <nodes/node.hpp>
 #include <nodes/camera.hpp>
 #include <nodes/scene.hpp>
+#include <scripting/script_manager.hpp>
 #include "node_inspector.hpp"
 
 
@@ -87,5 +88,16 @@ namespace Tank::Editor
 				transform->setLocalRotation(newRotation);
 			}
 		);
+
+		ImGui::TextColored(Colour::TITLE, "Scripts");
+		std::vector<fs::path> scriptPaths = m_node->getScriptPaths();
+		if (scriptPaths.empty())
+		{
+			ImGui::TextColored(Colour::DISABLED, "None");
+		}
+		for (fs::path path : scriptPaths)
+		{
+			ImGui::Text(path.string().c_str());
+		}
 	}
 }

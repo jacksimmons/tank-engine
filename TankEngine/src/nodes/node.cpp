@@ -262,6 +262,17 @@ namespace Tank
 	}
 
 
+	std::vector<fs::path> Node::getScriptPaths()
+	{
+		std::vector<fs::path> scriptPaths;
+		for (const auto &script : m_scripts)
+		{
+			scriptPaths.push_back(script->getScriptPath());
+		}
+		return scriptPaths;
+	}
+
+
 	void Node::update()
 	{
 		if (!m_enabled) return;

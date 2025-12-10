@@ -1,6 +1,4 @@
 #pragma once
-#include <log.hpp>
-#include <file.hpp>
 
 
 namespace Tank
@@ -19,24 +17,7 @@ namespace Tank
 			load(path);
 		}
 
-		void load(fs::path path)
-		{
-			auto result = File::readLines(path, m_lastContents);
-			if (result != File::ReadResult::Success)
-			{
-				switch (result)
-				{
-				case File::ReadResult::Error:
-					TE_CORE_ERROR(std::string("Error when loading script: ") + path.string());
-					break;
-				case File::ReadResult::NoFile:
-					TE_CORE_ERROR(std::string("Script did not exist: ") + path.string());
-					break;
-				}
-
-				m_lastContents = "";
-			}
-		}
+		void load(fs::path path);
 		const std::string &getContents() const { return m_lastContents; }
 	};
 
@@ -50,39 +31,10 @@ namespace Tank
 	private:
 		static ScriptMap s_loadedScripts;
 	public:
-		static const ScriptMap &getScripts()
-		{
-			return s_loadedScripts;
-		}
+		static const ScriptMap &getScripts() { return s_loadedScripts; }
 
-		static ScriptData addScript(fs::path path)
-		{
-			if (s_loadedScripts.contains(path))
-			{
-				TE_CORE_WARN(std::format("Script already exists at {}, updating it...", path.string()));
-				return updateScript(path);
-			}
-
-			auto data = ScriptData(path);
-			s_loadedScripts.insert(std::make_pair(path, data));
-			return data;
-		}
-
-		static ScriptData updateScript(fs::path path)
-		{
-			s_loadedScripts[path].load(path);
-			return s_loadedScripts[path];
-		}
-
-		static bool popScript(fs::path path)
-		{
-			if (s_loadedScripts.contains(path))
-			{
-				s_loadedScripts.erase(path);
-				return true;
-			}
-
-			return false;
-		}
+		static ScriptData addScript(fs::path path);
+		static ScriptData updateScript(fs::path path);
+		static bool popScript(fs::path path);
 	};
 }

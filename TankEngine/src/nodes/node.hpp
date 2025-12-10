@@ -130,6 +130,7 @@ namespace Tank
 		std::vector<int> treeFromChild(Node *child);
 
 		void addScript(std::unique_ptr<Script>);
+		std::vector<fs::path> getScriptPaths();
 
 		virtual void startup();
 		virtual void preupdate();

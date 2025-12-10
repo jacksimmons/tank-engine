@@ -19,9 +19,9 @@ namespace Tank
 	private:
 		bool m_enabled = true;
 		Node *m_node;
-		std::string m_filename;
+		fs::path m_scriptPath;
 		std::string m_scriptLines;
-		Script(Node *node, std::string filename, std::string scriptLines) : m_node(node), m_filename(filename), m_scriptLines(scriptLines) {}
+		Script(Node *node, fs::path scriptPath, std::string scriptLines) : m_node(node), m_scriptPath(scriptPath), m_scriptLines(scriptLines) {}
 	public:
 		~Script() = default;
 
@@ -29,6 +29,9 @@ namespace Tank
 
 		void setEnabled(bool enabled) noexcept { m_enabled = enabled; }
 		bool getEnabled() const noexcept { return m_enabled; }
+
+		const fs::path &getScriptPath() const noexcept { return m_scriptPath; }
+
 		void update();
 	};
 }
