@@ -11,15 +11,15 @@
 
 namespace Tank
 {
-	std::optional<std::unique_ptr<Script>> Script::createScript(Node *node, std::string filename)
+	std::optional<std::unique_ptr<Script>> Script::createScript(Node *node, fs::path path)
 	{
 		// Try to load lua file
-		std::filesystem::path scriptPath = std::filesystem::path() / "Scripts" / filename;
+		std::filesystem::path scriptPath = std::filesystem::path() / "scripts" / path;
 		ScriptData data = ScriptManager::addScript(scriptPath);
 		if (data.getContents() == "") return {};
 
 		// Interpret script with sol2
-		Script *script = new Script(node, filename, data.getContents());
+		Script *script = new Script(node, path, data.getContents());
 		return std::unique_ptr<Script>(script);
 	}
 

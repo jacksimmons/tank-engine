@@ -95,9 +95,33 @@ namespace Tank::Editor
 		{
 			ImGui::TextColored(Colour::DISABLED, "None");
 		}
+		int i = 0;
 		for (fs::path path : scriptPaths)
 		{
 			ImGui::Text(path.string().c_str());
+			//Widget::textInput(
+			//	std::format("##Inspector_Script_{}", i).c_str(),
+			//	path.string(),
+			//	[this](std::string newPath)
+			//	{
+			//		auto script = Script::createScript(m_node, newPath);
+			//		if (script.has_value())
+			//			m_node->addScript(std::move(script.value()));
+			//	}
+			//);
+			i++;
 		}
+		// Allow user to add a new script
+		Widget::textInput(
+			std::format("##Inspector_Add_Script", i).c_str(),
+			"New Script",
+			[this, &scriptPaths](std::string newPath)
+			{
+				auto script = Script::createScript(m_node, newPath);
+				auto it = std::find(scriptPaths.begin(), scriptPaths.end(), newPath);
+				if (script.has_value() && it == scriptPaths.end())
+					m_node->addScript(std::move(script.value()));
+			}
+		);
 	}
 }
