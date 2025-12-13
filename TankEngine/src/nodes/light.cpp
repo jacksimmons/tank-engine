@@ -38,7 +38,7 @@ namespace Tank
 	void Light::updateShader(const Shader &shader)
 	{
 		std::string str = getLightStruct();
-		if (getEnabled())
+		if (Enabled())
 		{
 			shader.setVec3(str + ".Ia", m_ambient);
 			shader.setVec3(str + ".Id", m_diffuse);

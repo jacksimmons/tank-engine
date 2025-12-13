@@ -18,13 +18,13 @@ namespace Tank::Editor
 		Tank::Transform *transform = m_node->getTransform();
 		const glm::mat4 &modelMatrix = transform->getWorldModelMatrix();
 
-		bool enabled = m_node->getEnabled();
+		bool enabled = m_node->Enabled();
 		if (ImGui::Checkbox("Enabled", &enabled))
-			m_node->setEnabled(enabled);
+			m_node->Enabled = enabled;
 
-		bool visible = m_node->getVisibility();
+		bool visible = m_node->Visible();
 		if (ImGui::Checkbox("Visible", &visible))
-			m_node->setVisibility(visible);
+			m_node->Visible = visible;
 
 		ImGui::TextColored(Tank::Colour::TITLE, "Name");
 		Tank::Widget::textInput("##Inspector_Name", m_node->getName(),

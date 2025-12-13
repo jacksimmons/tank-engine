@@ -49,9 +49,9 @@ namespace Tank
 
 	glm::mat4 Transform::getWorldModelMatrix() const
 	{
-		if (m_owner->getParent())
+		if (m_owner->Parent())
 		{
-			return m_owner->getParent()->getTransform()->getWorldModelMatrix() * getLocalModelMatrix();
+			return m_owner->Parent()->getTransform()->getWorldModelMatrix() * getLocalModelMatrix();
 		}
 
 		return getLocalModelMatrix();

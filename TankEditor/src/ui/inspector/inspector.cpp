@@ -111,7 +111,7 @@ namespace Tank::Editor
 			ImGui::Text(typeid(*m_inspectedNode).name());
 
 			// Prevent users from modifying editor nodes, which would likely cause a crash.
-			if (m_inspectedNode->isEditorControlled())
+			if (m_inspectedNode->IsEditorControlled())
 			{
 				ImGui::Text("Modifying the editor is not supported.");
 				return;

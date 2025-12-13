@@ -19,7 +19,7 @@ namespace Tank
 	void Scene::update()
 	{
 		// Ignore updates if no camera is active.
-		if (!m_activeCamera || !m_activeCamera->getEnabled()) return;
+		if (!m_activeCamera || !m_activeCamera->Enabled()) return;
 
 		// Update camera, then the scene
 		m_activeCamera->update();

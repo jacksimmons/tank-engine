@@ -1,5 +1,5 @@
 #pragma once
-#include <utils/property.hpp>
+#include <utils/getset.hpp>
 
 
 namespace Tank

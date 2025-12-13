@@ -67,7 +67,7 @@ namespace Tank
 
 	void Sprite::draw()
 	{
-		if (!getVisibility()) return;
+		if (!Visible()) return;
 
 		IOutlined::predraw();
 

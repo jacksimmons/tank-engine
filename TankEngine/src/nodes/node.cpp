@@ -312,7 +312,7 @@ json Tank::Node::serialise()
 void Tank::Node::deserialise(const json &serialised)
 {
 	setName(serialised["name"]);
-	setEnabled(serialised["enabled"]);
-	setVisibility(serialised["visible"]);
+	Enabled = serialised["enabled"];
+	Visible = serialised["visible"];
 	Transform::deserialise(serialised["transform"], getTransform());
 }

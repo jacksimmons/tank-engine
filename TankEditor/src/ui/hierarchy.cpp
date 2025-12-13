@@ -39,7 +39,7 @@ namespace Tank::Editor
 		{
 			while (true)
 			{
-				Node *parent = m_currentRoot->getParent();
+				Node *parent = m_currentRoot->Parent();
 				if (parent) m_currentRoot = parent;
 				else break;
 			}
@@ -73,8 +73,8 @@ namespace Tank::Editor
 
 		// Add node name to the tree, clicking on this node will set `nodeExpanded` to true if not a leaf node.
 		ImVec4 nodeNameCol = Colour::NORMAL;
-		if (!node->getEnabled()) nodeNameCol = Colour::DISABLED;
-		if (node->isEditorControlled()) nodeNameCol = Colour::ERR;
+		if (!node->Enabled()) nodeNameCol = Colour::DISABLED;
+		if (node->IsEditorControlled()) nodeNameCol = Colour::ERR;
 		
 		ImGui::PushStyleColor(ImGuiCol_Text, nodeNameCol);
 		bool nodeExpanded = ImGui::TreeNodeEx((node->getName() + "##" + std::to_string(*count)).c_str(), flags);
@@ -121,7 +121,7 @@ namespace Tank::Editor
 		if (ImGui::BeginPopupContextItem())
 		{
 			Scene *activeScene = Scene::getActiveScene();
-			bool isEditorControlled = node->isEditorControlled();
+			bool isEditorControlled = node->IsEditorControlled();
 
 			// If the node is not the root, not the current scene, and not an editor node, allow deletion
 			bool deletionAllowed = node != m_currentRoot && node != activeScene && !isEditorControlled;

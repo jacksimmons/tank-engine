@@ -196,7 +196,7 @@ namespace Tank
 
 	void Model::draw()
 	{
-		if (!getVisibility()) return;
+		if (!Visible()) return;
 
 		IOutlined::predraw();
 		const Shader &shader = getShader();

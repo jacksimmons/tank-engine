@@ -10,11 +10,11 @@ namespace Tank
 
 	void IEditorOnly::startup()
 	{
-		setVisibility(false);
+		Visible = false;
 		// @todo Find a better solution than hard-coding child visibility
 		for (std::unique_ptr<Node> &node : m_children)
 		{
-			node->setVisibility(false);
+			node->Visible = false;
 		}
 		Node::startup();
 	}
@@ -22,11 +22,11 @@ namespace Tank
 
 	void IEditorOnly::shutdown()
 	{
-		setVisibility(true);
+		Visible = true;
 		// @todo Find a better solution than hard-coding child visibility
 		for (std::unique_ptr<Node> &node : m_children)
 		{
-			node->setVisibility(true);
+			node->Visible = true;
 		}
 		Node::shutdown();
 	}

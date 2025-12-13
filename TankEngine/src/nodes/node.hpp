@@ -1,4 +1,5 @@
 #pragma once
+#include <utils/getset.hpp>
 #include "nodes/interfaces/serialisable.hpp"
 #include "nodes/interfaces/scriptable.hpp"
 #include "scripting/script.hpp"
@@ -50,22 +51,14 @@ namespace Tank
 		Node(const std::string &name = "Node");
 		virtual ~Node() = default;
 
-		constexpr const std::string& getType() const noexcept { return m_type; }
-
-		constexpr void setEnabled(bool enabled) noexcept { m_enabled = enabled; }
-		constexpr bool getEnabled() const noexcept { return m_enabled; }
-
-		constexpr void setVisibility(bool visible) noexcept { m_visible = visible; }
-		constexpr bool getVisibility() const noexcept { return m_visible; }
+		GetSet<bool> Enabled = m_enabled;
+		GetSet<bool> Visible = m_visible;
+		Get<bool> IsEditorControlled = m_isEditorControlled;
+		GetSet<Node*> Parent = m_parent;
 
 		void setName(const std::string &name) noexcept;
 		constexpr const std::string& getName() const noexcept { return m_name; }
 		std::string getPath() const;
-
-		constexpr bool isEditorControlled() const { return m_isEditorControlled; }
-
-		constexpr void setParent(Node *parent) noexcept { m_parent = parent; }
-		constexpr Node *getParent() const noexcept { return m_parent; }
 
 		Transform *getTransform() const;
 
@@ -107,9 +100,9 @@ namespace Tank
 			return m_parent->getChildrenOfType<T>();
 		}
 		// Get first sibling whose name matches the provided name.
-		Node *getSibling(std::string name) const { return getParent()->getChild(name); }
+		Node *getSibling(std::string name) const { return Parent()->getChild(name); }
 		// Get sibling by index.
-		Node *getSibling(int index) const { return getParent()->getChild(index); }
+		Node *getSibling(int index) const { return Parent()->getChild(index); }
 		// Get parent's child index for this node.
 		int getSiblingIndex() const;
 

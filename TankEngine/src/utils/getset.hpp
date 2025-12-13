@@ -7,9 +7,11 @@ namespace Tank
 	class Get
 	{
 	private:
-		const T& m_gettableRef;
+		T& m_gettableRef;
+		std::function<const T&()> m_getter;
 	public:
-		Get(T &ref) : m_gettableRef(ref) {};
+		Get(T &ref) : m_gettableRef(ref), m_getter([this]() { return m_gettableRef; }) {}
+		Get(T &ref, std::function<const T&()> getter) : m_gettableRef(ref), m_getter(getter) {}
 
 		// @todo
 		// Not sure if this is robust enough: It fails in cases like
@@ -28,7 +30,7 @@ namespace Tank
 		/// </summary>
 		const T& operator()() const
 		{
-			return m_gettableRef;
+			return m_getter();
 		}
 	};
 
@@ -43,11 +45,11 @@ namespace Tank
 
 
 		/// <summary>
-		/// Overwrite m_ref, and return this.
+		/// Overwrite value, and return this.
 		/// </summary>
-		Set<T>& operator =(T &newRef)
+		Set<T>& operator =(T newValue)
 		{
-			m_settableRef = newRef;
+			m_settableRef = newValue;
 			return *this;
 		}
 	};
@@ -58,5 +60,9 @@ namespace Tank
 	{
 	public:
 		GetSet(T &ref) : Get<T>(ref), Set<T>(ref) {};
+		GetSet(T &ref, std::function<const T&()> getter) : Get<T>(ref, getter), Set<T>(ref) {};
+
+
+		using Set<T>::operator =;
 	};
 }
