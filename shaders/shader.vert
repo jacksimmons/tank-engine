@@ -11,7 +11,6 @@ uniform mat4 PVM;
 uniform mat4 VM;
 uniform mat4 VM_it;
 
-
 void main()
 {
     gl_Position = PVM * vec4(position, 1.0);

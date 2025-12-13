@@ -8,7 +8,7 @@ namespace Tank
 		enum class ReadResult
 		{
 			Success,
-			NoFile,
+			NotFile,
 			Error
 		};
 

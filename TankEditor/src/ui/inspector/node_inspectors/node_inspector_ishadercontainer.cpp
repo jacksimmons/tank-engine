@@ -13,7 +13,8 @@ namespace Tank
 	/// <summary>
 	/// Draws section for a single shader source (e.g. frag shader).
 	/// </summary>
-	static std::string drawShaderSourceSection(const std::string &sourceName, const ShaderSource &source)
+	static std::string drawShaderSourceSection(const std::string &sourceName, const ShaderSource &source, bool readFile,
+		std::unordered_map<std::string, std::string> &sourceContents)
 	{
 		std::string retPath;
 
@@ -32,12 +33,15 @@ namespace Tank
 			system(std::format("code {}", ("shaders" / source.location).string()).c_str());
 		}
 
-		std::string shaderContents;
-		if (File::readLines("shaders" / source.location, shaderContents) == File::ReadResult::Success)
+		// Read the file if contents is not provided. If that read fails...
+		if (readFile && File::readLines("shaders" / source.location, sourceContents[sourceName]) != File::ReadResult::Success)
 		{
-			// https://github.com/ocornut/imgui/issues/2429
-			ImGui::TextUnformatted(shaderContents.c_str());
+			TE_CORE_TRACE(std::format("Couldn't read shader file {}", source.location.string()));
+			sourceContents[sourceName] = "<N/A>";
 		}
+
+		// https://github.com/ocornut/imgui/issues/2429
+		ImGui::TextUnformatted(sourceContents[sourceName].c_str());
 
 		return retPath;
 	}
@@ -54,19 +58,29 @@ namespace Tank::Editor
 		const ShaderSources &sources = m_node->getShader().getShaderSources();
 		ShaderSources copy = ShaderSources(sources);
 
-		std::string vertLoc = drawShaderSourceSection("Vertex", copy.vertex);
+		static TimePoint previousTime;
+		TimePoint currentTime = Time::CurrentTime();
+		static std::unordered_map<std::string, std::string> previousContents;
+		bool readFile = false;
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime).count() > 1000)
+		{
+			readFile = true;
+			previousTime = currentTime;
+		}
+
+		std::string vertLoc = drawShaderSourceSection("Vertex", copy.vertex, readFile, previousContents);
 		if (!vertLoc.empty())
 		{
 			copy.vertex.location = vertLoc;
 		}
 
-		std::string fragLoc = drawShaderSourceSection("Fragment", copy.fragment);
+		std::string fragLoc = drawShaderSourceSection("Fragment", copy.fragment, readFile, previousContents);
 		if (!fragLoc.empty())
 		{
 			copy.fragment.location = fragLoc;
 		}
 
-		std::string geomLoc = drawShaderSourceSection("Geometry", copy.geometry);
+		std::string geomLoc = drawShaderSourceSection("Geometry", copy.geometry, readFile, previousContents);
 		if (!geomLoc.empty())
 		{
 			copy.geometry.location = geomLoc;

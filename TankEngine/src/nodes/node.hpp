@@ -53,8 +53,8 @@ namespace Tank
 
 		GetSet<bool> Enabled = m_enabled;
 		GetSet<bool> Visible = m_visible;
-		Get<bool> IsEditorControlled = m_isEditorControlled;
 		GetSet<Node*> Parent = m_parent;
+		Get<bool> IsEditorControlled = m_isEditorControlled;
 
 		void setName(const std::string &name) noexcept;
 		constexpr const std::string& getName() const noexcept { return m_name; }

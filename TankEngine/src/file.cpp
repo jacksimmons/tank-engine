@@ -10,13 +10,14 @@ namespace Tank
 	{
 		bool exists(const std::filesystem::path &fp)
 		{
-			return std::filesystem::exists(fp);
+			return std::filesystem::is_regular_file(fp) && std::filesystem::exists(fp);
 		}
 
 
 		ReadResult readLines(const std::filesystem::path &fp, std::string &outStr) noexcept
 		{
-			if (!File::exists(fp)) return ReadResult::NoFile;
+			TE_CORE_TRACE(std::format("READ: {}", fp.string()));
+			if (!File::exists(fp)) return ReadResult::NotFile;
 
 			try
 			{

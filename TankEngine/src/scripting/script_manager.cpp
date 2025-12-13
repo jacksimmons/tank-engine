@@ -21,7 +21,7 @@ namespace Tank
 			case File::ReadResult::Error:
 				TE_CORE_ERROR(std::string("Error when loading script: ") + path.string());
 				break;
-			case File::ReadResult::NoFile:
+			case File::ReadResult::NotFile:
 				TE_CORE_ERROR(std::string("Script did not exist: ") + path.string());
 				break;
 			}
