@@ -9,6 +9,7 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - [x] Scene node
 - [x] Camera node
 - [ ] Text rendering node
+- [ ] Audio source node
 - [x] 2D Sprite node using stb_image
 - [x] 3D Model node using Assimp
 - [x] Skybox (cube-map texture rendered behind everything else)
@@ -43,13 +44,26 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - Build the `TankEditor` project for the Editor (UI).
 - Build the `TankPlayer` project for the Standalone Player (no UI).
 
-# Modules Used
-[Dear ImGui](https://github.com/ocornut/imgui)  
-[GLFW](https://github.com/glfw/glfw)  
-[GLAD](https://github.com/Dav1dde/glad)  
-[learnopengl.com](https://learnopengl.com/)  
-[stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)  
-[Input](https://stackoverflow.com/questions/55573238/how-do-i-do-a-proper-input-class-in-glfw-for-a-game-engine)  
+# References
+### Tutorials
+- The Cherno
+- [learnopengl.com](https://learnopengl.com/)
+### UI
+- [Dear ImGui](https://github.com/ocornut/imgui)
+### OpenGL
+- OpenGL (Khronos)
+- [GLFW](https://github.com/glfw/glfw)  
+- [GLAD](https://github.com/Dav1dde/glad)
+### Resource Loading
+- [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)
+- [assimp](https://github.com/assimp/assimp)
+- [ffmpeg](https://git.ffmpeg.org/ffmpeg.git)
+### Logging
+- [spdlog](https://github.com/gabime/spdlog)
+### JSON / Serialisation
+- [nlohmann/json](https://github.com/nlohmann/json)
+### Tooling
+- [premake](https://premake.github.io/)
+### Misc
+- [KeyInput](https://stackoverflow.com/questions/55573238/how-do-i-do-a-proper-input-class-in-glfw-for-a-game-engine)
 
-# Credits
-The Cherno
