@@ -35,7 +35,7 @@ namespace Tank
 
 		// Ensure velocities list is correct size before starting
 		while (s_instances.size() > m_velocities.size()) m_velocities.push_back({});
-		float dt = Time::getFrameDelta();
+		float dt = Time::FrameDelta();
 
 		// Handle physics for all other physics bodies
 		for (size_t i = 0; i < s_instances.size(); i++)

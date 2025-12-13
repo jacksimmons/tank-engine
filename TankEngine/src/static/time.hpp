@@ -1,20 +1,20 @@
 #pragma once
+#include <utils/property.hpp>
 
 
 namespace Tank
 {
 	class TANK_API Time
 	{
+		friend class Application;
 	private:
 		static float s_frameDelta;
-	public:
+
 		static void setFrameDelta(std::clock_t lastFrameStart, std::clock_t lastFrameEnd)
 		{
 			s_frameDelta = (lastFrameEnd - lastFrameStart) / (float)CLOCKS_PER_SEC;
 		}
-		static float getFrameDelta()
-		{
-			return s_frameDelta;
-		}
+	public:
+		static Get<float> FrameDelta;
 	};
 }

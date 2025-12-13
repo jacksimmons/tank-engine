@@ -30,7 +30,7 @@ namespace Tank
 		auto mesh = m_mesh.lock();
 
 		// Ensure velocities list is correct size before starting
-		float dt = Time::getFrameDelta();
+		float dt = Time::FrameDelta();
 
 		// Handle physics for all other physics bodies
 		for (size_t i = 0; i < s_instances.size(); i++)

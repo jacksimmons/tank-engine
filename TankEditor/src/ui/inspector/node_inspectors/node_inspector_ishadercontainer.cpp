@@ -4,6 +4,7 @@
 #include <widget.hpp>
 #include <shader.hpp>
 #include <nodes/interfaces/shader_container.hpp>
+#include <static/time.hpp>
 #include "node_inspector.hpp"
 
 
@@ -24,6 +25,12 @@ namespace Tank
 				retPath = newPath;
 			}
 		);
+
+		ImGui::SameLine();
+		if (ImGui::Button("Open in VSCode"))
+		{
+			system(std::format("code {}", ("shaders" / source.location).string()).c_str());
+		}
 
 		std::string shaderContents;
 		if (File::readLines("shaders" / source.location, shaderContents) == File::ReadResult::Success)

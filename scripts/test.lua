@@ -1,4 +1,6 @@
+local vec4 = require("tank.vec4")
+
+
 function update()
-    print("HI")
     translation.x = translation.x + 1
 end
