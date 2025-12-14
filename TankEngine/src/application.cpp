@@ -1,20 +1,22 @@
+#include <thread>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
 #include "application.hpp"
+#include "events/event_manager.hpp"
 #include "key_input.hpp"
 #include "log.hpp"
-#include "static/time.hpp"
+#include "nodes/camera.hpp"
+#include "nodes/cube_map.hpp"
+#include "nodes/light.hpp"
+#include "nodes/model.hpp"
 #include "nodes/node.hpp"
 #include "nodes/scene.hpp"
-#include "nodes/camera.hpp"
-#include "nodes/light.hpp"
 #include "nodes/sprite.hpp"
-#include "nodes/model.hpp"
-#include "nodes/cube_map.hpp"
-#include "events/event_manager.hpp"
 #include "reflection/node_factory.hpp"
+#include "static/audio.hpp"
+#include "static/time.hpp"
 
 
 // Enable debug output
@@ -56,6 +58,7 @@ namespace Tank
 		initImGui();
 		m_context = ImGui::GetCurrentContext();
 		m_keyInput = std::make_unique<KeyInput>(registeredKeys);
+		static std::thread thread(Audio::play);
 	}
 
 

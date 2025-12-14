@@ -1,3 +1,4 @@
+require "os"
 require "premake.project"
 require "premake.command"
 require "premake.links"
@@ -60,7 +61,8 @@ project "TankEngine"
 		"GLM_ENABLE_EXPERIMENTAL",
 		"FMT_UNICODE=0",
 		"GLAD_GLAPI_EXPORT",
-		"GLAD_GLAPI_EXPORT_BUILD"
+		"GLAD_GLAPI_EXPORT_BUILD",
+		"FFMPEG_DIR=\"vendor/ffmpeg\""
 	}
 
 	includedirs {
