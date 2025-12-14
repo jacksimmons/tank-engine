@@ -9,7 +9,7 @@ namespace Tank
 	public:
 		static void play()
 		{
-			system(std::format("{} audio/Test.opus", "ffplay.exe -nodisp").c_str());
+			system(std::format("{} audio/Test.opus", ".\\vendor\\ffmpeg\\bin\\ffplay.exe -nodisp").c_str());
 		}
 	};
 }
