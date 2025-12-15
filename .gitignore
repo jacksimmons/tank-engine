@@ -36,7 +36,7 @@ Builds/*
 # Engine data
 **/*.scene
 
-audio/Test.opus
+audio/*
 
 # Most of the Dotnet SDK
 **/lib/**/packs

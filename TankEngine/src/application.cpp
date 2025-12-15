@@ -15,7 +15,7 @@
 #include "nodes/scene.hpp"
 #include "nodes/sprite.hpp"
 #include "reflection/node_factory.hpp"
-#include "static/audio.hpp"
+#include "audio/audio_engine.hpp"
 #include "static/time.hpp"
 
 
@@ -58,7 +58,7 @@ namespace Tank
 		initImGui();
 		m_context = ImGui::GetCurrentContext();
 		m_keyInput = std::make_unique<KeyInput>(registeredKeys);
-		static std::thread thread(Audio::play);
+		m_audioEngine = std::make_unique<AudioEngine>();
 	}
 
 

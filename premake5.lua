@@ -51,6 +51,20 @@ project "Lua"
 		engineName .. "/include/lua/*.c"
 	}
 
+project "miniaudio"
+	local miniaudioDir = binDir .. "miniaudio/%{cfg.longname}"
+	kind "StaticLib"
+	PrjUseC()
+	PrjObjAndTargetDir()
+
+	includedirs {
+		"vendor"
+	}
+
+	files {
+		"vendor/miniaudio/miniaudio.c"
+	}
+
 project "TankEngine"
 	kind "SharedLib"
 	PrjUseCpp()
@@ -74,7 +88,8 @@ project "TankEngine"
 		"%{prj.name}/include",
 		"%{prj.name}/include/lua",
 		"%{prj.name}/src",
-		"%{prj.name}" -- for pch
+		"%{prj.name}", -- for pch
+		"vendor"
 	}
 
 	files {
@@ -91,6 +106,7 @@ project "TankEngine"
 		"lib"
 	}
 	LibDirWithPostCopy(luaDir, engineDir)
+	LibDirWithPostCopy(miniaudioDir, engineDir)
 	LibDirWithPostCopy("%{prj.name}/lib", engineDir)
 	LibDirGLFWPostCopy(_ACTION, engineDir)
 	
@@ -98,6 +114,7 @@ project "TankEngine"
 	LinkLua()
 	LinkGLFW()
 	LinkOpenGL()
+	LinkMiniaudio()
 	LinkAssimpPostCopy("lib", engineDir)
 	LinkFreetypePostCopy("lib", engineDir)
 

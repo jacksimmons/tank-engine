@@ -22,18 +22,19 @@ function LinkOpenGL()
 	filter {} -- Reset the filter to prevent side effects
 end
 
-
 -- Links GLFW.
 function LinkGLFW()
 	links { "glfw3" }
 end
-
 
 -- Links Lua.
 function LinkLua()
 	links { "Lua" }
 end
 
+function LinkMiniaudio()
+	links { "miniaudio" }
+end
 
 -- Links Assimp, and adds a postbuildcommand to copy after building.
 function LinkAssimpPostCopy(srcdir, destdir)
