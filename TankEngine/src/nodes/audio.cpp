@@ -24,7 +24,7 @@ namespace Tank
 		// Will reference Audio::s_engine
 		Audio::s_engine,
 		// Getter for s_engine
-		[](const ma_engine &engine)
+		[](const ma_engine &engine) -> const ma_engine &
 		{
 			if (s_engineStarted)
 			{
