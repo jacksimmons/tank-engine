@@ -13,7 +13,7 @@ namespace Tank
 		T& m_gettableRef;
 		Getter<T> m_getter;
 	public:
-		Get(T &ref) : m_gettableRef(ref), m_getter([](const T &ref) { return ref; }) {}
+		Get(T &ref) : m_gettableRef(ref), m_getter([](const T &ref) -> const T& { return ref; }) {}
 		Get(T &ref, Getter<T> getter) : m_gettableRef(ref), m_getter(getter) {}
 
 		// @todo
