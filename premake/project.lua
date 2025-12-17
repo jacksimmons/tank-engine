@@ -3,13 +3,13 @@ local groupSubDir = "%{prj.group}/%{prj.name}/%{cfg.shortname}"
 
 function PrjUseC()
     language "C"
-    cdialect "c23"
+    cdialect "c17"
 end
 
 
 function PrjUseCpp()
     language "C++"
-	cppdialect "c++23"
+	cppdialect "c++21"
 end
 
 function PrjUseCSharp()
