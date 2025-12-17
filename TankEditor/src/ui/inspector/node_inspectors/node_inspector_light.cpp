@@ -8,26 +8,10 @@
 namespace Tank::Editor
 {
 	/// <summary>
-	/// Draws inspector section for a DirLight (Directional Light).
-	/// </summary>
-	void _NodeInspector<DirLight>::draw()
-	{
-		ImGui::TextColored(Colour::TITLE, "Light Direction");
-		Widget::vec3Input(
-			"##Inspector_DirLight_Direction",
-			m_node->getDirection(),
-			[this](glm::vec3 newDirection)
-			{
-				m_node->setDirection(newDirection);
-			}
-		);
-	}
-
-
-	/// <summary>
 	/// Draws inspector section that is present for all Lights.
 	/// Also handles drawing of all Light subclasses.
 	/// </summary>
+	template <>
 	void _NodeInspector<Light>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Light Struct");
@@ -69,5 +53,23 @@ namespace Tank::Editor
 		{
 			_NodeInspector<DirLight>(dirLight, m_inspector).draw();
 		}
+	}
+
+
+	/// <summary>
+	/// Draws inspector section for a DirLight (Directional Light).
+	/// </summary>
+	template <>
+	void _NodeInspector<DirLight>::draw()
+	{
+		ImGui::TextColored(Colour::TITLE, "Light Direction");
+		Widget::vec3Input(
+			"##Inspector_DirLight_Direction",
+			m_node->getDirection(),
+			[this](glm::vec3 newDirection)
+			{
+				m_node->setDirection(newDirection);
+			}
+		);
 	}
 }

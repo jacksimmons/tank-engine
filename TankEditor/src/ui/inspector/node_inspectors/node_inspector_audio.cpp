@@ -13,6 +13,7 @@ namespace Tank::Editor
 	/// <summary>
 	/// Draws inspector section that is present for all Audios.
 	/// </summary>
+	template <>
 	void _NodeInspector<Audio>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Audio File");

@@ -12,6 +12,7 @@ namespace Tank::Editor
 	/// <summary>
 	/// Draws inspector section that is present for all Cameras.
 	/// </summary>
+	template <>
 	void _NodeInspector<Camera>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Camera Eye");

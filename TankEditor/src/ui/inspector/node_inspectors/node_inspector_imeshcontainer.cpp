@@ -6,6 +6,7 @@
 
 namespace Tank::Editor
 {
+	template <>
 	void _NodeInspector<IMeshContainer>::draw()
 	{
 		if (ImGui::CollapsingHeader("Show Meshes##Inspector_Meshes"))

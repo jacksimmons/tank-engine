@@ -15,6 +15,7 @@ const std::string g_name = "Load Model File";
 
 namespace Tank::Editor
 {
+	template <>
 	void _NodeInspector<Model>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Model File");
