@@ -116,7 +116,6 @@ project "TankEngine"
 	LinkOpenGL()
 	LinkMiniaudio()
 	LinkAssimpPostCopy("lib", engineDir)
-	LinkFreetypePostCopy("lib", engineDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
