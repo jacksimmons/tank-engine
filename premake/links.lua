@@ -40,11 +40,12 @@ end
 function LinkAssimpPostCopy(srcdir, destdir)
 	local assimpFile
 
-	filter { "system:windows" }
+	if os.target() == "windows" then
 		assimpFile = "assimp-vc143-mt"
-	filter { "system:not windows" }
+	else
 		assimpFile = "assimp5"
-	
+	end
+
 	PostCopyFile(assimpFile, srcdir, destdir)
 	links { assimpFile }
 end
