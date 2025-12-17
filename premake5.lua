@@ -76,7 +76,8 @@ project "TankEngine"
 		"FMT_UNICODE=0",
 		"GLAD_GLAPI_EXPORT",
 		"GLAD_GLAPI_EXPORT_BUILD",
-		"FFMPEG_DIR=\"vendor/ffmpeg\""
+		"FFMPEG_DIR=\"vendor/ffmpeg\"",
+		"STBI_NO_SIMD"
 	}
 
 	includedirs {
