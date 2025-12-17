@@ -9,7 +9,7 @@ end
 
 function PrjUseCpp()
     language "C++"
-	cppdialect "c++20"
+	cppdialect "c++23"
 end
 
 function PrjUseCSharp()
