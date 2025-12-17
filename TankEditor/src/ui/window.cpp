@@ -1,3 +1,4 @@
+#include <nodes/scene.hpp>
 #include "window.hpp"
 #include "log.hpp"
 

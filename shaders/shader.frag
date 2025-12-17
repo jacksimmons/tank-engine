@@ -1,4 +1,4 @@
-#version 460 core
+#version 430 core
 #define MAX_TEXTURES 16
 struct Material
 {

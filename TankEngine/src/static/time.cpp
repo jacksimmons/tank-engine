@@ -12,7 +12,7 @@ namespace Tank
 	TimePoint Time::s_currentTime = Time::s_startingTime;
 	Get<TimePoint> Time::CurrentTime = Get<TimePoint>(
 		Time::s_currentTime,
-		[]()
+		[](auto)
 		{
 			return std::chrono::system_clock::now();
 		}

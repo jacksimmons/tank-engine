@@ -15,7 +15,6 @@
 #include "nodes/scene.hpp"
 #include "nodes/sprite.hpp"
 #include "reflection/node_factory.hpp"
-#include "audio/audio_engine.hpp"
 #include "static/time.hpp"
 
 
@@ -58,7 +57,6 @@ namespace Tank
 		initImGui();
 		m_context = ImGui::GetCurrentContext();
 		m_keyInput = std::make_unique<KeyInput>(registeredKeys);
-		m_audioEngine = std::make_unique<AudioEngine>();
 	}
 
 
@@ -81,9 +79,10 @@ namespace Tank
 			glfwTerminate();
 		}
 
-		// Set GL version hint
+		// Set GL version hint.
+		// @WARN: 4.2 causes crash with glGetString(GL_VENDOR) below.
 		const int GL_MAJOR = 4;
-		const int GL_MINOR = 6;
+		const int GL_MINOR = 3;
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_MAJOR);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_MINOR);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -126,11 +125,13 @@ namespace Tank
 		// Enable debug output
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(msgCallback, nullptr);
-
 		// Re-set title to add graphics info
-		std::string graphicalDeviceInfo = (const char*)glGetString(GL_VENDOR)
-			+ std::string(": ") + (const char*)glGetString(GL_RENDERER);
-		std::string title = "TankEngine [" + graphicalDeviceInfo + "]";
+		std::string gpuInfo = (const char*)glGetString(GL_VENDOR)
+			+ std::format("({})", (const char*)glGetString(GL_RENDERER));
+
+		std::string title = "TankEngine " +
+			std::format("[GPU: {}] ", gpuInfo) +
+			std::format("[OpenGL: {}]", (const char *)glGetString(GL_VERSION));
 		glfwSetWindowTitle(m_window, title.c_str());
 	}
 
@@ -194,11 +195,10 @@ namespace Tank
 				m_keyInput->update();
 			}
 
+			step();
 			uiStep();
-
 			endImGui();
 
-			step();
 
 			// Double buffering
 			glfwSwapBuffers(m_window);

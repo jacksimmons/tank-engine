@@ -39,7 +39,7 @@ namespace Tank::Editor
 		{
 			while (true)
 			{
-				Node *parent = m_currentRoot->Parent();
+				Node *parent = m_currentRoot->getParent();
 				if (parent) m_currentRoot = parent;
 				else break;
 			}

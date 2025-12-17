@@ -1,4 +1,4 @@
-#version 460 core
+#version 430 core
 // Direction which represents a 3D texture coordinate
 in vec3 tex_coords;
 uniform samplerCube cubeMap;

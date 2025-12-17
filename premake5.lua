@@ -148,7 +148,8 @@ project "TankEditor"
 		"%{prj.name}/src",
 		engineName .. "/src",
 		engineName, -- for pch
-		"vendor/mono/include"
+		"vendor/mono/include",
+		"vendor"
 	}
 	
 	files {

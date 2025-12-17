@@ -14,6 +14,8 @@
 #include "nodes/light.hpp"
 #include "nodes/cube_map.hpp"
 #include "nodes/sprite.hpp"
+#include "nodes/physics/physics_body.hpp"
+#include "nodes/audio.hpp"
 #include "ui/console.hpp"
 #include "ui/scene_view.hpp"
 #include "ui/hierarchy.hpp"
@@ -21,7 +23,6 @@
 #include "ui/file_dialog.hpp"
 #include "ui/main_menu_bar.hpp"
 #include "ui/profiler.hpp"
-#include "nodes/physics/physics_body.hpp"
 
 
 namespace Tank::Editor
@@ -228,6 +229,9 @@ namespace Tank::Editor
 				auto sprite = std::unique_ptr<::Tank::Sprite>(new Sprite("Sprite", fs::current_path() / "textures/awesomeface.png", &sources));
 				spritePhysics->addChild(std::move(sprite));
 				scene->addChild(std::move(spritePhysics));
+
+				auto audio = std::make_unique<::Tank::Audio>();
+				scene->addChild(std::move(audio));
 			}
 
 			Scene::setActiveScene(scene.get());

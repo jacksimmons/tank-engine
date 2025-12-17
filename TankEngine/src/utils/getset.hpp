@@ -4,14 +4,17 @@
 namespace Tank
 {
 	template <class T>
+	using Getter = std::function<const T&(const T&)>;
+
+	template <class T>
 	class Get
 	{
 	private:
 		T& m_gettableRef;
-		std::function<const T&()> m_getter;
+		Getter<T> m_getter;
 	public:
-		Get(T &ref) : m_gettableRef(ref), m_getter([this]() { return m_gettableRef; }) {}
-		Get(T &ref, std::function<const T&()> getter) : m_gettableRef(ref), m_getter(getter) {}
+		Get(T &ref) : m_gettableRef(ref), m_getter([](auto &ref) { return ref; }) {}
+		Get(T &ref, Getter<T> getter) : m_gettableRef(ref), m_getter(getter) {}
 
 		// @todo
 		// Not sure if this is robust enough: It fails in cases like
@@ -30,18 +33,23 @@ namespace Tank
 		/// </summary>
 		const T& operator()() const
 		{
-			return m_getter();
+			return m_getter(m_gettableRef);
 		}
 	};
 
+
+	template <class T>
+	using Setter = std::function<void(T&, const T&)>;
 
 	template <class T>
 	class Set
 	{
 	private:
 		T& m_settableRef;
+		Setter<T> m_setter;
 	public:
-		Set(T &ref) : m_settableRef(ref) {};
+		Set(T &ref) : m_settableRef(ref), m_setter([](T &oldVal, const T &newVal) { oldVal = newVal; }) {};
+		Set(T &ref, Setter<T> setter) : m_settableRef(ref), m_setter(setter) {};
 
 
 		/// <summary>
@@ -60,7 +68,11 @@ namespace Tank
 	{
 	public:
 		GetSet(T &ref) : Get<T>(ref), Set<T>(ref) {};
-		GetSet(T &ref, std::function<const T&()> getter) : Get<T>(ref, getter), Set<T>(ref) {};
+		GetSet(
+			T &ref,
+			Getter<T> getter,
+			Setter<T> setter
+		) : Get<T>(ref, getter), Set<T>(ref, setter) {};
 
 
 		using Set<T>::operator =;

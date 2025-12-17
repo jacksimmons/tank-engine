@@ -1,9 +1,10 @@
 #pragma once
 #include <events/event.hpp>
 #include <events/event_manager.hpp>
-#include <nodes/model.hpp>
 #include <nodes/node.hpp>
+#include <nodes/model.hpp>
 #include <nodes/sprite.hpp>
+#include <nodes/audio.hpp>
 #include <ui/file_dialog.hpp>
 
 
@@ -52,6 +53,18 @@ namespace Tank
 					onItemSelected->registerHandler([this](_FileDialog *dialog, const fs::path &path)
 					{
 						if (dialog->getName() == "Load Texture File")
+						{
+							// Only update the texture if user has selected a valid file
+							if (!path.has_filename()) return;
+							dynamic_cast<Sprite*>(m_node)->setTexPath(path);
+						}
+					});
+				}
+				else if constexpr (std::is_same_v<T, Audio>)
+				{
+					onItemSelected->registerHandler([this](_FileDialog *dialog, const fs::path &path)
+					{
+						if (dialog->getName() == "Load Audio File")
 						{
 							// Only update the texture if user has selected a valid file
 							if (!path.has_filename()) return;

@@ -12,7 +12,6 @@ struct ImGuiSettings
 namespace Tank
 {
 	class KeyInput;
-	class AudioEngine;
 	namespace Reflect { class NodeFactory; }
 
 	class TANK_API Application
@@ -21,7 +20,6 @@ namespace Tank
 		ImGuiContext *m_context;
 		glm::ivec2 m_windowSize;
 		GLFWwindow *m_window;
-		std::unique_ptr<AudioEngine> m_audioEngine;
 	protected:
 		std::unique_ptr<KeyInput> m_keyInput;
 		std::unique_ptr<Reflect::NodeFactory> m_factory;
