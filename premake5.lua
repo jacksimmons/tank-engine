@@ -52,7 +52,7 @@ project "Lua"
 	}
 
 project "miniaudio"
-	local miniaudioDir = binDir .. "miniaudio/%{cfg.longname}"
+	local miniaudioDir = binDir .. "miniaudio/%{cfg.shortname}"
 	kind "StaticLib"
 	PrjUseC()
 	PrjObjAndTargetDir()
