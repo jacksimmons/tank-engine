@@ -162,6 +162,7 @@ project "TankEditor"
 	libdirs {
 		"lib",
 	}
+	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
 	LibDirGLFWPostCopy(_ACTION, editorDir)
 
 	-- Linked libraries
@@ -207,7 +208,7 @@ project "TankPlayer"
 	libdirs {
 		"lib",
 	}
-	LibDirWithPostCopy("%{prj.name}/lib", playerDir)
+	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
 
 	-- Linked libraries
 	LinkAssimpPostCopy("lib", playerDir)
