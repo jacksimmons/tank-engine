@@ -39,26 +39,12 @@ end
 -- Links Assimp, and adds a postbuildcommand to copy after building.
 function LinkAssimpPostCopy(srcdir, destdir)
 	local assimpFile
-	if os.target() == "windows" then
+
+	filter { "system:windows" }
 		assimpFile = "assimp-vc143-mt"
-	else
+	filter { "system:not windows" }
 		assimpFile = "assimp5"
-	end
 	
 	PostCopyFile(assimpFile, srcdir, destdir)
 	links { assimpFile }
-end
-
-
--- Links freetype, and adds a postbuildcommand to copy after building.
-function LinkFreetypePostCopy(srcdir, destdir)
-	local freetypeFile
-	if os.target() == "windows" then
-		freetypeFile = "freetype"
-	else
-		freetypeFile = "TODO"
-	end
-
-	PostCopyFile(freetypeFile, srcdir, destdir)
-	links { "freetype" }
 end

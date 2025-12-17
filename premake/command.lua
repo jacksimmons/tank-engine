@@ -1,3 +1,6 @@
+local os = require("os")
+
+
 -- Adds a postbuildcommand to make directory `dest`.
 function PostMakeDirectory(dest)
 	postbuildcommands {
@@ -19,9 +22,10 @@ function PostCopyFile(filename, srcdir, destdir)
 	PostMakeDirectory(destdir)
 
 	local extensions
-	if os.target() == "windows" then
+	filter { "system:windows" }
 		extensions = { ".lib", ".dll" }
-	end
+	filter { "system:not windows" }
+		extensions = { ".a", ".so" }
 
 	for i = 1, #(extensions) do
 		local cmd = "{COPYFILE} %[" .. srcdir .. "/" .. filename .. extensions[i] .. "] %[" .. destdir .. "/" .. filename .. extensions[i] .. "]"
