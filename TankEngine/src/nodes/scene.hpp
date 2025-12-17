@@ -12,7 +12,7 @@ namespace Tank
 
 	namespace Editor { class _Hierarchy; }
 
-	class TANK_API Scene : public Node, private ISerialisable
+	class TANK_API Scene : public Node
 	{
 		// The Hierarchy may modify elements of the scene (lights, nodes).
 		friend class Editor::_Hierarchy;
