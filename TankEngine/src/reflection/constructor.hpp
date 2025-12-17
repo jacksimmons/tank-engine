@@ -14,7 +14,7 @@ namespace Tank
 			template <class T, class ...TArgs>
 			void *withArgs(TArgs&&... args)
 			{
-				return new T(std::forward<TArgs>(args));
+				return new T(std::forward<TArgs>(args)...);
 			}
 		}
 	}

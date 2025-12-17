@@ -1,3 +1,4 @@
+require "os"
 require "premake.project"
 require "premake.command"
 require "premake.links"
@@ -37,8 +38,8 @@ workspace "TankEngine"
 -- 	}
 
 project "Lua"
-	local luaDir = binDir .. "Lua/%{cfg.longname}"
-	kind "StaticLib"
+	local luaDir = binDir .. "Lua/%{cfg.shortname}"
+	kind "SharedLib"
 	PrjUseC()
 	PrjObjAndTargetDir()
 
@@ -48,6 +49,20 @@ project "Lua"
 
 	files {
 		engineName .. "/include/lua/*.c"
+	}
+
+project "miniaudio"
+	local miniaudioDir = binDir .. "miniaudio/%{cfg.longname}"
+	kind "StaticLib"
+	PrjUseC()
+	PrjObjAndTargetDir()
+
+	includedirs {
+		"vendor"
+	}
+
+	files {
+		"vendor/miniaudio/miniaudio.c"
 	}
 
 project "TankEngine"
@@ -60,7 +75,9 @@ project "TankEngine"
 		"GLM_ENABLE_EXPERIMENTAL",
 		"FMT_UNICODE=0",
 		"GLAD_GLAPI_EXPORT",
-		"GLAD_GLAPI_EXPORT_BUILD"
+		"GLAD_GLAPI_EXPORT_BUILD",
+		"FFMPEG_DIR=\"vendor/ffmpeg\"",
+		"STBI_NO_SIMD"
 	}
 
 	includedirs {
@@ -72,7 +89,8 @@ project "TankEngine"
 		"%{prj.name}/include",
 		"%{prj.name}/include/lua",
 		"%{prj.name}/src",
-		"%{prj.name}" -- for pch
+		"%{prj.name}", -- for pch
+		"vendor"
 	}
 
 	files {
@@ -89,6 +107,7 @@ project "TankEngine"
 		"lib"
 	}
 	LibDirWithPostCopy(luaDir, engineDir)
+	LibDirWithPostCopy(miniaudioDir, engineDir)
 	LibDirWithPostCopy("%{prj.name}/lib", engineDir)
 	LibDirGLFWPostCopy(_ACTION, engineDir)
 	
@@ -96,8 +115,8 @@ project "TankEngine"
 	LinkLua()
 	LinkGLFW()
 	LinkOpenGL()
+	LinkMiniaudio()
 	LinkAssimpPostCopy("lib", engineDir)
-	LinkFreetypePostCopy("lib", engineDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
@@ -129,7 +148,8 @@ project "TankEditor"
 		"%{prj.name}/src",
 		engineName .. "/src",
 		engineName, -- for pch
-		"vendor/mono/include"
+		"vendor/mono/include",
+		"vendor"
 	}
 	
 	files {
@@ -142,7 +162,7 @@ project "TankEditor"
 	libdirs {
 		"lib",
 	}
-	LibDirWithPostCopy("%{prj.name}/lib", editorDir)
+	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
 	LibDirGLFWPostCopy(_ACTION, editorDir)
 
 	-- Linked libraries
@@ -188,7 +208,7 @@ project "TankPlayer"
 	libdirs {
 		"lib",
 	}
-	LibDirWithPostCopy("%{prj.name}/lib", playerDir)
+	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
 
 	-- Linked libraries
 	LinkAssimpPostCopy("lib", playerDir)

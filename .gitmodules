@@ -7,3 +7,9 @@
 [submodule "vendor/assimp"]
 	path = vendor/assimp
 	url = https://github.com/assimp/assimp
+[submodule "vendor/ffmpeg"]
+	path = vendor/ffmpeg
+	url = https://git.ffmpeg.org/ffmpeg.git
+[submodule "vendor/miniaudio"]
+	path = vendor/miniaudio
+	url = https://github.com/mackron/miniaudio

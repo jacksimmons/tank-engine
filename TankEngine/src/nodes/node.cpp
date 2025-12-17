@@ -10,7 +10,6 @@ namespace Tank
 		m_type = "Node";
 		m_name = name;
 		m_transform = std::make_unique<Transform>(this);
-		m_parent = nullptr;
 	}
 
 
@@ -89,7 +88,7 @@ namespace Tank
 		m_childrenAwaitingAdopt.push_back(std::move(child));
 	}
 
-	Node *Node::getChild(std::string name) const
+	Node *Node::getChild(const std::string &name) const
 	{
 		for (auto &child : m_children)
 		{

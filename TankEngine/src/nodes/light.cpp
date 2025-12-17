@@ -64,6 +64,7 @@ namespace Tank
 		else
 		{
 			TE_CORE_ERROR("Failed to get light struct.");
+			return "";
 		}
 	}
 

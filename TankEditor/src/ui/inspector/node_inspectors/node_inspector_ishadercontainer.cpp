@@ -53,6 +53,7 @@ namespace Tank::Editor
 	/// <summary>
 	/// Draws inspector section that is present for all nodes with shaders.
 	/// </summary>
+	template <>
 	void _NodeInspector<IShaderContainer>::draw()
 	{
 		const ShaderSources &sources = m_node->getShader().getShaderSources();

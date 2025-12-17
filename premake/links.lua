@@ -22,42 +22,30 @@ function LinkOpenGL()
 	filter {} -- Reset the filter to prevent side effects
 end
 
-
 -- Links GLFW.
 function LinkGLFW()
 	links { "glfw3" }
 end
-
 
 -- Links Lua.
 function LinkLua()
 	links { "Lua" }
 end
 
+function LinkMiniaudio()
+	links { "miniaudio" }
+end
 
 -- Links Assimp, and adds a postbuildcommand to copy after building.
 function LinkAssimpPostCopy(srcdir, destdir)
 	local assimpFile
+
 	if os.target() == "windows" then
 		assimpFile = "assimp-vc143-mt"
 	else
 		assimpFile = "assimp5"
 	end
-	
+
 	PostCopyFile(assimpFile, srcdir, destdir)
 	links { assimpFile }
-end
-
-
--- Links freetype, and adds a postbuildcommand to copy after building.
-function LinkFreetypePostCopy(srcdir, destdir)
-	local freetypeFile
-	if os.target() == "windows" then
-		freetypeFile = "freetype"
-	else
-		freetypeFile = "TODO"
-	end
-
-	PostCopyFile(freetypeFile, srcdir, destdir)
-	links { "freetype" }
 end

@@ -161,7 +161,7 @@ namespace Tank
 			bool skipLoading = false;
 
 			// See if texture with same path has already been loaded. If it has, copy existing version.
-			std::vector<std::shared_ptr<Texture>> loadedTextures = IShaderContainer::getLoadedTextures();
+			std::vector<std::shared_ptr<Texture>> loadedTextures = Texture::getLoadedTextures();
 			for (unsigned j = 0; j < loadedTextures.size(); j++)
 			{
 				std::shared_ptr<Texture> loadedTex = loadedTextures[j];
@@ -181,7 +181,7 @@ namespace Tank
 				{
 					std::shared_ptr<Texture> val = tex.value();
 					textures.push_back(val);
-					IShaderContainer::addLoadedTexture(val);
+					Texture::addLoadedTexture(val);
 				}
 				else
 				{

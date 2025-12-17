@@ -37,7 +37,7 @@ namespace Tank
 	protected:
 		std::string m_type;
 		std::unique_ptr<Transform> m_transform;
-		Node *m_parent;
+		Node *m_parent = nullptr;
 		std::vector<std::unique_ptr<Node>> m_children;
 		std::vector<std::unique_ptr<Script>> m_scripts;
 		bool m_started = false;
@@ -53,11 +53,14 @@ namespace Tank
 
 		GetSet<bool> Enabled = m_enabled;
 		GetSet<bool> Visible = m_visible;
-		GetSet<Node*> Parent = m_parent;
 		Get<bool> IsEditorControlled = m_isEditorControlled;
 
 		void setName(const std::string &name) noexcept;
 		constexpr const std::string& getName() const noexcept { return m_name; }
+		
+		void setParent(Node *parent) noexcept { m_parent = parent; }
+		Node *getParent() const noexcept { return m_parent; }
+
 		std::string getPath() const;
 
 		Transform *getTransform() const;
@@ -73,7 +76,7 @@ namespace Tank
 		// Add an existing child.
 		void addChild(std::unique_ptr<Node> child);
 		// Get first child whose name matches the provided name.
-		Node *getChild(std::string name) const;
+		Node *getChild(const std::string &name) const;
 		// Get child by index.
 		Node *getChild(int index) const;
 		// Get first child of type (if any).
@@ -100,9 +103,9 @@ namespace Tank
 			return m_parent->getChildrenOfType<T>();
 		}
 		// Get first sibling whose name matches the provided name.
-		Node *getSibling(std::string name) const { return Parent()->getChild(name); }
+		Node *getSibling(const std::string &name) const { return getParent()->getChild(name); }
 		// Get sibling by index.
-		Node *getSibling(int index) const { return Parent()->getChild(index); }
+		Node *getSibling(int index) const { return getParent()->getChild(index); }
 		// Get parent's child index for this node.
 		int getSiblingIndex() const;
 

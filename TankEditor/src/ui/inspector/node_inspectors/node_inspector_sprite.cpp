@@ -16,6 +16,7 @@ namespace Tank::Editor
 	/// <summary>
 	/// Draws inspector section for a Sprite.
 	/// </summary>
+	template <>
 	void _NodeInspector<Sprite>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Sprite Texture");

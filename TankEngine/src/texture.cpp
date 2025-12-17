@@ -8,6 +8,7 @@
 namespace Tank
 {
 	unsigned Texture::s_numTextures = 0;
+	std::vector<std::weak_ptr<Texture>> Texture::s_loadedTextures;
 
 
 	Texture::Texture(GLuint texID, GLenum texTarget, const std::string &texType, const fs::path &path) :
@@ -79,7 +80,12 @@ namespace Tank
 
 		TE_CORE_INFO(std::format("Added GL_TEXTURE_2D texture {} with ID {}.", path.filename().string(), texID));
 
-		return std::shared_ptr<Texture>(new Texture(texID, GL_TEXTURE_2D, texType, path));
+		auto tex = std::shared_ptr<Texture>(new Texture(texID, GL_TEXTURE_2D, texType, path));
+		tex->m_width = w;
+		tex->m_height = h;
+		tex->m_numChannels = numChannels;
+		tex->m_depth = 1;
+		return tex;
 	}
 
 
@@ -131,5 +137,41 @@ namespace Tank
 		TE_CORE_INFO(std::format("Added GL_TEXTURE_CUBE_MAP texture (first: {}/{}) with ID {}", directory.string(), filenames[0], texID));
 
 		return std::shared_ptr<Texture>(new Texture(texID, GL_TEXTURE_CUBE_MAP, texType, directory / filenames[0]));
+	}
+
+
+	void Texture::touchLoadedTextures()
+	{
+		std::vector<size_t> toRemoveIndices;
+
+		// Vector resizing occurs in this loop; continuously check we are in vector bounds.
+		size_t index = 0;
+		while (index < s_loadedTextures.size())
+		{
+			if (s_loadedTextures[index].expired()) s_loadedTextures.erase(s_loadedTextures.begin() + index);
+			else index++;
+		}
+	}
+
+
+	std::vector<std::shared_ptr<Texture>> Texture::getLoadedTextures()
+	{
+		touchLoadedTextures();
+
+		std::vector<std::shared_ptr<Texture>> textures;
+		textures.resize(s_loadedTextures.size());
+		std::transform(
+			s_loadedTextures.begin(),
+			s_loadedTextures.end(),
+			textures.begin(),
+			[](std::weak_ptr<Texture> tex) { return tex.lock(); }
+		);
+		return textures;
+	}
+
+
+	void Texture::addLoadedTexture(std::weak_ptr<Texture> texture)
+	{
+		s_loadedTextures.push_back(texture);
 	}
 }

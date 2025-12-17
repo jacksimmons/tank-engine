@@ -1,26 +1,19 @@
 #include "colours.hpp"
-#include "file.hpp"
 #include "node_inspectors/node_inspector.hpp"
 #include "nodes/camera.hpp"
-#include "nodes/interfaces/editor_only.hpp"
 #include "nodes/interfaces/shader_container.hpp"
 #include "nodes/light.hpp"
 #include "nodes/model.hpp"
 #include "nodes/node.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/sprite.hpp"
+#include "nodes/audio.hpp"
 #include "nodes/ui/text.hpp"
-#include "shader.hpp"
-#include "ui/console.hpp"
 #include "ui/file_dialog.hpp"
-#include "ui/hierarchy.hpp"
 #include "ui/inspector/inspector.hpp"
-#include "widget.hpp"
 #include <events/event_manager.hpp>
-#include <glm/gtx/euler_angles.hpp>
 #include <imgui.h>
 #include <nodes/interfaces/mesh_container.hpp>
-#include <optional>
 
 
 namespace Tank::Editor
@@ -69,6 +62,7 @@ namespace Tank::Editor
 			tryAddSection<Scene>();
 			tryAddSection<Camera>();
 			tryAddSection<Light>();
+			tryAddSection<Audio>();
 			tryAddSection<Sprite>();
 			tryAddSection<Model>();
 			tryAddSection<IMeshContainer>();

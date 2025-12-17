@@ -1,4 +1,4 @@
-#version 460 core
+#version 430 core
 
 
 float near = 1.0;

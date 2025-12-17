@@ -13,6 +13,7 @@ namespace Tank::Editor
 	/// <summary>
 	/// Draws inspector section that is present for all Nodes.
 	/// </summary>
+	template <>
 	void _NodeInspector<Node>::draw()
 	{
 		Tank::Transform *transform = m_node->getTransform();

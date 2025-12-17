@@ -3,7 +3,7 @@ local groupSubDir = "%{prj.group}/%{prj.name}/%{cfg.shortname}"
 
 function PrjUseC()
     language "C"
-    cdialect "c23"
+    cdialect "c17"
 end
 
 
