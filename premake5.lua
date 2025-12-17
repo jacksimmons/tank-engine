@@ -38,7 +38,7 @@ workspace "TankEngine"
 -- 	}
 
 project "Lua"
-	local luaDir = binDir .. "Lua/%{cfg.longname}"
+	local luaDir = binDir .. "Lua/%{cfg.shortname}"
 	kind "SharedLib"
 	PrjUseC()
 	PrjObjAndTargetDir()
