@@ -162,7 +162,6 @@ project "TankEditor"
 	libdirs {
 		"lib",
 	}
-	LibDirWithPostCopy("%{prj.name}/lib", editorDir)
 	LibDirGLFWPostCopy(_ACTION, editorDir)
 
 	-- Linked libraries
