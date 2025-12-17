@@ -5,7 +5,7 @@ namespace Tank
 {
 	template <class T>
 	using Getter = std::function<const T&(const T&)>;
-
+	
 	template <class T>
 	class Get
 	{
