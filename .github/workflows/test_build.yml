@@ -18,9 +18,9 @@ jobs:
           libxinerama-dev \
           libxcursor-dev \
           libxi-dev \
-          libdraco \
-          libminizip \
-          libpugixml
+          libdraco-dev \
+          libminizip-dev \
+          libpugixml-dev
 
       - name: Checkout Repo
         uses: actions/checkout@v5
