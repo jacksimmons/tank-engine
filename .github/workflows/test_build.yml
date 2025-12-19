@@ -5,7 +5,5 @@ on:
 jobs:
   build-on-ubuntu:
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu-latest
     steps:
       run: ./gmake_build.sh
