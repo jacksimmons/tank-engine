@@ -6,4 +6,4 @@ jobs:
   build-on-ubuntu:
     runs-on: ubuntu-latest
     steps:
-      run: ./gmake_build.sh
+      run: sh ./gmake_build.sh
