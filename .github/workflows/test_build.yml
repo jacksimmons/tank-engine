@@ -1,4 +1,4 @@
-name: Build Compat Tests
+name: Build Compatibility Tests
 on:
   push:
     branches: [ main, audio ]
@@ -6,4 +6,6 @@ jobs:
   build-on-ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - run: ./gmake_build.sh
+      - run: ls
+      - name: GMake (GCC) build
+        run: ./gmake_build.sh
