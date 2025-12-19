@@ -4,7 +4,9 @@ on:
     branches: [ main, audio ]
 jobs:
   build-on-ubuntu:
-    runs-on: nvidia/opengl
+    runs-on: ubuntu-latest
+    container:
+      image: nvidia/opengl
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v5
