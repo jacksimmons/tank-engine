@@ -8,6 +8,13 @@ jobs:
     steps:
       - name: Setup
         uses: microsoft/setup-msbuild@v2
+
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+        with:
+          submodules: 'true'
+          # token: ${{ secrets.PAT_TOKEN }}
+
       - name: Test
         run: |
           ./vs_build.bat
