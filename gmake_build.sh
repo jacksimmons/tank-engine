@@ -2,7 +2,7 @@
 premake/premake5 gmake
 
 # First param = Clean
-if [ $# -ne 0 ]; then
+# if [ $# -ne 0 ]; then
     # make clean
-fi
+# fi
 make
