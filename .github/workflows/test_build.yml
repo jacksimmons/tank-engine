@@ -6,6 +6,10 @@ jobs:
   build-on-ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+        with:
+          submodules: 'true'
+          # token: ${{ secrets.PAT_TOKEN }}
       - run: chmod +x ./gmake_build.sh
       - run: ./gmake_build.sh clean
