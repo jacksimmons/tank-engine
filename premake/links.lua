@@ -44,7 +44,7 @@ function LinkAssimpPostCopy(srcdir, destdir)
 	if os_type.windows() == true then
 		assimpFile = "assimp-vc143-mt"
 	else
-		assimpFile = "assimp5"
+		assimpFile = "libassimp5"
 	end
 
 	PostCopyFile(assimpFile, srcdir, destdir, false, true)
