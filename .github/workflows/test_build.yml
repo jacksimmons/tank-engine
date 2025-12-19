@@ -1,0 +1,11 @@
+name: Build Compat Tests
+on:
+    push:
+        branches: [ main, audio ]
+jobs:
+    container-test-job:
+        runs-on: ubuntu-latest
+        container:
+            image: ubuntu-latest
+        steps:
+            run: ./gmake_build.sh
