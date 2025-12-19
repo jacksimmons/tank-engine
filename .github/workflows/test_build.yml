@@ -22,32 +22,32 @@ jobs:
           msbuild TankEditor.vcxproj /p:Platform=x64
           msbuild TankPlayer.vcxproj /p:Platform=x64
 
-  # build-on-ubuntu:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Setup
-  #       run: |
-  #         sudo apt update
-  #         sudo apt install -y mesa-utils \
-  #         libgl1 \
-  #         libgl1-mesa-dev \
-  #         libglu1-mesa-dev \
-  #         libx11-dev \
-  #         libxrandr-dev \
-  #         libxinerama-dev \
-  #         libxcursor-dev \
-  #         libxi-dev \
-  #         libdraco-dev \
-  #         libminizip-dev \
-  #         libpugixml-dev
+  build-on-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        run: |
+          sudo apt update
+          sudo apt install -y mesa-utils \
+          libgl1 \
+          libgl1-mesa-dev \
+          libglu1-mesa-dev \
+          libx11-dev \
+          libxrandr-dev \
+          libxinerama-dev \
+          libxcursor-dev \
+          libxi-dev \
+          libdraco-dev \
+          libminizip-dev \
+          libpugixml-dev
 
-  #     - name: Checkout Repo
-  #       uses: actions/checkout@v5
-  #       with:
-  #         submodules: 'true'
-  #         # token: ${{ secrets.PAT_TOKEN }}
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+        with:
+          submodules: 'true'
+          # token: ${{ secrets.PAT_TOKEN }}
       
-  #     - name: Test
-  #       run: |
-  #         chmod +x ./gmake_build.sh
-  #         ./gmake_build.sh clean
+      - name: Test
+        run: |
+          chmod +x ./gmake_build.sh
+          ./gmake_build.sh clean
