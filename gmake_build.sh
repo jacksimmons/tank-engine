@@ -5,4 +5,4 @@ premake/premake5 gmake
 # if [ $# -ne 0 ]; then
     # make clean
 # fi
-make all MYCFLAGS="-fPIC" MYLDFLAGS="-shared"
+make all CFLAGS="-fPIC"
