@@ -7,6 +7,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - run: ls
-      - name: GMake (GCC) build
-        run: ./gmake_build.sh
+      - run: chmod +x ./gmake_build.sh
+      - run: ./gmake_build.sh
