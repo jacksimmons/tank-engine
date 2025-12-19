@@ -5,8 +5,8 @@ on:
 jobs:
   build-on-ubuntu:
     runs-on: ubuntu-latest
-    uses: actions/checkout@v5
     steps:
       - run: ls
       - name: GMake (GCC) build
+        uses: actions/checkout@v5
         run: ./gmake_build.sh
