@@ -5,3 +5,4 @@ premake/premake5 gmake
 if [ $# -ne 0 ]; then
     gmake clean
 fi
+make
