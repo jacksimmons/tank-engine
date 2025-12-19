@@ -18,6 +18,7 @@ jobs:
       - name: Test
         run: |
           ./vs_build.bat
+          more TankEngine.sln
           msbuild TankEditor.vcxproj /p:Configuration=Release;Platform=x64
           msbuild TankEditor.vcxproj /p:Configuration=Debug;Platform=x64
           msbuild TankPlayer.vcxproj /p:Configuration=Release;Platform=x64
