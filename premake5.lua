@@ -108,7 +108,6 @@ project "TankEngine"
 	}
 	LibDirWithPostCopy(luaDir, engineDir)
 	LibDirWithPostCopy(miniaudioDir, engineDir)
-	LibDirWithPostCopy("%{prj.name}/lib", engineDir)
 	LibDirGLFWPostCopy(_ACTION, engineDir)
 	
 	-- Linked libraries
