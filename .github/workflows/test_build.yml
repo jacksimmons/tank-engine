@@ -8,6 +8,11 @@ jobs:
     container:
       image: nvidia/opengl:base
     steps:
+      - name: Install git on container
+        run: |
+          apt update
+          apt install -y git
+
       - name: Checkout Repo
         uses: actions/checkout@v5
         with:
