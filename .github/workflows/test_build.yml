@@ -18,8 +18,10 @@ jobs:
       - name: Test
         run: |
           ./vs_build.bat
-          msbuild TankEditor.vcxproj -verbosity:normal
-          msbuild TankPlayer.vcxproj -verbosity:normal
+          msbuild TankEditor.vcxproj /p:Configuration=Release;Platform=x64
+          msbuild TankEditor.vcxproj /p:Configuration=Debug;Platform=x64
+          msbuild TankPlayer.vcxproj /p:Configuration=Release;Platform=x64
+          msbuild TankPlayer.vcxproj /p:Configuration=Debug;Platform=x64
 
   # build-on-ubuntu:
   #   runs-on: ubuntu-latest
