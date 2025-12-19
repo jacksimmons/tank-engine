@@ -18,8 +18,8 @@ jobs:
       - name: Test
         run: |
           ./vs_build.bat
-          msbuild TankEditor.vcxproj -verbosity:warn
-          msbuild TankPlayer.vcxproj -verbosity:warn
+          msbuild TankEditor.vcxproj -verbosity:normal
+          msbuild TankPlayer.vcxproj -verbosity:normal
 
   # build-on-ubuntu:
   #   runs-on: ubuntu-latest
