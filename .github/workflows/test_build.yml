@@ -18,11 +18,15 @@ jobs:
           libxinerama-dev \
           libxcursor-dev \
           libxi-dev \
+          libdraco \
+          libminizip \
+          libpugixml
 
       - name: Checkout Repo
         uses: actions/checkout@v5
         with:
           submodules: 'true'
           # token: ${{ secrets.PAT_TOKEN }}
-      - run: chmod +x ./gmake_build.sh
-      - run: ./gmake_build.sh clean
+      - run: |
+          chmod +x ./gmake_build.sh
+          ./gmake_build.sh clean
