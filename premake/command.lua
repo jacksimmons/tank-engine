@@ -18,14 +18,24 @@ function PostCopyDir(src, dest)
 end
 
 
-function PostCopyFile(filename, srcdir, destdir)
+function PostCopyFile(filename, srcdir, destdir, staticLib, sharedLib)
 	PostMakeDirectory(destdir)
 
 	local extensions
 	if os_type.windows() then
-		extensions = { ".lib", ".dll" }
+		if staticLib == true then
+			table.insert(extensions, ".lib")
+		end
+		if sharedLib == true then
+			table.insert(extensions, ".dll")
+		end
 	else
-		extensions = { ".a", ".so" }
+		if staticLib == true then
+			table.insert(extensions, ".a")
+		end
+		if sharedLib == true then
+			table.insert(extensions, ".so")
+		end
 	end
 
 	for i = 1, #(extensions) do

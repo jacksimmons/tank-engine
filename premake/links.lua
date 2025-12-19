@@ -1,4 +1,5 @@
 require "premake.command"
+os_type = require "premake.os_type"
 
 
 function LibDirWithPostCopy(dir, dest)
@@ -40,12 +41,12 @@ end
 function LinkAssimpPostCopy(srcdir, destdir)
 	local assimpFile
 
-	if os.target() == "windows" then
+	if os_type.windows() == true then
 		assimpFile = "assimp-vc143-mt"
 	else
 		assimpFile = "assimp5"
 	end
 
-	PostCopyFile(assimpFile, srcdir, destdir)
+	PostCopyFile(assimpFile, srcdir, destdir, false, true)
 	links { assimpFile }
 end
