@@ -21,7 +21,7 @@ end
 function PostCopyFile(filename, srcdir, destdir, staticLib, sharedLib)
 	PostMakeDirectory(destdir)
 
-	local extensions
+	local extensions = {}
 	if os_type.windows() then
 		if staticLib == true then
 			table.insert(extensions, ".lib")
