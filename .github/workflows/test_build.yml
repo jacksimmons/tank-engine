@@ -10,6 +10,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
       - name: Test
         run: |
+          ./vs_build.bat
           msbuild TankEditor.vcxproj -verbosity:diag
           msbuild TankPlayer.vcxproj -verbosity:diag
 
