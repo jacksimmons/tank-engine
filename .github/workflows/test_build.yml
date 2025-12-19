@@ -7,7 +7,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Setup
-        uses: microsoft/setup-msbuild
+        uses: microsoft/setup-msbuild@v2
       - name: Test
         run: |
           msbuild TankEditor.vcxproj -verbosity:diag
