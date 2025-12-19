@@ -1,5 +1,5 @@
-require "premake.command"
-os_type = require "premake.os_type"
+require("command")
+local os_type = require("os_type")
 
 
 function LibDirWithPostCopy(dir, dest)
