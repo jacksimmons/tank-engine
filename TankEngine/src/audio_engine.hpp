@@ -16,7 +16,7 @@ namespace Tank
 		~AudioEngine();
 
 		static AudioEngine &instance();
-		static ma_engine *ma_engine() { return &instance().m_engine; }
+		static ma_engine *maEngine() { return &instance().m_engine; }
 		static bool handleResult(ma_result result, const std::string &errorMsg);
 	};
 }

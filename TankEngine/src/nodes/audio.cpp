@@ -45,7 +45,7 @@ namespace Tank
 	{
 		if (m_hasSound) ma_sound_uninit(&m_currentSound);
 
-		ma_result result = ma_sound_init_from_file(AudioEngine::ma_engine(), m_audioPath.string().c_str(), 0, NULL, NULL, &m_currentSound);
+		ma_result result = ma_sound_init_from_file(AudioEngine::maEngine(), m_audioPath.string().c_str(), 0, NULL, NULL, &m_currentSound);
 		if (!AudioEngine::handleResult(result, std::format("Failed to update sound with result {}. File: {}", (int)result, m_audioPath.string()))) return;
 
 		m_hasSound = true;
