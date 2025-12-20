@@ -4,6 +4,7 @@
 #include "framebuffer.hpp"
 
 
+class ImGuiIO;
 namespace Tank
 {
 	class Node;
@@ -35,7 +36,9 @@ namespace Tank
 		protected:
 			virtual void step() override;
 			virtual void uiStep() override;
-			virtual void handleKeyInput() override;
+			virtual void handleKeyInput();
+			virtual void beginImGui(ImGuiIO &) override;
+			virtual void endImGui() override;
 		};
 	}
 }

@@ -151,28 +151,6 @@ namespace Tank
 	}
 
 
-	void Application::beginImGui(ImGuiIO &io)
-	{
-		// Draw UI
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		ImGui::SetNextWindowPos(ImVec2(0, 20));
-		ImGui::SetNextWindowSize(io.DisplaySize);
-
-		ImGui::Begin("##Main", nullptr, m_settings.mainWinFlags);
-	}
-
-
-	void Application::endImGui()
-	{
-		ImGui::End();
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	}
-
-
 	void Application::run()
 	{
 		ImGuiIO &io = ImGui::GetIO();
@@ -191,6 +169,7 @@ namespace Tank
 
 			step();
 			uiStep();
+
 			endImGui();
 
 			// Double buffering

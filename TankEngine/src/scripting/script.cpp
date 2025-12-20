@@ -2,9 +2,10 @@
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
 #include <glm/glm.hpp>
+#include <nodes/node.hpp>
+#include <nodes/scene.hpp>
+#include <nodes/camera.hpp>
 #include "log.hpp"
-#include "file.hpp"
-#include "nodes/node.hpp"
 #include "script.hpp"
 #include "script_manager.hpp"
 #include "user_types.hpp"
@@ -56,6 +57,7 @@ namespace Tank
 	void Script::pushProperties(sol::state &lua)
 	{
 		lua["node"] = m_node;
+		lua["camera"] = Scene::getActiveScene()->getActiveCamera();
 	}
 
 

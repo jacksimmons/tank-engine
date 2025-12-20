@@ -59,11 +59,11 @@ namespace Tank
 		glm::mat4 getView() const noexcept { return m_V; }
 		glm::mat4 getProj() const noexcept { return m_P; }
 
-		void setPosition(glm::vec3 pos);
-		void translate(glm::vec3 vec);
+		void setPosition(const glm::vec3 &pos);
+		void translate(const glm::vec3 &vec);
 		
-		void setRotation(glm::quat rot);
-		void rotate(glm::vec3 vec);
+		void setRotation(const glm::quat &rot);
+		void rotate(const glm::vec3 &vec);
 		
 		glm::vec3 getTransformedCentre() const;
 		glm::vec3 getTransformedEye() const;

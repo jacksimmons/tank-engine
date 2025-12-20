@@ -3,19 +3,26 @@
 
 
 function update()
-    local vec3 = node.transform.translation
-
+    local pos = node.transform.translation
+    local displace = vec3:new(0, 0, 0)
     if (node.key_input:get_key_state(KeyCode.W) == KeyState.Held) then
-        vec3.z = vec3.z + 1
-    elseif (node.key_input:get_key_state(KeyCode.S) == KeyState.Held) then
-        vec3.z = vec3.z - 1
-
-    -- Model is rotated 180 on z-axis
-    elseif (node.key_input:get_key_state(KeyCode.A) == KeyState.Held) then
-        vec3.x = vec3.x + 1
-    elseif (node.key_input:get_key_state(KeyCode.D) == KeyState.Held) then
-        vec3.x = vec3.x - 1
+        displace.z = 1
+    end
+    if (node.key_input:get_key_state(KeyCode.S) == KeyState.Held) then
+        displace.z = -1
     end
 
-    node.transform.translation = vec3
+    -- Model is rotated 180 on z-axis
+    if (node.key_input:get_key_state(KeyCode.A) == KeyState.Held) then
+        displace.x = 1
+    end
+    if (node.key_input:get_key_state(KeyCode.D) == KeyState.Held) then
+        displace.x = -1
+    end
+
+    pos.x = pos.x + displace.x
+    pos.y = pos.y + displace.y
+    pos.z = pos.z + displace.z
+    camera:set_pos(vec3:new(pos.x - 10, pos.y + 10, pos.z - 30))
+    node.transform.translation = pos
 end

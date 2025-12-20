@@ -35,22 +35,22 @@ namespace Tank
 	}
 
 
-	void Camera::setPosition(glm::vec3 pos)
+	void Camera::setPosition(const glm::vec3 &pos)
 	{
 		m_T = glm::translate(glm::mat4(1.0f), pos);
 	}
 
-	void Camera::translate(glm::vec3 vec)
+	void Camera::translate(const glm::vec3 &vec)
 	{
 		m_T = glm::translate(m_T, glm::vec3(m_R * glm::vec4(vec, 1.0f)));
 	}
 
-	void Camera::setRotation(glm::quat rot)
+	void Camera::setRotation(const glm::quat &rot)
 	{
 		m_R = glm::mat4_cast(rot);
 	}
 
-	void Camera::rotate(glm::vec3 vec)
+	void Camera::rotate(const glm::vec3 &vec)
 	{
 		glm::vec3 yAxis = glm::normalize(m_R * glm::vec4(m_up, 1.0f));
 		glm::vec3 zAxis = glm::normalize(m_R * glm::vec4(m_centre - m_eye, 1.0f));

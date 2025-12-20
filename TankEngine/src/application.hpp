@@ -29,9 +29,8 @@ namespace Tank
 		void initGLAD();
 		void initImGui();
 	protected:
-		virtual void handleKeyInput() = 0;
-		void beginImGui(ImGuiIO &io);
-		void endImGui();
+		virtual void beginImGui(ImGuiIO &io) = 0;
+		virtual void endImGui() = 0;
 		virtual void uiStep() {};
 		virtual void step() {};
 
