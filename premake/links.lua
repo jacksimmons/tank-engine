@@ -34,7 +34,11 @@ function LinkOpenGL()
 end
 
 function LinkGLFW()
-	links { "glfw3" }
+	filter { "system:windows" }
+		links { "glfw3" }
+	filter { "system:not windows" }
+		links { "glfw" }
+	filter {}
 end
 
 function LinkLua()
