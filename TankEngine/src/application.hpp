@@ -19,6 +19,7 @@ namespace Tank
 	private:
 		ImGuiContext *m_context;
 	protected:
+		bool m_gui;
 		glm::ivec2 m_windowSize;
 		GLFWwindow *m_window;
 		std::unique_ptr<Reflect::NodeFactory> m_factory;
@@ -29,15 +30,18 @@ namespace Tank
 		void initGLAD();
 		void initImGui();
 	protected:
-		virtual void beginImGui(ImGuiIO &io) = 0;
-		virtual void endImGui() = 0;
+		void beginImGui(const ImGuiIO &io);
+		void endImGui();
 		virtual void uiStep() {};
 		virtual void step() {};
 
-		Application(const ImGuiSettings settings = {
-			0,
-			0
-		});
+		Application(
+			bool gui = false,
+			ImGuiSettings settings = {
+				0,
+				0
+			}
+		);
 	public:
 		virtual ~Application();
 

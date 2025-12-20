@@ -18,7 +18,5 @@ namespace Tank
 		~Player();
 	protected:
 		virtual void step() override;
-		virtual void beginImGui(ImGuiIO &) override {};
-		virtual void endImGui() override {};
 	};
 }

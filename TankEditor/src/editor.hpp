@@ -29,7 +29,6 @@ namespace Tank
 		public:
 			EditorApp();
 			~EditorApp();
-			void initImGui();
 			void loadScene(std::unique_ptr<Scene> scene);
 			void loadDemoScene();
 			void postSceneSetup();
@@ -37,8 +36,6 @@ namespace Tank
 			virtual void step() override;
 			virtual void uiStep() override;
 			virtual void handleKeyInput();
-			virtual void beginImGui(ImGuiIO &) override;
-			virtual void endImGui() override;
 		};
 	}
 }

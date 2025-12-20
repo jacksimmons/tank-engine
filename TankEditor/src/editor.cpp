@@ -41,6 +41,7 @@ namespace Tank::Editor
 
 
 	EditorApp::EditorApp() : Application(
+		true,
 		{
 			ImGuiConfigFlags_DockingEnable,
 			ImGuiWindowFlags_NoResize
@@ -288,28 +289,6 @@ namespace Tank::Editor
 			return;
 		}
 		((_SceneView*)m_system->getChild("SceneView"))->handleKeyInput();
-	}
-
-
-	void EditorApp::beginImGui(ImGuiIO &io)
-	{
-		// Draw UI
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		ImGui::SetNextWindowPos(ImVec2(0, 20));
-		ImGui::SetNextWindowSize(io.DisplaySize);
-
-		ImGui::Begin("##Main", nullptr, m_settings.mainWinFlags);
-	}
-
-
-	void EditorApp::endImGui()
-	{
-		ImGui::End();
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 }
 

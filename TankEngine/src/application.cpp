@@ -17,6 +17,7 @@
 #include "nodes/audio.hpp"
 #include "reflection/node_factory.hpp"
 #include "static/time.hpp"
+#include "utils/getset.hpp"
 
 
 // Enable debug output
@@ -32,7 +33,8 @@ static void GLAPIENTRY msgCallback(GLenum source,
 
 namespace Tank
 {
-	Application::Application(ImGuiSettings settings)
+	Application::Application(bool gui, ImGuiSettings settings)
+		: m_gui(gui)
 	{
 		// Init reflection
 		m_factory = std::make_unique<Reflect::NodeFactory>();
@@ -56,16 +58,22 @@ namespace Tank
 
 		initGLFW();
 		initGLAD();
-		initImGui();
-		m_context = ImGui::GetCurrentContext();
+		if (m_gui)
+		{
+			initImGui();
+			m_context = ImGui::GetCurrentContext();
+		}
 	}
 
 
 	Application::~Application()
 	{
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
+		if (m_gui)
+		{
+			ImGui_ImplOpenGL3_Shutdown();
+			ImGui_ImplGlfw_Shutdown();
+			ImGui::DestroyContext();
+		}
 		glfwDestroyWindow(m_window);
 		glfwTerminate();
 	}
@@ -151,9 +159,30 @@ namespace Tank
 	}
 
 
+	void Application::beginImGui(const ImGuiIO &io)
+	{
+		// Draw UI
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		ImGui::SetNextWindowPos(ImVec2(0, 20));
+		ImGui::SetNextWindowSize(io.DisplaySize);
+
+		ImGui::Begin("##Main", nullptr, m_settings.mainWinFlags);
+	}
+
+
+	void Application::endImGui()
+	{
+		ImGui::End();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+
 	void Application::run()
 	{
-		ImGuiIO &io = ImGui::GetIO();
 		auto frameStart = std::clock();
 		auto frameEnd = std::clock();
 		float lastFrameDelta = 0;
@@ -165,12 +194,12 @@ namespace Tank
 
 			glfwPollEvents();
 
-			beginImGui(io);
+			if (m_gui) beginImGui(ImGui::GetIO());
 
 			step();
 			uiStep();
 
-			endImGui();
+			if (m_gui) endImGui();
 
 			// Double buffering
 			glfwSwapBuffers(m_window);

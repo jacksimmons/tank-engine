@@ -15,7 +15,7 @@
 
 namespace Tank
 {
-	Player::Player() : Application()
+	Player::Player() : Application(false)
 	{
 		auto scene = std::unique_ptr<Tank::Scene>(Serialisation::loadScene("scene.json", m_factory.get()));
 		Scene::setActiveScene(scene.get());

@@ -137,7 +137,7 @@ project "TankEditor"
 		"GLM_ENABLE_EXPERIMENTAL",
 		"FMT_UNICODE=0",
 		"GLAD_GLAPI_EXPORT",
-		"TANK_IMGUI"
+		"TANK_GUI"
 	}
 
 	includedirs {
