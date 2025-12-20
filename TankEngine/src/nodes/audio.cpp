@@ -2,50 +2,8 @@
 #include "audio.hpp"
 
 
-//
-// =-=-=-=-= Callback =-=-=-=-=
-//
-static void data_callback(ma_device *pDevice, void *pOutput, const void *pInput, ma_uint32 frameCount)
-{
-}
-
-
 namespace Tank
 {
-	//
-	// =-=-=-=-= Static =-=-=-=-=
-	//
-	ma_engine Audio::s_engine;
-	ma_engine_config Audio::s_engineConfig;
-	bool Audio::s_engineStarted;
-
-	// Public, read-only reference to s_engine.
-	Get<ma_engine> Audio::Engine = Get<ma_engine>(
-		// Will reference Audio::s_engine
-		Audio::s_engine,
-		// Getter for s_engine
-		[](const ma_engine &engine) -> const ma_engine &
-		{
-			if (s_engineStarted)
-			{
-				return engine;
-			}
-
-			s_engineConfig = ma_engine_config_init();
-			s_engineConfig.dataCallback = data_callback;
-
-			ma_result result;
-			result = ma_engine_init(&s_engineConfig, &s_engine);
-			if (result != MA_SUCCESS)
-			{
-				TE_CORE_CRITICAL(std::format("Failed to init audio engine, code {}", (int)result));
-			}
-			s_engineStarted = true;
-			return engine;
-		}
-	);
-
-
 	//
 	// =-=-=-=-= Serialisation =-=-=-=-=
 	//
@@ -72,13 +30,33 @@ namespace Tank
 		: Node(name)
 	{
 		m_type = "Audio";
-		m_audioPath = audioPath;
-		TE_CORE_INFO(m_audioPath.string());
-		TE_CORE_INFO(AudioPath().string());
+		setAudioPath(audioPath);
+	}
+
+
+	Audio::~Audio()
+	{
+		if (m_hasSound) ma_sound_uninit(&m_currentSound);
+		m_hasSound = false;
+	}
+
+
+	void Audio::updateSound()
+	{
+		if (m_hasSound) ma_sound_uninit(&m_currentSound);
+
+		ma_result result = ma_sound_init_from_file(AudioEngine::ma_engine(), m_audioPath.string().c_str(), 0, NULL, NULL, &m_currentSound);
+		if (!AudioEngine::handleResult(result, std::format("Failed to update sound with result {}. File: {}", (int)result, m_audioPath.string()))) return;
+
+		m_hasSound = true;
+		TE_CORE_INFO("Successfully updated sound to " + m_audioPath.string());
 	}
 
 	void Audio::play()
 	{
-		ma_result result = ma_engine_play_sound(&s_engine, "audio/test.wav", NULL);
+		ma_result result = ma_sound_start(&m_currentSound);
+		if (!AudioEngine::handleResult(result, std::format("Failed to play sound with result {}. File: {}", (int)result, m_audioPath.string()))) return;
+
+		TE_CORE_INFO("Successfully played sound " + m_audioPath.string());
 	}
 }

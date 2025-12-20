@@ -1,6 +1,6 @@
 #pragma once
 #include "node.hpp"
-#include "miniaudio/miniaudio.h"
+#include <audio_engine.hpp>
 
 
 namespace Tank
@@ -8,22 +8,21 @@ namespace Tank
 	class TANK_API Audio : public Node
 	{
 	public:
-		static Get<ma_engine> Engine;
-
 		virtual json serialise() override;
 		virtual void deserialise(const json &) override;
 
 	private:
-		static bool s_engineStarted;
-		static ma_engine_config s_engineConfig;
-		static ma_engine s_engine;
-
 		fs::path m_audioPath;
+		ma_sound m_currentSound;
+		bool m_hasSound = false;
 
 	public:
 		Audio(const std::string &name = "Audio", const fs::path &audioPath = "audio/test.wav");
+		~Audio();
 
-		Get<fs::path> AudioPath = m_audioPath;
+		void setAudioPath(const fs::path &path) { m_audioPath = path; updateSound(); };
+		const fs::path &getAudioPath() const { return m_audioPath; };
+		void updateSound();
 		void play();
 	};
 }

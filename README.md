@@ -41,8 +41,11 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - Example build command (Windows): `./premake/premake5 vs2022`.  
 
 ## Ubuntu
-- You will need to install dependencies yourself:
-- `xargs sudo apt install -y < apt-packages.txt`
+You will need to install dependencies yourself:
+- `xargs sudo apt-get -y install < apt-packages.txt`  
+
+To uninstall these dependencies, replace `install` in the
+above command with `remove`, or `purge`.
 
 # Project Building
 - Build the `TankEditor` project for the Editor (UI).

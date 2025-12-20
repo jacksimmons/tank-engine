@@ -17,14 +17,14 @@ namespace Tank::Editor
 	void _NodeInspector<Audio>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Audio File");
-		auto &audioPath = m_node->AudioPath();
+		auto &audioPath = m_node->getAudioPath();
 		Widget::textInput(
 			"##Inspector_Audio_File",
 			audioPath.string(),
 			[this](const std::string &modified)
 			{
-				if (fs::path{ modified } == m_node->AudioPath()) return;
-				//m_node->AudioPath = modified;
+				if (fs::path{ modified } == m_node->getAudioPath()) return;
+				m_node->setAudioPath(modified);
 			},
 			audioPath.string()
 		);
