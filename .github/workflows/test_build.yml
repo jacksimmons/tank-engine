@@ -34,7 +34,7 @@ jobs:
       - name: Setup
         run: |
           sudo apt update
-          xargs sudo apt install -y < apt-packages.txt
+          xargs sudo apt-get -y install < apt-packages.txt
       
       - name: Test
         run: |
