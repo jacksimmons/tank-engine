@@ -11,9 +11,9 @@ workspace "TankEngine"
 	local playerName = "TankPlayer"
 
 	local binDir = BinDir()
-	local engineDir = binDir .. engineName .. "/%{cfg.longname}"
-	local editorDir = binDir .. editorName .. "/%{cfg.longname}"
-	local playerDir = binDir .. playerName .. "/%{cfg.longname}"
+	local engineDir = binDir .. engineName .. "/%{cfg.shortname}"
+	local editorDir = binDir .. editorName .. "/%{cfg.shortname}"
+	local playerDir = binDir .. playerName .. "/%{cfg.shortname}"
 
     configurations { "Debug", "Release" }
 	architecture "x86_64"
@@ -39,7 +39,7 @@ workspace "TankEngine"
 
 project "Lua"
 	local luaDir = binDir .. "Lua/%{cfg.shortname}"
-	kind "SharedLib"
+	kind "StaticLib"
 	PrjUseC()
 	PrjObjAndTargetDir()
 
@@ -52,7 +52,7 @@ project "Lua"
 	}
 
 project "miniaudio"
-	local miniaudioDir = binDir .. "miniaudio/%{cfg.longname}"
+	local miniaudioDir = binDir .. "miniaudio/%{cfg.shortname}"
 	kind "StaticLib"
 	PrjUseC()
 	PrjObjAndTargetDir()
@@ -108,7 +108,6 @@ project "TankEngine"
 	}
 	LibDirWithPostCopy(luaDir, engineDir)
 	LibDirWithPostCopy(miniaudioDir, engineDir)
-	LibDirWithPostCopy("%{prj.name}/lib", engineDir)
 	LibDirGLFWPostCopy(_ACTION, engineDir)
 	
 	-- Linked libraries
@@ -116,7 +115,7 @@ project "TankEngine"
 	LinkGLFW()
 	LinkOpenGL()
 	LinkMiniaudio()
-	LinkAssimpPostCopy("lib", engineDir)
+	LinkAssimp("lib", engineDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
@@ -171,7 +170,7 @@ project "TankEditor"
 --		"mono-2.0-sgen"
 	}
 	LinkGLFW(_ACTION, editorDir)
-	LinkAssimpPostCopy("lib", editorDir)
+	LinkAssimp("lib", editorDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
@@ -211,7 +210,7 @@ project "TankPlayer"
 	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
 
 	-- Linked libraries
-	LinkAssimpPostCopy("lib", playerDir)
+	LinkAssimp("lib", playerDir)
 	links {
 		engineName
 	}

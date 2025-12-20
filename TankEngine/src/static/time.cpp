@@ -14,7 +14,8 @@ namespace Tank
 		Time::s_currentTime,
 		[](auto) -> const TimePoint &
 		{
-			return std::chrono::system_clock::now();
+			Time::s_currentTime = std::chrono::system_clock::now();
+			return Time::s_currentTime;
 		}
 	);
 
