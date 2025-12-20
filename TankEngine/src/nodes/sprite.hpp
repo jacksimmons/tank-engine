@@ -19,7 +19,7 @@ namespace Tank
 	public:
 		Sprite(
 			const std::string &name = "Sprite",
-			const fs::path &texPath = "textures/awesomeface.png",
+			const fs::path &texPath = fs::current_path() / "textures/awesomeface.png",
 			ShaderSources *sources = nullptr
 		);
 		virtual ~Sprite() = default;

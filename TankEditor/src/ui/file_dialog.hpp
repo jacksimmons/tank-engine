@@ -45,6 +45,11 @@ namespace Tank::Editor
 		/// </summary>
 		fs::path m_currentDirectory;
 
+		/// <summary>
+		/// Function called when an option is selected, and the dialog closes.
+		/// </summary>
+		std::function<void(const fs::path &)> m_onSelected;
+
 		std::vector<_DirectoryResult> m_currentSubdirectories;
 		std::vector<_FileResult> m_currentDirectoryFiles;
 		std::vector<_FileResult> m_filesMatchingSearchTerm;
@@ -66,7 +71,8 @@ namespace Tank::Editor
 			const std::string &name,
 			const fs::path &rootDirectory,
 			const fs::path &startDirectory,
-			_FileDialogTarget target
+			_FileDialogTarget target,
+			std::function<void(const fs::path &)> onSelected = [](auto){}
 		);
 	};
 }

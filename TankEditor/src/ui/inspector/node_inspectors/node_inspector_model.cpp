@@ -40,7 +40,11 @@ namespace Tank::Editor
 					g_name,
 					fs::current_path(),
 					fs::path(modelPath).parent_path(),
-					_FileDialogTarget::File
+					_FileDialogTarget::File,
+					[this](const fs::path &path)
+					{
+						m_node->setModelPath(path);
+					}
 				);
 
 				m_inspector->addChild(std::move(fileDialog));

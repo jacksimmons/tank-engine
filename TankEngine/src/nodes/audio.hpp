@@ -17,7 +17,10 @@ namespace Tank
 		bool m_hasSound = false;
 
 	public:
-		Audio(const std::string &name = "Audio", const fs::path &audioPath = "audio/test.wav");
+		Audio(
+			const std::string &name = "Audio",
+			const fs::path &audioPath = fs::current_path() / "audio/test.wav"
+		);
 		~Audio();
 
 		void setAudioPath(const fs::path &path) { m_audioPath = path; updateSound(); };

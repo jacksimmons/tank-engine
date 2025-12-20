@@ -20,16 +20,16 @@ namespace Tank::Editor
 	void _NodeInspector<Sprite>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Sprite Texture");
-		std::string texPath = m_node->getTexPath().string();
+		fs::path texPath = m_node->getTexPath();
 		Widget::textInput(
 			"##Inspector_Sprite_Texture",
-			texPath,
+			texPath.string(),
 			[this](const std::string &modified)
 			{
 				if (fs::path{ modified } == m_node->getTexPath()) return;
 				m_node->setTexPath(modified);
 			},
-			texPath
+			texPath.string()
 		);
 
 		ImGui::SameLine();
@@ -41,8 +41,12 @@ namespace Tank::Editor
 					new _FileDialog(
 						g_name,
 						fs::current_path(),
-						fs::path(texPath).parent_path(),
-						_FileDialogTarget::File
+						texPath.parent_path(),
+						_FileDialogTarget::File,
+						[this](const fs::path &path)
+						{
+							m_node->setTexPath(path);
+						}
 					));
 
 				m_inspector->addChild(std::move(fileDialog));

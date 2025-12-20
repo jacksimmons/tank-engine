@@ -19,13 +19,15 @@ namespace Tank::Editor
 		const std::string &name,
 		const std::filesystem::path &rootDirectory,
 		const std::filesystem::path &startDirectory,
-		_FileDialogTarget target
+		_FileDialogTarget target,
+		std::function<void(const fs::path &)> onSelected
 	) : _Window(name, WINDOW_OPTS),
 		m_rootDirectory(rootDirectory),
 		m_startDirectory(startDirectory),
 		m_currentDirectory(startDirectory),
 		m_target(target),
-		m_searchTerm("")
+		m_searchTerm(""),
+		m_onSelected(onSelected)
 	{
 		// If current directory doesn't contain the root directory
 		if (m_startDirectory.string().find(m_rootDirectory.string()) == std::string::npos)
@@ -195,7 +197,8 @@ namespace Tank::Editor
 	{
 		// If the current target is non-empty
 		std::string inputFieldHint;
-		if (!getCurrentTarget().empty()) inputFieldHint = getCurrentTarget().string();
+		fs::path currentTarget = getCurrentTarget();
+		if (!currentTarget.empty()) inputFieldHint = currentTarget.string();
 		else inputFieldHint = "Enter name...";
 		Widget::textInput(std::string{ getName() + "##FILE_DIALOG_SEARCH_TERM" }.c_str(), inputFieldHint.c_str(), [this](const std::string &modified)
 		{
@@ -205,11 +208,12 @@ namespace Tank::Editor
 
 		// If a target is selected, show "Select" button which will close the dialog when pressed.
 		ImGui::SameLine();
-		if (!getCurrentTarget().empty() && ImGui::SmallButton(std::string{ "Select##FILE_DIALOG_TARGET_SELECT(" + getName() + ")" }.c_str()))
+		if (!currentTarget.empty() && ImGui::SmallButton(std::string{ "Select##FILE_DIALOG_TARGET_SELECT(" + getName() + ")" }.c_str()))
 		{
 			// Select the current directory as a target, when target is a directory.
 			// Otherwise, select the current target.
-			EventManager::invokeEvent("FileDialog.ItemSelected", this, getCurrentTarget());
+			EventManager::invokeEvent("FileDialog.ItemSelected", this, currentTarget);
+			m_onSelected(currentTarget);
 			destroy();
 		}
 	}

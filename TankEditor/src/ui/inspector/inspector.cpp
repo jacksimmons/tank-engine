@@ -41,6 +41,7 @@ namespace Tank::Editor
 			if (m_inspectedNode)
 			{
 				// Disable outline for current inspected node (if necessary)
+				// @todo Access violation after New Project (inspector stays open)
 				if (IOutlined *inspectedOutline = dynamic_cast<IOutlined*>(m_inspectedNode))
 				{
 					inspectedOutline->setOutlineEnabled(false);

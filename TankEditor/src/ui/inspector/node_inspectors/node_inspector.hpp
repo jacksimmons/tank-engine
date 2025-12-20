@@ -34,44 +34,6 @@ namespace Tank
 				m_node(node),
 				m_inspector(inspector)
 			{
-				// Handle NodeInspector file dialog events
-				Event<_FileDialog*, fs::path> *onItemSelected = EventManager::getEvent<_FileDialog*, fs::path>("FileDialog.ItemSelected");
-
-				if constexpr (std::is_same_v<T, Model>)
-				{
-					onItemSelected->registerHandler([this](_FileDialog *dialog, const fs::path &path)
-					{
-						if (dialog->getName() == "Load Model File")
-						{
-							if (!path.has_filename()) return;
-							dynamic_cast<Model*>(m_node)->setModelPath(path);
-						}
-					});
-				}
-				else if constexpr (std::is_same_v<T, Sprite>)
-				{
-					onItemSelected->registerHandler([this](_FileDialog *dialog, const fs::path &path)
-					{
-						if (dialog->getName() == "Load Texture File")
-						{
-							// Only update the texture if user has selected a valid file
-							if (!path.has_filename()) return;
-							dynamic_cast<Sprite*>(m_node)->setTexPath(path);
-						}
-					});
-				}
-				else if constexpr (std::is_same_v<T, Audio>)
-				{
-					onItemSelected->registerHandler([this](_FileDialog *dialog, const fs::path &path)
-					{
-						if (dialog->getName() == "Load Audio File")
-						{
-							// Only update the texture if user has selected a valid file
-							if (!path.has_filename()) return;
-							dynamic_cast<Sprite*>(m_node)->setTexPath(path);
-						}
-					});
-				}
 			}
 
 			void draw() override;
