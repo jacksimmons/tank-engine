@@ -115,7 +115,7 @@ project "TankEngine"
 	LinkGLFW()
 	LinkOpenGL()
 	LinkMiniaudio()
-	LinkAssimpPostCopy("lib", engineDir)
+	LinkAssimp("lib", engineDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
@@ -170,7 +170,7 @@ project "TankEditor"
 --		"mono-2.0-sgen"
 	}
 	LinkGLFW(_ACTION, editorDir)
-	LinkAssimpPostCopy("lib", editorDir)
+	LinkAssimp("lib", editorDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
@@ -210,7 +210,7 @@ project "TankPlayer"
 	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
 
 	-- Linked libraries
-	LinkAssimpPostCopy("lib", playerDir)
+	LinkAssimp("lib", playerDir)
 	links {
 		engineName
 	}

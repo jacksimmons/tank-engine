@@ -45,8 +45,8 @@ function LinkMiniaudio()
 	links { "miniaudio" }
 end
 
--- Links Assimp, and adds a postbuildcommand to copy after building.
-function LinkAssimpPostCopy(srcdir, destdir)
+-- Links Assimp, copies library on Windows.
+function LinkAssimp(srcdir, destdir)
 	local assimpFile
 
 	if os_type.windows() == true then
