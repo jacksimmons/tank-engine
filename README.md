@@ -40,6 +40,10 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - Premake binaries for Windows/Linux are included in the `premake` folder, but you may want/need to use your own version.  
 - Example build command (Windows): `./premake/premake5 vs2022`.  
 
+## Ubuntu
+- You will need to install dependencies yourself:
+- `xargs sudo apt install -y < apt-packages.txt`
+
 # Project Building
 - Build the `TankEditor` project for the Editor (UI).
 - Build the `TankPlayer` project for the Standalone Player (no UI).
