@@ -2,20 +2,23 @@
 #include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
 
+#include <nodes/node.hpp>
+#include <nodes/model.hpp>
+#include <nodes/scene.hpp>
+#include <nodes/camera.hpp>
+#include <nodes/sprite.hpp>
+#include <nodes/audio.hpp>
+#include <nodes/cube_map.hpp>
+#include <nodes/light.hpp>
+#include <nodes/physics/physics_body.hpp>
+#include <events/event_manager.hpp>
+#include <scripting/script.hpp>
 #include "editor.hpp"
 #include "shader.hpp"
 #include "log.hpp"
 #include "scene_serialisation.hpp"
-#include <events/event_manager.hpp>
-#include "nodes/node.hpp"
-#include "nodes/camera.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/model.hpp"
-#include "nodes/light.hpp"
-#include "nodes/cube_map.hpp"
-#include "nodes/sprite.hpp"
-#include "nodes/physics/physics_body.hpp"
-#include "nodes/audio.hpp"
+#include "key_input.hpp"
+
 #include "ui/console.hpp"
 #include "ui/scene_view.hpp"
 #include "ui/hierarchy.hpp"
@@ -37,28 +40,6 @@ namespace Tank::Editor
 
 	EditorApp::EditorApp() : Application(
 		{
-			GLFW_KEY_F1,
-			GLFW_KEY_F2,
-			GLFW_KEY_F3,
-			GLFW_KEY_F4,
-			GLFW_KEY_F5,
-			GLFW_KEY_F6,
-
-			GLFW_KEY_W,
-			GLFW_KEY_A,
-			GLFW_KEY_S,
-			GLFW_KEY_D,
-			GLFW_KEY_Q,
-			GLFW_KEY_E,
-
-			GLFW_KEY_I,
-			GLFW_KEY_J,
-			GLFW_KEY_K,
-			GLFW_KEY_L,
-			GLFW_KEY_U,
-			GLFW_KEY_O,
-		},
-		{
 			ImGuiConfigFlags_DockingEnable,
 			ImGuiWindowFlags_NoResize
 			| ImGuiWindowFlags_NoCollapse
@@ -67,6 +48,17 @@ namespace Tank::Editor
 		}
 	)
 	{
+		// Create Editor KeyInput
+		std::vector<int> registeredKeys = {
+			// Function keys
+			GLFW_KEY_F1, GLFW_KEY_F2, GLFW_KEY_F3, GLFW_KEY_F4, GLFW_KEY_F5, GLFW_KEY_F6,
+			// Cam Movement keys
+			GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_Q, GLFW_KEY_E,
+			// Cam Rotation keys
+			GLFW_KEY_I, GLFW_KEY_J, GLFW_KEY_K, GLFW_KEY_L, GLFW_KEY_U, GLFW_KEY_O,
+		};
+		m_editorInput = std::make_unique<KeyInput>(registeredKeys);
+
 		// Add editor-specific events
 		EventManager::addEvent("Hierarchy.NodeSelected", new Event<Node*>());
 		EventManager::addEvent("Hierarchy.NodeDeleted", new Event<Node*>());
@@ -214,21 +206,25 @@ namespace Tank::Editor
 				sources.fragment.location = "shader.frag";
 
 				auto doom = std::unique_ptr<::Tank::Model>(new Model("Doom", fs::current_path() / "models/doom/doom_E1M1.obj", &sources));
-				doom->addScript(Script::createScript(doom.get(), "test.lua").value());
 				doom->getTransform()->setLocalTranslation({ 0, 0, 0 });
 				scene->addChild(std::move(doom));
 
-				auto backpackPhysics = std::unique_ptr<::Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
-				auto backpack = std::unique_ptr<::Tank::Model>(new Model("Backpack", fs::current_path() / "models/backpack/backpack.obj", &sources));
-				backpack->getTransform()->setLocalScale({ 100, 100, 100 });
-				backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
-				backpackPhysics->addChild(std::move(backpack));
-				scene->addChild(std::move(backpackPhysics));
+				auto player = std::unique_ptr<::Tank::Model>(new Model("Player", fs::current_path() / "models/player/Fat Banjo and Kazooie.obj", &sources));
+				player->addScript(Script::createScript(player.get(), "player.lua").value());
+				player->setCullFace(GL_FRONT);
+				scene->addChild(std::move(player));
 
-				auto spritePhysics = std::unique_ptr<::Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
-				auto sprite = std::unique_ptr<::Tank::Sprite>(new Sprite("Sprite", fs::current_path() / "textures/awesomeface.png", &sources));
-				spritePhysics->addChild(std::move(sprite));
-				scene->addChild(std::move(spritePhysics));
+				//auto backpackPhysics = std::unique_ptr<::Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
+				//auto backpack = std::unique_ptr<::Tank::Model>(new Model("Backpack", fs::current_path() / "models/backpack/backpack.obj", &sources));
+				//backpack->getTransform()->setLocalScale({ 100, 100, 100 });
+				//backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
+				//backpackPhysics->addChild(std::move(backpack));
+				//scene->addChild(std::move(backpack));
+
+				//auto spritePhysics = std::unique_ptr<::Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
+				//auto sprite = std::unique_ptr<::Tank::Sprite>(new Sprite("Sprite", fs::current_path() / "textures/awesomeface.png", &sources));
+				//spritePhysics->addChild(std::move(sprite));
+				//scene->addChild(std::move(sprite));
 
 				auto audio = std::make_unique<::Tank::Audio>();
 				scene->addChild(std::move(audio));
@@ -252,12 +248,23 @@ namespace Tank::Editor
 
 	void EditorApp::postSceneSetup()
 	{
-		m_system->addChild(std::unique_ptr<_SceneView>(new _SceneView("SceneView", getWindowSize(), getWindowSize(), m_keyInput.get())));
+		m_system->addChild(std::unique_ptr<_SceneView>(new _SceneView("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
 		m_system->addChild(std::unique_ptr<_Console>(new _Console("Console")));
 		m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));
 		m_system->forEachDescendant([](::Tank::Node *node) { TE_CORE_INFO(node->getName()); });
 		m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
 		m_system->preupdate();
+	}
+
+
+	void EditorApp::step()
+	{
+		if (m_editorInput)
+		{
+			handleKeyInput();
+			// Decay input states (comes after handleKeyInput)
+			m_editorInput->update();
+		}
 	}
 	
 

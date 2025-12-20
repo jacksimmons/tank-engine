@@ -1,7 +1,5 @@
 #include <format>
 #include <glad/glad.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -24,6 +22,7 @@ namespace Tank
 		json serialised = Node::serialise();
 		serialised["modelPath"] = getModelPath();
 		serialised["shader"] = Shader::serialise(getShader());
+		serialised["cullFace"] = getCullFace();
 		return serialised;
 	}
 
@@ -37,7 +36,7 @@ namespace Tank
 
 		initShaderContainer(&sources);
 		setModelPath(serialised["modelPath"]);
-
+		setCullFace(serialised["cullFace"]);
 		Node::deserialise(serialised);
 	}
 
@@ -47,6 +46,7 @@ namespace Tank
 	{
 		m_type = "Model";
 		setModelPath(modelPath);
+		m_cullFace = GL_BACK;
 	}
 
 
@@ -198,6 +198,8 @@ namespace Tank
 	{
 		if (!Visible()) return;
 
+		glCullFace(m_cullFace);
+
 		IOutlined::predraw();
 		const Shader &shader = getShader();
 		
@@ -225,6 +227,8 @@ namespace Tank
 		shader.unuse();
 
 		IOutlined::postdraw(m_transform.get());
+
+		glCullFace(GL_BACK);
 	}
 
 

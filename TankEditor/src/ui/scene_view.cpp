@@ -116,26 +116,16 @@ namespace Tank::Editor
 		if (!m_isPlayer) ImGui::EndChild();
 	}
 
-	void _SceneView::startup()
-	{
-		// Ignore EditorNode disabling behaviour
-	}
-
 	void _SceneView::update()
 	{
 		int fbW = m_fb->getW(), fbH = m_fb->getH();
-
+		
 		// Set viewport to fbo, render into fbo, set viewport to std.
 		glViewport(0, 0, fbW, fbH);
 		m_fb->update();
 		glViewport(0, 0, m_sceneW, m_sceneH);
 
 		_Window::update();
-	}
-
-	void _SceneView::shutdown()
-	{
-		// Ignore EditorNode enabling behaviour
 	}
 
 	void _SceneView::rescale(int w, int h) const
@@ -150,6 +140,7 @@ namespace Tank::Editor
 	void _SceneView::handleKeyInput()
 	{
 		if (!m_isFocussed) return;
+		if (m_started) return;
 
 		auto cam = Scene::getActiveScene()->getActiveCamera();
 		if (cam == nullptr) return;

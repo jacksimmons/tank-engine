@@ -15,30 +15,7 @@
 
 namespace Tank
 {
-	Player::Player() : Application(
-		{
-			GLFW_KEY_F1,
-			GLFW_KEY_F2,
-			GLFW_KEY_F3,
-			GLFW_KEY_F4,
-			GLFW_KEY_F5,
-			GLFW_KEY_F6,
-
-			GLFW_KEY_W,
-			GLFW_KEY_A,
-			GLFW_KEY_S,
-			GLFW_KEY_D,
-			GLFW_KEY_Q,
-			GLFW_KEY_E,
-
-			GLFW_KEY_I,
-			GLFW_KEY_J,
-			GLFW_KEY_K,
-			GLFW_KEY_L,
-			GLFW_KEY_U,
-			GLFW_KEY_O,
-		}
-	)
+	Player::Player() : Application()
 	{
 		auto scene = std::unique_ptr<Tank::Scene>(Serialisation::loadScene("scene.json", m_factory.get()));
 		Scene::setActiveScene(scene.get());
@@ -69,11 +46,6 @@ namespace Tank
 
 		m_root->update();
 		m_root->startup();
-	}
-
-
-	void Player::handleKeyInput()
-	{
 	}
 
 

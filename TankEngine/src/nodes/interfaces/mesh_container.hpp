@@ -1,5 +1,4 @@
 #pragma once
-#include <optional>
 #include "mesh.hpp"
 #include "shader_container.hpp"
 #include "outlined.hpp"
@@ -21,7 +20,6 @@ namespace Tank
 		}
 	public:
 		virtual ~IMeshContainer() = default;
-
 		
 		std::vector<Mesh*> getMeshes() const;
 		virtual void drawOutlineMeshes(Shader *outlineShader) override;

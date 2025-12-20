@@ -1,7 +1,5 @@
 #include <glad/glad.h>
 #include "framebuffer.hpp"
-#include "log.hpp"
-#include "shader.hpp"
 #include "nodes/scene.hpp"
 
 

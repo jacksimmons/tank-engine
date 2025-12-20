@@ -1,0 +1,532 @@
+{
+    "activeCam": [
+        0
+    ],
+    "children": [
+        {
+            "centre": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "children": [
+                {
+                    "children": [],
+                    "enabled": true,
+                    "name": "Gizmo",
+                    "scripts": [],
+                    "shader": {
+                        "frag": "shader.frag",
+                        "geom": ".",
+                        "id": 5,
+                        "vert": "shader.vert"
+                    },
+                    "texPath": "C:\\Git\\tank-engine\\textures/gizmo/camera.png",
+                    "transform": {
+                        "rotation": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "translation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    "type": "Sprite",
+                    "visible": true
+                },
+                {
+                    "children": [],
+                    "enabled": true,
+                    "name": "Gizmo (0)",
+                    "scripts": [],
+                    "shader": {
+                        "frag": "shader.frag",
+                        "geom": ".",
+                        "id": 14,
+                        "vert": "shader.vert"
+                    },
+                    "texPath": "C:\\Git\\tank-engine\\textures/gizmo/camera.png",
+                    "transform": {
+                        "rotation": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "translation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    "type": "Sprite",
+                    "visible": true
+                },
+                {
+                    "children": [],
+                    "enabled": true,
+                    "name": "Gizmo (0) (0)",
+                    "scripts": [],
+                    "shader": {
+                        "frag": "shader.frag",
+                        "geom": ".",
+                        "id": 22,
+                        "vert": "shader.vert"
+                    },
+                    "texPath": "C:\\Git\\tank-engine\\textures/gizmo/camera.png",
+                    "transform": {
+                        "rotation": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "translation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    "type": "Sprite",
+                    "visible": true
+                }
+            ],
+            "cullFar": 10000.0,
+            "cullNear": 0.10000000149011612,
+            "enabled": true,
+            "eye": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 3.0
+            },
+            "name": "Camera",
+            "panSpd": 100.0,
+            "rotSpd": 5.0,
+            "rotation": [
+                {
+                    "w": 0.0,
+                    "x": -0.9572674632072449,
+                    "y": 0.007813706994056702,
+                    "z": 0.2891227900981903
+                },
+                {
+                    "w": 0.0,
+                    "x": -0.010939117521047592,
+                    "y": 0.9979429841041565,
+                    "z": -0.06318875402212143
+                },
+                {
+                    "w": 0.0,
+                    "x": -0.2890211045742035,
+                    "y": -0.06365147978067398,
+                    "z": -0.9552105069160461
+                },
+                {
+                    "w": 1.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            ],
+            "scripts": [],
+            "transform": {
+                "rotation": {
+                    "w": 1.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "translation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "translation": [
+                {
+                    "w": 0.0,
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                {
+                    "w": 0.0,
+                    "x": 0.0,
+                    "y": 1.0,
+                    "z": 0.0
+                },
+                {
+                    "w": 0.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 1.0
+                },
+                {
+                    "w": 1.0,
+                    "x": 211.67088317871094,
+                    "y": 137.47848510742188,
+                    "z": -3268.485595703125
+                }
+            ],
+            "type": "Camera",
+            "up": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "view": [
+                {
+                    "w": 0.0,
+                    "x": -0.9572630524635315,
+                    "y": -0.010938075371086597,
+                    "z": -0.28901171684265137
+                },
+                {
+                    "w": 0.0,
+                    "x": 0.007813150994479656,
+                    "y": 0.9979419708251953,
+                    "z": -0.06364727020263672
+                },
+                {
+                    "w": 0.0,
+                    "x": 0.28911304473876953,
+                    "y": -0.06318527460098267,
+                    "z": -0.9552075266838074
+                },
+                {
+                    "w": 1.0,
+                    "x": 1145.64501953125,
+                    "y": -341.21087646484375,
+                    "z": -3049.290771484375
+                }
+            ],
+            "visible": true
+        },
+        {
+            "children": [],
+            "cubeMap": [
+                "skybox/right.jpg",
+                "skybox/left.jpg",
+                "skybox/bottom.jpg",
+                "skybox/top.jpg",
+                "skybox/front.jpg",
+                "skybox/back.jpg"
+            ],
+            "enabled": true,
+            "name": "CubeMap",
+            "scripts": [],
+            "shader": {
+                "frag": "skybox.frag",
+                "geom": ".",
+                "id": 27,
+                "vert": "skybox.vert"
+            },
+            "transform": {
+                "rotation": {
+                    "w": 1.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "translation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "type": "CubeMap",
+            "visible": true
+        },
+        {
+            "children": [],
+            "cullFace": 1029,
+            "enabled": true,
+            "modelPath": "C:/Git/tank-engine/models/doom\\doom_E1M1.obj",
+            "name": "Doom",
+            "scripts": [],
+            "shader": {
+                "frag": "shader.frag",
+                "geom": ".",
+                "id": 35,
+                "vert": "shader.vert"
+            },
+            "transform": {
+                "rotation": {
+                    "w": 1.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "translation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "type": "Model",
+            "visible": true
+        },
+        {
+            "children": [],
+            "cullFace": 1028,
+            "enabled": true,
+            "modelPath": "C:/Git/tank-engine/models/player\\Fat Banjo and Kazooie.obj",
+            "name": "Player",
+            "scripts": [
+                "player.lua"
+            ],
+            "shader": {
+                "frag": "shader.frag",
+                "geom": ".",
+                "id": 43,
+                "vert": "shader.vert"
+            },
+            "transform": {
+                "rotation": {
+                    "w": 1.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 10.0,
+                    "y": 10.0,
+                    "z": 10.0
+                },
+                "translation": {
+                    "x": 225.0,
+                    "y": 130.0,
+                    "z": -3235.0
+                }
+            },
+            "type": "Model",
+            "visible": true
+        },
+        {
+            "audioPath": "C:\\Git\\tank-engine\\audio/test.wav",
+            "children": [],
+            "enabled": true,
+            "name": "Audio",
+            "scripts": [],
+            "transform": {
+                "rotation": {
+                    "w": 1.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "translation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "type": "Audio",
+            "visible": true
+        },
+        {
+            "ambient": {
+                "x": 0.009999999776482582,
+                "y": 0.009999999776482582,
+                "z": 0.009999999776482582
+            },
+            "children": [
+                {
+                    "children": [],
+                    "enabled": true,
+                    "name": "Gizmo",
+                    "scripts": [],
+                    "shader": {
+                        "frag": "shader.frag",
+                        "geom": ".",
+                        "id": 48,
+                        "vert": "shader.vert"
+                    },
+                    "texPath": "C:\\Git\\tank-engine\\textures/gizmo/dir_light.png",
+                    "transform": {
+                        "rotation": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "translation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    "type": "Sprite",
+                    "visible": true
+                },
+                {
+                    "children": [],
+                    "enabled": true,
+                    "name": "Gizmo (0)",
+                    "scripts": [],
+                    "shader": {
+                        "frag": "shader.frag",
+                        "geom": ".",
+                        "id": 57,
+                        "vert": "shader.vert"
+                    },
+                    "texPath": "C:\\Git\\tank-engine\\textures/gizmo/dir_light.png",
+                    "transform": {
+                        "rotation": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "translation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    "type": "Sprite",
+                    "visible": true
+                },
+                {
+                    "children": [],
+                    "enabled": true,
+                    "name": "Gizmo (0) (0)",
+                    "scripts": [],
+                    "shader": {
+                        "frag": "shader.frag",
+                        "geom": ".",
+                        "id": 65,
+                        "vert": "shader.vert"
+                    },
+                    "texPath": "C:\\Git\\tank-engine\\textures/gizmo/dir_light.png",
+                    "transform": {
+                        "rotation": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "translation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    "type": "Sprite",
+                    "visible": true
+                }
+            ],
+            "diffuse": {
+                "x": 0.05000000074505806,
+                "y": 0.05000000074505806,
+                "z": 0.05000000074505806
+            },
+            "enabled": true,
+            "name": "PointLight",
+            "scripts": [],
+            "specular": {
+                "x": 0.05000000074505806,
+                "y": 0.05000000074505806,
+                "z": 0.05000000074505806
+            },
+            "transform": {
+                "rotation": {
+                    "w": 1.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "translation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -2500.0
+                }
+            },
+            "type": "PointLight",
+            "visible": true
+        }
+    ],
+    "enabled": true,
+    "isActiveScene": true,
+    "name": "Scene",
+    "scripts": [],
+    "transform": {
+        "rotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "translation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        }
+    },
+    "type": "Scene",
+    "visible": true
+}

@@ -122,8 +122,9 @@ project "TankEngine"
 	pchsource "%{prj.name}/src/application.cpp"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
-
+		
 	-- Copy bin and libs into all applicable outdirs
+	PostCopyDir("scripts", engineDir)
 	PostCopyDir(engineDir, editorDir)
 	PostCopyDir(engineDir, playerDir)
 

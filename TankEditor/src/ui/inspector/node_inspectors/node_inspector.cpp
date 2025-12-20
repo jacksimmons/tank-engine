@@ -4,7 +4,7 @@
 #include <nodes/node.hpp>
 #include <nodes/camera.hpp>
 #include <nodes/scene.hpp>
-#include <scripting/script_manager.hpp>
+#include <scripting/script.hpp>
 #include "node_inspector.hpp"
 
 

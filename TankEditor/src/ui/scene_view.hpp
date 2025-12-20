@@ -48,9 +48,7 @@ namespace Tank
 			);
 
 			void rescale(int w, int h) const;
-			void startup() override;
 			void update() override;
-			void shutdown() override;
 			virtual void draw() override;
 			virtual void drawPanel() override;
 			constexpr int getSceneW() const noexcept { return m_sceneW; }

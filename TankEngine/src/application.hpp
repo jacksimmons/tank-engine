@@ -18,10 +18,9 @@ namespace Tank
 	{
 	private:
 		ImGuiContext *m_context;
+	protected:
 		glm::ivec2 m_windowSize;
 		GLFWwindow *m_window;
-	protected:
-		std::unique_ptr<KeyInput> m_keyInput;
 		std::unique_ptr<Reflect::NodeFactory> m_factory;
 		ImGuiSettings m_settings;
 
@@ -36,7 +35,7 @@ namespace Tank
 		virtual void uiStep() {};
 		virtual void step() {};
 
-		Application(const std::vector<int> &registeredKeys, const ImGuiSettings settings = {
+		Application(const ImGuiSettings settings = {
 			0,
 			0
 		});

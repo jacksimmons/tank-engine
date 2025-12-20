@@ -1,5 +1,5 @@
 #pragma once
-struct GLFWWindow;
+struct GLFWwindow;
 namespace Tank
 {
 	enum class KeyState
@@ -21,13 +21,13 @@ namespace Tank
 		static std::vector<KeyInput *> s_instances;
 		std::map<int, KeyState> m_keys;
 
-		static void callback(GLFWwindow *win, int key, int scancode, int action, int mods);
 		void setKeyState(int key, KeyState state);
 	public:
+		static void callback(GLFWwindow *win, int key, int scancode, int action, int mods);
+		
 		KeyInput(const std::vector<int> &monitoredKeys);
 		~KeyInput();
 
-		static void setupKeyInputs(GLFWwindow *window);
 		KeyState getKeyState(int key);
 		void update();
 	};

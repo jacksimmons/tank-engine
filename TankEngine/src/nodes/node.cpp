@@ -1,6 +1,10 @@
+#include <GLFW/glfw3.h>
+#include <scripting/script.hpp>
+#include <log.hpp>
+#include <key_input.hpp>
+#include <transform.hpp>
+#include <events/event_manager.hpp>
 #include "node.hpp"
-#include "log.hpp"
-#include "events/event_manager.hpp"
 
 
 namespace Tank
@@ -10,7 +14,11 @@ namespace Tank
 		m_type = "Node";
 		m_name = name;
 		m_transform = std::make_unique<Transform>(this);
+		m_keyInput = std::unique_ptr<KeyInput>(nullptr);
 	}
+
+
+	Node::~Node() = default;
 
 
 	void Node::setName(const std::string &name) noexcept
@@ -76,10 +84,10 @@ namespace Tank
 	}
 
 
-	Transform *Node::getTransform() const
-	{
-		return m_transform.get();
-	}
+	KeyInput *Node::getKeyInput() const { return m_keyInput.get(); }
+
+
+	Transform *Node::getTransform() const { return m_transform.get(); }
 
 
 	void Node::addChild(std::unique_ptr<Node> child)
@@ -200,12 +208,6 @@ namespace Tank
 		if (m_started) return;
 		m_started = true;
 
-		//for (auto const &script : m_scripts)
-		//{
-		//	script->setEnabled(true);
-		//	script->startup();
-		//}
-
 		for (auto const &child : m_children)
 		{
 			child->startup();
@@ -218,12 +220,6 @@ namespace Tank
 		if (!m_enabled) return;
 		if (!m_started) return;
 		m_started = false;
-
-		//for (auto const &script : m_scripts)
-		//{
-		//	script->setEnabled(false);
-		//	script->shutdown();
-		//}
 
 		for (auto const &child : m_children)
 		{
@@ -257,6 +253,20 @@ namespace Tank
 
 	void Node::addScript(std::unique_ptr<Script> script)
 	{
+		if (!m_keyInput)
+		{
+			// Create Editor KeyInput
+			std::vector<int> registeredKeys = {
+				// Function keys
+				GLFW_KEY_F1, GLFW_KEY_F2, GLFW_KEY_F3, GLFW_KEY_F4, GLFW_KEY_F5, GLFW_KEY_F6,
+				// Cam Movement keys
+				GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_Q, GLFW_KEY_E,
+				// Cam Rotation keys
+				GLFW_KEY_I, GLFW_KEY_J, GLFW_KEY_K, GLFW_KEY_L, GLFW_KEY_U, GLFW_KEY_O,
+			};
+			m_keyInput = std::make_unique<KeyInput>(registeredKeys);
+		}
+
 		m_scripts.push_back(std::move(script));
 	}
 
@@ -284,9 +294,15 @@ namespace Tank
 		{
 			for (const auto &script : m_scripts)
 			{
-				script->update();
+				if (script->getEnabled())
+				{
+					script->update();
+				}
 			}
 		}
+
+		// Update KeyInput (decay inputs)
+		if (m_keyInput) m_keyInput->update();
 
 		// Recursively update
 		for (auto it = m_children.begin(); it != m_children.end(); ++it)
@@ -305,6 +321,14 @@ json Tank::Node::serialise()
 	serialised["enabled"] = m_enabled;
 	serialised["visible"] = m_visible;
 	serialised["transform"] = Transform::serialise(m_transform.get());
+
+	std::vector<std::string> scriptNames;
+	for (const auto &script : m_scripts)
+	{
+		scriptNames.push_back(script->getScriptPath().string());
+	}
+	serialised["scripts"] = scriptNames;
+
 	return serialised;
 }
 
@@ -314,4 +338,9 @@ void Tank::Node::deserialise(const json &serialised)
 	Enabled = serialised["enabled"];
 	Visible = serialised["visible"];
 	Transform::deserialise(serialised["transform"], getTransform());
+
+	for (const auto &script : serialised["scripts"].get<std::vector<std::string>>())
+	{
+		addScript(Script::createScript(this, script).value());
+	}
 }

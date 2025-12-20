@@ -16,12 +16,15 @@ namespace Tank
 		{
 		private:
 			static std::vector<std::string> s_windowNames;
-
+			
 			std::unique_ptr<Node> m_initUI;
 			/// <summary>
 			/// Root node for system UI (Hierarchy, Inspector, etc.)
 			/// </summary>
 			std::unique_ptr<Node> m_system;
+			
+			// Keyboard input for the Editor only.
+			std::unique_ptr<KeyInput> m_editorInput;
 		public:
 			EditorApp();
 			~EditorApp();
@@ -30,6 +33,7 @@ namespace Tank
 			void loadDemoScene();
 			void postSceneSetup();
 		protected:
+			virtual void step() override;
 			virtual void uiStep() override;
 			virtual void handleKeyInput() override;
 		};

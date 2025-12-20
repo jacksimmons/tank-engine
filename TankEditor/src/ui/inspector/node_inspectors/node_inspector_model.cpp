@@ -8,6 +8,7 @@
 #include <nodes/model.hpp>
 #include "ui/file_dialog.hpp"
 #include <widget.hpp>
+#include <glad/glad.h>
 
 
 const std::string g_name = "Load Model File";
@@ -49,6 +50,22 @@ namespace Tank::Editor
 
 				m_inspector->addChild(std::move(fileDialog));
 			}
+		}
+
+		std::vector<unsigned> options = { GL_BACK, GL_FRONT, GL_FRONT_AND_BACK };
+		std::vector<std::string> optionNames = { "BACK", "FRONT", "FRONT_AND_BACK" };
+
+		if (ImGui::BeginTable("Select Cull Face", options.size()))
+		{
+			for (int i = 0; i < options.size(); i++)
+			{
+				ImGui::TableNextColumn();
+				if (ImGui::RadioButton(optionNames[i].c_str(), m_node->getCullFace() == options[i]))
+				{
+					m_node->setCullFace(options[i]);
+				}
+			}
+			ImGui::EndTable();
 		}
 	}
 }

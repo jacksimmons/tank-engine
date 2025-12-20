@@ -5,6 +5,7 @@
 #include "core.hpp"
 
 
+namespace sol { class state; }
 namespace Tank
 {
 	class Node;
@@ -33,5 +34,7 @@ namespace Tank
 		const fs::path &getScriptPath() const noexcept { return m_scriptPath; }
 
 		void update();
+		void pushProperties(sol::state &);
+		void pullProperties(const sol::state &);
 	};
 }

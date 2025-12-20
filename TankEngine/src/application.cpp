@@ -4,9 +4,9 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include "application.hpp"
-#include "events/event_manager.hpp"
 #include "key_input.hpp"
 #include "log.hpp"
+#include "events/event_manager.hpp"
 #include "nodes/camera.hpp"
 #include "nodes/cube_map.hpp"
 #include "nodes/light.hpp"
@@ -14,6 +14,7 @@
 #include "nodes/node.hpp"
 #include "nodes/scene.hpp"
 #include "nodes/sprite.hpp"
+#include "nodes/audio.hpp"
 #include "reflection/node_factory.hpp"
 #include "static/time.hpp"
 
@@ -31,7 +32,7 @@ static void GLAPIENTRY msgCallback(GLenum source,
 
 namespace Tank
 {
-	Application::Application(const std::vector<int> &registeredKeys, ImGuiSettings settings)
+	Application::Application(ImGuiSettings settings)
 	{
 		// Init reflection
 		m_factory = std::make_unique<Reflect::NodeFactory>();
@@ -43,6 +44,7 @@ namespace Tank
 		m_factory->registerClass<Sprite>("Sprite");
 		m_factory->registerClass<Model>("Model");
 		m_factory->registerClass<CubeMap>("CubeMap");
+		m_factory->registerClass<Audio>("Audio");
 
 		// Init events
 		EventManager::addEvent("NodeAdopted", new Event<Node*>());
@@ -56,7 +58,6 @@ namespace Tank
 		initGLAD();
 		initImGui();
 		m_context = ImGui::GetCurrentContext();
-		m_keyInput = std::make_unique<KeyInput>(registeredKeys);
 	}
 
 
@@ -99,8 +100,8 @@ namespace Tank
 		glfwMakeContextCurrent(m_window);
 
 		// Initialise callbacks
-		KeyInput::setupKeyInputs(m_window);
 		glfwSetFramebufferSizeCallback(m_window, Application::onWindowSizeChange);
+		glfwSetKeyCallback(m_window, KeyInput::callback);
 	}
 
 
@@ -188,17 +189,9 @@ namespace Tank
 
 			beginImGui(io);
 
-			if (m_keyInput)
-			{
-				handleKeyInput();
-				// Decay input states (comes after handleKeyInput)
-				m_keyInput->update();
-			}
-
 			step();
 			uiStep();
 			endImGui();
-
 
 			// Double buffering
 			glfwSwapBuffers(m_window);

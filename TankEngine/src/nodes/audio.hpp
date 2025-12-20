@@ -25,6 +25,7 @@ namespace Tank
 
 		void setAudioPath(const fs::path &path) { m_audioPath = path; updateSound(); };
 		const fs::path &getAudioPath() const { return m_audioPath; };
+
 		void updateSound();
 		void play();
 	};

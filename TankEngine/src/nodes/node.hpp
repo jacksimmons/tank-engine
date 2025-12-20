@@ -2,12 +2,13 @@
 #include <utils/getset.hpp>
 #include "nodes/interfaces/serialisable.hpp"
 #include "nodes/interfaces/scriptable.hpp"
-#include "scripting/script.hpp"
 
 
 namespace Tank
 {
 	class Transform;
+	class KeyInput;
+	class Script;
 
 	/// <summary>
 	/// An object which exists in the Node hierarchy. It has a parent (or is the root),
@@ -34,10 +35,11 @@ namespace Tank
 
 		std::vector<Node*> m_childrenAwaitingDisown;
 		std::vector<std::unique_ptr<Node>> m_childrenAwaitingAdopt;
+		std::unique_ptr<KeyInput> m_keyInput;
 	protected:
 		std::string m_type;
-		std::unique_ptr<Transform> m_transform;
 		Node *m_parent = nullptr;
+		std::unique_ptr<Transform> m_transform;
 		std::vector<std::unique_ptr<Node>> m_children;
 		std::vector<std::unique_ptr<Script>> m_scripts;
 		bool m_started = false;
@@ -49,7 +51,7 @@ namespace Tank
 		bool m_isEditorControlled = false;
 	public:
 		Node(const std::string &name = "Node");
-		virtual ~Node() = default;
+		virtual ~Node();
 
 		GetSet<bool> Enabled = m_enabled;
 		GetSet<bool> Visible = m_visible;
@@ -62,10 +64,10 @@ namespace Tank
 		Node *getParent() const noexcept { return m_parent; }
 
 		std::string getPath() const;
-
+		KeyInput *getKeyInput() const;
 		Transform *getTransform() const;
-
 		size_t getChildCount() const noexcept { return m_children.size(); }
+
 		typedef std::vector<std::unique_ptr<Node>>::iterator iterator;
 		typedef std::vector<std::unique_ptr<Node>>::const_iterator const_iterator;
 		iterator begin() noexcept { return m_children.begin(); }

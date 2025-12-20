@@ -1,5 +1,6 @@
 #include <GLFW/glfw3.h>
 #include "key_input.hpp"
+#include <log.hpp>
 
 
 namespace Tank
@@ -25,12 +26,6 @@ namespace Tank
 	}
 
 
-	void KeyInput::setupKeyInputs(GLFWwindow *window)
-	{
-		glfwSetKeyCallback(window, KeyInput::callback);
-	}
-
-
 	void KeyInput::callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 	{
 		// Send the key event to all KeyInput instances.
@@ -38,7 +33,9 @@ namespace Tank
 		{
 			KeyState next;
 
-			// Either set state to Pressed or Released (Pressed decays into Held; Released decays into NotPressed)
+			// Either set state to Held, Pressed or Released (Released decays into NotPressed)
+			// Rules:
+			// - If somehow Pressed/Released happen at once, Released takes precedence for safety.
 			if (action == GLFW_PRESS)
 			{
 				next = KeyState::Pressed;
@@ -95,7 +92,7 @@ namespace Tank
 			// For all input keys...
 			for (auto it = m_keys.begin(); it != m_keys.end(); ++it)
 			{
-				// Decay Pressed states to Held states.
+				// Decay Pressed states into Held states
 				if (it->second == KeyState::Pressed)
 				{
 					it->second = KeyState::Held;

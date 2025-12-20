@@ -17,6 +17,5 @@ namespace Tank
 		~Player();
 	protected:
 		virtual void step() override;
-		virtual void handleKeyInput() override;
 	};
 }

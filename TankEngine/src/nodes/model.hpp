@@ -24,6 +24,7 @@ namespace Tank
 	private:
 		fs::path m_modelDirectory;
 		fs::path m_modelFile;
+		unsigned m_cullFace;
 	public:
 		Model(
 			const std::string &name = "Model",
@@ -34,6 +35,10 @@ namespace Tank
 
 		void setModelPath(const fs::path &path);
 		fs::path getModelPath() const { return m_modelDirectory / m_modelFile; }
+
+		unsigned getCullFace() const { return m_cullFace; }
+		void setCullFace(unsigned face) { m_cullFace = face; }
+
 		virtual void draw() override;
 		virtual void update() override;
 		void processNode(aiNode *node, const aiScene *scene);

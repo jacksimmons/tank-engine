@@ -3,7 +3,6 @@
 
 namespace Tank
 {
-	class Shader; class IOutlined;
 	class TANK_API Framebuffer
 	{
 	private:

@@ -7,6 +7,7 @@
 #include "nodes/node.hpp"
 #include "script.hpp"
 #include "script_manager.hpp"
+#include "user_types.hpp"
 
 
 namespace Tank
@@ -30,30 +31,35 @@ namespace Tank
 		sol::state lua;
 		lua.open_libraries(sol::lib::base, sol::lib::package);
 		auto result = lua.safe_script(m_scriptLines, sol::script_pass_on_error);
-
 		if (!result.valid())
 		{
 			sol::error err = result;
 			TE_CORE_ERROR(std::string("Script file failed to run:\n") + err.what());
 		}
-		
-		// Setup script functions
-		Transform *transform = m_node->getTransform();
-		{
-			auto trans = transform->getLocalTranslation();
-			auto table = lua.create_table_with(
-				"x", trans.x,
-				"y", trans.y,
-				"z", trans.z
-			);
-			lua["translation"] = table;
-		}
+
+		// Define usertypes
+		UserTypes::all(lua);
+
+		// Push properties to Lua from C++
+		pushProperties(lua);
 
 		// Call update function on lua script, if present
 		std::optional<sol::protected_function> update = lua["update"];
 		if (update.has_value())
 			update.value()();
 
-		transform->setLocalTranslation({ lua["translation"]["x"], lua["translation"]["y"], lua["translation"]["z"] });
+		// Pull properties from Lua to C++
+		pullProperties(lua);
+	}
+
+
+	void Script::pushProperties(sol::state &lua)
+	{
+		lua["node"] = m_node;
+	}
+
+
+	void Script::pullProperties(const sol::state &lua)
+	{
 	}
 }
