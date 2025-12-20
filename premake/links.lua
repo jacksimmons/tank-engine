@@ -37,7 +37,7 @@ function LinkGLFW()
 	filter { "system:windows" }
 		links { "glfw3" }
 	filter { "system:not windows" }
-		links { "glfw" } -- libglfw.so.3 is named "glfw"
+		links { "glfw" } -- libglfw.so.3 has name "glfw"
 	filter {}
 end
 
