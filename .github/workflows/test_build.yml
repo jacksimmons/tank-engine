@@ -39,7 +39,9 @@ jobs:
           libxi-dev \
           libdraco-dev \
           libminizip-dev \
-          libpugixml-dev
+          libpugixml-dev \
+          libglfw3-dev \
+          libassimp5
 
       - name: Checkout Repo
         uses: actions/checkout@v5
