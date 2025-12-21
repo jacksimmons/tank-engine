@@ -45,9 +45,9 @@ namespace Tank::Editor
 		if (ImGui::BeginChild(std::string{ getName() + "##FILE_DIALOG_VIEW" }.c_str(), viewSize))
 		{
 			drawTargetView();
-			drawTargetBar();
 		}
 		ImGui::EndChild();
+		drawTargetBar();
 	}
 
 
@@ -117,6 +117,9 @@ namespace Tank::Editor
 		for (const auto &dirItem : dirIter)
 		{
 			fs::path path = dirItem.path();
+			
+			// Check if path contains the search term, if it doesn't then skip
+			if (m_searchTerm.length() > 0 && !path.string().contains(m_searchTerm)) continue;
 
 			// Handle file additions
 			if (fs::is_regular_file(path))
@@ -124,8 +127,6 @@ namespace Tank::Editor
 				_FileResult file;
 				file.path = path;
 				file.name = path.filename().string();
-				// Check if its name contains the search term, if it doesn't then skip
-				if (m_searchTerm.length() > 0 && file.name.find(m_searchTerm) == std::string::npos) continue;
 
 				file.perms = fs::status(path).permissions();
 
@@ -204,6 +205,7 @@ namespace Tank::Editor
 		{
 			m_searchTerm = modified;
 			m_currentTarget = m_currentDirectory / m_searchTerm;
+			updateDirectoryItems();
 		});
 
 		// If a target is selected, show "Select" button which will close the dialog when pressed.

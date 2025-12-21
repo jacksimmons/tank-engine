@@ -113,12 +113,34 @@ namespace Tank::Editor
 	{
 		TabItem newProj =
 		{
-			"New Project",
-			[](auto &) { return true; },
+			"New Project...",
+			[this](auto &name) { return !m_initUI->getChild(name); },
 			[this]()
 			{
-				loadDemoScene();
-				postSceneSetup();
+				std::unique_ptr<_FileDialog> fd = std::unique_ptr<_FileDialog>(
+					new _FileDialog("New Project", "", fs::current_path().root_directory(), _FileDialogTarget::Directory,
+					[this](const fs::path &path)
+					{
+						if (fs::is_empty(path))
+						{
+							TE_CORE_ERROR(std::format("New Project > {} is not empty.", path.string()));
+							return;
+						}
+
+						fs::path scenePath = path / "scene.json";
+						fs::copy_file("scene.json", scenePath);
+
+						// Load scene if it was valid, and close the popup either way
+						if (Scene *rawScene = ::Tank::Serialisation::loadScene(scenePath.string(), m_factory.get()))
+						{
+							std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
+							loadScene(std::move(scene));
+							postSceneSetup();
+						}
+					})
+				);
+
+				m_initUI->addChild(std::move(fd));
 			}
 		};
 
