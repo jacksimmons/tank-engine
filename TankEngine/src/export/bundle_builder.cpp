@@ -1,5 +1,7 @@
+#include <regex>
 #include <log.hpp>
 #include <file.hpp>
+#include <string.hpp>
 #include <nodes/scene.hpp>
 #include <scene_serialisation.hpp>
 #include "bundle_builder.hpp"
@@ -44,19 +46,52 @@ namespace Tank::Export
 
 	void BundleBuilder::prepareSerialisedData(const fs::path &path)
 	{
-		// Read the serialised file
+		// Read the serialised file into a new Scene instance
 		std::string serialised;
-		auto result = File::readLines(path, serialised);
-
-		// Cut all occurrences of project dir
-		std::string projectDir = fs::current_path().string();
-		while (serialised.contains(projectDir))
+		std::string scenePath = (path / "scene.json").string();
+		auto result = File::readLines(path / "scene.json", serialised);
+		if (result != File::ReadResult::Success)
 		{
-			size_t index = serialised.find(projectDir);
-			serialised.replace(index, projectDir.size(), "");
+			TE_CORE_ERROR(std::format("BundleBuilder > Error reading {}.", scenePath));
+			return;
 		}
 
+		// Cut all occurrences of project dir; replace with relative dir
+		// @todo Neaten this up once projects are enforced, and all assets are already required to be a subdirectory of the root project.
+		// C:\\tank-engine
+		std::string projectDir = std::regex_replace(
+			fs::current_path().string(),
+			std::regex(R"(\\)"),
+			"/"
+		);
+		// C:/tank-engine\\...
+		String::replaceAll(serialised, projectDir + "\\\\", 10000);
+		// C:/tank-engine\...
+		String::replaceAll(serialised, projectDir + "\\", 10000);
+		// C:/tank-engine/...
+		String::replaceAll(serialised, projectDir + "/", 10000);
+		// C:/tank-engine...
+		String::replaceAll(serialised, projectDir, 10000);
+
+		projectDir = std::regex_replace(
+			fs::current_path().string(),
+			std::regex(R"(\\)"),
+			R"(\\)"
+		);
+		// C:\\tank-engine\\...
+		String::replaceAll(serialised, projectDir + "\\\\", 10000);
+		// C:\\tank-engine\...
+		String::replaceAll(serialised, projectDir + "\\", 10000);
+		// C:\\tank-engine/...
+		String::replaceAll(serialised, projectDir + "/", 10000);
+		// C:\\tank-engine...
+		String::replaceAll(serialised, projectDir, 10000);
+
 		// Modify the serialised file
-		File::writeLines(path, serialised);
+		bool status = File::writeLines(scenePath, serialised);
+		if (!status)
+		{
+			TE_CORE_ERROR(std::format("BundleBuilder > Error writing to {}.", scenePath));
+		}
 	}
 }

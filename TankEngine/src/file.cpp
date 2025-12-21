@@ -16,7 +16,6 @@ namespace Tank
 
 		ReadResult readLines(const std::filesystem::path &fp, std::string &outStr) noexcept
 		{
-			TE_CORE_TRACE(std::format("READ: {}", fp.string()));
 			if (!File::exists(fp)) return ReadResult::NotFile;
 
 			try
@@ -41,6 +40,8 @@ namespace Tank
 
 		bool writeLines(const std::filesystem::path &fp, const std::string &inStr)
 		{
+			if (fs::is_directory(fp)) return false;
+
 			try
 			{
 				std::ofstream out(fp);

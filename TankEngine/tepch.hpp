@@ -6,6 +6,7 @@
 #include <chrono>
 #include <filesystem>
 #include <type_traits>
+#include <regex>
 
 // Standard Library Datatypes
 #include <string>

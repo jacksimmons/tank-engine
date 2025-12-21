@@ -17,9 +17,9 @@ namespace Tank
 		private:
 			BundleBuilder();
 
-			static void prepareSerialisedData(const fs::path &path);
+			static void prepareSerialisedData(const fs::path &);
 		public:
-			static bool build(Scene *scene, const fs::path &path);
+			static bool build(Scene *, const fs::path &);
 		};
 	}
 }
