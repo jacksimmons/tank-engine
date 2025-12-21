@@ -9,7 +9,7 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - [x] Scene node
 - [x] Camera node
 - [ ] Text rendering node
-- [ ] Audio source node
+- [x] Audio source node
 - [x] 2D Sprite node using stb_image
 - [x] 3D Model node using Assimp
 - [x] Skybox (cube-map texture rendered behind everything else)
@@ -20,10 +20,12 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - [x] Factory + JSON serialisation
 ## Engine: Physics
 - [x] Planetary gravity physics
-## Engine: C# Scripting  
-- [x] Script class, with a pure virtual update method
-- [ ] Editor and Play mode distinction for Scripts
-- [ ] C# integration
+## Engine: Lua Scripting
+- [x] Basic interop Lua <-> C++
+- [x] Node bindings
+- [x] Camera bindings
+- [x] KeyInput bindings
+- [ ] Type hints / documentation (maybe autogen)
 ## Editor: UI
 - [x] Node-tree scene system, with the Scene as the root  
 - [x] Hierarchy window, displaying and allowing interaction with the Node tree  
