@@ -72,12 +72,12 @@ project "TankEngine"
 
 	defines {
 		"TANK_DLL",
+		"TANK_PLAYERDIR=\"" .. playerDir .. "\"",
 		"GLM_ENABLE_EXPERIMENTAL",
 		"FMT_UNICODE=0",
 		"GLAD_GLAPI_EXPORT",
 		"GLAD_GLAPI_EXPORT_BUILD",
-		"FFMPEG_DIR=\"vendor/ffmpeg\"",
-		"STBI_NO_SIMD"
+		"STBI_NO_SIMD",
 	}
 
 	includedirs {
@@ -124,7 +124,6 @@ project "TankEngine"
 		buildoptions { "/FI tepch.hpp" }
 		
 	-- Copy bin and libs into all applicable outdirs
-	PostCopyDir("scripts", engineDir)
 	PostCopyDir(engineDir, editorDir)
 	PostCopyDir(engineDir, playerDir)
 
@@ -137,7 +136,6 @@ project "TankEditor"
 		"GLM_ENABLE_EXPERIMENTAL",
 		"FMT_UNICODE=0",
 		"GLAD_GLAPI_EXPORT",
-		"TANK_GUI"
 	}
 
 	includedirs {

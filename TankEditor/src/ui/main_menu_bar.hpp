@@ -7,16 +7,16 @@ namespace Tank::Editor
 {
 	struct TabItem
 	{
-		const std::string name;
-		const std::function<bool()> getEnabled;
-		const std::function<void()> onSelect;
+		std::string name;
+		std::function<bool(const std::string &name)> getEnabled;
+		std::function<void()> onSelect;
 	};
 
 	struct Tab
 	{
-		const std::string name;
-		const std::function<bool()> getEnabled;
-		const std::vector<TabItem> items;
+		std::string name;
+		std::function<bool(const std::string &name)> getEnabled;
+		std::vector<TabItem> items;
 	};
 
 

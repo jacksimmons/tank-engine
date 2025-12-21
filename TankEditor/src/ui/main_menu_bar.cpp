@@ -18,15 +18,15 @@ namespace Tank::Editor
 		if (ImGui::BeginMainMenuBar())
 		{
 			// For each tab, begin a menu.
-			for (const Tab tab : m_tabs)
+			for (const Tab &tab : m_tabs)
 			{
-				if (ImGui::BeginMenu(tab.name.c_str(), tab.getEnabled()))
+				if (ImGui::BeginMenu(tab.name.c_str(), tab.getEnabled(tab.name)))
 				{
 					// For each tab item, begin a menu item.
 					for (const TabItem &item : tab.items)
 					{
 						bool isSelected = false;
-						ImGui::MenuItem(item.name.c_str(), "", &isSelected, item.getEnabled());
+						ImGui::MenuItem(item.name.c_str(), "", &isSelected, item.getEnabled(item.name));
 						if (isSelected)
 						{
 							item.onSelect();

@@ -1,7 +1,5 @@
 #pragma once
-#include <imgui.h>
 #include "engine.hpp"
-#include "framebuffer.hpp"
 
 
 class ImGuiIO;
@@ -13,6 +11,7 @@ namespace Tank
 
 	namespace Editor
 	{
+		class Tab; class TabItem;
 		class EditorApp : public Application
 		{
 		private:
@@ -26,6 +25,9 @@ namespace Tank
 			
 			// Keyboard input for the Editor only.
 			std::unique_ptr<KeyInput> m_editorInput;
+
+			Tab getFileTab();
+			Tab getWindowTab();
 		public:
 			EditorApp();
 			~EditorApp();

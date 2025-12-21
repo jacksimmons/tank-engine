@@ -15,12 +15,12 @@
 #include <nodes/physics/physics_body.hpp>
 #include <events/event_manager.hpp>
 #include <scripting/script.hpp>
+#include <export/bundle_builder.hpp>
 #include "editor.hpp"
 #include "shader.hpp"
 #include "log.hpp"
 #include "scene_serialisation.hpp"
 #include "key_input.hpp"
-
 #include "ui/console.hpp"
 #include "ui/scene_view.hpp"
 #include "ui/hierarchy.hpp"
@@ -97,85 +97,131 @@ namespace Tank::Editor
 
 		// Initialise UI
 		m_initUI = std::make_unique<Node>("Init");
-		m_initUI->addChild(
-			std::unique_ptr<_MainMenuBar>(new _MainMenuBar("MainMenuBar",
-			{
-				{
-					"File",
-					[]() { return true; },
-					{
-						{
-							"New Project",
-							[]() { return true; },
-							[this]()
-							{
-								loadDemoScene();
-								postSceneSetup();
-							}
-						},
-						{
-							"Open Project",
-							[this]() { return !m_initUI->getChild("Open Project"); },
-							[this]()
-							{
-								std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-									new _FileDialog("Open Project", "", fs::current_path(), _FileDialogTarget::File)
-								);
-								m_initUI->addChild(std::move(fileDialog));
-							}
-						},
-						{
-							"Save Project",
-							[this]() { return Scene::getActiveScene() && !m_initUI->getChild("Save Project"); },
-							[this]()
-							{
-								std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-									new _FileDialog("Save Project", fs::current_path(), fs::current_path(), _FileDialogTarget::File)
-								);
-								m_initUI->addChild(std::move(fileDialog));
-							}
-						}
-					},
-				},
 
-				{
-					"Window",
-					[]() { return Scene::getActiveScene(); },
-					{
-						{
-							"Hierarchy",
-							[this]() { return !m_system->getChild("Hierarchy"); },
-							[this]() { m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy())); }
-						},
-						{
-							"Inspector",
-							[this]() { return !m_system->getChild("Inspector"); },
-							[this]() { m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector())); }
-						},
-						{
-							"SceneView",
-							[this]() { return !m_system->getChild("SceneView"); },
-							//[this]() { m_system->addChild(std::make_unique<_SceneView>(); }
-						},
-						{
-							"Console",
-							[this]() { return !m_system->getChild("Console"); },
-							[this]() { m_system->addChild(std::unique_ptr<_Console>(new _Console())); }
-						},
-						{
-							"Profiler",
-							[this]() { return !m_system->getChild("Profiler"); },
-							[this]() { m_system->addChild(std::unique_ptr<_Profiler>(new _Profiler())); }
-						}
-					}
-				}
-			}))
-		);
+		// Initialise Tabs
+		std::vector<Tab> tabs = { getFileTab(), getWindowTab() };
+		m_initUI->addChild(std::unique_ptr<_MainMenuBar>(new _MainMenuBar("MainMenuBar", tabs)));
 	}
 
 
 	EditorApp::~EditorApp()
 	{
+	}
+
+
+	Tab EditorApp::getFileTab()
+	{
+		TabItem newProj =
+		{
+			"New Project",
+			[](auto &) { return true; },
+			[this]()
+			{
+				loadDemoScene();
+				postSceneSetup();
+			}
+		};
+
+		TabItem openProj =
+		{
+			"Open Project...",
+			[this](auto &name) { return !m_initUI->getChild(name); },
+			[this]()
+			{
+				std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
+					new _FileDialog("Open Project", "", fs::current_path(), _FileDialogTarget::File)
+				);
+				m_initUI->addChild(std::move(fileDialog));
+			}
+		};
+
+		TabItem saveProj = {
+			"Save Project As...",
+			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
+			[this]()
+			{
+				std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
+					new _FileDialog("Save Project", fs::current_path(), fs::current_path(), _FileDialogTarget::File)
+				);
+				m_initUI->addChild(std::move(fileDialog));
+			}
+		};
+
+		TabItem exportProj = {
+			"Export Project...",
+			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
+			[this]()
+			{
+				std::unique_ptr<_FileDialog> fd = std::unique_ptr<_FileDialog>(
+					new _FileDialog(
+						"Export Project",
+						fs::current_path().root_directory(),
+						fs::current_path(),
+						_FileDialogTarget::Directory,
+						[this](const fs::path &path)
+						{
+							Export::BundleBuilder::build(Scene::getActiveScene(), path);
+						}
+					)
+				);
+				m_initUI->addChild(std::move(fd));
+			}
+		};
+
+		Tab file =
+		{
+			"File",
+			[](auto &) { return true; },
+			{ newProj, openProj, saveProj, exportProj }
+		};
+		return file;
+	}
+
+
+	Tab EditorApp::getWindowTab()
+	{
+		TabItem hierarchy =
+		{
+			"Hierarchy",
+			[this](auto &name) { return !m_system->getChild(name); },
+			[this]() { m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy())); }
+		};
+
+		TabItem inspector =
+		{
+			"Inspector",
+			[this](auto &name) { return !m_system->getChild(name); },
+			[this]() { m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector())); }
+		};
+
+		TabItem sceneView =
+		{
+			"SceneView",
+			[this](auto &name) { return !m_system->getChild(name); },
+			//[this]() { m_system->addChild(std::make_unique<_SceneView>(); }
+		};
+
+		TabItem console =
+		{
+			"Console",
+			[this](auto &name) { return !m_system->getChild(name); },
+			[this]() { m_system->addChild(std::unique_ptr<_Console>(new _Console())); }
+		};
+
+		TabItem profiler =
+		{
+			"Profiler",
+			[this](auto &name) { return !m_system->getChild(name); },
+			[this]() { m_system->addChild(std::unique_ptr<_Profiler>(new _Profiler())); }
+		};
+
+		Tab window =
+		{
+			"Window",
+			[](auto &) { return Scene::getActiveScene(); },
+			{ hierarchy, inspector, sceneView, console, profiler }
+		};
+		return window;
 	}
 
 
