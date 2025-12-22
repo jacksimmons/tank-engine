@@ -1,7 +1,6 @@
 #pragma once
 #include <nodes/node.hpp>
 #include "interfaces/mesh_container.hpp"
-namespace fs = std::filesystem;
 
 
 namespace Tank
@@ -15,17 +14,16 @@ namespace Tank
 		virtual json serialise() override;
 		void deserialise(const json &serialised);
 	private:
-		fs::path m_texPath;
+		Resource m_texPath;
 	public:
 		Sprite(
 			const std::string &name = "Sprite",
-			const fs::path &texPath = fs::current_path() / "textures/awesomeface.png",
-			ShaderSources *sources = nullptr
+			const Resource &texPath = Resource("textures/awesomeface.png", true)
 		);
 		virtual ~Sprite() = default;
 
-		bool setTexPath(const fs::path &texPath);
-		const fs::path& getTexPath() { return m_texPath; }
+		bool setTexPath(const Resource &texPath);
+		const Resource& getTexPath() { return m_texPath; }
 		virtual void draw() override;
 	};
 }

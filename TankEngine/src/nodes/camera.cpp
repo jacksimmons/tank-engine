@@ -30,7 +30,7 @@ namespace Tank
 
 		m_freeLook = true;
 
-		auto gizmo = std::make_unique<Sprite>("Gizmo", fs::current_path() / "textures/gizmo/camera.png");
+		auto gizmo = std::make_unique<Sprite>("Gizmo", Res("textures/gizmo/camera.png", true));
 		addChild(std::move(gizmo));
 	}
 

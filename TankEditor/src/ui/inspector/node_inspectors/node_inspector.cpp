@@ -91,15 +91,15 @@ namespace Tank::Editor
 		);
 
 		ImGui::TextColored(Colour::TITLE, "Scripts");
-		std::vector<fs::path> scriptPaths = m_node->getScriptPaths();
+		std::vector<Res> scriptPaths = m_node->getScriptPaths();
 		if (scriptPaths.empty())
 		{
 			ImGui::TextColored(Colour::DISABLED, "None");
 		}
 		int i = 0;
-		for (fs::path path : scriptPaths)
+		for (Res path : scriptPaths)
 		{
-			ImGui::Text(path.string().c_str());
+			ImGui::Text(Res::encode(path).c_str());
 			//Widget::textInput(
 			//	std::format("##Inspector_Script_{}", i).c_str(),
 			//	path.string(),
@@ -118,10 +118,16 @@ namespace Tank::Editor
 			"New Script",
 			[this, &scriptPaths](std::string newPath)
 			{
-				auto script = Script::createScript(m_node, newPath);
-				auto it = std::find(scriptPaths.begin(), scriptPaths.end(), newPath);
-				if (script.has_value() && it == scriptPaths.end())
-					m_node->addScript(std::move(script.value()));
+				auto script = Script::createScript(m_node, Res::decode(newPath));
+				for (auto it = scriptPaths.begin(); it != scriptPaths.end(); ++it)
+				{
+					if (!script.has_value()) break;
+
+					if ((*it) == Res::decode(newPath))
+					{
+						m_node->addScript(std::move(script.value()));
+					}
+				}
 			}
 		);
 	}

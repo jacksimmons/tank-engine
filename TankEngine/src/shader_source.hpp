@@ -7,7 +7,7 @@ namespace Tank
 	{
 		unsigned glType;
 		unsigned glID;
-		fs::path location;
+		Resource location;
 		bool enabled;
 
 
@@ -19,6 +19,25 @@ namespace Tank
 
 	struct TANK_API ShaderSources
 	{
+		static ShaderSources deserialise(const json &j)
+		{
+			ShaderSources ss;
+			ss.vertex.location = Res::decode(j["vert"]);
+			ss.fragment.location = Res::decode(j["frag"]);
+			ss.geometry.location = Res::decode(j["geom"]);
+			return ss;
+		}
+
+		static json serialise(const ShaderSources &ss)
+		{
+			json serialised;
+			serialised["vert"] = Res::encode(ss.vertex.location);
+			serialised["frag"] = Res::encode(ss.fragment.location);
+			serialised["geom"] = Res::encode(ss.geometry.location);
+			return serialised;
+		}
+
+
 		ShaderSource vertex;
 		ShaderSource fragment;
 		ShaderSource geometry;

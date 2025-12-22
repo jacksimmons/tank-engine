@@ -20,7 +20,7 @@ namespace Tank
 	json Model::serialise()
 	{
 		json serialised = Node::serialise();
-		serialised["modelPath"] = getModelPath();
+		serialised["modelPath"] = Resource::encode(getModelPath());
 		serialised["shader"] = Shader::serialise(getShader());
 		serialised["cullFace"] = getCullFace();
 		return serialised;
@@ -29,20 +29,17 @@ namespace Tank
 
 	void Model::deserialise(const json &serialised)
 	{
-		ShaderSources sources;
-		sources.vertex.location = std::string{ serialised["shader"]["vert"] };
-		sources.fragment.location = std::string{ serialised["shader"]["frag"] };
-		sources.geometry.location = std::string{ serialised["shader"]["geom"] };
-
-		initShaderContainer(&sources);
-		setModelPath(serialised["modelPath"]);
+		initShaderContainer(ShaderSources::deserialise(serialised["shader"]));
+		setModelPath(Resource::decode(serialised["modelPath"]));
 		setCullFace(serialised["cullFace"]);
 		Node::deserialise(serialised);
+
+		process();
 	}
 
 
-	Model::Model(const std::string &name, const fs::path &modelPath, ShaderSources *sources)
-		: Node(name), IMeshContainer(sources)
+	Model::Model(const std::string &name, const Resource &modelPath)
+		: Node(name), IMeshContainer()
 	{
 		m_type = "Model";
 		setModelPath(modelPath);
@@ -50,18 +47,22 @@ namespace Tank
 	}
 
 
-	void Model::setModelPath(const fs::path &path)
+	void Model::setModelPath(const Resource &res)
 	{
 		m_meshes.clear();
-		std::string modelPath = path.string();
+		m_modelPath = res;
+	}
+
+
+	void Model::process()
+	{
+		std::string modelPath = m_modelPath.resolvePathStr();
 
 		// Replace all backslashes with forward slashes
 		std::replace(modelPath.begin(), modelPath.end(), '\\', '/');
 
 		// Find the last forward slash, to distinguish between directory and filename
 		size_t indexOfLastSlash = modelPath.find_last_of("/");
-		m_modelDirectory = modelPath.substr(0, indexOfLastSlash);
-		m_modelFile = modelPath.substr(indexOfLastSlash + 1, (modelPath.length() - indexOfLastSlash) + 1);
 
 		Assimp::Importer importer;
 		const aiScene *scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -175,7 +176,8 @@ namespace Tank
 
 			if (!skipLoading)
 			{
-				auto tex = Texture::fromFile(m_modelDirectory / str.C_Str(), typeName);
+				TE_CORE_INFO(m_modelPath.resolvePathStr());
+				auto tex = Texture::fromFile(m_modelPath.resolvePath().parent_path() / str.C_Str(), typeName);
 
 				if (tex.has_value())
 				{
@@ -185,7 +187,7 @@ namespace Tank
 				}
 				else
 				{
-					TE_CORE_ERROR(std::format("Unable to load texture {}/{}", m_modelDirectory.string(), str.C_Str()));
+					TE_CORE_ERROR(std::format("Unable to load texture {}", (m_modelPath.resolvePath() / str.C_Str()).string()));
 				}
 			}
 		}

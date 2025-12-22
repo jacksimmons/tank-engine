@@ -20,18 +20,18 @@ namespace Tank
 	private:
 		bool m_enabled = true;
 		Node *m_node;
-		fs::path m_scriptPath;
+		Res m_path;
 		std::string m_scriptLines;
-		Script(Node *node, fs::path scriptPath, std::string scriptLines) : m_node(node), m_scriptPath(scriptPath), m_scriptLines(scriptLines) {}
+		Script(Node *node, const Res &scriptPath, std::string scriptLines) : m_node(node), m_path(scriptPath), m_scriptLines(scriptLines) {}
 	public:
 		~Script() = default;
 
-		static std::optional<std::unique_ptr<Script>> createScript(Node *node, fs::path path);
+		static std::optional<std::unique_ptr<Script>> createScript(Node *node, const Res &path);
 
 		void setEnabled(bool enabled) noexcept { m_enabled = enabled; }
 		bool getEnabled() const noexcept { return m_enabled; }
 
-		const fs::path &getScriptPath() const noexcept { return m_scriptPath; }
+		const Res &getPath() const noexcept { return m_path; }
 
 		void update();
 		void pushProperties(sol::state &);

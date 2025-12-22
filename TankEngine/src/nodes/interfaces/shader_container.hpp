@@ -1,6 +1,4 @@
 #pragma once
-#include <utils/getset.hpp>
-
 
 
 namespace Tank
@@ -17,14 +15,13 @@ namespace Tank
 	private:
 		std::unique_ptr<Shader> m_shader;
 	protected:
-		void initShaderContainer(ShaderSources *sources);
+		void initShaderContainer(ShaderSources sources);
 	public:
+		IShaderContainer();
+		virtual ~IShaderContainer();
 
-		IShaderContainer(ShaderSources *sources);
-		virtual ~IShaderContainer() = default;
 
-
-		void setShader(std::unique_ptr<Shader> shader) { m_shader = std::move(shader); };
-		const Shader &getShader() const { return *m_shader; }
+		void setShader(std::unique_ptr<Shader> shader);
+		const Shader &getShader() const;
 	};
 }

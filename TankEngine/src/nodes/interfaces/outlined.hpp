@@ -1,10 +1,13 @@
 #pragma once
-#include "shader.hpp"
 
 
 namespace Tank
 {
-	class Mesh; class Transform;
+	class Mesh;
+	class Transform;
+	class Shader;
+
+
 	class TANK_API IOutlined
 	{
 	private:
@@ -13,7 +16,7 @@ namespace Tank
 	protected:
 		IOutlined(const glm::vec4 &outlineCol = { 0.5f, 0, 0, 1 });
 	public:
-		virtual ~IOutlined() = default;
+		virtual ~IOutlined();
 
 		void setOutlineEnabled(bool enabled) noexcept { m_outlineEnabled = enabled; }
 		void predraw();

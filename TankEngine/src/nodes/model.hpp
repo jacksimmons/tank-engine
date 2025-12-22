@@ -22,25 +22,25 @@ namespace Tank
 		void deserialise(const json &serialised);
 
 	private:
-		fs::path m_modelDirectory;
-		fs::path m_modelFile;
+		Resource m_modelPath;
 		unsigned m_cullFace;
 	public:
 		Model(
 			const std::string &name = "Model",
-			const fs::path &modelPath = "models/backpack/backpack.obj",
-			ShaderSources *sources = nullptr
+			const Resource &modelPath = Res("models/backpack/backpack.obj", true)
 		);
 		virtual ~Model() = default;
 
-		void setModelPath(const fs::path &path);
-		fs::path getModelPath() const { return m_modelDirectory / m_modelFile; }
+		void setModelPath(const Resource &resource);
+		const Resource &getModelPath() const { return m_modelPath; }
 
 		unsigned getCullFace() const { return m_cullFace; }
 		void setCullFace(unsigned face) { m_cullFace = face; }
 
 		virtual void draw() override;
 		virtual void update() override;
+
+		void process();
 		void processNode(aiNode *node, const aiScene *scene);
 		std::unique_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene);
 		void processLights();

@@ -20,7 +20,7 @@ namespace Tank
 
 		std::string shaderType = sourceName + " shader";
 		ImGui::TextColored(Colour::TITLE, shaderType.c_str());
-		Widget::textInput(("##Inspector_" + shaderType).c_str(), source.location.string(),
+		Widget::textInput(("##Inspector_" + shaderType).c_str(), source.location.resolvePathStr(),
 			[&retPath](const std::string &newPath)
 			{
 				retPath = newPath;
@@ -30,13 +30,13 @@ namespace Tank
 		ImGui::SameLine();
 		if (ImGui::Button("Open in VSCode"))
 		{
-			system(std::format("code {}", ("shaders" / source.location).string()).c_str());
+			system(std::format("code {}", source.location.resolvePathStr()).c_str());
 		}
 
 		// Read the file if contents is not provided. If that read fails...
-		if (readFile && File::readLines("shaders" / source.location, sourceContents[sourceName]) != File::ReadResult::Success)
+		if (readFile && File::readLines(source.location.resolvePath(), sourceContents[sourceName]) != File::ReadResult::Success)
 		{
-			TE_CORE_TRACE(std::format("Couldn't read shader file {}", source.location.string()));
+			TE_CORE_TRACE(std::format("Couldn't read shader file {}", source.location.resolvePathStr()));
 			sourceContents[sourceName] = "<N/A>";
 		}
 
@@ -72,19 +72,19 @@ namespace Tank::Editor
 		std::string vertLoc = drawShaderSourceSection("Vertex", copy.vertex, readFile, previousContents);
 		if (!vertLoc.empty())
 		{
-			copy.vertex.location = vertLoc;
+			copy.vertex.location = Res::decode(vertLoc);
 		}
 
 		std::string fragLoc = drawShaderSourceSection("Fragment", copy.fragment, readFile, previousContents);
 		if (!fragLoc.empty())
 		{
-			copy.fragment.location = fragLoc;
+			copy.fragment.location = Res::decode(fragLoc);
 		}
 
 		std::string geomLoc = drawShaderSourceSection("Geometry", copy.geometry, readFile, previousContents);
 		if (!geomLoc.empty())
 		{
-			copy.geometry.location = geomLoc;
+			copy.geometry.location = Res::decode(geomLoc);
 		}
 
 		if (copy != sources)

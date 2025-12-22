@@ -27,3 +27,4 @@ namespace fs = std::filesystem;
 // Tank
 #include <core.hpp>
 #include <transform.hpp>
+#include <assets/resource.hpp>

@@ -6,23 +6,15 @@ namespace Tank
 {
 	json Shader::serialise(const Shader &shader)
 	{
-		json serialised;
+		json serialised = ShaderSources::serialise(shader.m_sources);
 		serialised["id"] = shader.m_id;
-		serialised["vert"] = shader.m_sources.vertex.location;
-		serialised["frag"] = shader.m_sources.fragment.location;
-		serialised["geom"] = shader.m_sources.geometry.location;
 		return serialised;
 	}
 
 
 	Shader *Shader::deserialise(const json &serialised)
 	{
-		ShaderSources sources;
-		sources.vertex.location = std::string{ serialised["vert"] };
-		sources.fragment.location = std::string { serialised["frag"] };
-		sources.geometry.location = std::string{ serialised["geom"] };
-
-		return new Shader(serialised["id"], sources);
+		return new Shader(serialised["id"], ShaderSources::deserialise(serialised));
 	}
 
 
@@ -57,7 +49,7 @@ namespace Tank
 		std::string shaderContents;
 
 		// Exit with error if any shader file cannot be read.
-		if (!readShaderFile(source.location, shaderContents, "Unspecified shader")) return false;
+		if (!readShaderFile(source.location.resolvePath(), shaderContents, "Unspecified shader")) return false;
 
 		std::optional<GLuint> shader = compileShader(shaderContents, source.glType, "Unspecified shader");
 
@@ -72,9 +64,9 @@ namespace Tank
 
 	bool Shader::readShaderFile(const fs::path &shaderPath, std::string &shaderContents, const std::string &shaderType)
 	{
-		if (File::readLines(fs::current_path() / "shaders" / shaderPath, shaderContents) != File::ReadResult::Success)
+		if (File::readLines(shaderPath, shaderContents) != File::ReadResult::Success)
 		{
-			std::string errMsg = "Failed to read " + shaderType + " shader: " + (fs::current_path() / "shaders" / shaderPath).string();
+			std::string errMsg = "Failed to read " + shaderType + " shader: " + shaderPath.string();
 			TE_CORE_ERROR(errMsg);
 			return false;
 		}

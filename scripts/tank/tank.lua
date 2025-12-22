@@ -1,5 +1,0 @@
-local tank = {}
-
-
-
-return tank

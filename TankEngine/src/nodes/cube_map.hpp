@@ -9,6 +9,7 @@ namespace Tank
 	class Texture;
 	class Shader;
 	struct ShaderSource;
+	struct ShaderSources;
 	namespace Reflect { class NodeFactory; }
 
 	class TANK_API CubeMap : public Node, public IShaderContainer
@@ -22,15 +23,22 @@ namespace Tank
 		unsigned m_vao;
 		unsigned m_vbo;
 		std::shared_ptr<Texture> m_texture;
-		std::array<std::string, 6> m_texturePaths;
+		std::array<Resource, 6> m_texturePaths;
 	public:
 		CubeMap(
 			const std::string &name = "CubeMap",
-			ShaderSources *sources = nullptr,
-			const std::array<std::string, 6> &textureNames = { "skybox/right.jpg", "skybox/left.jpg", "skybox/bottom.jpg", "skybox/top.jpg", "skybox/front.jpg", "skybox/back.jpg" }
+			const std::array<Resource, 6> &textureNames =
+			{
+				Res("textures/skybox/right.jpg", true),
+				Res("textures/skybox/left.jpg", true),
+				Res("textures/skybox/bottom.jpg", true),
+				Res("textures/skybox/top.jpg", true),
+				Res("textures/skybox/front.jpg", true),
+				Res("textures/skybox/back.jpg", true)
+			}
 		);
 
-		void setTexPaths(const std::array<std::string, 6> &texPaths);
+		void setTexPaths(const std::array<Resource, 6> &texPaths);
 		virtual void draw() override;
 
 	private:

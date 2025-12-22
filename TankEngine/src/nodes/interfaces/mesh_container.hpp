@@ -15,9 +15,7 @@ namespace Tank
 		std::vector<std::unique_ptr<Mesh>> m_meshes;
 
 
-		IMeshContainer(ShaderSources *sources) : IOutlined(), IShaderContainer(sources)
-		{
-		}
+		IMeshContainer();
 	public:
 		virtual ~IMeshContainer() = default;
 		

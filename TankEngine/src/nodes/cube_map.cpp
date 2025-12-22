@@ -15,7 +15,14 @@ namespace Tank
 	json CubeMap::serialise()
 	{
 		json serialised = Node::serialise();
-		serialised["cubeMap"] = m_texturePaths;
+
+		std::vector<std::string> encodedPaths;
+		for (const Res &res : m_texturePaths)
+		{
+			encodedPaths.push_back(Res::encode(res));
+		}
+		serialised["cubeMap"] = encodedPaths;
+
 		serialised["shader"] = Shader::serialise(getShader());
 		return serialised;
 	}
@@ -23,21 +30,27 @@ namespace Tank
 
 	void CubeMap::deserialise(const json &serialised)
 	{
-		ShaderSources sources;
-		sources.vertex.location = std::string{ serialised["shader"]["vert"] };
-		sources.fragment.location = std::string{ serialised["shader"]["frag"] };
-		sources.geometry.location = std::string{ serialised["shader"]["geom"] };
+		initShaderContainer(ShaderSources::deserialise(serialised["shader"]));
 
-		initShaderContainer(&sources);
-		setTexPaths(serialised["cubeMap"]);
+		std::array<Res, 6> decodedPaths;
+		for (int i = 0; i < 6; i++)
+		{
+			decodedPaths[i] = Res::decode(serialised["cubeMap"][i]);
+		}
+		setTexPaths(decodedPaths);
+		
 		Node::deserialise(serialised);
 	}
 
 
-	CubeMap::CubeMap(const std::string &name, ShaderSources *sources, const std::array<std::string, 6> &textureNames)
-		: Node(name), IShaderContainer(sources)
+	CubeMap::CubeMap(const std::string &name, const std::array<Resource, 6> &texturePaths)
+		: Node(name), IShaderContainer()
 	{
 		m_type = "CubeMap";
+		ShaderSources sources;
+		sources.vertex.location = Res("shaders/skybox.vert", true);
+		sources.fragment.location = Res("shaders/skybox.frag", true);
+		initShaderContainer(sources);
 
 		glGenVertexArrays(1, &m_vao);
 		glGenBuffers(1, &m_vbo);
@@ -48,11 +61,11 @@ namespace Tank
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-		setTexPaths(textureNames);
+		setTexPaths(texturePaths);
 	}
 
 
-	void CubeMap::setTexPaths(const std::array<std::string, 6> &texPaths)
+	void CubeMap::setTexPaths(const std::array<Resource, 6> &texPaths)
 	{
 		m_texturePaths = texPaths;
 		const Shader &shader = getShader();
@@ -60,7 +73,7 @@ namespace Tank
 		shader.use();
 		{
 			int texNum = Texture::getTexCount();
-			auto tex = Texture::cubeMapFromFile(fs::current_path() / "textures", m_texturePaths, "cubeMap");
+			auto tex = Texture::cubeMapFromFile(m_texturePaths, "cubeMap");
 			if (tex.has_value())
 			{
 				m_texture = tex.value();

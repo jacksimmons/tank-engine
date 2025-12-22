@@ -12,19 +12,19 @@ namespace Tank
 		virtual void deserialise(const json &) override;
 
 	private:
-		fs::path m_audioPath;
+		Resource m_audioPath;
 		ma_sound m_currentSound;
 		bool m_hasSound = false;
 
 	public:
 		Audio(
 			const std::string &name = "Audio",
-			const fs::path &audioPath = fs::current_path() / "audio/test.wav"
+			const Resource &audioPath = Resource("audio/test.wav", true)
 		);
 		~Audio();
 
-		void setAudioPath(const fs::path &path) { m_audioPath = path; updateSound(); };
-		const fs::path &getAudioPath() const { return m_audioPath; };
+		void setAudioPath(const Resource &path) { m_audioPath = path; };
+		const Resource &getAudioPath() const { return m_audioPath; };
 
 		void updateSound();
 		void play();

@@ -1,8 +1,9 @@
 #include <glad/glad.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "texture.hpp"
-#include "nodes/model.hpp"
+#include <log.hpp>
+#include <texture.hpp>
+#include <nodes/model.hpp>
 
 
 namespace Tank
@@ -89,8 +90,7 @@ namespace Tank
 	}
 
 
-	std::optional<std::shared_ptr<Texture>> Texture::cubeMapFromFile(const fs::path &directory, const std::array<std::string, 6> &filenames,
-		const std::string &texType)
+	std::optional<std::shared_ptr<Texture>> Texture::cubeMapFromFile(const std::array<Resource, 6> &paths, const std::string &texType)
 	{
 		//GLint maxTextureUnits;
 		//glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
@@ -104,12 +104,11 @@ namespace Tank
 		for (int i = 0; i < 6; i++)
 		{
 			int w, h, numChannels;
-			unsigned char *data = stbi_load((directory / filenames[i]).string().c_str(), &w, &h, &numChannels, 0); // +stbi1
+			unsigned char *data = stbi_load(paths[i].resolvePathStr().c_str(), &w, &h, &numChannels, 0); // +stbi1
 
 			if (!data)
 			{
-				TE_CORE_ERROR("Failed to load texture from image. File:");
-				TE_CORE_ERROR(filenames[i]);
+				TE_CORE_ERROR(std::format("CubeMap > Failed to load texture from image: {}", paths[i].resolvePathStr()));
 				stbi_image_free(data); // -stbi1
 				return {};
 			}
@@ -134,9 +133,9 @@ namespace Tank
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-		TE_CORE_INFO(std::format("Added GL_TEXTURE_CUBE_MAP texture (first: {}/{}) with ID {}", directory.string(), filenames[0], texID));
+		TE_CORE_INFO(std::format("Added GL_TEXTURE_CUBE_MAP texture (first: {}) with ID {}", paths[0].resolvePathStr(), texID));
 
-		return std::shared_ptr<Texture>(new Texture(texID, GL_TEXTURE_CUBE_MAP, texType, directory / filenames[0]));
+		return std::shared_ptr<Texture>(new Texture(texID, GL_TEXTURE_CUBE_MAP, texType, paths[0].resolvePath()));
 	}
 
 

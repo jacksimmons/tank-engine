@@ -17,16 +17,17 @@ namespace Tank::Editor
 	void _NodeInspector<Audio>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Audio File");
-		auto &audioPath = m_node->getAudioPath();
+		std::string audioPath = Res::encode(m_node->getAudioPath());
 		Widget::textInput(
 			"##Inspector_Audio_File",
-			audioPath.string(),
-			[this](const std::string &modified)
+			audioPath,
+			[this, &audioPath](const std::string &modified)
 			{
-				if (fs::path{ modified } == m_node->getAudioPath()) return;
-				m_node->setAudioPath(modified);
+				if (modified == audioPath) return;
+				m_node->setAudioPath(Resource::decode(modified));
+				m_node->updateSound();
 			},
-			audioPath.string()
+			audioPath
 		);
 
 		ImGui::SameLine();
@@ -36,12 +37,13 @@ namespace Tank::Editor
 			{
 				auto fileDialog = std::make_unique<_FileDialog>(
 					g_name,
-					fs::current_path(),
-					audioPath.parent_path(),
+					Resource::getProjPath(),
+					Resource::getProjPath(),
 					_FileDialogTarget::File,
 					[this](const fs::path &path)
 					{
 						m_node->setAudioPath(path);
+						m_node->updateSound();
 					}
 				);
 

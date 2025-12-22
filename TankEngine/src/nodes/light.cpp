@@ -23,7 +23,7 @@ namespace Tank
 		}
 		m_scene->addLight(this);
 
-		auto gizmo = std::make_unique<Sprite>("Gizmo", fs::current_path() / "textures/gizmo/dir_light.png");
+		auto gizmo = std::make_unique<Sprite>("Gizmo", Res("textures/gizmo/dir_light.png", true));
 		addChild(std::move(gizmo));
 	}
 

@@ -20,14 +20,15 @@ namespace Tank::Editor
 	void _NodeInspector<Model>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Model File");
-		std::string modelPath = m_node->getModelPath().string();
+		std::string modelPath = Res::encode(m_node->getModelPath());
 		Widget::textInput(
 			"##Inspector_Model_File",
 			modelPath,
-			[this](const std::string &modified)
+			[this, &modelPath](const std::string &modified)
 			{
-				if (fs::path{ modified } == m_node->getModelPath()) return;
-				m_node->setModelPath(modified);
+				if (modified == modelPath) return;
+				m_node->setModelPath(Resource::decode(modified));
+				m_node->process();
 			},
 			modelPath
 		);
@@ -39,12 +40,13 @@ namespace Tank::Editor
 			{
 				auto fileDialog = std::make_unique<_FileDialog>(
 					g_name,
-					fs::current_path(),
-					fs::path(modelPath).parent_path(),
+					Resource::getProjPath(),
+					Resource::getProjPath(),
 					_FileDialogTarget::File,
 					[this](const fs::path &path)
 					{
 						m_node->setModelPath(path);
+						m_node->process();
 					}
 				);
 

@@ -8,7 +8,7 @@ namespace Tank
 	{
 		glType = GL_VERTEX_SHADER;
 		glID = 0;
-		location = ".";
+		location = Resource("", false);
 		enabled = false;
 	}
 
@@ -24,7 +24,10 @@ namespace Tank
 
 	bool ShaderSource::operator==(const ShaderSource &other)
 	{
-		return glType == other.glType && glID == other.glID && location == other.location && enabled == other.enabled;
+		return glType == other.glType
+			&& glID == other.glID
+			&& location == other.location
+			&& enabled == other.enabled;
 	}
 
 
@@ -32,9 +35,11 @@ namespace Tank
 	{
 		vertex.glType = GL_VERTEX_SHADER;
 		vertex.enabled = true;
+		vertex.location = Res("shaders/shader.vert", true);
 
 		fragment.glType = GL_FRAGMENT_SHADER;
 		fragment.enabled = true;
+		fragment.location = Res("shaders/shader.frag", true);
 
 		geometry.glType = GL_GEOMETRY_SHADER;
 	}

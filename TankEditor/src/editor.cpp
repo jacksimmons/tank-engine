@@ -75,17 +75,7 @@ namespace Tank::Editor
 			{
 				const std::string &name = dialog->getName();
 
-				if (name == "Open Project")
-				{
-					// Load scene if it was valid, and close the popup either way
-					if (Scene *rawScene = ::Tank::Serialisation::loadScene(path.string(), m_factory.get()))
-					{
-						std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
-						loadScene(std::move(scene));
-						postSceneSetup();
-					}
-				}
-				else if (name == "Save Project")
+				if (name == "Save Project")
 				{
 					Serialisation::saveScene(Scene::getActiveScene(), path);
 				}
@@ -121,19 +111,21 @@ namespace Tank::Editor
 					new _FileDialog("New Project", "", fs::current_path().root_directory(), _FileDialogTarget::Directory,
 					[this](const fs::path &path)
 					{
-						if (fs::is_empty(path))
+						if (!fs::is_empty(path))
 						{
 							TE_CORE_ERROR(std::format("New Project > {} is not empty.", path.string()));
 							return;
 						}
 
-						fs::path scenePath = path / "scene.json";
-						fs::copy_file("scene.json", scenePath);
+						fs::path projectPath = path;
+						fs::path scenePath = projectPath / "scene.json";
+						fs::copy("DemoProject", projectPath);
 
 						// Load scene if it was valid, and close the popup either way
 						if (Scene *rawScene = ::Tank::Serialisation::loadScene(scenePath.string(), m_factory.get()))
 						{
 							std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
+							loadProject(projectPath);
 							loadScene(std::move(scene));
 							postSceneSetup();
 						}
@@ -151,7 +143,19 @@ namespace Tank::Editor
 			[this]()
 			{
 				std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-					new _FileDialog("Open Project", "", fs::current_path(), _FileDialogTarget::File)
+					new _FileDialog("Open Project", fs::current_path().root_path(), fs::current_path(), _FileDialogTarget::File,
+					[this](const fs::path &path)
+					{
+						loadProject(path.parent_path());
+
+						// Load scene if it was valid, and close the popup either way
+						if (Scene *rawScene = ::Tank::Serialisation::loadScene(path.string(), m_factory.get()))
+						{
+							std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
+							loadScene(std::move(scene));
+							postSceneSetup();
+						}
+					})
 				);
 				m_initUI->addChild(std::move(fileDialog));
 			}
@@ -163,7 +167,11 @@ namespace Tank::Editor
 			[this]()
 			{
 				std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-					new _FileDialog("Save Project", fs::current_path(), fs::current_path(), _FileDialogTarget::File)
+					new _FileDialog("Save Project", "", fs::current_path().root_directory(), _FileDialogTarget::File,
+					[this](const fs::path &path)
+					{
+						Serialisation::saveScene(Scene::getActiveScene(), path);
+					})
 				);
 				m_initUI->addChild(std::move(fileDialog));
 			}
@@ -252,68 +260,6 @@ namespace Tank::Editor
 		m_system.reset();
 		m_system = std::make_unique<Node>("Editor");
 		m_system->addChild(std::move(scene));
-	}
-
-
-	void EditorApp::loadDemoScene()
-	{
-		// Create nodes
-		{
-			auto scene = std::make_unique<::Tank::Scene>();
-			{
-				auto camera = std::make_unique<::Tank::Camera>();
-				scene->setActiveCamera(dynamic_cast<::Tank::Camera*>(camera.get()));
-				scene->addChild(std::move(camera));
-			}
-			{
-				ShaderSources sources;
-				sources.vertex.location = "skybox.vert";
-				sources.fragment.location = "skybox.frag";
-				scene->addChild(std::make_unique<::Tank::CubeMap>("CubeMap", &sources));
-			}
-			{
-				ShaderSources sources;
-				sources.vertex.location = "shader.vert";
-				sources.fragment.location = "shader.frag";
-
-				auto doom = std::unique_ptr<::Tank::Model>(new Model("Doom", fs::current_path() / "models/doom/doom_E1M1.obj", &sources));
-				doom->getTransform()->setLocalTranslation({ 0, 0, 0 });
-				scene->addChild(std::move(doom));
-
-				auto player = std::unique_ptr<::Tank::Model>(new Model("Player", fs::current_path() / "models/player/Fat Banjo and Kazooie.obj", &sources));
-				player->addScript(Script::createScript(player.get(), "player.lua").value());
-				player->setCullFace(GL_FRONT);
-				scene->addChild(std::move(player));
-
-				//auto backpackPhysics = std::unique_ptr<::Tank::PhysicsBody>(new PhysicsBody("BackpackBody", 1e15f));
-				//auto backpack = std::unique_ptr<::Tank::Model>(new Model("Backpack", fs::current_path() / "models/backpack/backpack.obj", &sources));
-				//backpack->getTransform()->setLocalScale({ 100, 100, 100 });
-				//backpackPhysics->getTransform()->setLocalTranslation({ 0, 0, 200 });
-				//backpackPhysics->addChild(std::move(backpack));
-				//scene->addChild(std::move(backpack));
-
-				//auto spritePhysics = std::unique_ptr<::Tank::PhysicsBody>(new PhysicsBody("SpriteBody", 1e15f));
-				//auto sprite = std::unique_ptr<::Tank::Sprite>(new Sprite("Sprite", fs::current_path() / "textures/awesomeface.png", &sources));
-				//spritePhysics->addChild(std::move(sprite));
-				//scene->addChild(std::move(sprite));
-
-				auto audio = std::make_unique<::Tank::Audio>();
-				scene->addChild(std::move(audio));
-			}
-
-			Scene::setActiveScene(scene.get());
-			loadScene(std::move(scene));
-
-			// Lights can only be added after scene load
-			std::string name = "DirLight";
-			auto light = std::make_unique<::Tank::DirLight>(name,
-				glm::vec3{ 0.0f, -1.0f, 0.0f },
-				glm::vec3{ 0.02f, 0.02f, 0.02f },
-				glm::vec3{ 0.2f, 0.2f, 0.2f },
-				glm::vec3{ 0.1f, 0.1f, 0.1f }
-			);
-			Scene::getActiveScene()->addChild(std::move(light));
-		}
 	}
 
 

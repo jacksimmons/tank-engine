@@ -69,6 +69,7 @@ namespace Tank::Editor
 			ImGui::TableNextColumn();
 			if (ImGui::Button("../"))
 			{
+				m_currentTarget = "";
 				m_currentDirectory = m_currentDirectory.parent_path();
 				TE_CORE_INFO(m_currentDirectory.string());
 				ImGui::EndTable();
@@ -157,7 +158,8 @@ namespace Tank::Editor
 			ImGui::TableNextColumn();
 			if (ImGui::Selectable(subdir.path.string().c_str()))
 			{
-				// Update current directory.
+				// Clear target and update current directory.
+				m_currentTarget = "";
 				m_currentDirectory = subdir.path;
 			}
 
@@ -198,25 +200,61 @@ namespace Tank::Editor
 	{
 		// If the current target is non-empty
 		std::string inputFieldHint;
+		std::string inputFieldContents;
 		fs::path currentTarget = getCurrentTarget();
-		if (!currentTarget.empty()) inputFieldHint = currentTarget.string();
-		else inputFieldHint = "Enter name...";
-		Widget::textInput(std::string{ getName() + "##FILE_DIALOG_SEARCH_TERM" }.c_str(), inputFieldHint.c_str(), [this](const std::string &modified)
+		if (!currentTarget.empty())
+		{
+			inputFieldContents = currentTarget.string();
+		}
+		else
+		{
+			inputFieldHint = "Enter name...";
+		}
+		Widget::textInput("##FILE_DIALOG_SEARCH_TERM", inputFieldHint.c_str(), [this](const std::string &modified)
 		{
 			m_searchTerm = modified;
-			m_currentTarget = m_currentDirectory / m_searchTerm;
-			updateDirectoryItems();
-		});
+		
+			// Reject non-existent paths
+			if (!fs::exists(m_currentDirectory / m_searchTerm))
+			{
+				return;
+			}
 
-		// If a target is selected, show "Select" button which will close the dialog when pressed.
+			// Update the target to the search term
+			m_currentTarget = m_currentDirectory / m_searchTerm;
+
+			// If the user went into a subdir, update the current dir.
+			m_currentDirectory = m_currentTarget.parent_path();
+
+			// Re-render directory items
+			updateDirectoryItems();
+		}, inputFieldContents.c_str());
+
 		ImGui::SameLine();
-		if (!currentTarget.empty() && ImGui::SmallButton(std::string{ "Select##FILE_DIALOG_TARGET_SELECT(" + getName() + ")" }.c_str()))
+		// If a target is selected, and the target exists, show "Select" button which will close the dialog when pressed.
+		if (!currentTarget.empty() && fs::exists(getCurrentTarget()) && ImGui::SmallButton(std::string{ "Select##FILE_DIALOG_TARGET_SELECT(" + getName() + ")" }.c_str()))
 		{
 			// Select the current directory as a target, when target is a directory.
 			// Otherwise, select the current target.
-			EventManager::invokeEvent("FileDialog.ItemSelected", this, currentTarget);
-			m_onSelected(currentTarget);
+			EventManager::invokeEvent("FileDialog.ItemSelected", this, getCurrentTarget());
+			m_onSelected(getCurrentTarget());
 			destroy();
+		}
+
+		// Otherwise, if the target isn't empty, but doesn't exist, offer to make them a New Folder, then scope to it.
+		ImGui::SameLine();
+		if (!m_searchTerm.empty() && !fs::exists(m_searchTerm) && ImGui::SmallButton(std::string{ "New Folder##FILE_DIALOG_TARGET_NEW_FOLDER(" + getName() + ")" }.c_str()))
+		{
+			fs::path path = fs::path(m_searchTerm);
+			fs::path dir;
+			if (dir.has_parent_path()) dir = path.parent_path();
+			else dir = path;
+			
+			fs::create_directories(dir);
+
+			m_currentTarget = path;
+			m_currentDirectory = dir;
+			m_searchTerm = "";
 		}
 	}
 

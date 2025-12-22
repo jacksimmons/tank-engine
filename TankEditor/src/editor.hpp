@@ -32,7 +32,6 @@ namespace Tank
 			EditorApp();
 			~EditorApp();
 			void loadScene(std::unique_ptr<Scene> scene);
-			void loadDemoScene();
 			void postSceneSetup();
 		protected:
 			virtual void step() override;

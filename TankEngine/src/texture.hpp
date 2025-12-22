@@ -47,7 +47,6 @@ namespace Tank
 
 		static void initSTBI();
 		static std::optional<std::shared_ptr<Texture>> fromFile(const fs::path &path, const std::string &texType);
-		static std::optional<std::shared_ptr<Texture>> cubeMapFromFile(const fs::path &directory, const std::array<std::string, 6> &filenames,
-			const std::string &texType);
+		static std::optional<std::shared_ptr<Texture>> cubeMapFromFile(const std::array<Resource, 6> &paths, const std::string &texType);
 	};
 }

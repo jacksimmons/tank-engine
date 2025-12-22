@@ -11,8 +11,8 @@ namespace Tank
 	IOutlined::IOutlined(const glm::vec4 &outlineCol)
 	{
 		ShaderSources sources;
-		sources.vertex.location = "shader.vert";
-		sources.fragment.location = "outline/single_colour.frag";
+		sources.vertex.location = Res("shaders/shader.vert", true);
+		sources.fragment.location = Res("shaders/outline/single_colour.frag", true);
 		auto shader = Shader::createShader(sources);
 
 		if (shader.has_value())
@@ -29,6 +29,9 @@ namespace Tank
 		m_outlineShader->unuse();
 		m_outlineEnabled = false;
 	}
+
+
+	IOutlined::~IOutlined() = default;
 
 
 	/// <summary>

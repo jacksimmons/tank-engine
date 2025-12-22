@@ -17,7 +17,6 @@
 #include "nodes/audio.hpp"
 #include "reflection/node_factory.hpp"
 #include "static/time.hpp"
-#include "utils/getset.hpp"
 
 
 // Enable debug output
@@ -178,6 +177,13 @@ namespace Tank
 		ImGui::End();
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+
+	void Application::loadProject(const fs::path &dir)
+	{
+		// Update where to load project resources from
+		Resource::s_projectPath = dir;
 	}
 
 

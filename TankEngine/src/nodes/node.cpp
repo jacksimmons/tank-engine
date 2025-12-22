@@ -271,12 +271,12 @@ namespace Tank
 	}
 
 
-	std::vector<fs::path> Node::getScriptPaths()
+	std::vector<Res> Node::getScriptPaths()
 	{
-		std::vector<fs::path> scriptPaths;
+		std::vector<Res> scriptPaths;
 		for (const auto &script : m_scripts)
 		{
-			scriptPaths.push_back(script->getScriptPath());
+			scriptPaths.push_back(script->getPath());
 		}
 		return scriptPaths;
 	}
@@ -325,7 +325,7 @@ json Tank::Node::serialise()
 	std::vector<std::string> scriptNames;
 	for (const auto &script : m_scripts)
 	{
-		scriptNames.push_back(script->getScriptPath().string());
+		scriptNames.push_back(Res::encode(script->getPath()));
 	}
 	serialised["scripts"] = scriptNames;
 
@@ -341,6 +341,6 @@ void Tank::Node::deserialise(const json &serialised)
 
 	for (const auto &script : serialised["scripts"].get<std::vector<std::string>>())
 	{
-		addScript(Script::createScript(this, script).value());
+		addScript(Script::createScript(this, Res::decode(script)).value());
 	}
 }

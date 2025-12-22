@@ -9,7 +9,7 @@ namespace Tank
 	//
 	void Audio::deserialise(const json &serialised)
 	{
-		m_audioPath = fs::path(std::string(serialised["audioPath"]));
+		m_audioPath = Resource::decode(serialised["audioPath"]);
 
 		Node::deserialise(serialised);
 	}
@@ -17,7 +17,7 @@ namespace Tank
 	json Audio::serialise()
 	{
 		json serialised = Node::serialise();
-		serialised["audioPath"] = m_audioPath.string();
+		serialised["audioPath"] = Resource::encode(m_audioPath);
 
 		return serialised;
 	}
@@ -26,11 +26,11 @@ namespace Tank
 	//
 	// =-=-=-=-= Instance =-=-=-=-=
 	//
-	Audio::Audio(const std::string &name, const fs::path &audioPath)
+	Audio::Audio(const std::string &name, const Resource &audioPath)
 		: Node(name)
 	{
 		m_type = "Audio";
-		setAudioPath(audioPath);
+		m_audioPath = audioPath;
 	}
 
 
@@ -45,19 +45,19 @@ namespace Tank
 	{
 		if (m_hasSound) ma_sound_uninit(&m_currentSound);
 
-		ma_result result = ma_sound_init_from_file(AudioEngine::maEngine(), m_audioPath.string().c_str(), 0, NULL, NULL, &m_currentSound);
-		if (!AudioEngine::handleResult(result, std::format("Failed to update sound with result {}. File: {}", (int)result, m_audioPath.string()))) return;
+		ma_result result = ma_sound_init_from_file(AudioEngine::maEngine(), m_audioPath.resolvePathStr().c_str(), 0, NULL, NULL, &m_currentSound);
+		if (!AudioEngine::handleResult(result, std::format("Failed to update sound with result {}. File: {}", (int)result, m_audioPath.resolvePathStr()))) return;
 
 		m_hasSound = true;
-		TE_CORE_INFO("Successfully updated sound to " + m_audioPath.string());
+		TE_CORE_INFO("Successfully updated sound to " + m_audioPath.resolvePathStr());
 	}
 
 
 	void Audio::play()
 	{
 		ma_result result = ma_sound_start(&m_currentSound);
-		if (!AudioEngine::handleResult(result, std::format("Failed to play sound with result {}. File: {}", (int)result, m_audioPath.string()))) return;
+		if (!AudioEngine::handleResult(result, std::format("Failed to play sound with result {}. File: {}", (int)result, m_audioPath.resolvePathStr()))) return;
 
-		TE_CORE_INFO("Successfully played sound " + m_audioPath.string());
+		TE_CORE_INFO("Successfully played sound " + m_audioPath.resolvePathStr());
 	}
 }

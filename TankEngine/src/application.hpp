@@ -34,6 +34,7 @@ namespace Tank
 		void endImGui();
 		virtual void uiStep() {};
 		virtual void step() {};
+		virtual void loadProject(const fs::path &);
 
 		Application(
 			bool gui = false,

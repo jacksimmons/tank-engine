@@ -1,4 +1,5 @@
 #include <imgui.h>
+#include <glm/gtx/string_cast.hpp>
 #include <nodes/interfaces/mesh_container.hpp>
 #include <shapes/vertex.hpp>
 #include "node_inspector.hpp"
