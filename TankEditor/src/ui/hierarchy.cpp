@@ -153,9 +153,27 @@ namespace Tank::Editor
 				if (ImGui::MenuItem("Sprite (2D)")) addNewNode(node, new Sprite());
 				if (ImGui::MenuItem("Model (3D)")) addNewNode(node, new Model());
 				if (ImGui::MenuItem("Skybox (CubeMap)")) addNewNode(node, new CubeMap());
-				if (ImGui::MenuItem("Point Light")) addNewNode(node, new PointLight());
-				if (ImGui::MenuItem("Directional Light")) addNewNode(node, new DirLight());
-				if (ImGui::MenuItem("Camera")) addNewNode(node, new Camera());
+				if (ImGui::MenuItem("Point Light"))
+				{
+					PointLight *pl = new PointLight();
+					auto gizmo = std::make_unique<Sprite>("Gizmo", Res("textures/gizmo/dir_light.png", true));
+					pl->addChild(std::move(gizmo));
+					addNewNode(node, pl);
+				}
+				if (ImGui::MenuItem("Directional Light"))
+				{
+					DirLight *dl = new DirLight();
+					auto gizmo = std::make_unique<Sprite>("Gizmo", Res("textures/gizmo/dir_light.png", true));
+					dl->addChild(std::move(gizmo));
+					addNewNode(node, dl);
+				}
+				if (ImGui::MenuItem("Camera"))
+				{
+					Camera *cam = new Camera();
+					auto gizmo = std::make_unique<Sprite>("Gizmo", Res("textures/gizmo/camera.png", true));
+					cam->addChild(std::move(gizmo));
+					addNewNode(node, cam);
+				}
 				if (ImGui::BeginMenu("Collider"))
 				{
 					if (ImGui::MenuItem("Sphere")) addNewNode(node, new Collider(

@@ -96,8 +96,8 @@ namespace Tank::Editor
 		{
 			ImGui::TextColored(Colour::DISABLED, "None");
 		}
-		int i = 0;
-		for (Res path : scriptPaths)
+
+		for (const Res &path : scriptPaths)
 		{
 			ImGui::Text(Res::encode(path).c_str());
 			//Widget::textInput(
@@ -110,12 +110,11 @@ namespace Tank::Editor
 			//			m_node->addScript(std::move(script.value()));
 			//	}
 			//);
-			i++;
 		}
 		// Allow user to add a new script
 		Widget::textInput(
-			std::format("##Inspector_Add_Script", i).c_str(),
-			"New Script",
+			"##Inspector_Add_Script",
+			"Add Script",
 			[this, &scriptPaths](std::string newPath)
 			{
 				auto script = Script::createScript(m_node, Res::decode(newPath));

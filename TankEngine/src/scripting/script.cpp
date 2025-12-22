@@ -16,11 +16,11 @@ namespace Tank
 	std::optional<std::unique_ptr<Script>> Script::createScript(Node *node, const Res &path)
 	{
 		// Try to load lua file
-		ScriptData data = ScriptManager::addScript(path.resolvePath());
+		ScriptData data = ScriptManager::addScript(path);
 		if (data.getContents() == "") return {};
 
 		// Interpret script with sol2
-		Script *script = new Script(node, path.resolvePath(), data.getContents());
+		Script *script = new Script(node, path, data.getContents());
 		return std::unique_ptr<Script>(script);
 	}
 

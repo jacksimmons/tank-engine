@@ -12,16 +12,16 @@ namespace Tank
 		std::string m_lastContents;
 	public:
 		ScriptData() : m_lastContents("") {}
-		ScriptData(fs::path path)
+		ScriptData(const Res &path)
 		{
 			load(path);
 		}
 
-		void load(fs::path path);
+		void load(const Res &path);
 		const std::string &getContents() const { return m_lastContents; }
 	};
 
-	typedef std::unordered_map<fs::path, ScriptData> ScriptMap;
+	typedef std::unordered_map<std::string, ScriptData> ScriptMap;
 
 	/// <summary>
 	/// Stores all loaded scripts.
@@ -33,8 +33,8 @@ namespace Tank
 	public:
 		static const ScriptMap &getScripts() { return s_loadedScripts; }
 
-		static ScriptData addScript(fs::path path);
-		static ScriptData updateScript(fs::path path);
-		static bool popScript(fs::path path);
+		static ScriptData addScript(const Res &path);
+		static ScriptData updateScript(const Res &path);
+		static bool popScript(const Res &path);
 	};
 }

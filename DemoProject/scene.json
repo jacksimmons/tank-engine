@@ -16,111 +16,12 @@
                     "name": "Gizmo",
                     "scripts": [],
                     "shader": {
-                        "frag": "[ENGINE]shaders/shader.frag",
+                        "frag": "{engine}shaders/shader.frag",
                         "geom": "",
-                        "id": 5,
-                        "vert": "[ENGINE]shaders/shader.vert"
+                        "id": 8,
+                        "vert": "{engine}shaders/shader.vert"
                     },
-                    "texPath": "[ENGINE]textures/gizmo/camera.png",
-                    "transform": {
-                        "rotation": {
-                            "w": 1.0,
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        },
-                        "translation": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        }
-                    },
-                    "type": "Sprite",
-                    "visible": true
-                },
-                {
-                    "children": [],
-                    "enabled": true,
-                    "name": "Gizmo (0)",
-                    "scripts": [],
-                    "shader": {
-                        "frag": "[ENGINE]shaders/shader.frag",
-                        "geom": "",
-                        "id": 14,
-                        "vert": "[ENGINE]shaders/shader.vert"
-                    },
-                    "texPath": "[ENGINE]textures/gizmo/camera.png",
-                    "transform": {
-                        "rotation": {
-                            "w": 1.0,
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        },
-                        "translation": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        }
-                    },
-                    "type": "Sprite",
-                    "visible": true
-                },
-                {
-                    "children": [],
-                    "enabled": true,
-                    "name": "Gizmo (0) (0)",
-                    "scripts": [],
-                    "shader": {
-                        "frag": "[ENGINE]shaders/shader.frag",
-                        "geom": "",
-                        "id": 22,
-                        "vert": "[ENGINE]shaders/shader.vert"
-                    },
-                    "texPath": "[ENGINE]textures/gizmo/camera.png",
-                    "transform": {
-                        "rotation": {
-                            "w": 1.0,
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        },
-                        "translation": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        }
-                    },
-                    "type": "Sprite",
-                    "visible": true
-                },
-                {
-                    "children": [],
-                    "enabled": true,
-                    "name": "Gizmo (0) (0) (0)",
-                    "scripts": [],
-                    "shader": {
-                        "frag": "[ENGINE]shaders/shader.frag",
-                        "geom": "",
-                        "id": 30,
-                        "vert": "[ENGINE]shaders/shader.vert"
-                    },
-                    "texPath": "[ENGINE]textures/gizmo/camera.png",
+                    "texPath": "{engine}textures/gizmo/camera.png",
                     "transform": {
                         "rotation": {
                             "w": 1.0,
@@ -262,21 +163,21 @@
         {
             "children": [],
             "cubeMap": [
-                "[ENGINE]textures/skybox/right.jpg",
-                "[ENGINE]textures/skybox/left.jpg",
-                "[ENGINE]textures/skybox/bottom.jpg",
-                "[ENGINE]textures/skybox/top.jpg",
-                "[ENGINE]textures/skybox/front.jpg",
-                "[ENGINE]textures/skybox/back.jpg"
+                "{engine}textures/skybox/right.jpg",
+                "{engine}textures/skybox/left.jpg",
+                "{engine}textures/skybox/bottom.jpg",
+                "{engine}textures/skybox/top.jpg",
+                "{engine}textures/skybox/front.jpg",
+                "{engine}textures/skybox/back.jpg"
             ],
             "enabled": true,
             "name": "CubeMap",
             "scripts": [],
             "shader": {
-                "frag": "[ENGINE]shaders/skybox.frag",
+                "frag": "{engine}shaders/skybox.frag",
                 "geom": "",
-                "id": 35,
-                "vert": "[ENGINE]shaders/skybox.vert"
+                "id": 13,
+                "vert": "{engine}shaders/skybox.vert"
             },
             "transform": {
                 "rotation": {
@@ -307,10 +208,10 @@
             "name": "Doom",
             "scripts": [],
             "shader": {
-                "frag": "[ENGINE]shaders/shader.frag",
+                "frag": "{engine}shaders/shader.frag",
                 "geom": "",
-                "id": 43,
-                "vert": "[ENGINE]shaders/shader.vert"
+                "id": 21,
+                "vert": "{engine}shaders/shader.vert"
             },
             "transform": {
                 "rotation": {
@@ -343,10 +244,10 @@
                 "scripts/player.lua"
             ],
             "shader": {
-                "frag": "[ENGINE]shaders/shader.frag",
+                "frag": "{engine}shaders/shader.frag",
                 "geom": "",
-                "id": 51,
-                "vert": "[ENGINE]shaders/shader.vert"
+                "id": 29,
+                "vert": "{engine}shaders/shader.vert"
             },
             "transform": {
                 "rotation": {
@@ -409,12 +310,12 @@
                     "name": "Gizmo",
                     "scripts": [],
                     "shader": {
-                        "frag": "[ENGINE]shaders/shader.frag",
+                        "frag": "{engine}shaders/shader.frag",
                         "geom": "",
-                        "id": 56,
-                        "vert": "[ENGINE]shaders/shader.vert"
+                        "id": 34,
+                        "vert": "{engine}shaders/shader.vert"
                     },
-                    "texPath": "[ENGINE]textures/gizmo/dir_light.png",
+                    "texPath": "{engine}textures/gizmo/dir_light.png",
                     "transform": {
                         "rotation": {
                             "w": 1.0,
@@ -442,12 +343,12 @@
                     "name": "Gizmo (0)",
                     "scripts": [],
                     "shader": {
-                        "frag": "[ENGINE]shaders/shader.frag",
+                        "frag": "{engine}shaders/shader.frag",
                         "geom": "",
-                        "id": 65,
-                        "vert": "[ENGINE]shaders/shader.vert"
+                        "id": 43,
+                        "vert": "{engine}shaders/shader.vert"
                     },
-                    "texPath": "[ENGINE]textures/gizmo/dir_light.png",
+                    "texPath": "{engine}textures/gizmo/dir_light.png",
                     "transform": {
                         "rotation": {
                             "w": 1.0,
@@ -475,45 +376,12 @@
                     "name": "Gizmo (0) (0)",
                     "scripts": [],
                     "shader": {
-                        "frag": "[ENGINE]shaders/shader.frag",
+                        "frag": "{engine}shaders/shader.frag",
                         "geom": "",
-                        "id": 73,
-                        "vert": "[ENGINE]shaders/shader.vert"
+                        "id": 51,
+                        "vert": "{engine}shaders/shader.vert"
                     },
-                    "texPath": "[ENGINE]textures/gizmo/dir_light.png",
-                    "transform": {
-                        "rotation": {
-                            "w": 1.0,
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        },
-                        "translation": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        }
-                    },
-                    "type": "Sprite",
-                    "visible": true
-                },
-                {
-                    "children": [],
-                    "enabled": true,
-                    "name": "Gizmo (0) (0) (0)",
-                    "scripts": [],
-                    "shader": {
-                        "frag": "[ENGINE]shaders/shader.frag",
-                        "geom": "",
-                        "id": 81,
-                        "vert": "[ENGINE]shaders/shader.vert"
-                    },
-                    "texPath": "[ENGINE]textures/gizmo/dir_light.png",
+                    "texPath": "{engine}textures/gizmo/dir_light.png",
                     "transform": {
                         "rotation": {
                             "w": 1.0,

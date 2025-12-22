@@ -11,18 +11,18 @@ namespace Tank
 	// =-=-=-=- ScriptData -=-=-=-=
 
 
-	void ScriptData::load(fs::path path)
+	void ScriptData::load(const Res &path)
 	{
-		auto result = File::readLines(path, m_lastContents);
+		auto result = File::readLines(path.resolvePath(), m_lastContents);
 		if (result != File::ReadResult::Success)
 		{
 			switch (result)
 			{
 			case File::ReadResult::Error:
-				TE_CORE_ERROR(std::string("Error when loading script: ") + path.string());
+				TE_CORE_ERROR(std::string("Error when loading script: ") + Res::encode(path));
 				break;
 			case File::ReadResult::NotFile:
-				TE_CORE_ERROR(std::string("Script did not exist: ") + path.string());
+				TE_CORE_ERROR(std::string("Script did not exist: ") + Res::encode(path));
 				break;
 			}
 
@@ -34,32 +34,35 @@ namespace Tank
 	// =-=-=-=- ScriptManager -=-=-=-=
 
 
-	ScriptData ScriptManager::addScript(fs::path path)
+	ScriptData ScriptManager::addScript(const Res &path)
 	{
-		if (s_loadedScripts.contains(path))
+		std::string encoded = Res::encode(path);
+		if (s_loadedScripts.contains(encoded))
 		{
-			TE_CORE_WARN(std::format("Script already exists at {}, updating it...", path.string()));
+			TE_CORE_WARN(std::format("Script already exists at {}, updating it...", encoded));
 			return updateScript(path);
 		}
 
 		auto data = ScriptData(path);
-		s_loadedScripts.insert(std::make_pair(path, data));
+		s_loadedScripts.insert(std::make_pair(encoded, data));
 		return data;
 	}
 
 
-	ScriptData ScriptManager::updateScript(fs::path path)
+	ScriptData ScriptManager::updateScript(const Res &path)
 	{
-		s_loadedScripts[path].load(path);
-		return s_loadedScripts[path];
+		std::string encoded = Res::encode(path);
+		s_loadedScripts[encoded].load(path);
+		return s_loadedScripts[encoded];
 	}
 
 
-	bool ScriptManager::popScript(fs::path path)
+	bool ScriptManager::popScript(const Res &path)
 	{
-		if (s_loadedScripts.contains(path))
+		std::string encoded = Res::encode(path);
+		if (s_loadedScripts.contains(encoded))
 		{
-			s_loadedScripts.erase(path);
+			s_loadedScripts.erase(encoded);
 			return true;
 		}
 

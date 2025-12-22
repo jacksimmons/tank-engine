@@ -4,7 +4,7 @@
 
 namespace Tank
 {
-	std::string Resource::s_engineToken = "[ENGINE]";
+	std::string Resource::s_engineToken = "{engine}";
 	fs::path Resource::s_enginePath = fs::current_path();
 	fs::path Resource::s_projectPath = fs::current_path();
 

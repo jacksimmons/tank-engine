@@ -29,9 +29,6 @@ namespace Tank
 		m_rotSpeed = 5;
 
 		m_freeLook = true;
-
-		auto gizmo = std::make_unique<Sprite>("Gizmo", Res("textures/gizmo/camera.png", true));
-		addChild(std::move(gizmo));
 	}
 
 

@@ -20,7 +20,7 @@ namespace Tank
 
 		std::string shaderType = sourceName + " shader";
 		ImGui::TextColored(Colour::TITLE, shaderType.c_str());
-		Widget::textInput(("##Inspector_" + shaderType).c_str(), source.location.resolvePathStr(),
+		Widget::textInput(("##Inspector_" + shaderType).c_str(), Res::encode(source.location),
 			[&retPath](const std::string &newPath)
 			{
 				retPath = newPath;
