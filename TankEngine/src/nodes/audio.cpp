@@ -55,6 +55,8 @@ namespace Tank
 
 	void Audio::play()
 	{
+		if (!m_hasSound) updateSound();
+
 		ma_result result = ma_sound_start(&m_currentSound);
 		if (!AudioEngine::handleResult(result, std::format("Failed to play sound with result {}. File: {}", (int)result, m_audioPath.resolvePathStr()))) return;
 

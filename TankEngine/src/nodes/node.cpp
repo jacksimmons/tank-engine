@@ -69,7 +69,6 @@ namespace Tank
 
 			m_name = dupeName;
 		}
-		TE_CORE_INFO(m_name);
 	}
 
 

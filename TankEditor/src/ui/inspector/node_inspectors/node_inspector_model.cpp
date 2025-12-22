@@ -57,6 +57,7 @@ namespace Tank::Editor
 		std::vector<unsigned> options = { GL_BACK, GL_FRONT, GL_FRONT_AND_BACK };
 		std::vector<std::string> optionNames = { "BACK", "FRONT", "FRONT_AND_BACK" };
 
+		ImGui::Text("Cull Face");
 		if (ImGui::BeginTable("Select Cull Face", options.size()))
 		{
 			for (int i = 0; i < options.size(); i++)

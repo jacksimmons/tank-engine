@@ -5,6 +5,8 @@
 #include <nodes/camera.hpp>
 #include <nodes/scene.hpp>
 #include <scripting/script.hpp>
+#include <ui/inspector/schema/schema_primitive.hpp>
+#include <ui/inspector/schema/schema_glm.hpp>
 #include "node_inspector.hpp"
 
 
@@ -19,19 +21,14 @@ namespace Tank::Editor
 		Tank::Transform *transform = m_node->getTransform();
 		const glm::mat4 &modelMatrix = transform->getWorldModelMatrix();
 
-		bool enabled = m_node->Enabled();
-		if (ImGui::Checkbox("Enabled", &enabled))
-			m_node->Enabled = enabled;
-
-		bool visible = m_node->Visible();
-		if (ImGui::Checkbox("Visible", &visible))
-			m_node->Visible = visible;
+		Schema::draw(m_node->Enabled(), "Enabled", [this](bool val) { m_node->Enabled = val; });
+		Schema::draw(m_node->Visible(), "Visible", [this](bool val) { m_node->Visible = val; });
 
 		ImGui::TextColored(Tank::Colour::TITLE, "Name");
 		Tank::Widget::textInput("##Inspector_Name", m_node->getName(),
 			[this](const std::string &newName)
 			{
-				m_node->setName(newName);
+				if (newName != m_node->getName()) m_node->setName(newName);
 			}
 		);
 
@@ -46,49 +43,20 @@ namespace Tank::Editor
 			}
 		}
 
-		ImGui::TextColored(Tank::Colour::TITLE, "Model Matrix");
-		// glm::mat4 indexing is column-major, but ImGui is row-major.
-		// Transposing the model means an ImGui row corresponds to a model matrix row.
-		glm::mat4 displayMatrix = glm::transpose(modelMatrix);
-		for (int i = 0; i < 4; i++)
+		ImGui::TextColored(Tank::Colour::TITLE, "Transform");
+		Schema::draw(modelMatrix, "Model Matrix");
+		Schema::draw(transform->getLocalTranslation(), "Translation", [&transform](const glm::vec3 &val)
 		{
-			glm::vec4 row = displayMatrix[i];
-			std::string rowText = std::to_string(row.x) + "\t" +
-				std::to_string(row.y) + "\t" +
-				std::to_string(row.z) + "\t" +
-				std::to_string(row.w);
-			ImGui::Text(rowText.c_str());
-		}
-
-		ImGui::TextColored(Colour::TITLE, "Translation");
-		Widget::vec3Input(
-			"##Inspector_Translation",
-			transform->getLocalTranslation(),
-			[&transform](glm::vec3 newTranslation)
-			{
-				transform->setLocalTranslation(newTranslation);
-			}
-		);
-
-		ImGui::TextColored(Colour::TITLE, "Scale");
-		Widget::vec3Input(
-			"##Inspector_Scale",
-			transform->getLocalScale(),
-			[&transform](glm::vec3 newScale)
-			{
-				transform->setLocalScale(newScale);
-			}
-		);
-
-		ImGui::TextColored(Colour::TITLE, "Rotation (Euler Angles)");
-		Widget::vec3Input(
-			"##Inspector_Rotation_EulerAngles",
-			glm::eulerAngles(transform->getLocalRotation()),
-			[&transform](glm::vec3 newRotation)
-			{
-				transform->setLocalRotation(newRotation);
-			}
-		);
+			transform->setLocalTranslation(val);
+		});
+		Schema::draw(transform->getLocalScale(), "Scale", [&transform](const glm::vec3 &val)
+		{
+			transform->setLocalScale(val);
+		});
+		Schema::draw(glm::eulerAngles(transform->getLocalRotation()), "Rotation (Euler Angles)", [&transform](const glm::vec3 &val)
+		{
+			transform->setLocalRotation(val);
+		});
 
 		ImGui::TextColored(Colour::TITLE, "Scripts");
 		std::vector<Res> scriptPaths = m_node->getScriptPaths();
@@ -100,6 +68,12 @@ namespace Tank::Editor
 		for (const Res &path : scriptPaths)
 		{
 			ImGui::Text(Res::encode(path).c_str());
+			ImGui::SameLine();
+			if (ImGui::Button("Open in VSCode"))
+			{
+				system(std::format("code {}", path.resolvePathStr()).c_str());
+			}
+
 			//Widget::textInput(
 			//	std::format("##Inspector_Script_{}", i).c_str(),
 			//	path.string(),

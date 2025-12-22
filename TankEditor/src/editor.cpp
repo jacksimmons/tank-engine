@@ -268,7 +268,6 @@ namespace Tank::Editor
 		m_system->addChild(std::unique_ptr<_SceneView>(new _SceneView("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
 		m_system->addChild(std::unique_ptr<_Console>(new _Console("Console")));
 		m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));
-		m_system->forEachDescendant([](::Tank::Node *node) { TE_CORE_INFO(node->getName()); });
 		m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
 		m_system->preupdate();
 	}

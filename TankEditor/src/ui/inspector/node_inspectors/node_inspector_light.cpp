@@ -1,6 +1,6 @@
 #include <imgui.h>
 #include <colours.hpp>
-#include <widget.hpp>
+#include <ui/inspector/schema/schema_glm.hpp>
 #include <nodes/light.hpp>
 #include "node_inspector.hpp"
 
@@ -18,48 +18,27 @@ namespace Tank::Editor
 		std::string lightStruct = m_node->getLightStruct();
 		ImGui::Text(lightStruct.c_str());
 
-		ImGui::TextColored(Colour::TITLE, "Ambient Intensity (RGB)");
-		Widget::vec3Input(
-			"##Inspector_Light_Ambient",
-			m_node->getAmbient(),
-			[this](glm::vec3 newAmbient)
-			{
-				m_node->setAmbient(newAmbient);
-			}
-		);
-
-		ImGui::TextColored(Colour::TITLE, "Diffuse Intensity (RGB)");
-		Widget::vec3Input(
-			"##Inspector_Light_Diffuse",
-			m_node->getDiffuse(),
-			[this](glm::vec3 newDiffuse)
-			{
-				m_node->setDiffuse(newDiffuse);
-			}
-		);
-
-		ImGui::TextColored(Colour::TITLE, "Specular Intensity (RGB)");
-		Widget::vec3Input(
-			"##Inspector_Light_Specular",
-			m_node->getSpecular(),
-			[this](glm::vec3 newSpecular)
-			{
-				m_node->setSpecular(newSpecular);
-			}
-		);
+		Schema::draw(m_node->getAmbient(), "Ambient Intensity (RGB)", [this](const glm::vec3 &val)
+		{
+			m_node->setAmbient(val);
+		});
+		Schema::draw(m_node->getDiffuse(), "Diffuse Intensity (RGB)", [this](const glm::vec3 &val)
+		{
+			m_node->setDiffuse(val);
+		});
+		Schema::draw(m_node->getSpecular(), "Specular Intensity (RGB)", [this](const glm::vec3 &val)
+		{
+			m_node->setSpecular(val);
+		});
 
 		// Draw Light subclass sections
 		if (DirLight *dirLight = dynamic_cast<DirLight *>(m_node))
 		{
 			ImGui::TextColored(Colour::TITLE, "Light Direction");
-			Widget::vec3Input(
-				"##Inspector_DirLight_Direction",
-				dirLight->getDirection(),
-				[this, &dirLight](glm::vec3 newDirection)
-				{
-					dirLight->setDirection(newDirection);
-				}
-			);
+			Schema::draw(dirLight->getDirection(), "Light Direction", [&dirLight](const glm::vec3 &val)
+			{
+				dirLight->setDirection(val);
+			});
 		}
 	}
 }
