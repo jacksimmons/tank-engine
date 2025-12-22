@@ -44,7 +44,7 @@ namespace Tank
 		pushProperties(lua);
 
 		// Call update function on lua script, if present
-		std::optional<sol::protected_function> update = lua["update"];
+		std::optional<sol::protected_function> update = lua["Update"];
 		if (update.has_value())
 			update.value()();
 

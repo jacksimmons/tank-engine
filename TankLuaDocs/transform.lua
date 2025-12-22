@@ -1,0 +1,5 @@
+---@meta
+---@class Transform
+---@field translation Vec3_t
+---@field scale Vec3_t
+---@field rotation Vec3_t

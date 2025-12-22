@@ -17,8 +17,8 @@ namespace Tank
 	void UserTypes::allGLM(sol::state &lua)
 	{
 		sol::usertype<glm::vec3> vec3 = lua.new_usertype<glm::vec3>(
-			"vec3",
-			sol::constructors<glm::vec3(float, float, float)>()
+			"Vec3",
+			sol::constructors<glm::vec3(), glm::vec3(float, float, float)>()
 		);
 		vec3["x"] = &glm::vec3::x;
 		vec3["y"] = &glm::vec3::y;
