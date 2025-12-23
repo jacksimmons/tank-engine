@@ -39,6 +39,7 @@ namespace Tank
 
 		// Define usertypes
 		UserTypes::all(lua);
+		UserTypes::codegen();
 
 		// Push properties to Lua from C++
 		pushProperties(lua);

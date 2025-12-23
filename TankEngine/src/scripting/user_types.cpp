@@ -1,6 +1,11 @@
+#include <GLFW/glfw3.h>
+#include <fstream>
+#include <log.hpp>
+#include <file.hpp>
+#include <assets/resource.hpp>
 #include "user_types.hpp"
 #include "sol/sol.hpp"
-#include <GLFW/glfw3.h>
+#include "lua_codegen.hpp"
 // The types to-be-defined as usertypes
 #include <glm/glm.hpp>
 #include <transform.hpp>
@@ -11,18 +16,24 @@
 
 #define KC_PAIR(x) #x, GLFW_KEY_##x
 
+#define LUA_CLASS(name) \
+	(UserTypes::s_luaClasses.push_back({#name}), #name)
+// Declares a field for the LAST DECLARED LUA_CLASS.
+#define LUA_FIELD(name, type) \
+	(UserTypes::s_luaClasses[s_luaClasses.size() - 1].fields.push_back({#name, #type}), #name)
+
 
 namespace Tank
 {
 	void UserTypes::allGLM(sol::state &lua)
 	{
-		sol::usertype<glm::vec3> vec3 = lua.new_usertype<glm::vec3>(
-			"Vec3",
+		auto utVec3 = lua.new_usertype<glm::vec3>(
+			LUA_CLASS(Vec3),
 			sol::constructors<glm::vec3(), glm::vec3(float, float, float)>()
 		);
-		vec3["x"] = &glm::vec3::x;
-		vec3["y"] = &glm::vec3::y;
-		vec3["z"] = &glm::vec3::z;
+		utVec3[LUA_FIELD(x, number)] = &glm::vec3::x;
+		utVec3[LUA_FIELD(y, number)] = &glm::vec3::y;
+		utVec3[LUA_FIELD(z, number)] = &glm::vec3::z;
 	}
 
 
@@ -31,9 +42,11 @@ namespace Tank
 		// Define types Node is dependent on
 
 		// Transform
-		sol::usertype<Transform> utTransform = lua.new_usertype<Transform>("Transform");
-		utTransform["translation"] = sol::property(&Transform::getLocalTranslation, &Transform::setLocalTranslation);
-		utTransform["rotation"] = sol::property(&Transform::getLocalRotation, &Transform::setLocalRotation);
+		auto utTransform = lua.new_usertype<Transform>(
+			LUA_CLASS(Transform)
+		);
+		utTransform[LUA_FIELD(translation, Vec3)] = sol::property(&Transform::getLocalTranslation, &Transform::setLocalTranslation);
+		utTransform[LUA_FIELD(rotation, Vec3)] = sol::property(&Transform::getLocalRotation, &Transform::setLocalRotation);
 
 		// KeyInput, and relevant enums
 		lua.new_enum(
@@ -51,18 +64,21 @@ namespace Tank
 			KC_PAIR(D)
 		);
 
-		sol::usertype<KeyInput> utKeyInput = lua.new_usertype<KeyInput>("KeyInput");
+		sol::usertype<KeyInput> utKeyInput = lua.new_usertype<KeyInput>(
+			LUA_CLASS(KeyInput)
+		);
 		utKeyInput["get_key_state"] = &KeyInput::getKeyState;
 
 		// Now we can define Node and its subclasses
-		sol::usertype<Node> utNode = lua.new_usertype<Node>("Node");
-		utNode["name"] = sol::property(&Node::getName, &Node::setName);
-		utNode["transform"] = sol::property(&Node::getTransform);
-		utNode["key_input"] = sol::property(&Node::getKeyInput);
-		utNode["destroy"] = &Node::destroy;
+		sol::usertype<Node> utNode = lua.new_usertype<Node>(
+			LUA_CLASS(Node)
+		);
+		utNode[LUA_FIELD(name, string)] = sol::property(&Node::getName, &Node::setName);
+		utNode[LUA_FIELD(transform, Transform)] = sol::property(&Node::getTransform);
+		utNode[LUA_FIELD(key_input, KeyInput)] = sol::property(&Node::getKeyInput);
 
 		sol::usertype<Camera> utCamera = lua.new_usertype<Camera>(
-			"Camera",
+			LUA_CLASS(Camera),
 			sol::base_classes, sol::bases<Node>()
 		);
 		utCamera["set_pos"] = &Camera::setPosition;
@@ -73,5 +89,29 @@ namespace Tank
 	{
 		UserTypes::allGLM(lua);
 		UserTypes::allNodes(lua);
+	}
+
+
+	void UserTypes::codegen()
+	{
+		Res codegenPath = Res("TankLuaDocs/fields.lua", true);
+		std::string firstLine = "---@meta (GENERATED)\n";
+
+		std::ofstream stream;
+		// @todo may throw
+		stream.open(codegenPath.resolvePathStr(), std::ofstream::out | std::ofstream::trunc);
+		//if (!File::writeLines(codegenPath.resolvePath(), firstLine))
+		//{
+		//	TE_CORE_WARN(std::format("Codegen > Failed to clear {}. Cancelling...", codegenPath.resolvePathStr()));
+		//	return;
+		//}
+
+		stream << firstLine;
+		for (const LuaClass &lc : s_luaClasses)
+		{
+			stream << lc << "\n";
+		}
+
+		s_luaClasses.clear();
 	}
 }
