@@ -10,7 +10,7 @@
 
 ---@class KeyInput
 
----@class Node
+---@class Node : Node
 ---@field name string
 ---@field transform Transform
 ---@field key_input KeyInput

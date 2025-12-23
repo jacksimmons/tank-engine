@@ -1,11 +1,6 @@
 #pragma once
-#include <optional>
-#include <memory>
-#include <string>
-#include "core.hpp"
 
 
-namespace sol { class state; }
 namespace Tank
 {
 	class Node;
@@ -22,6 +17,7 @@ namespace Tank
 		Node *m_node;
 		Res m_path;
 		std::string m_scriptLines;
+		sol::state m_state;
 		Script(Node *node, const Res &scriptPath, std::string scriptLines) : m_node(node), m_path(scriptPath), m_scriptLines(scriptLines) {}
 	public:
 		~Script() = default;
@@ -33,8 +29,9 @@ namespace Tank
 
 		const Res &getPath() const noexcept { return m_path; }
 
+		void initSol();
 		void update();
-		void pushProperties(sol::state &);
-		void pullProperties(const sol::state &);
+		void pushProperties();
+		void pullProperties();
 	};
 }

@@ -17,10 +17,14 @@
 #define KC_PAIR(x) #x, GLFW_KEY_##x
 
 #define LUA_CLASS(name) \
-	(UserTypes::s_luaClasses.push_back({#name}), #name)
-// Declares a field for the LAST DECLARED LUA_CLASS.
+	(s_luaClasses.push_back({#name}), #name)
+#define LAST_LUA_CLASS s_luaClasses[s_luaClasses.size() - 1]
+// Declares a field for the LAST_LUA_CLASS.
 #define LUA_FIELD(name, type) \
-	(UserTypes::s_luaClasses[s_luaClasses.size() - 1].fields.push_back({#name, #type}), #name)
+	(LAST_LUA_CLASS.fields.push_back({#name, #type}), #name)
+// Declares a class base for the LAST_LUA_CLASS.
+#define LUA_CLASS_BASE(name) \
+	(LAST_LUA_CLASS.base = #name, sol::bases<name>())
 
 
 namespace Tank
@@ -79,7 +83,7 @@ namespace Tank
 
 		sol::usertype<Camera> utCamera = lua.new_usertype<Camera>(
 			LUA_CLASS(Camera),
-			sol::base_classes, sol::bases<Node>()
+			sol::base_classes, LUA_CLASS_BASE(Node)
 		);
 		utCamera["set_pos"] = &Camera::setPosition;
 	}
@@ -94,7 +98,7 @@ namespace Tank
 
 	void UserTypes::codegen()
 	{
-		Res codegenPath = Res("TankLuaDocs/fields.lua", true);
+		Res codegenPath = Res("TankLuaDocs/autogen.lua", true);
 		std::string firstLine = "---@meta (GENERATED)\n";
 
 		std::ofstream stream;

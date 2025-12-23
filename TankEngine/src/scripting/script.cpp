@@ -1,11 +1,9 @@
-#include <functional>
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
-#include <glm/glm.hpp>
 #include <nodes/node.hpp>
 #include <nodes/scene.hpp>
 #include <nodes/camera.hpp>
-#include "log.hpp"
+#include <log.hpp>
 #include "script.hpp"
 #include "script_manager.hpp"
 #include "user_types.hpp"
@@ -21,47 +19,51 @@ namespace Tank
 
 		// Interpret script with sol2
 		Script *script = new Script(node, path, data.getContents());
+		script->initSol();
 		return std::unique_ptr<Script>(script);
+	}
+
+
+	void Script::initSol()
+	{
+		m_state.open_libraries(sol::lib::base, sol::lib::package);
+		auto result = m_state.safe_script(m_scriptLines, sol::script_pass_on_error);
+		if (!result.valid())
+		{
+			sol::error err = result;
+			TE_CORE_ERROR(std::string("Script > Sol failed to init:\n") + err.what());
+			return;
+		}
+
+		// Define usertypes
+		UserTypes::all(m_state);
+		UserTypes::codegen();
 	}
 
 
 	void Script::update()
 	{
-		// Setup lua script
-		sol::state lua;
-		lua.open_libraries(sol::lib::base, sol::lib::package);
-		auto result = lua.safe_script(m_scriptLines, sol::script_pass_on_error);
-		if (!result.valid())
-		{
-			sol::error err = result;
-			TE_CORE_ERROR(std::string("Script file failed to run:\n") + err.what());
-		}
-
-		// Define usertypes
-		UserTypes::all(lua);
-		UserTypes::codegen();
-
 		// Push properties to Lua from C++
-		pushProperties(lua);
+		pushProperties();
 
 		// Call update function on lua script, if present
-		std::optional<sol::protected_function> update = lua["Update"];
+		std::optional<sol::protected_function> update = m_state["Update"];
 		if (update.has_value())
 			update.value()();
 
 		// Pull properties from Lua to C++
-		pullProperties(lua);
+		pullProperties();
 	}
 
 
-	void Script::pushProperties(sol::state &lua)
+	void Script::pushProperties()
 	{
-		lua["node"] = m_node;
-		lua["camera"] = Scene::getActiveScene()->getActiveCamera();
+		m_state["node"] = m_node;
+		m_state["camera"] = Scene::getActiveScene()->getActiveCamera();
 	}
 
 
-	void Script::pullProperties(const sol::state &lua)
+	void Script::pullProperties()
 	{
 	}
 }

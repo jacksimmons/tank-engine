@@ -23,6 +23,7 @@ using json = nlohmann::json;
 namespace fs = std::filesystem;
 #include "glm/glm.hpp"
 #include "spdlog/spdlog.h"
+#include <sol/sol.hpp>
 
 // Tank
 #include <core.hpp>

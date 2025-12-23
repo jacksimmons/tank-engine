@@ -5,7 +5,7 @@ namespace Tank
 {
 	std::ostream &operator<<(std::ostream &os, const LuaClass &lc)
 	{
-		os << std::format("---@class {}\n", lc.name);
+		os << std::format("---@class {}", lc.name) << (lc.base.empty() ? "\n" : (" : " + lc.base + "\n"));
 		for (const auto &field : lc.fields)
 		{
 			os << field;

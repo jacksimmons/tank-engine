@@ -85,9 +85,9 @@ project "TankEngine"
 		"include/glm",
 		"include/imgui",
 		"include/imgui/backends",
+		"include/sol",
 		"include/lua",
 		"%{prj.name}/include",
-		"%{prj.name}/include/lua",
 		"%{prj.name}/src",
 		"%{prj.name}", -- for pch
 		"vendor"
@@ -142,6 +142,8 @@ project "TankEditor"
 		"include",
 		"include/glm",
 		"include/imgui",
+		"include/sol",
+		"include/lua",
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		engineName .. "/src",
@@ -196,6 +198,8 @@ project "TankPlayer"
 	includedirs {
 		"include",
 		"include/glm",
+		"include/sol",
+		"include/lua",
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		engineName .. "/src",

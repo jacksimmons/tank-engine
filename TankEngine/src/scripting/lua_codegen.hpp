@@ -12,6 +12,7 @@ namespace Tank
 	struct LuaClass
 	{
 		std::string name;
+		std::string base;
 		std::vector<LuaField> fields;
 	};
 
