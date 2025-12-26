@@ -4,7 +4,7 @@
 
 namespace Tank::String
 {
-	void replaceAll(std::string &str, const std::string &exp, size_t maxCount)
+	void eraseAll(std::string &str, const std::string &exp, size_t maxCount)
 	{
 		size_t count = 0;
 		while (str.contains(exp) || count > maxCount)

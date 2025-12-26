@@ -65,13 +65,13 @@ namespace Tank::Export
 			"/"
 		);
 		// C:/tank-engine\\...
-		String::replaceAll(serialised, projectDir + "\\\\", 10000);
+		String::eraseAll(serialised, projectDir + "\\\\", 10000);
 		// C:/tank-engine\...
-		String::replaceAll(serialised, projectDir + "\\", 10000);
+		String::eraseAll(serialised, projectDir + "\\", 10000);
 		// C:/tank-engine/...
-		String::replaceAll(serialised, projectDir + "/", 10000);
+		String::eraseAll(serialised, projectDir + "/", 10000);
 		// C:/tank-engine...
-		String::replaceAll(serialised, projectDir, 10000);
+		String::eraseAll(serialised, projectDir, 10000);
 
 		projectDir = std::regex_replace(
 			fs::current_path().string(),
@@ -79,13 +79,13 @@ namespace Tank::Export
 			R"(\\)"
 		);
 		// C:\\tank-engine\\...
-		String::replaceAll(serialised, projectDir + "\\\\", 10000);
+		String::eraseAll(serialised, projectDir + "\\\\", 10000);
 		// C:\\tank-engine\...
-		String::replaceAll(serialised, projectDir + "\\", 10000);
+		String::eraseAll(serialised, projectDir + "\\", 10000);
 		// C:\\tank-engine/...
-		String::replaceAll(serialised, projectDir + "/", 10000);
+		String::eraseAll(serialised, projectDir + "/", 10000);
 		// C:\\tank-engine...
-		String::replaceAll(serialised, projectDir, 10000);
+		String::eraseAll(serialised, projectDir, 10000);
 
 		// Modify the serialised file
 		bool status = File::writeLines(scenePath, serialised);

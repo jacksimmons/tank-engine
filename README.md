@@ -25,7 +25,7 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - [x] Node bindings
 - [x] Camera bindings
 - [x] KeyInput bindings
-- [ ] Type hints / documentation (maybe autogen)
+- [ ] Type hints / documentation (WIP)
 ## Editor: UI
 - [x] Node-tree scene system, with the Scene as the root  
 - [x] Hierarchy window, displaying and allowing interaction with the Node tree  
@@ -52,6 +52,11 @@ above command with `remove`, or `purge`.
 # Project Building
 - Build the `TankEditor` project for the Editor (UI).
 - Build the `TankPlayer` project for the Standalone Player (no UI).
+
+# Scripting
+- Lua is supported for scripting.
+- Auto-generated documentation for [LuaLS](https://github.com/LuaLS/lua-language-server) is created under TankLuaDocs at engine runtime.
+- You need to use LuaLS to benefit from these type hints.
 
 # References
 ### Tutorials

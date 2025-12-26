@@ -59,7 +59,6 @@ namespace Tank
 	void Script::pushProperties()
 	{
 		m_state["node"] = m_node;
-		m_state["camera"] = Scene::getActiveScene()->getActiveCamera();
 	}
 
 
