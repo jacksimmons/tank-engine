@@ -1,10 +1,10 @@
----@meta
----@class Camera_t : Node_t
+---@meta (GENERATED)
+
+--- Class Definition
+---@class (exact) Camera : Node
+
+--- Class Reference
+---@type Camera
 Camera = {}
+return Camera
 
----@param pos Vec3_t
-function Camera:set_pos(pos) end
-
-
----@type Camera_t
-camera = {}

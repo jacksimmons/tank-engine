@@ -1,5 +1,13 @@
--- ---@meta
--- ---@class Transform
--- ---@field translation Vec3_t
--- ---@field scale Vec3_t
--- ---@field rotation Vec3_t
+---@meta (GENERATED)
+
+--- Class Definition
+---@class (exact) Transform
+---@field translation Vec3
+---@field rotation Vec3
+---@field scale Vec3
+
+--- Class Reference
+---@type Transform
+Transform = {}
+return Transform
+

@@ -16,28 +16,56 @@
 
 #define KC_PAIR(x) #x, GLFW_KEY_##x
 
-#define LUA_CLASS(name) \
-	(s_luaClasses.push_back({#name}), #name)
-#define LAST_LUA_CLASS s_luaClasses[s_luaClasses.size() - 1]
-// Declares a field for the LAST_LUA_CLASS.
-#define LUA_FIELD(name, type) \
-	(LAST_LUA_CLASS.fields.push_back({#name, #type}), #name)
-// Declares a class base for the LAST_LUA_CLASS.
-#define LUA_CLASS_BASE(name) \
-	(LAST_LUA_CLASS.base = #name, sol::bases<name>())
+// Declare a Sol class usertype.
+#define LUA_CLASS(name) (s_luaClasses.push_back({#name}), #name)
+// Get a lua class from name
+#define GET_LUA_CLASS(name) Tank::UserTypes::classFromName(#name).value()
+
+// Declares a class base for name.
+#define LUA_CLASS_BASE(name, baseName) (GET_LUA_CLASS(name)->base = #baseName/*, sol::bases<baseName>()*/)
+
+// Declares a class field.
+#define LUA_FIELD(className, name, type) \
+	(GET_LUA_CLASS(className)->fields.push_back({#name, #type}), #name)
+
+#define LUA_FUNCTION(className, funcName, retType, ...) \
+	GET_LUA_CLASS(className)->functions.push_back({ \
+		#funcName, \
+		{ ##__VA_ARGS__ }, \
+		#retType \
+	})
+#define LUA_CONSTRUCTOR(className, ...) \
+	LUA_FUNCTION(className, new, className, ##__VA_ARGS__)
 
 
 namespace Tank
 {
+	std::optional<LuaClass*> UserTypes::classFromName(const std::string &name)
+	{
+		// First UserType class whose name matches the key
+		auto it = std::find_if(s_luaClasses.begin(), s_luaClasses.end(), [&name](const LuaClass &cls) { return name == cls.name; });
+		if (it == s_luaClasses.end())
+		{
+			TE_CORE_ERROR(std::format("Codegen > Tried to find class with name {}, but it didn't exist.", name));
+			return {};
+		}
+
+		return &(*it);
+	}
+
+
 	void UserTypes::allGLM(sol::state &lua)
 	{
 		auto utVec3 = lua.new_usertype<glm::vec3>(
 			LUA_CLASS(Vec3),
 			sol::constructors<glm::vec3(), glm::vec3(float, float, float)>()
 		);
-		utVec3[LUA_FIELD(x, number)] = &glm::vec3::x;
-		utVec3[LUA_FIELD(y, number)] = &glm::vec3::y;
-		utVec3[LUA_FIELD(z, number)] = &glm::vec3::z;
+		LUA_CONSTRUCTOR(Vec3);
+		LUA_CONSTRUCTOR(Vec3, {{"x", "number"}, {"y", "number"}, {"z", "number"}});
+
+		utVec3[LUA_FIELD(Vec3, x, number)] = &glm::vec3::x;
+		utVec3[LUA_FIELD(Vec3, y, number)] = &glm::vec3::y;
+		utVec3[LUA_FIELD(Vec3, z, number)] = &glm::vec3::z;
 	}
 
 
@@ -49,9 +77,10 @@ namespace Tank
 		auto utTransform = lua.new_usertype<Transform>(
 			LUA_CLASS(Transform)
 		);
-		utTransform[LUA_FIELD(translation, Vec3)] = sol::property(&Transform::getLocalTranslation, &Transform::setLocalTranslation);
-		utTransform[LUA_FIELD(rotation, Vec3)] = sol::property(&Transform::getLocalRotation, &Transform::setLocalRotation);
-
+		utTransform[LUA_FIELD(Transform, translation, Vec3)] = sol::property(&Transform::getLocalTranslation, &Transform::setLocalTranslation);
+		utTransform[LUA_FIELD(Transform, rotation, Vec3)] = sol::property(&Transform::getLocalRotation, &Transform::setLocalRotation);
+		utTransform[LUA_FIELD(Transform, scale, Vec3)] = sol::property(&Transform::getLocalScale, &Transform::setLocalScale);
+		
 		// KeyInput, and relevant enums
 		lua.new_enum(
 			"KeyState",
@@ -77,14 +106,15 @@ namespace Tank
 		sol::usertype<Node> utNode = lua.new_usertype<Node>(
 			LUA_CLASS(Node)
 		);
-		utNode[LUA_FIELD(name, string)] = sol::property(&Node::getName, &Node::setName);
-		utNode[LUA_FIELD(transform, Transform)] = sol::property(&Node::getTransform);
-		utNode[LUA_FIELD(key_input, KeyInput)] = sol::property(&Node::getKeyInput);
+		utNode[LUA_FIELD(Node, name, string)] = sol::property(&Node::getName, &Node::setName);
+		utNode[LUA_FIELD(Node, transform, Transform)] = sol::property(&Node::getTransform);
+		utNode[LUA_FIELD(Node, key_input, KeyInput)] = sol::property(&Node::getKeyInput);
 
 		sol::usertype<Camera> utCamera = lua.new_usertype<Camera>(
 			LUA_CLASS(Camera),
-			sol::base_classes, LUA_CLASS_BASE(Node)
+			sol::base_classes, sol::bases<Node>()
 		);
+		LUA_CLASS_BASE(Camera, Node);
 		utCamera["set_pos"] = &Camera::setPosition;
 	}
 
@@ -98,21 +128,22 @@ namespace Tank
 
 	void UserTypes::codegen()
 	{
-		Res codegenPath = Res("TankLuaDocs/autogen.lua", true);
-		std::string firstLine = "---@meta (GENERATED)\n";
-
-		std::ofstream stream;
-		// @todo may throw
-		stream.open(codegenPath.resolvePathStr(), std::ofstream::out | std::ofstream::trunc);
 		//if (!File::writeLines(codegenPath.resolvePath(), firstLine))
 		//{
 		//	TE_CORE_WARN(std::format("Codegen > Failed to clear {}. Cancelling...", codegenPath.resolvePathStr()));
 		//	return;
 		//}
 
-		stream << firstLine;
 		for (const LuaClass &lc : s_luaClasses)
 		{
+			TE_CORE_INFO(lc.base);
+			Res codegenPath = Res(std::format("TankLuaDocs/{}.lua", lc.name), true);
+
+			std::ofstream stream;
+			// @todo may throw
+			stream.open(codegenPath.resolvePathStr(), std::ofstream::out | std::ofstream::trunc);
+
+			stream << "---@meta (GENERATED)\n";
 			stream << lc << "\n";
 		}
 
