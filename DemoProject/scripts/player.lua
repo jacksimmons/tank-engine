@@ -17,13 +17,10 @@ function Update()
     end
 
     local pos = node.transform.translation
-    pos.x = pos.x + displace.x
-    pos.y = pos.y + displace.y
-    pos.z = pos.z + displace.z
+    pos = pos + displace
 
     local cam = Scene:current():active_camera()
-    cam:set_pos(Vec3:new(pos.x - 10, pos.y + 10, pos.z - 30))
-    
-    pos = pos + Vec3:new(1, 2, 3)
+    cam:set_pos(pos - Vec3:new(10, -10, 30))
+
     node.transform.translation = pos
 end

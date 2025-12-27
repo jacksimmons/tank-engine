@@ -89,7 +89,7 @@ namespace Tank
 	}
 
 
-	void UserTypes::allGLM(sol::state &lua)
+	void UserTypes::generate(sol::state &lua)
 	{
 		// Vec3
 		auto utVec3 = lua.new_usertype<glm::vec3>(
@@ -129,29 +129,24 @@ namespace Tank
 			"Vec3",
 			{ "scalar", "number" }
 		)] = [](const glm::vec3 &a, const float b) { return a / b; };
-		utVec3[SOL_META_METHOD(
+		SOL_META_METHOD(
 			"Vec3",
 			sol::meta_function::unary_minus,
 			"Vec3"
-		)] = [](const glm::vec3 &a) { return -a; };
-		utVec3[SOL_META_METHOD(
+		);
+		SOL_META_METHOD(
 			"Vec3",
 			sol::meta_function::equal_to,
 			"boolean",
 			{ "other", "Vec3" }
-		)] = [](const glm::vec3 &a, const glm::vec3 &b) { return a == b; };
-		utVec3[SOL_META_METHOD(
+		);
+		SOL_META_METHOD(
 			"Vec3",
 			sol::meta_function::to_string,
 			"string"
-		)] = [](const glm::vec3 &v) { return glm::to_string(v); };
-	}
+		);
 
-
-	void UserTypes::allNodes(sol::state &lua)
-	{
 		// Define types Node is dependent on
-
 		// Transform
 		auto utTransform = lua.new_usertype<Transform>(
 			SOL_CLASS(Transform)
@@ -191,6 +186,9 @@ namespace Tank
 		utNode[SOL_FIELD("Node", "name", "string")] = sol::property(&Node::getName, &Node::setName);
 		utNode[SOL_FIELD("Node", "transform", "Transform")] = sol::property(&Node::getTransform);
 		utNode[SOL_FIELD("Node", "key_input", "KeyInput")] = sol::property(&Node::getKeyInput);
+		utNode[SOL_METHOD("Node", "get_parent", "Node")] = &Node::getParent;
+		utNode[SOL_METHOD("Node", "get_child", "Node", { "index", "number" })] = static_cast<Node *(Node::*)(int) const>(&Node::getChild);
+		utNode[SOL_METHOD("Node", "get_child", "Node", { "name", "string" })] = static_cast<Node *(Node::*)(const std::string &) const>(&Node::getChild);
 		SOL_GLOBAL_FIELD("Node", "node", "Node");
 
 
@@ -211,13 +209,6 @@ namespace Tank
 		SOL_CLASS_BASE("Scene", Node);
 		utScene[SOL_METHOD("Scene", "active_camera", "Camera")] = &Scene::getActiveCamera;
 		utScene[SOL_STATIC_METHOD("Scene", "current", "Scene")] = &Scene::getActiveScene;
-	}
-
-
-	void UserTypes::all(sol::state &lua)
-	{
-		UserTypes::allGLM(lua);
-		UserTypes::allNodes(lua);
 	}
 
 

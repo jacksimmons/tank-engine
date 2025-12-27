@@ -36,7 +36,7 @@ namespace Tank
 		}
 
 		// Define usertypes
-		UserTypes::all(m_state);
+		UserTypes::generate(m_state);
 		UserTypes::codegen();
 	}
 
