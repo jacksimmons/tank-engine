@@ -44,11 +44,11 @@ project "Lua"
 	PrjObjAndTargetDir()
 
 	includedirs {
-		engineName .. "/include/lua"
+		"include/lua"
 	}
 
 	files {
-		engineName .. "/include/lua/*.c"
+		"include/lua/*.c"
 	}
 
 project "miniaudio"
