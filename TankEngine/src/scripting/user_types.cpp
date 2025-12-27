@@ -34,7 +34,7 @@
 #define SOL_CALLABLE(relevantClass, functionsVector, funcName, retType, ...) \
 	GET_SOL_CLASS(relevantClass)->functionsVector.push_back({ \
 		funcName, \
-		{ ##__VA_ARGS__ }, \
+		##__VA_ARGS__, \
 		retType \
 	})
 #define SOL_METHOD(className, name, retType, ...) \
@@ -96,8 +96,8 @@ namespace Tank
 			SOL_CLASS(Vec3),
 			sol::constructors<glm::vec3(), glm::vec3(float, float, float)>()
 		);
-		SOL_CONSTRUCTOR("Vec3");
-		SOL_CONSTRUCTOR("Vec3", {"x", "number"}, {"y", "number"}, {"z", "number"});
+		SOL_CONSTRUCTOR("Vec3", {});
+		SOL_CONSTRUCTOR("Vec3", {{"x", "number"}, {"y", "number"}, {"z", "number"}});
 
 		// Fields
 		utVec3[SOL_FIELD("Vec3", "x", "number")] = &glm::vec3::x;
@@ -132,7 +132,8 @@ namespace Tank
 		SOL_META_METHOD(
 			"Vec3",
 			sol::meta_function::unary_minus,
-			"Vec3"
+			"Vec3",
+			{}
 		);
 		SOL_META_METHOD(
 			"Vec3",
@@ -143,7 +144,8 @@ namespace Tank
 		SOL_META_METHOD(
 			"Vec3",
 			sol::meta_function::to_string,
-			"string"
+			"string",
+			{}
 		);
 
 		// Define types Node is dependent on
@@ -186,7 +188,7 @@ namespace Tank
 		utNode[SOL_FIELD("Node", "name", "string")] = sol::property(&Node::getName, &Node::setName);
 		utNode[SOL_FIELD("Node", "transform", "Transform")] = sol::property(&Node::getTransform);
 		utNode[SOL_FIELD("Node", "key_input", "KeyInput")] = sol::property(&Node::getKeyInput);
-		utNode[SOL_METHOD("Node", "get_parent", "Node")] = &Node::getParent;
+		utNode[SOL_METHOD("Node", "get_parent", "Node", {})] = &Node::getParent;
 		utNode[SOL_METHOD("Node", "get_child", "Node", { "index", "number" })] = static_cast<Node *(Node::*)(int) const>(&Node::getChild);
 		utNode[SOL_METHOD("Node", "get_child", "Node", { "name", "string" })] = static_cast<Node *(Node::*)(const std::string &) const>(&Node::getChild);
 		SOL_GLOBAL_FIELD("Node", "node", "Node");
@@ -207,8 +209,8 @@ namespace Tank
 			sol::base_classes, sol::bases<Node>()
 		);
 		SOL_CLASS_BASE("Scene", Node);
-		utScene[SOL_METHOD("Scene", "active_camera", "Camera")] = &Scene::getActiveCamera;
-		utScene[SOL_STATIC_METHOD("Scene", "current", "Scene")] = &Scene::getActiveScene;
+		utScene[SOL_METHOD("Scene", "active_camera", "Camera", {})] = &Scene::getActiveCamera;
+		utScene[SOL_STATIC_METHOD("Scene", "current", "Scene", {})] = &Scene::getActiveScene;
 	}
 
 
