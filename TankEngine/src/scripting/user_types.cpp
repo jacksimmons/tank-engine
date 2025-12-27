@@ -109,25 +109,25 @@ namespace Tank
 			"Vec3",
 			sol::meta_function::addition,
 			"Vec3",
-			{ "other", "Vec3" }
+			{{ "other", "Vec3" }}
 		)] = [](const glm::vec3 &a, const glm::vec3 &b) { return a + b; };
 		utVec3[SOL_META_METHOD(
 			"Vec3",
 			sol::meta_function::subtraction,
 			"Vec3",
-			{ "other", "Vec3" }
+			{{ "other", "Vec3" }}
 		)] = [](const glm::vec3 &a, const glm::vec3 &b) { return a - b; };
 		utVec3[SOL_META_METHOD(
 			"Vec3",
 			sol::meta_function::multiplication,
 			"Vec3",
-			{ "scalar", "number" }
+			{{ "scalar", "number" }}
 		)] = [](const glm::vec3 &a, const float b) { return a * b; };
 		utVec3[SOL_META_METHOD(
 			"Vec3",
 			sol::meta_function::division,
 			"Vec3",
-			{ "scalar", "number" }
+			{{ "scalar", "number" }}
 		)] = [](const glm::vec3 &a, const float b) { return a / b; };
 		SOL_META_METHOD(
 			"Vec3",
@@ -139,7 +139,7 @@ namespace Tank
 			"Vec3",
 			sol::meta_function::equal_to,
 			"boolean",
-			{ "other", "Vec3" }
+			{{ "other", "Vec3" }}
 		);
 		SOL_META_METHOD(
 			"Vec3",
@@ -178,7 +178,7 @@ namespace Tank
 		sol::usertype<KeyInput> utKeyInput = lua.new_usertype<KeyInput>(
 			SOL_CLASS(KeyInput)
 		);
-		utKeyInput[SOL_METHOD("KeyInput", "get_key_state", "KeyState", {"code", "KeyCode"})] = &KeyInput::getKeyState;
+		utKeyInput[SOL_METHOD("KeyInput", "get_key_state", "KeyState", {{ "code", "KeyCode" }})] = &KeyInput::getKeyState;
 
 
 		// Node
@@ -189,8 +189,8 @@ namespace Tank
 		utNode[SOL_FIELD("Node", "transform", "Transform")] = sol::property(&Node::getTransform);
 		utNode[SOL_FIELD("Node", "key_input", "KeyInput")] = sol::property(&Node::getKeyInput);
 		utNode[SOL_METHOD("Node", "get_parent", "Node", {})] = &Node::getParent;
-		utNode[SOL_METHOD("Node", "get_child", "Node", { "index", "number" })] = static_cast<Node *(Node::*)(int) const>(&Node::getChild);
-		utNode[SOL_METHOD("Node", "get_child", "Node", { "name", "string" })] = static_cast<Node *(Node::*)(const std::string &) const>(&Node::getChild);
+		utNode[SOL_METHOD("Node", "get_child", "Node", {{ "index", "number" }})] = static_cast<Node *(Node::*)(int) const>(&Node::getChild);
+		utNode[SOL_METHOD("Node", "get_child", "Node", {{ "name", "string" }})] = static_cast<Node *(Node::*)(const std::string &) const>(&Node::getChild);
 		SOL_GLOBAL_FIELD("Node", "node", "Node");
 
 
@@ -200,7 +200,7 @@ namespace Tank
 			sol::base_classes, sol::bases<Node>()
 		);
 		SOL_CLASS_BASE("Camera", Node);
-		utCamera[SOL_METHOD("Camera", "set_pos", "", {"pos", "Vec3"})] = &Camera::setPosition;
+		utCamera[SOL_METHOD("Camera", "set_pos", "", {{ "pos", "Vec3" }})] = &Camera::setPosition;
 
 
 		// Scene
