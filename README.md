@@ -37,7 +37,8 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - [x] Saving and loading of scenes
 
 # Project Setup
-- This repository uses submodules, so please use --recurse-submodules when git-cloning.    
+- This repository uses submodules. Use --recurse-submodules when git-cloning.    
+- (Or `git submodule update --init --recursive --progress` after cloning)  
 - No binaries are located in this repo, so instead use premake5 to generate them.
 - Premake binaries for Windows/Linux are included in the `premake` folder, but you may want/need to use your own version.  
 - Example build command (Windows): `./premake/premake5 vs2022`.  
