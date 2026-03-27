@@ -13,3 +13,9 @@
 [submodule "vendor/miniaudio"]
 	path = vendor/miniaudio
 	url = https://github.com/mackron/miniaudio
+[submodule "include/lua"]
+	path = include/lua
+	url = https://github.com/lua/lua
+[submodule "include/sol2"]
+	path = include/sol2
+	url = https://github.com/ThePhd/sol2
