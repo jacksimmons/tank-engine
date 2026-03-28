@@ -12,3 +12,4 @@ libminizip-dev
 libpugixml-dev
 libglfw3-dev
 libassimp5
+bear
