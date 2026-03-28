@@ -87,6 +87,7 @@ project "TankEngine"
 		"include/imgui/backends",
 		"include/sol2/include",
 		"include/lua",
+		"include/nativefiledialog/src/include",
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		"%{prj.name}", -- for pch
@@ -144,6 +145,7 @@ project "TankEditor"
 		"include/imgui",
 		"include/sol2/include",
 		"include/lua",
+		"include/nativefiledialog/src/include",
 		"%{prj.name}/include",
 		"%{prj.name}/src",
 		engineName .. "/src",

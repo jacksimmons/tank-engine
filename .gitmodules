@@ -19,3 +19,6 @@
 [submodule "include/sol2"]
 	path = include/sol2
 	url = https://github.com/ThePhd/sol2
+[submodule "include/nativefiledialog"]
+	path = include/nativefiledialog
+	url = https://github.com/mlabbe/nativefiledialog

@@ -3,6 +3,7 @@
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
+#include <nfd.h>
 
 #include <nodes/node.hpp>
 #include <nodes/model.hpp>
@@ -25,7 +26,6 @@
 #include "ui/scene_view.hpp"
 #include "ui/hierarchy.hpp"
 #include "ui/inspector/inspector.hpp"
-#include "ui/file_dialog.hpp"
 #include "ui/main_menu_bar.hpp"
 #include "ui/profiler.hpp"
 
