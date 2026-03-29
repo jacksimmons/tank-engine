@@ -6,15 +6,6 @@ require "premake.outdir"
 
 
 workspace "TankEngine"
-	local engineName = "TankEngine"
-	local editorName = "TankEditor"
-	local playerName = "TankPlayer"
-
-	local binDir = BinDir()
-	local engineDir = binDir .. engineName .. "/%{cfg.shortname}"
-	local editorDir = binDir .. editorName .. "/%{cfg.shortname}"
-	local playerDir = binDir .. playerName .. "/%{cfg.shortname}"
-
     configurations { "Debug", "Release" }
 	architecture "x86_64"
 
@@ -22,7 +13,6 @@ workspace "TankEngine"
 	symbols "On"
     filter { "configurations:Release" }
 	optimize "On"
-
 
 -- project "TankCSharpBindings"
 -- 	kind "SharedLib"
@@ -38,7 +28,6 @@ workspace "TankEngine"
 -- 	}
 
 project "Lua"
-	local luaDir = binDir .. "Lua/%{cfg.shortname}"
 	kind "StaticLib"
 	PrjUseC()
 	PrjObjAndTargetDir()
@@ -52,7 +41,6 @@ project "Lua"
 	}
 
 project "miniaudio"
-	local miniaudioDir = binDir .. "miniaudio/%{cfg.shortname}"
 	kind "StaticLib"
 	PrjUseC()
 	PrjObjAndTargetDir()
@@ -65,166 +53,9 @@ project "miniaudio"
 		"vendor/miniaudio/miniaudio.c"
 	}
 
-project "TankEngine"
-	kind "SharedLib"
-	PrjUseCpp()
-	PrjObjAndTargetDir()
-
-	defines {
-		"TANK_DLL",
-		"TANK_PLAYERDIR=\"" .. playerDir .. "\"",
-		"GLM_ENABLE_EXPERIMENTAL",
-		"FMT_UNICODE=0",
-		"GLAD_GLAPI_EXPORT",
-		"GLAD_GLAPI_EXPORT_BUILD",
-		"STBI_NO_SIMD",
-	}
-
-	includedirs {
-		"include",
-		"include/glm",
-		"include/imgui",
-		"include/imgui/backends",
-		"include/sol2/include",
-		"include/lua",
-		"include/nativefiledialog/src/include",
-		"%{prj.name}/include",
-		"%{prj.name}/src",
-		"%{prj.name}", -- for pch
-		"vendor"
-	}
-
-	files {
-		"include/imgui/imgui*.cpp",
-		"include/imgui/backends/imgui_impl_glfw.cpp",
-		"include/imgui/backends/imgui_impl_opengl3.cpp",
-		"include/glad/glad.cpp",
-		"%{prj.name}/src/**.hpp",
-		"%{prj.name}/src/**.cpp"
-	}
-
-	-- Library dirs
-	libdirs {
-		"lib"
-	}
-	LibDirWithPostCopy(luaDir, engineDir)
-	LibDirWithPostCopy(miniaudioDir, engineDir)
-	LibDirGLFWPostCopy(_ACTION, engineDir)
-	
-	-- Linked libraries
-	LinkLua()
-	LinkGLFW()
-	LinkOpenGL()
-	LinkMiniaudio()
-	LinkAssimp("lib", engineDir)
-
-	-- PCH
-	pchheader "tepch.hpp"
-	pchsource "%{prj.name}/src/application.cpp"
-	filter { "action:vs*" }
-		buildoptions { "/FI tepch.hpp" }
-		
-	-- Copy bin and libs into all applicable outdirs
-	PostCopyDir(engineDir, editorDir)
-	PostCopyDir(engineDir, playerDir)
-
-project "TankEditor"
-	kind "ConsoleApp"
-	PrjUseCpp()
-	PrjObjAndTargetDir()
-
-	defines {
-		"GLM_ENABLE_EXPERIMENTAL",
-		"FMT_UNICODE=0",
-		"GLAD_GLAPI_EXPORT",
-	}
-
-	includedirs {
-		"include",
-		"include/glm",
-		"include/imgui",
-		"include/sol2/include",
-		"include/lua",
-		"include/nativefiledialog/src/include",
-		"%{prj.name}/include",
-		"%{prj.name}/src",
-		engineName .. "/src",
-		engineName, -- for pch
-		"vendor/mono/include",
-		"vendor"
-	}
-	
-	files {
-		"include/imgui/imgui*.cpp",
-		"%{prj.name}/src/**.hpp",
-		"%{prj.name}/src/**.cpp",
-	}
-
-	-- Library dirs
-	libdirs {
-		"lib",
-	}
-	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
-	LibDirGLFWPostCopy(_ACTION, editorDir)
-
-	-- Linked libraries
-	links {
-		engineName
---		"mono-2.0-sgen"
-	}
-	LinkGLFW(_ACTION, editorDir)
-	LinkAssimp("lib", editorDir)
-
-	-- PCH
-	pchheader "tepch.hpp"
-	pchsource "%{prj.name}/src/editor.cpp"
-	filter { "action:vs*" }
-		buildoptions { "/FI tepch.hpp" }
-
-project "TankPlayer"
-	kind "ConsoleApp"
-	PrjUseCpp()
-	PrjObjAndTargetDir()
-
-	defines {
-		"GLM_ENABLE_EXPERIMENTAL",
-		"FMT_UNICODE=0",
-		"GLAD_GLAPI_EXPORT"
-	}
-	
-	files {
-		"%{prj.name}/src/**.hpp",
-		"%{prj.name}/src/**.cpp",
-	}
-
-	includedirs {
-		"include",
-		"include/glm",
-		"include/sol2/include",
-		"include/lua",
-		"%{prj.name}/include",
-		"%{prj.name}/src",
-		engineName .. "/src",
-		engineName, -- for pch
-	}
-
-	-- Library dirs
-	libdirs {
-		"lib",
-	}
-	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
-
-	-- Linked libraries
-	LinkAssimp("lib", playerDir)
-	links {
-		engineName
-	}
-
-	-- PCH
-	pchheader "tepch.hpp"
-	pchsource "%{prj.name}/src/player.cpp"
-	filter { "action:vs*" }
-		buildoptions { "/FI tepch.hpp" }
+include "TankEngine"
+include "TankEditor"
+include "TankPlayer"
 
 
 -- require "TankCSharpHost.premake5"

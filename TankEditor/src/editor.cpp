@@ -65,22 +65,21 @@ namespace Tank::Editor
 		// Add editor-specific events
 		EventManager::addEvent("Hierarchy.NodeSelected", new Event<Node*>());
 		EventManager::addEvent("Hierarchy.NodeDeleted", new Event<Node*>());
-		EventManager::addEvent("FileDialog.ItemSelected", new Event<_FileDialog*, fs::path>());
 		EventManager::addEvent("Console.AddColouredLine", new Event<std::string, ImColor>());
 
 		// Register file dialog event handlers
-		EventManager::getEvent<_FileDialog*, fs::path>("FileDialog.ItemSelected")
-		->registerHandler(
-			[this](_FileDialog *dialog, const std::filesystem::path &path)
-			{
-				const std::string &name = dialog->getName();
+		// EventManager::getEvent<_FileDialog*, fs::path>("FileDialog.ItemSelected")
+		// ->registerHandler(
+		// 	[this](_FileDialog *dialog, const std::filesystem::path &path)
+		// 	{
+		// 		const std::string &name = dialog->getName();
 
-				if (name == "Save Project")
-				{
-					Serialisation::saveScene(Scene::getActiveScene(), path);
-				}
-			}
-		);
+		// 		if (name == "Save Project")
+		// 		{
+		// 			Serialisation::saveScene(Scene::getActiveScene(), path);
+		// 		}
+		// 	}
+		// );
 
 		// Set the ImGui context, over DLL boundary
 		ImGui::SetCurrentContext(getContext());
@@ -107,32 +106,18 @@ namespace Tank::Editor
 			[this](auto &name) { return !m_initUI->getChild(name); },
 			[this]()
 			{
-				std::unique_ptr<_FileDialog> fd = std::unique_ptr<_FileDialog>(
-					new _FileDialog("New Project", "", fs::current_path().root_directory(), _FileDialogTarget::Directory,
-					[this](const fs::path &path)
-					{
-						if (!fs::is_empty(path))
-						{
-							TE_CORE_ERROR(std::format("New Project > {} is not empty.", path.string()));
-							return;
-						}
+				fs::path projectDir = FileDialog::selectDirectory();
+				fs::path scenePath = projectDir / "scene.json";
+				fs::copy("DemoProject", projectDir);
 
-						fs::path projectPath = path;
-						fs::path scenePath = projectPath / "scene.json";
-						fs::copy("DemoProject", projectPath);
-
-						// Load scene if it was valid, and close the popup either way
-						if (Scene *rawScene = ::Tank::Serialisation::loadScene(scenePath.string(), m_factory.get()))
-						{
-							std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
-							loadProject(projectPath);
-							loadScene(std::move(scene));
-							postSceneSetup();
-						}
-					})
-				);
-
-				m_initUI->addChild(std::move(fd));
+				// Load scene if it was valid, and close the popup either way
+				if (Scene *rawScene = ::Tank::Serialisation::loadScene(scenePath.string(), m_factory.get()))
+				{
+					std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
+					loadProject(projectDir);
+					loadScene(std::move(scene));
+					postSceneSetup();
+				}
 			}
 		};
 
@@ -142,22 +127,16 @@ namespace Tank::Editor
 			[this](auto &name) { return !m_initUI->getChild(name); },
 			[this]()
 			{
-				std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-					new _FileDialog("Open Project", fs::current_path().root_path(), fs::current_path(), _FileDialogTarget::File,
-					[this](const fs::path &path)
-					{
-						loadProject(path.parent_path());
+				fs::path projectDir = FileDialog::selectDirectory();
+				loadProject(projectDir);
 
-						// Load scene if it was valid, and close the popup either way
-						if (Scene *rawScene = ::Tank::Serialisation::loadScene(path.string(), m_factory.get()))
-						{
-							std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
-							loadScene(std::move(scene));
-							postSceneSetup();
-						}
-					})
-				);
-				m_initUI->addChild(std::move(fileDialog));
+				// Load scene if it was valid, and close the popup either way
+				if (Scene *rawScene = ::Tank::Serialisation::loadScene(projectDir / "scene.json", m_factory.get()))
+				{
+					std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
+					loadScene(std::move(scene));
+					postSceneSetup();
+				}
 			}
 		};
 
@@ -166,14 +145,14 @@ namespace Tank::Editor
 			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
 			[this]()
 			{
-				std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-					new _FileDialog("Save Project", "", fs::current_path().root_directory(), _FileDialogTarget::File,
-					[this](const fs::path &path)
-					{
-						Serialisation::saveScene(Scene::getActiveScene(), path);
-					})
-				);
-				m_initUI->addChild(std::move(fileDialog));
+				// std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
+				// 	new _FileDialog("Save Project", "", fs::current_path().root_directory(), _FileDialogTarget::File,
+				// 	[this](const fs::path &path)
+				// 	{
+				// 		Serialisation::saveScene(Scene::getActiveScene(), path);
+				// 	})
+				// );
+				// m_initUI->addChild(std::move(fileDialog));
 			}
 		};
 
@@ -182,19 +161,19 @@ namespace Tank::Editor
 			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
 			[this]()
 			{
-				std::unique_ptr<_FileDialog> fd = std::unique_ptr<_FileDialog>(
-					new _FileDialog(
-						"Export Project",
-						fs::current_path().root_directory(),
-						fs::current_path(),
-						_FileDialogTarget::Directory,
-						[this](const fs::path &path)
-						{
-							Export::BundleBuilder::build(Scene::getActiveScene(), path);
-						}
-					)
-				);
-				m_initUI->addChild(std::move(fd));
+				// std::unique_ptr<_FileDialog> fd = std::unique_ptr<_FileDialog>(
+				// 	new _FileDialog(
+				// 		"Export Project",
+				// 		fs::current_path().root_directory(),
+				// 		fs::current_path(),
+				// 		_FileDialogTarget::Directory,
+				// 		[this](const fs::path &path)
+				// 		{
+				// 			Export::BundleBuilder::build(Scene::getActiveScene(), path);
+				// 		}
+				// 	)
+				// );
+				// m_initUI->addChild(std::move(fd));
 			}
 		};
 

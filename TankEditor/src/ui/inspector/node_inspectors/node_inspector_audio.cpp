@@ -35,19 +35,9 @@ namespace Tank::Editor
 		{
 			if (!m_inspector->getSibling(g_name))
 			{
-				auto fileDialog = std::make_unique<_FileDialog>(
-					g_name,
-					Resource::getProjPath(),
-					Resource::getProjPath(),
-					_FileDialogTarget::File,
-					[this](const fs::path &path)
-					{
-						m_node->setAudioPath(path);
-						m_node->updateSound();
-					}
-				);
-
-				m_inspector->addChild(std::move(fileDialog));
+				fs::path path = FileDialog::selectFile();
+				m_node->setAudioPath(path);
+				m_node->updateSound();
 			}
 		}
 

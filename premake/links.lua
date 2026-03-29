@@ -41,14 +41,6 @@ function LinkGLFW()
 	filter {}
 end
 
-function LinkLua()
-	links { "Lua" }
-end
-
-function LinkMiniaudio()
-	links { "miniaudio" }
-end
-
 -- Links Assimp, copies library on Windows.
 function LinkAssimp(srcdir, destdir)
 	local assimpFile
