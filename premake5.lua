@@ -14,6 +14,10 @@ workspace "TankEngine"
     filter { "configurations:Release" }
 	optimize "On"
 
+	filter "system:linux"
+        buildoptions { "-fPIC", "`pkg-config --cflags gtk+-3.0`" }
+		linkoptions { "`pkg-config --libs gtk+-3.0`" }
+
 -- project "TankCSharpBindings"
 -- 	kind "SharedLib"
 -- 	PrjUseCSharp()

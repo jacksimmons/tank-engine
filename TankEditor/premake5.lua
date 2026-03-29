@@ -34,7 +34,6 @@ project "TankEditor"
 
 	files {
 		wks .. "include/imgui/imgui*.cpp",
-        nfd .. "src/**.c",
 		"src/**.hpp",
 		"src/**.cpp",
 	}
