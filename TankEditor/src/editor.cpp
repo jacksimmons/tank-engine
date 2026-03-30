@@ -28,6 +28,7 @@
 #include "ui/inspector/inspector.hpp"
 #include "ui/main_menu_bar.hpp"
 #include "ui/profiler.hpp"
+#include "ui/menu/projects_menu.hpp"
 
 
 namespace Tank::Editor
@@ -86,10 +87,30 @@ namespace Tank::Editor
 
 		// Initialise UI
 		m_initUI = std::make_unique<Node>("Init");
+	
+		// Load Project (via New/Open Project)
+		auto projectsMenu = std::unique_ptr<ProjectsMenu>(
+			new ProjectsMenu(
+				[this](const fs::path &path)
+				{
+					fs::path scenePath = path / "scene.json";
 
-		// Initialise Tabs
-		std::vector<Tab> tabs = { getFileTab(), getWindowTab() };
-		m_initUI->addChild(std::unique_ptr<_MainMenuBar>(new _MainMenuBar("MainMenuBar", tabs)));
+					// Load scene if it was valid, and close the popup either way
+					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.string(), m_factory.get()))
+					{
+						std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
+						loadProject(path);
+						loadScene(std::move(scene));
+						postSceneSetup();
+					}
+
+					// Initialise Tabs
+					std::vector<Tab> tabs = { getFileTab(), getWindowTab() };
+					m_initUI->addChild(std::unique_ptr<_MainMenuBar>(new _MainMenuBar("MainMenuBar", tabs)));
+				}
+			)
+		);
+		m_initUI->addChild(std::move(projectsMenu));
 	}
 
 
@@ -102,49 +123,30 @@ namespace Tank::Editor
 	{
 		TabItem newProj =
 		{
-			"New Project...",
+			"New Scene...",
 			[this](auto &name) { return !m_initUI->getChild(name); },
 			[this]()
 			{
-				fs::path projectDir = FileDialog::selectDirectory();
-				fs::path scenePath = projectDir / "scene.json";
-				fs::copy("DemoProject", projectDir);
-
-				// Load scene if it was valid, and close the popup either way
-				if (Scene *rawScene = ::Tank::Serialisation::loadScene(scenePath.string(), m_factory.get()))
-				{
-					std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
-					loadProject(projectDir);
-					loadScene(std::move(scene));
-					postSceneSetup();
-				}
 			}
 		};
 
 		TabItem openProj =
 		{
-			"Open Project...",
+			"Open Scene...",
 			[this](auto &name) { return !m_initUI->getChild(name); },
 			[this]()
 			{
-				fs::path projectDir = FileDialog::selectDirectory();
-				loadProject(projectDir);
-
-				// Load scene if it was valid, and close the popup either way
-				if (Scene *rawScene = ::Tank::Serialisation::loadScene(projectDir / "scene.json", m_factory.get()))
-				{
-					std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
-					loadScene(std::move(scene));
-					postSceneSetup();
-				}
 			}
 		};
 
 		TabItem saveProj = {
-			"Save Project As...",
+			"Save Scene As...",
 			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
 			[this]()
 			{
+				fs::path projectDir = FileDialog::selectDirectory();
+				if (projectDir == "") return;
+
 				// std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
 				// 	new _FileDialog("Save Project", "", fs::current_path().root_directory(), _FileDialogTarget::File,
 				// 	[this](const fs::path &path)

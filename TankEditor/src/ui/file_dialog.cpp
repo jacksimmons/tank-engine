@@ -2,22 +2,20 @@
 #include "file_dialog.hpp"
 
 
-static bool handleResult(nfdresult_t result, const std::string &outPath)
+static std::string handleResult(nfdresult_t result, nfdchar_t **outPath)
 {
-    if (result = NFD_OKAY)
+    switch (result)
     {
-        TE_INFO( std::format("File dialog outputted path {}", outPath) );
-        return true;
+        case NFD_OKAY:
+            TE_INFO( std::format("File dialog outputted path {}", *outPath) );
+            return *outPath;
+        case NFD_CANCEL:
+            TE_INFO( "User cancelled dialog" );
+            return "";
+        default:
+            TE_INFO( std::format("NFD error: {}", NFD_GetError()) );
+            return "";
     }
-    else if (result == NFD_CANCEL)
-    {
-        TE_INFO("User cancelled dialog");
-    }
-    else
-    {
-        TE_ERROR( std::format("Dialog error: {}", NFD_GetError()) );
-    }
-    return false;
 }
 
 
@@ -27,25 +25,19 @@ namespace Tank
     {
         nfdresult_t result;
         std::string outPathStr;
-        {
-            nfdchar_t *outPath = NULL;
 
-            switch (target)
-            {
-                case FileDialog::Target::File:
-                    result = NFD_OpenDialog(NULL, NULL, &outPath);
-                    break;
-                case FileDialog::Target::Directory:
-                    result = NFD_PickFolder(NULL, &outPath);
-            }
-            outPathStr = outPath;
-            free(outPath);
-        }
-        
-        if (handleResult(result, outPathStr))
+        nfdchar_t *outPath = NULL;
+
+        switch (target)
         {
-            return outPathStr;
+            case FileDialog::Target::File:
+                result = NFD_OpenDialog(NULL, NULL, &outPath);
+                break;
+            case FileDialog::Target::Directory:
+                result = NFD_PickFolder(NULL, &outPath);
+                break;
         }
-        return "";
+
+        return handleResult(result, &outPath);
     }
 }

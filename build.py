@@ -28,7 +28,7 @@ def main(
     if build_system == "gmake":
         # Make NFD
         command(f"make -C include/nativefiledialog/build/{BUILD_SYSTEMS_FOR_NFD[build_system]} nfd config=debug_x64")
-        command(f"{"bear -- " if use_bear else ""} make {str.join("", [f"{t} " for t in targets])}")
+        command(f"{"bear --append -- " if use_bear else ""} make {str.join("", [f"{t} " for t in targets])}")
 
         if gmake_fix_precompiled_header_paths:
             command(r"""perl -i -0pe 's|("-include",\s*")[^"]*tepch\.hpp"|$1'"$(pwd)"'/TankEngine/tepch.hpp"|g' compile_commands.json""")

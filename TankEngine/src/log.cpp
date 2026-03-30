@@ -15,7 +15,7 @@ namespace Tank
 		s_coreLogger = spdlog::stdout_color_mt("TANK");
 		s_coreLogger->set_level(spdlog::level::trace);
 
-		s_clientLogger = spdlog::stdout_color_mt("APP");
+		s_clientLogger = spdlog::stdout_color_mt("APPLICATION");
 		s_clientLogger->set_level(spdlog::level::trace);
 	}
 }

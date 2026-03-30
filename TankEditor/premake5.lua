@@ -50,7 +50,12 @@ project "TankEditor"
 	-- Linked libraries
 	links {
 		"TankEngine",
-		"nfd_d"
+		"nfd_d",
+		"gtk-3",
+		"gdk-3",
+		"glib-2.0",
+		"gobject-2.0",
+		"gio-2.0"
 --		"mono-2.0-sgen"
 	}
 	LinkGLFW(_ACTION)
@@ -61,6 +66,3 @@ project "TankEditor"
 	pchsource "src/editor.cpp"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
-    filter { "action:gmake" }
-        buildoptions { "`pkg-config --cflags gtk+-3.0`" }
-        linkoptions { "`pkg-config --libs gtk+-3.0`" }
