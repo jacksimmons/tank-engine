@@ -13,8 +13,7 @@ namespace Tank
         };
 
 
-        fs::path selectOne(Target target);
-        static fs::path selectFile() { return selectOne(Target::File); }
-        static fs::path selectDirectory() { return selectOne(Target::Directory); }
+        fs::path open(Target target);
+        fs::path saveAs();
     }
 }

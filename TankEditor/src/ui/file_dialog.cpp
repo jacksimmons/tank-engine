@@ -21,7 +21,7 @@ static std::string handleResult(nfdresult_t result, nfdchar_t **outPath)
 
 namespace Tank
 {
-    fs::path FileDialog::selectOne(FileDialog::Target target)
+    fs::path FileDialog::open(FileDialog::Target target)
     {
         nfdresult_t result;
         std::string outPathStr;
@@ -38,6 +38,17 @@ namespace Tank
                 break;
         }
 
+        return handleResult(result, &outPath);
+    }
+
+
+    fs::path FileDialog::saveAs()
+    {
+        nfdresult_t result;
+        std::string outPathStr;
+        nfdchar_t *outPath = NULL;
+
+        result = NFD_SaveDialog(NULL, NULL, &outPath);
         return handleResult(result, &outPath);
     }
 }

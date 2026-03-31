@@ -101,7 +101,7 @@ namespace Tank::Editor
 					// Load scene if it was valid, and close the popup either way
 					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.string(), m_factory.get()))
 					{
-						std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
+						std::unique_ptr<Tank::Scene> scene = std::unique_ptr<Tank::Scene>(rawScene);
 						loadScene(std::move(scene));
 						postSceneSetup();
 					}
@@ -123,31 +123,44 @@ namespace Tank::Editor
 
 	Tab EditorApp::getFileTab()
 	{
-		TabItem newProj =
+		TabItem newScene =
 		{
 			"New Scene...",
 			[this](auto &name) { return !m_initUI->getChild(name); },
 			[this]()
 			{
+				fs::path scenePath = FileDialog::saveAs();
+				if (scenePath == "") return;
+
+				// Copy demo scene to the selected path
+				TE_INFO(std::format("New scene > {}", scenePath.string()));
+				fs::copy(Res::getEnginePath() / "DemoProject" / "scene.json", scenePath);
 			}
 		};
 
-		TabItem openProj =
+		TabItem openScene =
 		{
 			"Open Scene...",
 			[this](auto &name) { return !m_initUI->getChild(name); },
 			[this]()
 			{
+				fs::path scenePath = FileDialog::open(FileDialog::Target::File);
+				if (scenePath == "") return;
+
+				// Load the selected scene
+				TE_INFO(std::format("Open scene > {}", scenePath.string()));
+				auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_factory.get()));
+				loadScene(std::move(scene));
 			}
 		};
 
-		TabItem saveProj = {
+		TabItem saveScene = {
 			"Save Scene As...",
 			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
 			[this]()
 			{
-				fs::path projectDir = FileDialog::selectDirectory();
-				if (projectDir == "") return;
+				// fs::path sceneDir = FileDialog::saveAs();
+				// if (sceneDir == "") return;
 
 				// std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
 				// 	new _FileDialog("Save Project", "", fs::current_path().root_directory(), _FileDialogTarget::File,
@@ -185,7 +198,7 @@ namespace Tank::Editor
 		{
 			"File",
 			[](auto &) { return true; },
-			{ newProj, openProj, saveProj, exportProj }
+			{ newScene, openScene, saveScene, exportProj }
 		};
 		return file;
 	}

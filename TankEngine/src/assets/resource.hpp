@@ -21,6 +21,7 @@ namespace Tank
 		/// </summary>
 		bool m_inEngine;
 	public:
+		static const fs::path &getEnginePath() { return s_enginePath; }
 
 		static std::string encode(const Resource &decoded);
 		static Resource decode(const std::string &encoded);

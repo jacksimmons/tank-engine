@@ -178,7 +178,6 @@ namespace Tank
 			{
 				TE_CORE_INFO(m_modelPath.resolvePathStr());
 				fs::path texturePath = m_modelPath.resolvePath().parent_path() / str.C_Str();
-				TE_CORE_INFO(str.C_Str());
 				auto tex = Texture::fromFile(texturePath, typeName);
 
 				if (tex.has_value())
@@ -189,7 +188,7 @@ namespace Tank
 				}
 				else
 				{
-					TE_CORE_ERROR(std::format("Unable to load texture {}", texturePath));
+					TE_CORE_ERROR(std::format("Unable to load texture {}", texturePath.string()));
 				}
 			}
 		}

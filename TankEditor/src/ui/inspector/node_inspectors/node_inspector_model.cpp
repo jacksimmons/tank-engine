@@ -38,7 +38,7 @@ namespace Tank::Editor
 		{
 			if (!m_inspector->getSibling(g_name))
 			{
-				fs::path path = FileDialog::selectDirectory();
+				fs::path path = FileDialog::open(FileDialog::Target::Directory);
 				m_node->setModelPath(path);
 				m_node->process();
 			}

@@ -18,7 +18,7 @@ namespace Tank::Editor
     {
         if (ImGui::Button("New Project"))
         {
-            fs::path projectDir = FileDialog::selectDirectory();
+            fs::path projectDir = FileDialog::open(FileDialog::Target::Directory);
             if (projectDir == "") return;
             fs::copy("DemoProject", projectDir);
 
@@ -27,7 +27,7 @@ namespace Tank::Editor
 
         if (ImGui::Button("Open Project"))
         {
-            fs::path projectDir = FileDialog::selectDirectory();
+            fs::path projectDir = FileDialog::open(FileDialog::Target::Directory);
             if (projectDir == "") return;
 
             m_loadProject(projectDir);

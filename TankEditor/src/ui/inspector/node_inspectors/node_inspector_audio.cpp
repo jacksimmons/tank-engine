@@ -35,7 +35,7 @@ namespace Tank::Editor
 		{
 			if (!m_inspector->getSibling(g_name))
 			{
-				fs::path path = FileDialog::selectFile();
+				fs::path path = FileDialog::open(FileDialog::Target::File);
 				m_node->setAudioPath(path);
 				m_node->updateSound();
 			}
