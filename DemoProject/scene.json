@@ -204,7 +204,7 @@
             "children": [],
             "cullFace": 1029,
             "enabled": true,
-            "modelPath": "models/doom\\doom_E1M1.obj",
+            "modelPath": "models/doom/doom_E1M1.obj",
             "name": "Doom",
             "scripts": [],
             "shader": {
@@ -238,7 +238,7 @@
             "children": [],
             "cullFace": 1028,
             "enabled": true,
-            "modelPath": "models/player\\Fat Banjo and Kazooie.obj",
+            "modelPath": "models/player/Fat Banjo and Kazooie.obj",
             "name": "Player",
             "scripts": [
                 "scripts/player.lua"

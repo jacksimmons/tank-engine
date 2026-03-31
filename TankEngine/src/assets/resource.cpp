@@ -6,7 +6,6 @@ namespace Tank
 {
 	std::string Resource::s_engineToken = "{engine}";
 	fs::path Resource::s_enginePath = fs::current_path();
-	fs::path Resource::s_projectPath = fs::current_path();
 
 	
 	std::string Resource::encode(const Resource &res)
@@ -37,11 +36,13 @@ namespace Tank
 	{
 		if (m_inEngine)
 		{
+			// Takes the resource from the engine itself
 			return s_enginePath / m_path;
 		}
 		else
 		{
-			return s_projectPath / m_path;
+			// Expects cwd to be project root
+			return m_path;
 		}
 	}
 

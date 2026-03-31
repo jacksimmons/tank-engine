@@ -93,13 +93,15 @@ namespace Tank::Editor
 			new ProjectsMenu(
 				[this](const fs::path &path)
 				{
+					// Update cwd to project path
+					fs::current_path(path);
+
 					fs::path scenePath = path / "scene.json";
 
 					// Load scene if it was valid, and close the popup either way
 					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.string(), m_factory.get()))
 					{
 						std::unique_ptr<::Tank::Scene> scene = std::unique_ptr<::Tank::Scene>(rawScene);
-						loadProject(path);
 						loadScene(std::move(scene));
 						postSceneSetup();
 					}

@@ -5,7 +5,6 @@ namespace Tank
 {
 	class TANK_API Resource final
 	{
-		friend class Application;
 	private:
 		static std::string s_engineToken;
 		static fs::path s_enginePath;

@@ -180,13 +180,6 @@ namespace Tank
 	}
 
 
-	void Application::loadProject(const fs::path &dir)
-	{
-		// Update where to load project resources from
-		Resource::s_projectPath = dir;
-	}
-
-
 	void Application::run()
 	{
 		auto frameStart = std::clock();

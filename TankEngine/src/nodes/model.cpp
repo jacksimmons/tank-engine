@@ -58,7 +58,7 @@ namespace Tank
 	{
 		std::string modelPath = m_modelPath.resolvePathStr();
 
-		// Replace all backslashes with forward slashes
+		// Replace all backslashes with forward slashes (for assimp)
 		std::replace(modelPath.begin(), modelPath.end(), '\\', '/');
 
 		// Find the last forward slash, to distinguish between directory and filename
@@ -177,7 +177,9 @@ namespace Tank
 			if (!skipLoading)
 			{
 				TE_CORE_INFO(m_modelPath.resolvePathStr());
-				auto tex = Texture::fromFile(m_modelPath.resolvePath().parent_path() / str.C_Str(), typeName);
+				fs::path texturePath = m_modelPath.resolvePath().parent_path() / str.C_Str();
+				TE_CORE_INFO(str.C_Str());
+				auto tex = Texture::fromFile(texturePath, typeName);
 
 				if (tex.has_value())
 				{
@@ -187,7 +189,7 @@ namespace Tank
 				}
 				else
 				{
-					TE_CORE_ERROR(std::format("Unable to load texture {}", (m_modelPath.resolvePath() / str.C_Str()).string()));
+					TE_CORE_ERROR(std::format("Unable to load texture {}", texturePath));
 				}
 			}
 		}
