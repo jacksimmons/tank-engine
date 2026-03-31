@@ -18,18 +18,18 @@ project "TankEditor"
 	}
 
 	includedirs {
+		"include",
+		"src",
 		wks .. "include",
 		wks .. "include/glm",
 		wks .. "include/imgui",
 		wks .. "include/sol2/include",
 		wks .. "include/lua",
-		nfd .. "src/include",
-		"include",
-		"src",
 		wks .. "TankEngine/src",
 		wks .. "TankEngine", -- for pch
 		wks .. "vendor",
-		wks .. "vendor/mono/include"
+		wks .. "vendor/mono/include",
+		nfd .. "src/include",
 	}
 
 	files {

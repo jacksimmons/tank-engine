@@ -19,8 +19,8 @@ jobs:
         run: |
           ./vs_build.bat
           more TankEngine.sln
-          msbuild TankEditor.vcxproj /p:Platform=x64
-          msbuild TankPlayer.vcxproj /p:Platform=x64
+          msbuild TankEditor/TankEditor.vcxproj /p:Platform=x64
+          msbuild TankPlayer/TankPlayer.vcxproj /p:Platform=x64
 
   build-on-ubuntu:
     runs-on: ubuntu-latest
@@ -35,8 +35,12 @@ jobs:
         run: |
           sudo apt update
           xargs sudo apt-get -y install < apt-packages.txt
+          sudo pip install -r requirements.txt
       
-      - name: Test
+      - name: Test Editor build
         run: |
-          chmod +x ./gmake_build.sh
-          ./gmake_build.sh clean
+          python3 build.py gmake TankEditor
+      
+      - name: Test Player build
+        run: |
+          python3 build.py gmake TankPlayer

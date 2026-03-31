@@ -1,6 +1,7 @@
 require("premake.outdir")
 
 
+local wks = "%{wks.location}/"
 local playerBin = ThisBinDir()
 
 
@@ -16,29 +17,28 @@ project "TankPlayer"
 	}
 	
 	files {
-		"%{prj.name}/src/**.hpp",
-		"%{prj.name}/src/**.cpp",
+		"src/**.hpp",
+		"src/**.cpp",
 	}
 
 	includedirs {
-		"include",
-		"include/glm",
-		"include/sol2/include",
-		"include/lua",
-		"%{prj.name}/include",
-		"%{prj.name}/src",
-		"TankEngine/src",
-		"TankEngine", -- for pch
+		"src",
+		wks .. "include",
+		wks .. "include/glm",
+		wks .. "include/sol2/include",
+		wks .. "include/lua",
+		wks .. "TankEngine/src",
+		wks .. "TankEngine", -- for pch
 	}
 
 	-- Library dirs
 	libdirs {
-		"lib",
+		wks .. "lib",
 	}
 	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
 
 	-- Linked libraries
-	LinkAssimp("lib", playerBin)
+	LinkAssimp(wks .. "lib", playerBin)
 	links {
 		"TankEngine"
 	}

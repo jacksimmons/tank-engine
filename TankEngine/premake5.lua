@@ -23,6 +23,9 @@ project "TankEngine"
 	}
 
 	includedirs {
+		"", -- for pch
+		"include",
+		"src",
 		wks .. "include",
 		wks .. "include/glm",
 		wks .. "include/imgui",
@@ -30,9 +33,6 @@ project "TankEngine"
 		wks .. "include/sol2/include",
 		wks .. "include/lua",
 		wks .. "vendor",
-		"include",
-		"src",
-		"", -- for pch
 	}
 
 	files {
