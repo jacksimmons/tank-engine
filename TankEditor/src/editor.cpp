@@ -136,7 +136,15 @@ namespace Tank::Editor
 
 				// Copy demo scene to the selected path
 				TE_INFO(std::format("New scene > {}", scenePath.string()));
-				fs::copy(Res::getEnginePath() / "DemoProject" / "scene.json", scenePath);
+				fs::copy(
+					Res::getEnginePath() / "DemoProject" / "scene.json",
+					scenePath,
+					fs::copy_options::overwrite_existing
+				);
+				
+				// Load the scene
+				auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_factory.get()));
+				loadScene(std::move(scene));
 			}
 		};
 
@@ -149,8 +157,9 @@ namespace Tank::Editor
 				fs::path scenePath = FileDialog::open(FileDialog::Target::File);
 				if (scenePath == "") return;
 
-				// Load the selected scene
 				TE_INFO(std::format("Open scene > {}", scenePath.string()));
+				
+				// Load the scene
 				auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_factory.get()));
 				loadScene(std::move(scene));
 			}
