@@ -8,10 +8,12 @@ namespace Tank
 	class Node;
 	class Scene;
 	class KeyInput;
-
+	
 	namespace Editor
 	{
-		class Tab; class TabItem;
+		class Project;
+		class Tab;
+		class TabItem;
 		class EditorApp : public Application
 		{
 		private:
@@ -25,6 +27,8 @@ namespace Tank
 			
 			// Keyboard input for the Editor only.
 			std::unique_ptr<KeyInput> m_editorInput;
+
+			std::unique_ptr<Project> m_project;
 
 			Tab getFileTab();
 			Tab getWindowTab();

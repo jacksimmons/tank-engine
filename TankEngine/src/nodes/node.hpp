@@ -16,7 +16,7 @@ namespace Tank
 	/// 
 	/// Nodes can be serialised and deserialised.
 	/// </summary>
-	class TANK_API Node : public ISerialisable, public IScriptable
+	class TANK_API Node : public ISerialisable<>, public IScriptable
 	{
 	public:
 		virtual json serialise();

@@ -29,6 +29,7 @@
 #include "ui/main_menu_bar.hpp"
 #include "ui/profiler.hpp"
 #include "ui/menu/projects_menu.hpp"
+#include "project/project.hpp"
 
 
 namespace Tank::Editor
@@ -85,24 +86,25 @@ namespace Tank::Editor
 		// Set the ImGui context, over DLL boundary
 		ImGui::SetCurrentContext(getContext());
 
-		// Initialise UI
 		m_initUI = std::make_unique<Node>("Init");
+		m_project = nullptr;
 	
 		// Load Project (via New/Open Project)
 		auto projectsMenu = std::unique_ptr<ProjectsMenu>(
 			new ProjectsMenu(
 				[this](const fs::path &path)
 				{
+					// Load the project
+					m_project = Project::loadFromDir(path);
+
 					// Update cwd to project path
 					fs::current_path(path);
 
-					fs::path scenePath = path / "scene.json";
-
-					// Load scene if it was valid, and close the popup either way
-					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.string(), m_factory.get()))
+					// Load the scene
+					Res scenePath = m_project->getSceneRes();
+					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), m_factory.get()))
 					{
-						std::unique_ptr<Tank::Scene> scene = std::unique_ptr<Tank::Scene>(rawScene);
-						loadScene(std::move(scene));
+						loadScene(std::unique_ptr<Scene>(rawScene));
 						postSceneSetup();
 					}
 

@@ -3,12 +3,12 @@
 
 namespace Tank
 {
-	/// <summary>
-	/// An object which can be serialised.
-	/// </summary>
+	/// @brief An object which can be serialised to a type T.
+	template <typename T = json>
 	class TANK_API ISerialisable
 	{
 	public:
-		virtual json serialise() = 0;
+		virtual T serialise() = 0;
+		virtual void deserialise(const T &serialised) = 0;
 	};
 }
