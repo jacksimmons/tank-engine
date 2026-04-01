@@ -20,7 +20,7 @@ namespace Tank::Editor
         {
             fs::path projectDir = FileDialog::open(FileDialog::Target::Directory);
             if (projectDir == "") return;
-            fs::copy("DemoProject", projectDir);
+            fs::copy("DemoProject", projectDir, fs::copy_options::recursive);
 
             m_loadProject(projectDir);
         }
