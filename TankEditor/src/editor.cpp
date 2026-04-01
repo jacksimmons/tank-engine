@@ -105,7 +105,6 @@ namespace Tank::Editor
 					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), m_factory.get()))
 					{
 						loadScene(std::unique_ptr<Scene>(rawScene));
-						postSceneSetup();
 					}
 
 					// Initialise Tabs
@@ -264,9 +263,9 @@ namespace Tank::Editor
 
 	void EditorApp::loadScene(std::unique_ptr<Scene> scene)
 	{
-		m_system.reset();
 		m_system = std::make_unique<Node>("Editor");
 		m_system->addChild(std::move(scene));
+		postSceneSetup();
 	}
 
 
