@@ -169,17 +169,13 @@ namespace Tank::Editor
 			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
 			[this]()
 			{
-				// fs::path sceneDir = FileDialog::saveAs();
-				// if (sceneDir == "") return;
+				fs::path scenePath = FileDialog::saveAs();
+				if (scenePath == "") return;
 
-				// std::unique_ptr<_FileDialog> fileDialog = std::unique_ptr<_FileDialog>(
-				// 	new _FileDialog("Save Project", "", fs::current_path().root_directory(), _FileDialogTarget::File,
-				// 	[this](const fs::path &path)
-				// 	{
-				// 		Serialisation::saveScene(Scene::getActiveScene(), path);
-				// 	})
-				// );
-				// m_initUI->addChild(std::move(fileDialog));
+				TE_INFO(std::format("Save scene > {}", scenePath.string()));
+
+				// Save the scene
+				Serialisation::saveScene(Scene::getActiveScene(), scenePath);
 			}
 		};
 

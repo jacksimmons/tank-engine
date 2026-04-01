@@ -312,7 +312,7 @@
                     "shader": {
                         "frag": "{engine}shaders/shader.frag",
                         "geom": "",
-                        "id": 34,
+                        "id": 37,
                         "vert": "{engine}shaders/shader.vert"
                     },
                     "texPath": "{engine}textures/gizmo/dir_light.png",
