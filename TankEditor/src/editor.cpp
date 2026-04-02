@@ -184,19 +184,16 @@ namespace Tank::Editor
 			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
 			[this]()
 			{
-				// std::unique_ptr<_FileDialog> fd = std::unique_ptr<_FileDialog>(
-				// 	new _FileDialog(
-				// 		"Export Project",
-				// 		fs::current_path().root_directory(),
-				// 		fs::current_path(),
-				// 		_FileDialogTarget::Directory,
-				// 		[this](const fs::path &path)
-				// 		{
-				// 			Export::BundleBuilder::build(Scene::getActiveScene(), path);
-				// 		}
-				// 	)
-				// );
-				// m_initUI->addChild(std::move(fd));
+				fs::path exportPath = FileDialog::open(FileDialog::Target::Directory);
+				if (exportPath == "") return;
+
+				TE_INFO(std::format("Export > {}", exportPath.string()));
+
+				// Export
+				Export::BundleBuilder::build(
+					Scene::getActiveScene(),
+					exportPath
+				);
 			}
 		};
 

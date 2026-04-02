@@ -9,6 +9,13 @@
 
 namespace Tank::Export
 {
+	static void createDirThenCopyInto(const fs::path &src, const fs::path &dest)
+	{
+		TE_INFO(fs::create_directories(dest));
+		fs::copy(src, dest, fs::copy_options::recursive);
+	}
+
+
 	bool BundleBuilder::build(Scene *scene, const fs::path &path)
 	{
 		// Check if TankPlayer is built
@@ -32,11 +39,13 @@ namespace Tank::Export
 		prepareSerialisedData(path);
 
 		TE_CORE_INFO("BundleBuilder > Copying assets...");
-		fs::copy("shaders", path / "shaders", fs::copy_options::recursive);
-		fs::copy("textures", path / "textures", fs::copy_options::recursive);
-		fs::copy("models", path / "models", fs::copy_options::recursive);
-		fs::copy("audio", path / "audio", fs::copy_options::recursive);
-		fs::copy("scripts", path / "scripts", fs::copy_options::recursive);
+		fs::path root = fs::absolute(fs::current_path());
+		fs::path relativePath = fs::relative(path, root);
+		createDirThenCopyInto("shaders", relativePath / "shaders");
+		createDirThenCopyInto("textures", relativePath / "textures");
+		createDirThenCopyInto("models", relativePath / "models");
+		createDirThenCopyInto("audio", relativePath / "audio");
+		createDirThenCopyInto("scripts", relativePath / "scripts");
 
 		TE_CORE_INFO("BundleBuilder > Copying player...");
 		fs::copy(TANK_PLAYERDIR, path);
