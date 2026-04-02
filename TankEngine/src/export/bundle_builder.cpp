@@ -9,9 +9,15 @@
 
 namespace Tank::Export
 {
-	static void createDirThenCopyInto(const fs::path &src, const fs::path &dest)
+	static void copyProjectDir(const fs::path &src, const fs::path &dest)
 	{
-		TE_INFO(fs::create_directories(dest));
+		// Exit if the src doesn't exist, or is not a directory
+		if (!fs::exists(src) || !fs::is_directory(src)) return;
+
+		// Ensure the dest exists, make it if not
+		fs::create_directories(dest);
+
+		// Copy recursively
 		fs::copy(src, dest, fs::copy_options::recursive);
 	}
 
@@ -39,16 +45,24 @@ namespace Tank::Export
 		prepareSerialisedData(path);
 
 		TE_CORE_INFO("BundleBuilder > Copying assets...");
-		fs::path root = fs::absolute(fs::current_path());
-		fs::path relativePath = fs::relative(path, root);
-		createDirThenCopyInto("shaders", relativePath / "shaders");
-		createDirThenCopyInto("textures", relativePath / "textures");
-		createDirThenCopyInto("models", relativePath / "models");
-		createDirThenCopyInto("audio", relativePath / "audio");
-		createDirThenCopyInto("scripts", relativePath / "scripts");
+		fs::path proj = fs::current_path();
+		
+		std::vector<std::string> dirnames = {
+			"shaders",
+			"textures",
+			"models",
+			"audio",
+			"scripts"
+		};
+
+		for (const std::string &dirname : dirnames) {
+			copyProjectDir(proj / dirname, path / dirname);
+		}
 
 		TE_CORE_INFO("BundleBuilder > Copying player...");
 		fs::copy(TANK_PLAYERDIR, path);
+
+		TE_CORE_INFO("BundleBuilder > Done.");
 		return true;
 	}
 
