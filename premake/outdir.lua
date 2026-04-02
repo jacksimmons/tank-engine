@@ -7,7 +7,7 @@ end
 ---comment Returns the bin dir for the current project
 ---@return string
 function ThisBinDir()
-	return BinDir() .. "%{prj.name}/"
+	return BinDir() .. "%{prj.name}/%{cfg.shortname}"
 end
 
 ---comment Returns the bin dir for a specific project

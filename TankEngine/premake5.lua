@@ -14,6 +14,7 @@ project "TankEngine"
 
 	defines {
 		"TANK_DLL",
+		"TANK_ENGINEDIR=\"" .. engineBin .. "\"",
 		"TANK_PLAYERDIR=\"" .. playerBin .. "\"",
 		"GLM_ENABLE_EXPERIMENTAL",
 		"FMT_UNICODE=0",

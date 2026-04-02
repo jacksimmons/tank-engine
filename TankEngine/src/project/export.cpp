@@ -41,9 +41,22 @@ namespace Tank
 			return false;
 		}
 
+		TE_CORE_INFO("Export > Copying engine...");
+		fs::copy(TANK_ENGINEDIR, path);
+
 		TE_CORE_INFO("Export > Copying player...");
 		fs::copy(TANK_PLAYERDIR, path);
-
+		
+#ifdef __linux__
+		TE_CORE_INFO("Export > Patching player...");
+		system(
+			std::format(
+				"patchelf --set-rpath '$ORIGIN' {}",
+				(path / "TankPlayer").string()
+			).c_str()
+		);
+#endif
+		
 		TE_CORE_INFO("Export > Copying assets...");
 		fs::path proj = fs::current_path();
 		copyProjectDir(proj / "assets", path / "assets");

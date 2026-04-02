@@ -193,7 +193,6 @@ namespace Tank::Editor
 				// Force save of current scene
 				Tank::Serialisation::saveScene(Scene::getActiveScene(), m_project->getSceneRes().resolvePath());
 
-
 				// Export
 				Export::project(
 					m_project.get(),
