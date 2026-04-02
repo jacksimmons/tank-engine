@@ -7,11 +7,11 @@ namespace Tank
 {
 	class Node;
 	class Scene;
+	class Project;
 	class KeyInput;
 	
 	namespace Editor
 	{
-		class Project;
 		class Tab;
 		class TabItem;
 		class EditorApp : public Application

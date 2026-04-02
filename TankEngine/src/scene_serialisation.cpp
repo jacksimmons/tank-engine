@@ -54,6 +54,7 @@ namespace Tank
 			}
 
 			// Write with pretty print (indent=4)
+			TE_CORE_INFO(std::format("Saving scene to {}", scenePath.string()));
 			File::writeLines(scenePath, serialise(scene).dump(4));
 		}
 	}

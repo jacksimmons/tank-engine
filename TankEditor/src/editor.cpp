@@ -16,7 +16,8 @@
 #include <nodes/physics/physics_body.hpp>
 #include <events/event_manager.hpp>
 #include <scripting/script.hpp>
-#include <export/bundle_builder.hpp>
+#include <project/project.hpp>
+#include <project/export.hpp>
 #include "editor.hpp"
 #include "shader.hpp"
 #include "log.hpp"
@@ -188,10 +189,14 @@ namespace Tank::Editor
 				if (exportPath == "") return;
 
 				TE_INFO(std::format("Export > {}", exportPath.string()));
+				
+				// Force save of current scene
+				Tank::Serialisation::saveScene(Scene::getActiveScene(), m_project->getSceneRes().resolvePath());
+
 
 				// Export
-				Export::BundleBuilder::build(
-					Scene::getActiveScene(),
+				Export::project(
+					m_project.get(),
 					exportPath
 				);
 			}

@@ -42,7 +42,7 @@ namespace Tank
 		else
 		{
 			// Expects cwd to be project root
-			return m_path;
+			return "assets" / m_path;
 		}
 	}
 

@@ -12,12 +12,10 @@ namespace Tank
     {
         class NodeFactory;
     }
-}
 
-namespace Tank::Editor
-{
+
     /// @brief Project in memory.
-    class Project : public ISerialisable<>
+    class TANK_API Project : public ISerialisable<>
     {
     private:
         /// @brief The last scene loaded in editor.

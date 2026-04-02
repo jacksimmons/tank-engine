@@ -4,7 +4,7 @@
 #include "project.hpp"
 
 
-namespace Tank::Editor
+namespace Tank
 {
     json Project::serialise()
     {
