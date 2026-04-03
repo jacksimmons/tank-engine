@@ -24,9 +24,6 @@ CMakeUserPresets.json
 *.sln
 compileData.*
 
-# VSCode
-.vscode/
-
 # Compile Score
 *.scor
 
