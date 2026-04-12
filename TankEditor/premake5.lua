@@ -45,19 +45,24 @@ project "TankEditor"
 	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
 	LibDirWithPostCopy(wks .. "include/nativefiledialog/build/obj/x64/%{cfg.buildcfg}", GrpPrjBinDir())
 	LibDirWithPostCopy(wks .. "include/nativefiledialog/build/lib/%{cfg.buildcfg}/x64", GrpPrjBinDir())
-	LibDirGLFWPostCopy(_ACTION, GrpPrjBinDir())
+	LibDirGLFWPostCopy(wks .. "lib/", _ACTION, GrpPrjBinDir())
 
 	-- Linked libraries
+	filter { "system:linux" }
+		links {
+			"gtk-3",
+			"gdk-3",
+			"glib-2.0",
+			"gobject-2.0",
+			"gio-2.0"
+		}
+	filter { }
 	links {
 		"TankEngine",
 		"nfd_d",
-		"gtk-3",
-		"gdk-3",
-		"glib-2.0",
-		"gobject-2.0",
-		"gio-2.0"
 --		"mono-2.0-sgen"
 	}
+
 	LinkGLFW(_ACTION)
 	LinkAssimp(wks .. "lib", GrpPrjBinDir())
 

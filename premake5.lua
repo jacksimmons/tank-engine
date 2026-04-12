@@ -45,7 +45,7 @@ project "Lua"
 	}
 
 project "miniaudio"
-	kind "StaticLib"
+	kind "SharedLib"
 	PrjUseC()
 	PrjObjAndTargetDir()
 

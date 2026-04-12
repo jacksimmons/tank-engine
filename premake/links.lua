@@ -17,9 +17,16 @@ end
 
 -- Adds GLFW's libdir, and copies the directory after building.
 -- Windows exclusive.
-function LibDirGLFWPostCopy(action, dest)
+function LibDirGLFWPostCopy(libdir, action, dest)
 	if os_type.windows() then
-		LibDirWithPostCopy("lib/glfw/" .. action, dest)
+		vsver = string.sub(action, 3)
+		
+		if tonumber(vsver) > 2022 then
+			vsver = 2022
+		end
+	
+		-- vsXXXX -> lib-vcXXXX
+		LibDirWithPostCopy(libdir .. "glfw/lib-vc" .. vsver, dest)
 	end
 end
 

@@ -10,6 +10,7 @@ namespace Tank
     {
         json j;
         j["lastLoadedScene"] = Res::encode(m_loadedScene);
+        return j;
     }
 
     void Project::deserialise(const json &j)

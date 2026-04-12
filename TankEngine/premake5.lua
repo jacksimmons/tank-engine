@@ -51,7 +51,7 @@ project "TankEngine"
 	}
 	LibDirWithPostCopy(PrjBinDir("Lua"), engineBin)
 	LibDirWithPostCopy(PrjBinDir("miniaudio"), engineBin)
-	LibDirGLFWPostCopy(_ACTION, engineBin)
+	LibDirGLFWPostCopy(wks .. "lib/", _ACTION, engineBin)
 	
 	-- Linked libraries
 	links {
