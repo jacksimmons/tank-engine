@@ -137,7 +137,7 @@ namespace Tank::Editor
 				// Copy demo scene to the selected path
 				TE_INFO(std::format("New scene > {}", scenePath.string()));
 				fs::copy(
-					Res::getEnginePath() / "DemoProject" / "scene.json",
+					fs::path{"DemoProject"} / "scene.json",
 					scenePath,
 					fs::copy_options::overwrite_existing
 				);

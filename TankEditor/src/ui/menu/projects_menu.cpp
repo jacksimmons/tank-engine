@@ -3,6 +3,8 @@
 #include <ui/file_dialog.hpp>
 #include <nodes/scene.hpp>
 #include <serialisation.hpp>
+#include <log.hpp>
+#include <fs/fs.hpp>
 #include "projects_menu.hpp"
 
 
@@ -18,9 +20,11 @@ namespace Tank::Editor
     {
         if (ImGui::Button("New Project"))
         {
+            fs::path demoDir = fs::path{ "DemoProject" };
             fs::path projectDir = FileDialog::open(FileDialog::Target::Directory);
             if (projectDir == "") return;
-            fs::copy("DemoProject", projectDir, fs::copy_options::recursive);
+            
+            FS::tryCopy(demoDir, projectDir, fs::copy_options::recursive & fs::copy_options::overwrite_existing);
 
             m_loadProject(projectDir);
         }

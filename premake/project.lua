@@ -24,7 +24,7 @@ function PrjObjAndTargetDir()
 	objdir ("%{wks.location}/Builds/obj/" .. subDir)
 end
 
-function GrpPrjObjAndTargetDir()
-    targetdir ("Builds/bin/" .. groupSubDir)
-    objdir ("Builds/obj/" .. groupSubDir)
-end
+-- function GrpPrjObjAndTargetDir()
+--     targetdir ("Builds/bin/" .. groupSubDir)
+--     objdir ("Builds/obj/" .. groupSubDir)
+-- end

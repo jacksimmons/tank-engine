@@ -1,9 +1,11 @@
-require("premake.links")
-require("premake.outdir")
+require "premake.links"
+require "premake.outdir"
+require "premake.project"
 
 
 local wks = "%{wks.location}/"
 local nfd = wks .. "include/nativefiledialog/"
+local binDir = wks .. PrjBinDir("TankEditor")
 
 
 project "TankEditor"
@@ -42,10 +44,9 @@ project "TankEditor"
 	libdirs {
 		wks .. "lib",
 	}
-	-- LibDirWithPostCopy("%{prj.name}/lib", playerDir)
-	LibDirWithPostCopy(wks .. "include/nativefiledialog/build/obj/x64/%{cfg.buildcfg}", GrpPrjBinDir())
-	LibDirWithPostCopy(wks .. "include/nativefiledialog/build/lib/%{cfg.buildcfg}/x64", GrpPrjBinDir())
-	LibDirGLFWPostCopy(wks .. "lib/", _ACTION, GrpPrjBinDir())
+	LibDirWithPostCopy(wks .. "include/nativefiledialog/build/obj/x64/%{cfg.buildcfg}", binDir)
+	LibDirWithPostCopy(wks .. "include/nativefiledialog/build/lib/%{cfg.buildcfg}/x64", binDir)
+	LibDirGLFWPostCopy(wks .. "lib/", _ACTION, binDir)
 
 	-- Linked libraries
 	filter { "system:linux" }
@@ -64,10 +65,13 @@ project "TankEditor"
 	}
 
 	LinkGLFW(_ACTION)
-	LinkAssimp(wks .. "lib", GrpPrjBinDir())
+	LinkAssimp(wks .. "lib", binDir)
 
 	-- PCH
 	pchheader "tepch.hpp"
 	pchsource "src/editor.cpp"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
+
+	-- Visual Studio debugging
+	debugdir "%{wks.location}"
