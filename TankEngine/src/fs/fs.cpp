@@ -10,7 +10,7 @@ namespace Tank
 		fs::copy(from, to, opts, ec);
 		if (ec)
 		{
-			TE_CORE_ERROR(std::format("{} when copying from path {} to {}", ec.message(), from.string(), to.string()));
+			TE_CORE_ERROR(std::format("\"{}\" (Copying from path {} to {})", ec.message(), from.string(), to.string()));
 			return ec;
 		}
 

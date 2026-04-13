@@ -24,7 +24,7 @@ namespace Tank::Editor
             fs::path projectDir = FileDialog::open(FileDialog::Target::Directory);
             if (projectDir == "") return;
             
-            FS::tryCopy(demoDir, projectDir, fs::copy_options::recursive & fs::copy_options::overwrite_existing);
+            FS::tryCopy(demoDir, projectDir, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
 
             m_loadProject(projectDir);
         }
