@@ -19,10 +19,10 @@ end
 -- Windows exclusive.
 function LibDirGLFWPostCopy(libdir, action, dest)
 	if os_type.windows() then
-		vsver = string.sub(action, 3)
+		local vsver = string.sub(action, 3)
 		
 		if tonumber(vsver) > 2022 then
-			vsver = 2022
+			vsver = "2022"
 		end
 	
 		-- vsXXXX -> lib-vcXXXX

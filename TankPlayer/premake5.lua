@@ -2,7 +2,8 @@ require("premake.outdir")
 
 
 local wks = "%{wks.location}/"
-local playerBin = ThisBinDir()
+local playerBin = wks .. PrjBinDir("%{prj.name}")
+local playerReleaseBin = wks .. "%{prj.name}/ReleaseBuilds/%{cfg.system}/"
 
 
 project "TankPlayer"
@@ -45,6 +46,11 @@ project "TankPlayer"
 
 	-- PCH
 	pchheader "tepch.hpp"
-	pchsource "%{prj.name}/src/player.cpp"
+	pchsource (wks .. "%{prj.name}/src/player.cpp")
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
+
+	-- Copy to non gitignored folder if in Release mode
+	filter { "configurations:Release" }
+		PostCopyDir(playerBin, playerReleaseBin)
+	filter {}
