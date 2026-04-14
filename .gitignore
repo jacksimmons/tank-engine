@@ -29,7 +29,9 @@ compileData.*
 *.scor
 
 # Builds
-Builds/*
+Builds/obj/
+Builds/bin/*
+!Builds/bin/TankPlayer
 **/obj
 
 # Engine data

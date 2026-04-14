@@ -26,14 +26,8 @@ namespace Tank
 
 	bool Export::project(const Project &project, const fs::path &path)
 	{
-		// Check if TankPlayer is built
-		// @todo This should be generic; TankEngine shouldn't have a dependency on TankPlayer.
-		bool playerExists = fs::exists(TANK_PLAYERDIR) && !fs::is_empty(TANK_PLAYERDIR);
-		if (!playerExists)
-		{
-			TE_CORE_ERROR("Export > No TankPlayer executable found with configuration matching TankEngine.");
-			return false;
-		}
+		// Assert TankPlayer for current configuration is built
+		assert(fs::exists(TANK_PLAYERDIR) && !fs::is_empty(TANK_PLAYERDIR));
 
 		// Serialise scene, and copy Player to the path (if empty)
 		if (!fs::is_empty(path))
