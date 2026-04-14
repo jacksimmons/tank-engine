@@ -6,6 +6,7 @@
 #include <project/project.hpp>
 #include <scene_serialisation.hpp>
 #include "export.hpp"
+#include <fs/dir.hpp>
 
 
 namespace Tank
@@ -19,11 +20,11 @@ namespace Tank
 		fs::create_directories(dest);
 
 		// Copy recursively
-		fs::copy(src, dest, fs::copy_options::recursive);
+		Dir::tryCopy(src, dest, fs::copy_options::recursive);
 	}
 
 
-	bool Export::project(Project *project, const fs::path &path)
+	bool Export::project(const Project &project, const fs::path &path)
 	{
 		// Check if TankPlayer is built
 		// @todo This should be generic; TankEngine shouldn't have a dependency on TankPlayer.
@@ -42,10 +43,10 @@ namespace Tank
 		}
 
 		TE_CORE_INFO("Export > Copying engine...");
-		fs::copy(TANK_ENGINEDIR, path);
-
+		Dir::tryCopy(TANK_ENGINEDIR, path, fs::copy_options::update_existing);
+		
 		TE_CORE_INFO("Export > Copying player...");
-		fs::copy(TANK_PLAYERDIR, path);
+		Dir::tryCopy(TANK_PLAYERDIR, path, fs::copy_options::update_existing);
 		
 #ifdef __linux__
 		TE_CORE_INFO("Export > Patching player...");

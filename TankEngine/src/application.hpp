@@ -7,12 +7,16 @@ struct ImGuiSettings
 	ImGuiConfigFlags configFlags;
 	ImGuiWindowFlags mainWinFlags;
 };
+struct GLFWwindow;
 
 
 namespace Tank
 {
 	class KeyInput;
-	namespace Reflect { class NodeFactory; }
+	namespace Reflect
+	{
+		class NodeFactory;
+	}
 
 	class TANK_API Application
 	{
@@ -32,6 +36,7 @@ namespace Tank
 	protected:
 		void beginImGui(const ImGuiIO &io);
 		void endImGui();
+		virtual void start() {};
 		virtual void uiStep() {};
 		virtual void step() {};
 
@@ -45,16 +50,12 @@ namespace Tank
 	public:
 		virtual ~Application();
 
-		/// <summary>
-		/// Callback occurs when window size changes.
-		/// </summary>
-		static void onWindowSizeChange(GLFWwindow *window, int width, int height) { glViewport(0, 0, width, height); }
-
 		void run();
 
 		const glm::ivec2 &getWindowSize() { return m_windowSize; }
 		GLFWwindow *const getWindow() { return m_window; }
 		ImGuiContext *const getContext() { return m_context; }
+		const Reflect::NodeFactory &getFactory() const { return *m_factory; }
 	};
 
 

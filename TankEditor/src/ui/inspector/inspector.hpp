@@ -13,6 +13,7 @@ namespace Tank::Editor
 	class _Inspector final : public _Window
 	{
 		friend class EditorApp;
+		friend class ProjectMenuBar;
 	private:
 		Node *m_inspectedNode;
 		std::vector<std::unique_ptr<_NodeInspectorBase>> m_nodeInspectors;

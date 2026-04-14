@@ -1,5 +1,5 @@
 #pragma once
-#include "engine.hpp"
+#include <application.hpp>
 
 
 class ImGuiIO;
@@ -9,38 +9,27 @@ namespace Tank
 	class Scene;
 	class Project;
 	class KeyInput;
-	
-	namespace Editor
+}
+namespace Tank::Editor
+{
+	class ProjectMenuBar;
+	class EditorApp : public Application
 	{
-		class Tab;
-		class TabItem;
-		class EditorApp : public Application
-		{
-		private:
-			static std::vector<std::string> s_windowNames;
+	private:
+		static std::vector<std::string> s_windowNames;
 			
-			std::unique_ptr<Node> m_initUI;
-			/// <summary>
-			/// Root node for system UI (Hierarchy, Inspector, etc.)
-			/// </summary>
-			std::unique_ptr<Node> m_system;
-			
-			// Keyboard input for the Editor only.
-			std::unique_ptr<KeyInput> m_editorInput;
+		std::unique_ptr<Node> m_initUI;
+		// Keyboard input for the Editor only.
+		std::unique_ptr<KeyInput> m_editorInput;
+		std::unique_ptr<Project> m_project;
+	public:
+		EditorApp();
+		~EditorApp();
 
-			std::unique_ptr<Project> m_project;
-
-			Tab getFileTab();
-			Tab getWindowTab();
-		public:
-			EditorApp();
-			~EditorApp();
-			void loadScene(std::unique_ptr<Scene> scene);
-			void postSceneSetup();
-		protected:
-			virtual void step() override;
-			virtual void uiStep() override;
-			virtual void handleKeyInput();
-		};
-	}
+		const Project &getProject() const { return *m_project; }
+	protected:
+		virtual void step() override;
+		virtual void uiStep() override;
+		virtual void handleKeyInput();
+	};
 }

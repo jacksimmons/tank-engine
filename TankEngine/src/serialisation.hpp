@@ -11,6 +11,6 @@ namespace Tank
 	namespace Serialisation
 	{
 		json serialise(Node *deserialised);
-		Node* deserialise(const json &serialised, Reflect::NodeFactory *factory);
+		Node* deserialise(const json &serialised, const Reflect::NodeFactory &factory);
 	}
 }

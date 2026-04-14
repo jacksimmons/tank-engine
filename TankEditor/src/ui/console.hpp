@@ -7,6 +7,7 @@ namespace Tank::Editor
 	class _Console final : public _Window
 	{
 		friend class EditorApp;
+		friend class ProjectMenuBar;
 	private:
 		struct ConsoleCommand
 		{

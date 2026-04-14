@@ -4,7 +4,7 @@
 #include <nodes/scene.hpp>
 #include <serialisation.hpp>
 #include <log.hpp>
-#include <fs/fs.hpp>
+#include <fs/dir.hpp>
 #include "projects_menu.hpp"
 
 
@@ -24,7 +24,7 @@ namespace Tank::Editor
             fs::path projectDir = FileDialog::open(FileDialog::Target::Directory);
             if (projectDir == "") return;
             
-            FS::tryCopy(demoDir, projectDir, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
+            Dir::tryCopy(demoDir, projectDir, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
 
             m_loadProject(projectDir);
         }

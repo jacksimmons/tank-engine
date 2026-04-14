@@ -30,6 +30,12 @@ static void GLAPIENTRY msgCallback(GLenum source,
 }
 
 
+static void windowSizeChangeCallback(GLFWwindow *win, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+
+
 namespace Tank
 {
 	Application::Application(bool gui, ImGuiSettings settings)
@@ -107,7 +113,7 @@ namespace Tank
 		glfwMakeContextCurrent(m_window);
 
 		// Initialise callbacks
-		glfwSetFramebufferSizeCallback(m_window, Application::onWindowSizeChange);
+		glfwSetFramebufferSizeCallback(m_window, windowSizeChangeCallback);
 		glfwSetKeyCallback(m_window, KeyInput::callback);
 	}
 
@@ -185,6 +191,8 @@ namespace Tank
 		auto frameStart = std::clock();
 		auto frameEnd = std::clock();
 		float lastFrameDelta = 0;
+
+		start();
 
 		// =-=-=-= MAINLOOP =-=-=-=
 		while (!glfwWindowShouldClose(m_window))

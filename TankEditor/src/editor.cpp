@@ -5,6 +5,7 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <nfd.h>
 
+#include <engine.hpp>
 #include <nodes/node.hpp>
 #include <nodes/model.hpp>
 #include <nodes/scene.hpp>
@@ -18,7 +19,9 @@
 #include <scripting/script.hpp>
 #include <project/project.hpp>
 #include <project/export.hpp>
+#include <reflection/node_factory.hpp>
 #include "editor.hpp"
+#include "editor_root.hpp"
 #include "shader.hpp"
 #include "log.hpp"
 #include "scene_serialisation.hpp"
@@ -27,10 +30,9 @@
 #include "ui/scene_view.hpp"
 #include "ui/hierarchy.hpp"
 #include "ui/inspector/inspector.hpp"
-#include "ui/main_menu_bar.hpp"
 #include "ui/profiler.hpp"
 #include "ui/menu/projects_menu.hpp"
-#include "project/project.hpp"
+#include "ui/menu_bar/project_menu_bar.hpp"
 
 
 namespace Tank::Editor
@@ -103,14 +105,20 @@ namespace Tank::Editor
 
 					// Load the scene
 					Res scenePath = m_project->getSceneRes();
-					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), m_factory.get()))
+					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), *m_factory))
 					{
-						loadScene(std::unique_ptr<Scene>(rawScene));
-					}
+						EditorRoot::setRoot(std::make_unique<Node>("Editor"));
+						EditorRoot::setScene(std::unique_ptr<Scene>(rawScene));
 
-					// Initialise Tabs
-					std::vector<Tab> tabs = { getFileTab(), getWindowTab() };
-					m_initUI->addChild(std::unique_ptr<_MainMenuBar>(new _MainMenuBar("MainMenuBar", tabs)));
+						Node &root = EditorRoot::getRoot();
+						assert(EditorRoot::isReady());
+						root.addChild(std::unique_ptr<ProjectMenuBar>(new ProjectMenuBar(*this)));
+						root.addChild(std::unique_ptr<_SceneView>(new _SceneView("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
+						root.addChild(std::unique_ptr<_Console>(new _Console("Console")));
+						root.addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));
+						root.addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
+						root.preupdate();
+					}
 				}
 			)
 		);
@@ -120,159 +128,6 @@ namespace Tank::Editor
 
 	EditorApp::~EditorApp()
 	{
-	}
-
-
-	Tab EditorApp::getFileTab()
-	{
-		TabItem newScene =
-		{
-			"New Scene...",
-			[this](auto &name) { return !m_initUI->getChild(name); },
-			[this]()
-			{
-				fs::path scenePath = FileDialog::saveAs();
-				if (scenePath == "") return;
-
-				// Copy demo scene to the selected path
-				TE_INFO(std::format("New scene > {}", scenePath.string()));
-				fs::copy(
-					fs::path{"DemoProject"} / "scene.json",
-					scenePath,
-					fs::copy_options::overwrite_existing
-				);
-				
-				// Load the scene
-				auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_factory.get()));
-				loadScene(std::move(scene));
-			}
-		};
-
-		TabItem openScene =
-		{
-			"Open Scene...",
-			[this](auto &name) { return !m_initUI->getChild(name); },
-			[this]()
-			{
-				fs::path scenePath = FileDialog::open(FileDialog::Target::File);
-				if (scenePath == "") return;
-
-				TE_INFO(std::format("Open scene > {}", scenePath.string()));
-				
-				// Load the scene
-				auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_factory.get()));
-				loadScene(std::move(scene));
-			}
-		};
-
-		TabItem saveScene = {
-			"Save Scene As...",
-			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
-			[this]()
-			{
-				fs::path scenePath = FileDialog::saveAs();
-				if (scenePath == "") return;
-
-				TE_INFO(std::format("Save scene > {}", scenePath.string()));
-
-				// Save the scene
-				Serialisation::saveScene(Scene::getActiveScene(), scenePath);
-			}
-		};
-
-		TabItem exportProj = {
-			"Export Project...",
-			[this](auto &name) { return Scene::getActiveScene() && !m_initUI->getChild(name); },
-			[this]()
-			{
-				fs::path exportPath = FileDialog::open(FileDialog::Target::Directory);
-				if (exportPath == "") return;
-
-				TE_INFO(std::format("Export > {}", exportPath.string()));
-				
-				// Force save of current scene
-				Tank::Serialisation::saveScene(Scene::getActiveScene(), m_project->getSceneRes().resolvePath());
-
-				// Export
-				Export::project(
-					m_project.get(),
-					exportPath
-				);
-			}
-		};
-
-		Tab file =
-		{
-			"File",
-			[](auto &) { return true; },
-			{ newScene, openScene, saveScene, exportProj }
-		};
-		return file;
-	}
-
-
-	Tab EditorApp::getWindowTab()
-	{
-		TabItem hierarchy =
-		{
-			"Hierarchy",
-			[this](auto &name) { return !m_system->getChild(name); },
-			[this]() { m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy())); }
-		};
-
-		TabItem inspector =
-		{
-			"Inspector",
-			[this](auto &name) { return !m_system->getChild(name); },
-			[this]() { m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector())); }
-		};
-
-		TabItem sceneView =
-		{
-			"SceneView",
-			[this](auto &name) { return !m_system->getChild(name); },
-			//[this]() { m_system->addChild(std::make_unique<_SceneView>(); }
-		};
-
-		TabItem console =
-		{
-			"Console",
-			[this](auto &name) { return !m_system->getChild(name); },
-			[this]() { m_system->addChild(std::unique_ptr<_Console>(new _Console())); }
-		};
-
-		TabItem profiler =
-		{
-			"Profiler",
-			[this](auto &name) { return !m_system->getChild(name); },
-			[this]() { m_system->addChild(std::unique_ptr<_Profiler>(new _Profiler())); }
-		};
-
-		Tab window =
-		{
-			"Window",
-			[](auto &) { return Scene::getActiveScene(); },
-			{ hierarchy, inspector, sceneView, console, profiler }
-		};
-		return window;
-	}
-
-
-	void EditorApp::loadScene(std::unique_ptr<Scene> scene)
-	{
-		m_system = std::make_unique<Node>("Editor");
-		m_system->addChild(std::move(scene));
-		postSceneSetup();
-	}
-
-
-	void EditorApp::postSceneSetup()
-	{
-		m_system->addChild(std::unique_ptr<_SceneView>(new _SceneView("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
-		m_system->addChild(std::unique_ptr<_Console>(new _Console("Console")));
-		m_system->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));
-		m_system->addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
-		m_system->preupdate();
 	}
 
 
@@ -290,9 +145,9 @@ namespace Tank::Editor
 	void EditorApp::uiStep()
 	{
 		// Draw all system UI (SceneView/Framebuffer draws the scene)
-		if (m_system)
+		if (EditorRoot::isReady())
 		{
-			m_system->update();
+			EditorRoot::getRoot().update();
 		}
 		m_initUI->update();
 	}
@@ -300,11 +155,11 @@ namespace Tank::Editor
 
 	void EditorApp::handleKeyInput()
 	{
-		if (!m_system)
+		if (!EditorRoot::isReady())
 		{
 			return;
 		}
-		((_SceneView*)m_system->getChild("SceneView"))->handleKeyInput();
+		((_SceneView*)EditorRoot::getRoot().getChild("SceneView"))->handleKeyInput();
 	}
 }
 

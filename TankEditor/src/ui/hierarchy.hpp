@@ -10,6 +10,7 @@ namespace Tank::Editor
 	class _Hierarchy final : public _Window
 	{
 		friend class EditorApp;
+		friend class ProjectMenuBar;
 		
 		// Fields
 	private:

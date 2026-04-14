@@ -37,13 +37,13 @@ namespace Tank
 		/// Deserialises generic Node json into a Node.
 		/// Allocations: +Node (return value).
 		/// </summary>
-		Node* deserialise(const json &serialised, Reflect::NodeFactory *factory)
+		Node* deserialise(const json &serialised, const Reflect::NodeFactory &factory)
 		{
 			// Pointer to a Node* or subclass of. 
 			Node *node = nullptr;
 			const std::string &type = serialised["type"];
 
-			node = factory->deserialise(serialised);
+			node = factory.deserialise(serialised);
 			for (const json &child : serialised["children"].get<std::vector<json>>())
 			{
 				node->addChild(std::unique_ptr<Node>(deserialise(child, factory)));

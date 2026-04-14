@@ -5,7 +5,7 @@
 
 namespace Tank::Reflect
 {
-	Node *NodeFactory::deserialise(const json &serialised)
+	Node *NodeFactory::deserialise(const json &serialised) const
 	{
 		// Deduce type
 		std::string type = serialised["type"];

@@ -15,7 +15,7 @@ namespace Tank
 {
 	namespace Serialisation
 	{
-		Scene* loadScene(const std::filesystem::path &scenePath, Reflect::NodeFactory *factory)
+		Scene* loadScene(const std::filesystem::path &scenePath, const Reflect::NodeFactory &factory)
 		{
 			std::string sceneFile;
 			if (File::readLines(scenePath, sceneFile) != File::ReadResult::Success)

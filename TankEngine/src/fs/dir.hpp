@@ -1,7 +1,7 @@
-namespace Tank::FS
+namespace Tank::Dir
 {
 	// @brief
-	// Tries to copy one location to another location.
+	// Tries to copy the contents of one directory into another.
 	// Handles all exception logging, and returns the error code.
 	TANK_API std::optional<std::error_code> tryCopy(
 		const fs::path& from,
