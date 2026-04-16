@@ -4,19 +4,32 @@
 
 namespace Tank
 {
-	std::optional<std::error_code> Dir::tryCopy(const fs::path &from, const fs::path &to, fs::copy_options opts) noexcept
+	std::optional<std::error_code> Dir::tryCopy(const fs::path &src, const fs::path &dest, fs::copy_options opts) noexcept
 	{
 		std::error_code ec;
-		
-		// Ensure we are copying directories
-		if (!fs::is_directory(from) || !fs::is_directory(to))
-			ec = std::make_error_code(std::errc::not_a_directory);
-		else
-			fs::copy(from, to, opts, ec);
 
+		// No src -> error
+		if (!fs::is_directory(src))
+		{
+			ec = std::make_error_code(std::errc::not_a_directory);
+		}
+
+		// No dest -> try making dest
+		if (!fs::exists(dest))
+		{
+			fs::create_directories(dest, ec);
+		}
+
+		// No errors so far -> try copying
+		if (!ec)
+		{
+			fs::copy(src, dest, opts, ec);
+		}
+
+		// Output and return any error codes
 		if (ec)
 		{
-			TE_CORE_ERROR(std::format("\"{}\" (Copying from path {} to {})", ec.message(), from.string(), to.string()));
+			TE_CORE_ERROR(std::format("\"{}\" (Copying from path {} to {})", ec.message(), src.string(), dest.string()));
 			return ec;
 		}
 

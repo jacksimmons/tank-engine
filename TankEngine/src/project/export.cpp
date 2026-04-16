@@ -11,19 +11,6 @@
 
 namespace Tank
 {
-	static void copyProjectDir(const fs::path &src, const fs::path &dest)
-	{
-		// Exit if the src doesn't exist, or is not a directory
-		if (!fs::exists(src) || !fs::is_directory(src)) return;
-
-		// Ensure the dest exists, make it if not
-		fs::create_directories(dest);
-
-		// Copy recursively
-		Dir::tryCopy(src, dest, fs::copy_options::recursive);
-	}
-
-
 	bool Export::project(const Project &project, const fs::path &path)
 	{
 		// Assert TankPlayer for current configuration is built
@@ -55,10 +42,10 @@ namespace Tank
 		
 		TE_CORE_INFO("Export > Copying assets...");
 		fs::path proj = fs::current_path();
-		copyProjectDir(proj / "assets", path / "assets");
+		Dir::tryCopy(proj / "assets", path / "assets", fs::copy_options::recursive);
 
 		TE_CORE_INFO("Export > Copying core assets...");
-		copyProjectDir(Res::getCoreAssetsPath(), path / "CoreAssets");
+		Dir::tryCopy(Res::getCoreAssetsPath(), path / "CoreAssets", fs::copy_options::recursive);
 
 		TE_CORE_INFO("Export > Done.");
 		return true;
