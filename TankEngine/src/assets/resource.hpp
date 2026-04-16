@@ -7,7 +7,7 @@ namespace Tank
 	{
 	private:
 		static std::string s_engineToken;
-		static fs::path s_enginePath;
+		static fs::path s_coreAssetsPath;
 
 		/// <summary>
 		/// Path of the resource (relative to engine/project root).
@@ -20,7 +20,7 @@ namespace Tank
 		/// </summary>
 		bool m_inEngine;
 	public:
-		static const fs::path &getEnginePath() { return s_enginePath; }
+		static const fs::path &getCoreAssetsPath() { return s_coreAssetsPath; }
 
 		static std::string encode(const Resource &decoded);
 		static Resource decode(const std::string &encoded);

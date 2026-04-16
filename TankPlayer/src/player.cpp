@@ -19,7 +19,7 @@ namespace Tank
 	{
 		TE_INFO("Loading scene (hope it's in this directory)");
 
-		auto scene = std::unique_ptr<Tank::Scene>(Serialisation::loadScene("scene.json", *m_factory));
+		auto scene = std::unique_ptr<Tank::Scene>(Serialisation::loadScene("assets/scene.json", *m_factory));
 		Scene::setActiveScene(scene.get());
 		m_root = std::move(scene);
 

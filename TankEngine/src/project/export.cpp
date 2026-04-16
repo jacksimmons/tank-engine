@@ -27,7 +27,8 @@ namespace Tank
 	bool Export::project(const Project &project, const fs::path &path)
 	{
 		// Assert TankPlayer for current configuration is built
-		assert(fs::exists(TANK_PLAYERDIR) && !fs::is_empty(TANK_PLAYERDIR));
+		assert(fs::exists(TANK_PLAYERDIR));
+		assert(!fs::is_empty(TANK_PLAYERDIR));
 
 		// Serialise scene, and copy Player to the path (if empty)
 		if (!fs::is_empty(path))
@@ -41,7 +42,7 @@ namespace Tank
 		
 		TE_CORE_INFO("Export > Copying player...");
 		Dir::tryCopy(TANK_PLAYERDIR, path, fs::copy_options::update_existing);
-		
+
 #ifdef __linux__
 		TE_CORE_INFO("Export > Patching player...");
 		system(
@@ -55,6 +56,9 @@ namespace Tank
 		TE_CORE_INFO("Export > Copying assets...");
 		fs::path proj = fs::current_path();
 		copyProjectDir(proj / "assets", path / "assets");
+
+		TE_CORE_INFO("Export > Copying core assets...");
+		copyProjectDir(Res::getCoreAssetsPath(), path / "CoreAssets");
 
 		TE_CORE_INFO("Export > Done.");
 		return true;

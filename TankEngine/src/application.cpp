@@ -41,6 +41,9 @@ namespace Tank
 	Application::Application(bool gui, ImGuiSettings settings)
 		: m_gui(gui)
 	{
+		TE_CORE_INFO("Application > Constructor");
+		TE_CORE_INFO(std::format("CWD: {}", fs::current_path().string()));
+
 		// Init reflection
 		m_factory = std::make_unique<Reflect::NodeFactory>();
 		m_factory->registerClass<Node>("Node");
