@@ -11,12 +11,12 @@
 namespace Tank::Editor
 {
     ProjectsMenu::ProjectsMenu(std::function<void(fs::path)> loadProject)
-    : Menu("ProjectsMenu"), m_loadProject(loadProject)
+    : UINode("ProjectsMenu"), m_loadProject(loadProject)
     {
     }
 
 
-    void ProjectsMenu::draw()
+    void ProjectsMenu::drawUI()
     {
         if (ImGui::Button("New Project"))
         {

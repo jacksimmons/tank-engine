@@ -204,12 +204,14 @@ namespace Tank
 
 			glfwPollEvents();
 
-			if (m_gui) beginImGui(ImGui::GetIO());
-
 			step();
-			uiStep();
-
-			if (m_gui) endImGui();
+			
+			if (m_gui)
+			{
+				beginImGui(ImGui::GetIO());
+				uiStep();
+				endImGui();
+			}
 
 			// Double buffering
 			glfwSwapBuffers(m_window);

@@ -15,6 +15,7 @@
 #include <nodes/cube_map.hpp>
 #include <nodes/light.hpp>
 #include <nodes/physics/physics_body.hpp>
+#include <nodes/ui/ui_node.hpp>
 #include <events/event_manager.hpp>
 #include <scripting/script.hpp>
 #include <project/project.hpp>
@@ -76,20 +77,6 @@ namespace Tank::Editor
 		EventManager::addEvent("Hierarchy.NodeDeleted", new Event<Node*>());
 		EventManager::addEvent("Console.AddColouredLine", new Event<std::string, ImColor>());
 
-		// Register file dialog event handlers
-		// EventManager::getEvent<_FileDialog*, fs::path>("FileDialog.ItemSelected")
-		// ->registerHandler(
-		// 	[this](_FileDialog *dialog, const std::filesystem::path &path)
-		// 	{
-		// 		const std::string &name = dialog->getName();
-
-		// 		if (name == "Save Project")
-		// 		{
-		// 			Serialisation::saveScene(Scene::getActiveScene(), path);
-		// 		}
-		// 	}
-		// );
-
 		// Set the ImGui context, over DLL boundary
 		ImGui::SetCurrentContext(getContext());
 
@@ -143,17 +130,37 @@ namespace Tank::Editor
 			// Decay input states (comes after handleKeyInput)
 			m_editorInput->update();
 		}
-	}
-	
 
-	void EditorApp::uiStep()
-	{
-		// Draw all system UI (SceneView/Framebuffer draws the scene)
+		// Run update step on root
 		if (EditorRoot::isReady())
 		{
 			EditorRoot::getRoot().update();
 		}
+	}
+
+
+	// Currently, the Editor handles drawUI
+	void EditorApp::uiStep()
+	{
+		// Run ImGui update step on root
+		if (EditorRoot::isReady())
+		{
+			Node &root = EditorRoot::getRoot();
+			auto uiNodes = root.getChildrenOfType<UINode>();
+			for (const auto uiNode : uiNodes)
+			{
+				uiNode->drawUI();
+			}
+		}
+
+		// Run update step on initUI
 		m_initUI->update();
+		// Run ImGui update step on initUI and its children
+		auto initUINodes = m_initUI->getChildrenOfType<UINode>();
+		for (const auto uiNode : initUINodes)
+		{
+			uiNode->drawUI();
+		}
 	}
 
 

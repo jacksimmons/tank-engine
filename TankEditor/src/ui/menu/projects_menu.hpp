@@ -1,17 +1,16 @@
 #pragma once
-#include <events/event.hpp>
-#include "menu.hpp"
+#include <nodes/ui/ui_node.hpp>
 
 
 namespace Tank::Editor
 {
-    class ProjectsMenu final : public Menu
+    class ProjectsMenu final : public UINode
     {
     private:
         std::function<void(fs::path)> m_loadProject;
     public:
         ProjectsMenu(std::function<void(fs::path)> loadProject);
 
-        void draw() override;
+        void drawUI() override;
     };
 }

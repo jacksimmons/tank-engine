@@ -19,7 +19,7 @@
 
 namespace Tank::Editor
 {
-	void ProjectMenuBar::draw()
+	void ProjectMenuBar::drawUI()
 	{
 		if (ImGui::BeginMainMenuBar())
 		{

@@ -1,5 +1,5 @@
 #pragma once
-#include "nodes/node.hpp"
+#include <nodes/ui/ui_node.hpp>
 
 
 namespace Tank::Reflect
@@ -9,7 +9,7 @@ namespace Tank::Reflect
 namespace Tank::Editor
 {
 	class EditorApp;
-	class ProjectMenuBar final : public Node
+	class ProjectMenuBar final : public UINode
 	{
 	private:
 		EditorApp &m_editor;
@@ -19,8 +19,8 @@ namespace Tank::Editor
 
 		bool spawnerMenuItem(const std::string &nodeName);
 	public:
-		virtual void draw() override;
-
-		ProjectMenuBar(EditorApp &editor) : Node("ProjectMenuBar"), m_editor(editor) {};
+		ProjectMenuBar(EditorApp &editor) : UINode("ProjectMenuBar"), m_editor(editor) {};
+		
+		void drawUI() override;
 	};
 }

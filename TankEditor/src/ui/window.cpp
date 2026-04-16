@@ -6,14 +6,14 @@
 namespace Tank::Editor
 {
 	_Window::_Window(const std::string &name, const WindowOpts &opts)
-		: Node(name), m_opts(opts)
+		: UINode(name), m_opts(opts)
 	{
 		m_opts.flags |= ImGuiWindowFlags_NoCollapse;
 		m_isEditorControlled = true;
 	}
 
 
-	void _Window::draw()
+	void _Window::drawUI()
 	{
 		bool open = true;
 		ImGui::Begin(getName().c_str(), m_opts.closeable ? &open : nullptr, m_opts.flags);

@@ -81,7 +81,7 @@ namespace Tank
 		Node *getChild(const std::string &name) const;
 		// Get child by index.
 		Node *getChild(int index) const;
-		// Get first child of type (if any).
+		// Get all children of type (if any).
 		template <class T>
 		std::vector<T*> getChildrenOfType() const
 		{
