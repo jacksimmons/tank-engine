@@ -98,7 +98,7 @@ namespace Tank::Editor
 		{
 			ImGui::TextColored(Tank::Colour::TITLE, "Type");
 			ImGui::Text(typeid(*m_inspectedNode).name());
-
+			
 			// Prevent users from modifying editor nodes, which would likely cause a crash.
 			if (m_inspectedNode->IsEditorControlled())
 			{

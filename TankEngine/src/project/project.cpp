@@ -35,18 +35,12 @@ namespace Tank
             }
             catch (std::exception e)
             {
-                TE_ERROR(std::format("Couldn't parse project file {}.", projectFilePath.string()));
+                TE_CORE_ERROR(std::format("Couldn't parse project file {}.", projectFilePath.string()));
                 return nullptr;
             }
         }
 
-        TE_ERROR(std::format("Couldn't read project file {}.", projectFilePath.string()));
+        TE_CORE_ERROR(std::format("Couldn't read project file {}.", projectFilePath.string()));
         return nullptr;
-    }
-
-
-    const Res &Project::getSceneRes() const
-    {
-        return m_loadedScene;
     }
 }

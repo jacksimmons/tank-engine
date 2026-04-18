@@ -1,4 +1,5 @@
 #include "imgui.h"
+#include <fs/file.hpp>
 #include <nodes/node.hpp>
 #include <nodes/scene.hpp>
 #include <ui/file_dialog.hpp>
@@ -40,6 +41,8 @@ namespace Tank::Editor
 
 	void ProjectMenuBar::drawFile()
 	{
+		bool resetInspector = false;
+
 		if (ImGui::MenuItem("New Scene"))
 		{
 			fs::path scenePath = FileDialog::saveAs();
@@ -47,8 +50,8 @@ namespace Tank::Editor
 
 			// Copy demo scene to the selected path
 			TE_INFO(std::format("New scene > {}", scenePath.string()));
-			fs::copy(
-				fs::path{ "DemoProject" } / "scene.json",
+			File::tryCopy(
+				fs::current_path() / "DemoProject" / "scene.json",
 				scenePath,
 				fs::copy_options::overwrite_existing
 			);
@@ -56,6 +59,8 @@ namespace Tank::Editor
 			// Load the scene
 			auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_editor.getFactory()));
 			EditorRoot::setScene(std::move(scene));
+
+			resetInspector = true;
 		}
 
 		if (ImGui::MenuItem("Open Scene"))
@@ -68,6 +73,8 @@ namespace Tank::Editor
 			// Load the scene
 			auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_editor.getFactory()));
 			EditorRoot::setScene(std::move(scene));
+
+			resetInspector = true;
 		}
 
 		if (ImGui::MenuItem("Save Scene"))
@@ -96,6 +103,15 @@ namespace Tank::Editor
 				m_editor.getProject(),
 				exportPath
 			);
+		}
+
+		// If we did anything that would corrupt the inspector's inspected node, reset the inspector.
+		if (resetInspector)
+		{
+			_Inspector *inspector = dynamic_cast<_Inspector *>(EditorRoot::getRoot().getChild("Inspector"));
+			assert(inspector != nullptr);
+
+			inspector->m_inspectedNode = nullptr;
 		}
 	}
 

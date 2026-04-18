@@ -25,10 +25,10 @@ namespace Tank
 		}
 
 		TE_CORE_INFO("Export > Copying engine...");
-		Dir::tryCopy(TANK_ENGINEDIR, path, fs::copy_options::update_existing);
+		Dir::tryCopy(TANK_ENGINEDIR, path);
 		
 		TE_CORE_INFO("Export > Copying player...");
-		Dir::tryCopy(TANK_PLAYERDIR, path, fs::copy_options::update_existing);
+		Dir::tryCopy(TANK_PLAYERDIR, path);
 
 #ifdef __linux__
 		TE_CORE_INFO("Export > Patching player...");

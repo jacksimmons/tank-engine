@@ -8,7 +8,7 @@ namespace Tank
 	{
 		std::error_code ec;
 
-		// No src -> error
+		// Invalid src -> error
 		if (!fs::is_directory(src))
 		{
 			ec = std::make_error_code(std::errc::not_a_directory);

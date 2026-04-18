@@ -15,7 +15,7 @@ namespace Tank
 		fs::path m_path;
 
 		/// <summary>
-		/// If `true`, then we use fs::current_path() / m_path (and need to copy it over if it's Engine during export).
+		/// If `true`, then we use engine_path / m_path (and need to copy it over if it's Engine during export).
 		/// If `false`, then we use project_path / m_path.
 		/// </summary>
 		bool m_inEngine;
