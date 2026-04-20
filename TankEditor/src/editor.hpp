@@ -12,7 +12,7 @@ namespace Tank
 }
 namespace Tank::Editor
 {
-	class ProjectMenuBar;
+	class _ProjectMenuBar;
 	class EditorApp : public Application
 	{
 	private:

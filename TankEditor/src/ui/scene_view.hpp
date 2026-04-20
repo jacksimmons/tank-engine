@@ -16,7 +16,7 @@ namespace Tank::Editor
 	/// </summary>
 	class _SceneView final : public _Window
 	{
-		friend class ProjectMenuBar;
+		friend class _ProjectMenuBar;
 		friend class EditorApp;
 
 	private:

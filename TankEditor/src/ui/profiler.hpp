@@ -7,7 +7,7 @@ namespace Tank::Editor
 	class _Profiler : public _Window
 	{
 		friend class EditorApp;
-		friend class ProjectMenuBar;
+		friend class _ProjectMenuBar;
 	private:
 		_Profiler(const std::string &name = "Profiler");
 	public:

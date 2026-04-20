@@ -9,7 +9,7 @@ namespace Tank::Reflect
 namespace Tank::Editor
 {
 	class EditorApp;
-	class ProjectMenuBar final : public UINode
+	class _ProjectMenuBar final : public UINode
 	{
 	private:
 		EditorApp &m_editor;
@@ -19,7 +19,10 @@ namespace Tank::Editor
 
 		bool spawnerMenuItem(const std::string &nodeName);
 	public:
-		ProjectMenuBar(EditorApp &editor) : UINode("ProjectMenuBar"), m_editor(editor) {};
+		_ProjectMenuBar(EditorApp &editor) : UINode("ProjectMenuBar"), m_editor(editor)
+		{
+			m_isEditorControlled = true;
+		}
 		
 		void drawUI() override;
 	};

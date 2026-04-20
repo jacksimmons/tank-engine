@@ -103,7 +103,7 @@ namespace Tank::Editor
 
 						Node &root = EditorRoot::getRoot();
 						assert(EditorRoot::isReady());
-						root.addChild(std::unique_ptr<ProjectMenuBar>(new ProjectMenuBar(*this)));
+						root.addChild(std::unique_ptr<_ProjectMenuBar>(new _ProjectMenuBar(*this)));
 						root.addChild(std::unique_ptr<_SceneView>(new _SceneView("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
 						root.addChild(std::unique_ptr<_Console>(new _Console("Console")));
 						root.addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));

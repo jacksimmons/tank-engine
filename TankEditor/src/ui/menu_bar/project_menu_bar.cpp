@@ -20,7 +20,7 @@
 
 namespace Tank::Editor
 {
-	void ProjectMenuBar::drawUI()
+	void _ProjectMenuBar::drawUI()
 	{
 		if (ImGui::BeginMainMenuBar())
 		{
@@ -39,7 +39,7 @@ namespace Tank::Editor
 	}
 
 
-	void ProjectMenuBar::drawFile()
+	void _ProjectMenuBar::drawFile()
 	{
 		bool resetInspector = false;
 
@@ -116,7 +116,7 @@ namespace Tank::Editor
 	}
 
 
-	void ProjectMenuBar::drawView()
+	void _ProjectMenuBar::drawView()
 	{
 		Node& root = EditorRoot::getRoot();
 
@@ -147,7 +147,7 @@ namespace Tank::Editor
 	}
 
 
-	bool ProjectMenuBar::spawnerMenuItem(const std::string& nodeName)
+	bool _ProjectMenuBar::spawnerMenuItem(const std::string& nodeName)
 	{
 		return ImGui::MenuItem(nodeName.c_str(), 0, false, !EditorRoot::getRoot().getChild(nodeName));
 	}
