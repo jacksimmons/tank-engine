@@ -14,6 +14,7 @@ project "TankEditor"
 	PrjObjAndTargetDir()
 
 	defines {
+		"TANK_WKS=\"" .. wks .. "\"",
 		"GLM_ENABLE_EXPERIMENTAL",
 		"FMT_UNICODE=0",
 		"GLAD_GLAPI_EXPORT",
