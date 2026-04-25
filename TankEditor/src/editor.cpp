@@ -88,8 +88,9 @@ namespace Tank::Editor
 			new ProjectsMenu(
 				[this](const fs::path &path)
 				{
-					// Load the project
+					// Try to load the project (exit if this fails)
 					m_project = Project::loadFromDir(path);
+					if (m_project == nullptr) return;
 
 					// Update cwd to project path
 					fs::current_path(path);
