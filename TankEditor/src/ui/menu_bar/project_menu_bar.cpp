@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include "imgui.h"
 #include <fs/file.hpp>
 #include <nodes/node.hpp>
@@ -12,6 +13,7 @@
 #include <project/project.hpp>
 #include <reflection/node_factory.hpp>
 #include <scene_serialisation.hpp>
+#include <colours.hpp>
 #include <log.hpp>
 #include <editor.hpp>
 #include <editor_root.hpp>
@@ -20,21 +22,17 @@
 
 namespace Tank::Editor
 {
-	void _ProjectMenuBar::drawUI()
+	void _ProjectMenuBar::drawMainMenuBar()
 	{
-		if (ImGui::BeginMainMenuBar())
+		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::BeginMenu("File"))
-			{
-				drawFile();
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("View"))
-			{
-				drawView();
-				ImGui::EndMenu();
-			}
-			ImGui::EndMainMenuBar();
+			drawFile();
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("View"))
+		{
+			drawView();
+			ImGui::EndMenu();
 		}
 	}
 

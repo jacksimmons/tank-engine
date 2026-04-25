@@ -33,6 +33,7 @@
 #include "ui/inspector/inspector.hpp"
 #include "ui/profiler.hpp"
 #include "ui/menu/projects_menu.hpp"
+#include "ui/menu_bar/global_menu_bar.hpp"
 #include "ui/menu_bar/project_menu_bar.hpp"
 
 
@@ -113,6 +114,8 @@ namespace Tank::Editor
 				}
 			)
 		);
+
+		m_initUI->addChild(std::unique_ptr<_GlobalMenuBar>(new _GlobalMenuBar(*this)));
 		m_initUI->addChild(std::move(projectsMenu));
 	}
 

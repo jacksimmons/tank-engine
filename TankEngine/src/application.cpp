@@ -44,7 +44,7 @@ namespace Tank
 		TE_CORE_INFO("Application > Constructor");
 		TE_CORE_INFO(std::format("CWD: {}", fs::current_path().string()));
 
-		// Init reflection
+		// Register nodes for deserialising
 		m_factory = std::make_unique<Reflect::NodeFactory>();
 		m_factory->registerClass<Node>("Node");
 		m_factory->registerClass<Scene>("Scene");
@@ -142,14 +142,6 @@ namespace Tank
 		// Enable debug output
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(msgCallback, nullptr);
-		// Re-set title to add graphics info
-		std::string gpuInfo = (const char*)glGetString(GL_VENDOR)
-			+ std::format("({})", (const char*)glGetString(GL_RENDERER));
-
-		std::string title = "TankEngine " +
-			std::format("[GPU: {}] ", gpuInfo) +
-			std::format("[OpenGL: {}]", (const char *)glGetString(GL_VERSION));
-		glfwSetWindowTitle(m_window, title.c_str());
 	}
 
 
