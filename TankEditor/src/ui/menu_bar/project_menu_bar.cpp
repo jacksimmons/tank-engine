@@ -16,7 +16,6 @@
 #include <colours.hpp>
 #include <log.hpp>
 #include <editor.hpp>
-#include <editor_root.hpp>
 #include "project_menu_bar.hpp"
 
 
@@ -56,7 +55,7 @@ namespace Tank::Editor
 
 			// Load the scene
 			auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_editor.getFactory()));
-			EditorRoot::setScene(std::move(scene));
+			m_editor.setScene(std::move(scene));
 
 			resetInspector = true;
 		}
@@ -70,7 +69,7 @@ namespace Tank::Editor
 
 			// Load the scene
 			auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_editor.getFactory()));
-			EditorRoot::setScene(std::move(scene));
+			m_editor.setScene(std::move(scene));
 
 			resetInspector = true;
 		}
@@ -106,7 +105,7 @@ namespace Tank::Editor
 		// If we did anything that would corrupt the inspector's inspected node, reset the inspector.
 		if (resetInspector)
 		{
-			_Inspector *inspector = dynamic_cast<_Inspector *>(EditorRoot::getRoot().getChild("Inspector"));
+			_Inspector *inspector = dynamic_cast<_Inspector *>(m_editor.getProjRoot().getChild("Inspector"));
 			assert(inspector != nullptr);
 
 			inspector->m_inspectedNode = nullptr;
@@ -116,7 +115,7 @@ namespace Tank::Editor
 
 	void _ProjectMenuBar::drawView()
 	{
-		Node& root = EditorRoot::getRoot();
+		Node& root = m_editor.getProjRoot();
 
 		if (spawnerMenuItem("Hierarchy"))
 		{
@@ -147,6 +146,6 @@ namespace Tank::Editor
 
 	bool _ProjectMenuBar::spawnerMenuItem(const std::string& nodeName)
 	{
-		return ImGui::MenuItem(nodeName.c_str(), 0, false, !EditorRoot::getRoot().getChild(nodeName));
+		return ImGui::MenuItem(nodeName.c_str(), 0, false, !m_editor.getProjRoot().getChild(nodeName));
 	}
 }
