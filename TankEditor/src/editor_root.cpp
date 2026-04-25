@@ -9,10 +9,10 @@ namespace Tank::Editor
 
 	void EditorRoot::setScene(std::unique_ptr<Scene> scene)
 	{
-		Node* existingScene = s_instance.m_root->getChild("Scene");
-		if (existingScene) existingScene->destroy();
+		std::vector<Scene *> existingScenes = s_instance.m_root->getChildrenOfType<Scene>();
+		assert(existingScenes.size() <= 1);
+		if (existingScenes.size() > 0) existingScenes[0]->destroy();
 
-		assert(scene->getName() == "Scene");
 		s_instance.m_root->addChild(std::move(scene));
 	}
 }
