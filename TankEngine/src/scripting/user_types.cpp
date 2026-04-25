@@ -222,10 +222,10 @@ namespace Tank
 		//	return;
 		//}
 
-		fs::create_directories("TankLuaDocs/codegen");
+		fs::create_directories("lua/codegen");
 		for (const LuaClass &lc : s_luaClasses)
 		{
-			Res codegenPath = Res(std::format("TankLuaDocs/codegen/{}.lua", lc.name), true);
+			Res codegenPath = Res(std::format("lua/codegen/{}.lua", lc.name), true);
 
 			std::ofstream stream;
 			// @todo may throw

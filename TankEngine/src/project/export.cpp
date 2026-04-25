@@ -45,7 +45,7 @@ namespace Tank
 		Dir::tryCopy(proj / "assets", path / "assets", fs::copy_options::recursive);
 
 		TE_CORE_INFO("Export > Copying core assets...");
-		Dir::tryCopy(Res::getCoreAssetsPath(), path / "CoreAssets", fs::copy_options::recursive);
+		Dir::tryCopy(Res::getCoreAssetsPath(), path / "core-assets", fs::copy_options::recursive);
 
 		TE_CORE_INFO("Export > Done.");
 		return true;

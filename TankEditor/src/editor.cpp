@@ -58,8 +58,8 @@ namespace Tank::Editor
 	)
 	{
 		TE_INFO("Editor > Constructor");
-		TE_INFO(std::format("CWD: {}", fs::current_path().string()));
-		TE_INFO(std::format("CoreAssets: {}", Res::getCoreAssetsPath().string()));
+		TE_INFO(std::format("cwd: {}", fs::current_path().string()));
+		TE_INFO(std::format("core-assets: {}", Res::getCoreAssetsPath().string()));
 
 		// Create Editor KeyInput
 		std::vector<int> registeredKeys = {

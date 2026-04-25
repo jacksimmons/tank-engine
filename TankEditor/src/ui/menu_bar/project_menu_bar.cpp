@@ -48,7 +48,7 @@ namespace Tank::Editor
 			// Copy demo scene to the selected path
 			TE_INFO(std::format("New scene > {}", scenePath.string()));
 			File::tryCopy(
-				fs::absolute(fs::path(TANK_WKS)) / "DemoProject" / "assets" / "scene.json",
+				fs::absolute(fs::path(TANK_WKS)) / "demo-project" / "assets" / "scene.json",
 				scenePath,
 				fs::copy_options::overwrite_existing
 			);

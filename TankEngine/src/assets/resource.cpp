@@ -5,7 +5,7 @@
 namespace Tank
 {
 	std::string Resource::s_engineToken = "{engine}";
-	fs::path Resource::s_coreAssetsPath = fs::current_path() / fs::path("CoreAssets");
+	fs::path Resource::s_coreAssetsPath = fs::current_path() / fs::path("core-assets");
 
 	
 	std::string Resource::encode(const Resource &res)

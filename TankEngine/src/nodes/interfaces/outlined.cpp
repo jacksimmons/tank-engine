@@ -21,7 +21,7 @@ namespace Tank
 		}
 		else
 		{
-			TE_CORE_ERROR("IOutlined: Invalid shader.");
+			TE_CORE_CRITICAL("IOutlined: Invalid shader.");
 		}
 
 		m_outlineShader->use();

@@ -20,7 +20,7 @@ namespace Tank::Editor
     {
         if (ImGui::Button("New Project"))
         {
-            fs::path demoDir = fs::path{ "DemoProject" };
+            fs::path demoDir = fs::path{ "demo-project" };
             fs::path projectDir = FileDialog::open(FileDialog::Target::Directory);
             if (projectDir == "") return;
             
