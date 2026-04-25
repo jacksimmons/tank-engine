@@ -1,3 +1,4 @@
+#include <log.hpp>
 #include "colours.hpp"
 #include "node_inspectors/node_inspector.hpp"
 #include "nodes/camera.hpp"
@@ -20,7 +21,7 @@ namespace Tank::Editor
 {
 	const WindowOpts WINDOW_OPTS = {
 		ImGuiWindowFlags_None,
-		true,
+		false,
 		false
 	};
 
@@ -38,6 +39,13 @@ namespace Tank::Editor
 		auto onNodeSelected = EventManager::getEvent<Node*>("Hierarchy.NodeSelected");
 		onNodeSelected->registerHandler([this](Node *node)
 		{
+			// Don't allow editor nodes in the hierarchy to be inspected
+			if (node->IsEditorControlled())
+			{
+				TE_WARN("Attempted to inspect an editor node - this is unsupported as it's extremely unstable.");
+				return;
+			}
+
 			if (m_inspectedNode)
 			{
 				// Disable outline for current inspected node (if necessary)
@@ -99,13 +107,6 @@ namespace Tank::Editor
 			ImGui::TextColored(Tank::Colour::TITLE, "Type");
 			ImGui::Text(typeid(*m_inspectedNode).name());
 			
-			// Prevent users from modifying editor nodes, which would likely cause a crash.
-			if (m_inspectedNode->IsEditorControlled())
-			{
-				ImGui::Text("Modifying the editor is not supported.");
-				return;
-			}
-
 			// Draw all node inspector sections
 			for (const auto &nodeInspector : m_nodeInspectors)
 			{

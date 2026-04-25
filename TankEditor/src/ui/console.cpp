@@ -9,7 +9,7 @@ namespace Tank::Editor
 {
 	const WindowOpts WINDOW_OPTS = {
 		ImGuiWindowFlags_None,
-		true,
+		false,
 		true
 	};
 
