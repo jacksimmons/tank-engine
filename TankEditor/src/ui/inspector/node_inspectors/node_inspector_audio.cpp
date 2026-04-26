@@ -14,7 +14,7 @@ namespace Tank::Editor
 	/// Draws inspector section that is present for all Audios.
 	/// </summary>
 	template <>
-	void _NodeInspector<Audio>::draw()
+	void NodeInspector_<Audio>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Audio File");
 		std::string audioPath = Res::encode(m_node->getAudioPath());

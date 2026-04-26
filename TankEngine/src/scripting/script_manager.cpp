@@ -39,7 +39,7 @@ namespace Tank
 		std::string encoded = Res::encode(path);
 		if (s_loadedScripts.contains(encoded))
 		{
-			TE_CORE_WARN(std::format("Script already exists at {}, updating it...", encoded));
+			TE_CORE_WARN(std::format("Script {} already loaded, reloading it...", encoded));
 			return updateScript(path);
 		}
 

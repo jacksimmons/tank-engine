@@ -11,7 +11,7 @@ namespace Tank::Editor
 	/// Draws a section specifically for the root node (scene).
 	/// </summary>
 	template <>
-	void _NodeInspector<Scene>::draw()
+	void NodeInspector_<Scene>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Active Camera");
 

@@ -13,7 +13,7 @@ namespace Tank::Editor
 	/// Draws inspector section that is present for all Cameras.
 	/// </summary>
 	template <>
-	void _NodeInspector<Camera>::draw()
+	void NodeInspector_<Camera>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Camera Eye");
 		glm::vec3 eye = m_node->getTransformedEye();

@@ -208,6 +208,23 @@ namespace Tank
 	}
 
 
+	bool Node::removeScript(const Res &path)
+	{
+		auto it = std::find_if(m_scripts.begin(), m_scripts.end(), [&path](std::unique_ptr<Script> &ownedScript)
+		{
+			if (ownedScript.get()->getPath() == path)
+			{
+				return true;
+			}
+			return false;
+		});
+
+		if (it == m_scripts.end()) return false;
+		m_scripts.erase(it);
+		return true;
+	}
+
+
 	std::vector<Res> Node::getScriptPaths()
 	{
 		std::vector<Res> scriptPaths;

@@ -12,7 +12,7 @@ namespace Tank::Editor
 	/// Also handles drawing of all Light subclasses.
 	/// </summary>
 	template <>
-	void _NodeInspector<Light>::draw()
+	void NodeInspector_<Light>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Light Struct");
 		std::string lightStruct = m_node->getLightStruct();

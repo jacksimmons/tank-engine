@@ -16,7 +16,7 @@ namespace Tank::Editor
 	/// Draws inspector section that is present for all Nodes.
 	/// </summary>
 	template <>
-	void _NodeInspector<Node>::draw()
+	void NodeInspector_<Node>::draw()
 	{
 		Tank::Transform *transform = m_node->getTransform();
 		const glm::mat4 &modelMatrix = transform->getWorldModelMatrix();
@@ -65,26 +65,24 @@ namespace Tank::Editor
 			ImGui::TextColored(Colour::DISABLED, "None");
 		}
 
+		std::optional<Res> toDetach = std::nullopt;
 		for (const Res &path : scriptPaths)
 		{
 			ImGui::Text(Res::encode(path).c_str());
+			
 			ImGui::SameLine();
 			if (ImGui::Button("Open in VSCode"))
 			{
 				system(std::format("code {}", path.resolvePathStr()).c_str());
 			}
 
-			//Widget::textInput(
-			//	std::format("##Inspector_Script_{}", i).c_str(),
-			//	path.string(),
-			//	[this](std::string newPath)
-			//	{
-			//		auto script = Script::createScript(m_node, newPath);
-			//		if (script.has_value())
-			//			m_node->addScript(std::move(script.value()));
-			//	}
-			//);
+			ImGui::SameLine();
+			if (ImGui::Button("Detach"))
+			{
+				m_node->removeScript(path);
+			}
 		}
+
 		// Allow user to add a new script
 		Widget::textInput(
 			"##Inspector_Add_Script",
@@ -92,16 +90,24 @@ namespace Tank::Editor
 			[this, &scriptPaths](std::string newPath)
 			{
 				auto script = Script::createScript(m_node, Res::decode(newPath));
+				if (!script.has_value()) return;
+
+				// Check if script already exists on this node, and we need to update it
+				TE_INFO(newPath);
 				for (auto it = scriptPaths.begin(); it != scriptPaths.end(); ++it)
 				{
-					if (!script.has_value()) break;
-
-					if ((*it) == Res::decode(newPath))
+					TE_INFO(Res::encode(*it));
+					if (Res::encode(*it) == newPath)
 					{
 						m_node->addScript(std::move(script.value()));
+						return;
 					}
 				}
-			}
+				
+				m_node->addScript(std::move(script.value()));
+			},
+			"",
+			ImGuiInputTextFlags_EnterReturnsTrue
 		);
 	}
 }

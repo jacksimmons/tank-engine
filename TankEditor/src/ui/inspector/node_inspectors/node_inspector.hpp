@@ -16,21 +16,21 @@ namespace Tank
 	{
 		class Inspector_;
 
-		class _NodeInspectorBase
+		class NodeInspector_Base
 		{
 		public:
 			virtual void draw() = 0;
 		};
 
 		template <class T>
-		class _NodeInspector final : public _NodeInspectorBase
+		class NodeInspector_ final : public NodeInspector_Base
 		{
 		private:
 			T *m_node;
 			Inspector_ *m_inspector;
 		public:
-			_NodeInspector(T *node, Inspector_ *inspector) :
-				_NodeInspectorBase(),
+			NodeInspector_(T *node, Inspector_ *inspector) :
+				NodeInspector_Base(),
 				m_node(node),
 				m_inspector(inspector)
 			{

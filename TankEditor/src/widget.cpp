@@ -5,7 +5,7 @@
 
 namespace Tank
 {
-	void Widget::textInput(const char *label, const std::string &hint, std::function<void(const std::string&)> onModified, const std::string &contents)
+	void Widget::textInput(const char *label, const std::string &hint, std::function<void(const std::string&)> onModified, const std::string &contents, ImGuiInputTextFlags flags)
 	{
 		const size_t size = 100;
 		char buf[size] = "\0";
@@ -17,7 +17,7 @@ namespace Tank
 		}
 
 		strcpy(buf, contents.data());
-		if (ImGui::InputTextWithHint(label, hint.c_str(), buf, size))
+		if (ImGui::InputTextWithHint(label, hint.c_str(), buf, size, flags))
 		{
 			onModified(std::string(buf));
 		}

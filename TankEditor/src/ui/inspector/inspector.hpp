@@ -16,7 +16,7 @@ namespace Tank::Editor
 		friend class ProjectMenuBar_;
 	private:
 		Node *m_inspectedNode;
-		std::vector<std::unique_ptr<_NodeInspectorBase>> m_nodeInspectors;
+		std::vector<std::unique_ptr<NodeInspector_Base>> m_nodeInspectors;
 
 		Inspector_(const std::string &name = "Inspector");
 

@@ -54,7 +54,7 @@ namespace Tank::Editor
 	/// Draws inspector section that is present for all nodes with shaders.
 	/// </summary>
 	template <>
-	void _NodeInspector<IShaderContainer>::draw()
+	void NodeInspector_<IShaderContainer>::draw()
 	{
 		const ShaderSources &sources = m_node->getShader().getShaderSources();
 		ShaderSources copy = ShaderSources(sources);

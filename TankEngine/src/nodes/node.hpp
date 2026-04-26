@@ -158,6 +158,12 @@ namespace Tank
 		std::vector<int> treeFromChild(Node *child);
 
 		void addScript(std::unique_ptr<Script>);
+
+		/// @brief Removes a script.
+		/// @param script 
+		/// @return Whether it was successfully removed.
+		bool removeScript(const Res &path);
+
 		std::vector<Res> getScriptPaths();
 
 		virtual void startup();

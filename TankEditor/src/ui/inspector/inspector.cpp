@@ -126,7 +126,7 @@ namespace Tank::Editor
 		// If the node can be casted to this node subtype, then draw using the subtype inspector.
 		if (T *t = dynamic_cast<T *>(m_inspectedNode))
 		{
-			m_nodeInspectors.push_back(std::make_unique<_NodeInspector<T>>(t, this));
+			m_nodeInspectors.push_back(std::make_unique<NodeInspector_<T>>(t, this));
 		}
 	}
 }
