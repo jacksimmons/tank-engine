@@ -1,14 +1,22 @@
 #include <nodes/node.hpp>
+#include <log.hpp>
 
 
 namespace Tank
 {
-	void Node::setParent(Node *parent)
+	bool Node::setParent(Node *parent, std::optional<size_t> siblingIndex)
 	{
+		// Set the parent if it's different to our current
+		if (m_parent == parent)
+		{
+			TE_CORE_TRACE(std::format("Parent is already {}, doing nothing.", parent->getName()));
+			return false;
+		}
+
 		std::unique_ptr<Node> me = m_parent->disownChild(this);
 		assert(me != nullptr);
-
-		parent->addChild(std::move(me));
+		parent->addChild(std::move(me), siblingIndex);
+		return true;
 	}
 
 
@@ -18,10 +26,10 @@ namespace Tank
 	}
 
 
-	void Node::addChild(std::unique_ptr<Node> child)
+	void Node::addChild(std::unique_ptr<Node> child, std::optional<size_t> atIndex)
 	{
 		child->m_parent = this;
-		m_childrenAwaitingAdopt.push_back(std::move(child));
+		m_childrenAwaitingAdopt.push_back(std::make_tuple(std::move(child), atIndex));
 	}
 
 
@@ -77,6 +85,52 @@ namespace Tank
 				return i;
 		}
 		return -1;
+	}
+
+
+	bool Node::setSiblingIndex(size_t index)
+	{
+		if (index >= m_parent->getChildCount())
+		{
+			TE_CORE_ERROR(std::format("Couldn't set sibling index to {}, when parent only has {} children.", index, m_parent->getChildCount()));
+			return false;
+		}
+
+		size_t currentIndex = getSiblingIndex();
+		if (currentIndex == index)
+		{
+			TE_CORE_TRACE(std::format("Sibling index was already {}, doing nothing.", index));
+			return true;
+		}
+
+		auto &vec = m_parent->m_children;
+
+		// Left rotate
+		if (currentIndex > index)
+		{
+			auto current = vec.begin() + currentIndex;
+			auto target = vec.begin() + index;
+
+			// Target index: 0
+			//    { A, B, [X], Y, Z }
+			// -> { [A, B, X], Y, Z } // Select range for rotation (exclusive on 3rd parameter)
+			// -> { X, A, B, Y, Z }   // Done
+			std::rotate(target, current, current + 1);
+		}
+		// Right rotate
+		else
+		{
+			// The reverse iterator from start. Subtract from it to go towards the end.
+			auto start = (vec.rbegin() + (vec.size() - 1));
+			auto current = start - currentIndex;
+			auto target = start - index;
+
+			// Target index: 4
+			//    { A, B, [X], Y, Z }
+			// -> { A, B, [X, Y, Z] } // Select range for rotation (exclusive on 3rd parameter)
+			// -> { A, B, Y, Z, X }   // Done
+			std::rotate(target, current, current + 1);
+		}
 	}
 
 

@@ -164,7 +164,21 @@ namespace Tank
 		// Adopt all children waiting to be adopted
 		for (auto it = m_childrenAwaitingAdopt.begin(); it != m_childrenAwaitingAdopt.end(); ++it)
 		{
-			m_children.push_back(std::move(*it));
+			std::unique_ptr<Node> child = std::move(std::get<0>(*it));
+			auto index = std::get<1>(*it);
+			
+			// Insert at `index` if provided, otherwise just push_back
+			if (index.has_value())
+			{
+				TE_CORE_TRACE(std::format("{} insert child (index {})", getName(), index.value()));
+				m_children.insert(m_children.begin() + index.value(), std::move(child));
+			}
+			else
+			{
+				TE_CORE_TRACE(std::format("{} push_back child (index {})", getName(), m_children.size()));
+				m_children.push_back(std::move(child));
+			}
+
 			Node *node = m_children.back().get();
 			// setName sets name to NAME (0) if any siblings share its name (then NAME (1) if NAME (0) already exists, etc...)
 			node->setName(node->m_name);

@@ -10,6 +10,10 @@ namespace Tank
 	class KeyInput;
 	class Script;
 
+
+	typedef std::tuple<std::unique_ptr<Node>, std::optional<size_t>> Adoption;
+
+
 	/// <summary>
 	/// An object which exists in the Node hierarchy. It has a parent (or is the root),
 	/// and any number of children.
@@ -34,7 +38,7 @@ namespace Tank
 		bool m_visible = true;
 
 		std::vector<Node*> m_childrenAwaitingDisown;
-		std::vector<std::unique_ptr<Node>> m_childrenAwaitingAdopt;
+		std::vector<Adoption> m_childrenAwaitingAdopt;
 		std::unique_ptr<KeyInput> m_keyInput;
 	protected:
 		std::string m_type;
@@ -60,7 +64,12 @@ namespace Tank
 		void setName(const std::string &name) noexcept;
 		constexpr const std::string& getName() const noexcept { return m_name; }
 		
-		void setParent(Node *parent);
+		/// @brief Sets the parent of this Node.
+		/// The parent controls ownership and this Node will be stored in parent's m_children.
+		/// @param parent 
+		/// @param siblingIndex If provided, gets added by insert rather than push_back.
+		/// @return Whether the operation was successful (parent changed).
+		bool setParent(Node *parent, std::optional<size_t> siblingIndex = std::nullopt);
 		Node *getParent() const noexcept;
 
 		std::string getPath() const;
@@ -77,9 +86,10 @@ namespace Tank
 
 		// Add an existing child.
 
-		/// @brief Adds a node as a child.
+		/// @brief Adds a node as a child, at the end of m_children by default.
 		/// @param child 
-		void addChild(std::unique_ptr<Node> child);
+		/// @param atIndex If provided, inserts the child at the index instead.
+		void addChild(std::unique_ptr<Node> child, std::optional<size_t> atIndex = std::nullopt);
 
 		/// @brief Gets a child by name.
 		/// @param name 
@@ -125,6 +135,11 @@ namespace Tank
 		Node *getSibling(int index) const { return getParent()->getChild(index); }
 		// Get parent's child index for this node.
 		int getSiblingIndex() const;
+
+		/// @brief Sets the index of this node in its parent's m_children.
+		/// @param index 
+		/// @return Whether it was successful.
+		bool setSiblingIndex(size_t index);
 
 		void forEachDescendant(std::function<void(Node *)> forEach, std::function<bool()> terminate = nullptr);
 

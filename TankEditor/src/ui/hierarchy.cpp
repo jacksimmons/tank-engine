@@ -75,6 +75,39 @@ namespace Tank::Editor
 		ImVec4 nodeNameCol = Colour::NORMAL;
 		if (!node->Enabled()) nodeNameCol = Colour::DISABLED;
 		if (node->IsEditorControlled()) nodeNameCol = Colour::ERR;
+
+		ImGui::InvisibleButton("##HIERARCHY_SEPARATOR", ImVec2(100, 5));
+		if (ImGui::BeginDragDropTarget())
+		{
+			bool unstable = false;
+
+			// If the node is hovering over this button, move it after `node`.
+			if (const ImGuiPayload *p = ImGui::AcceptDragDropPayload("HIERARCHY_NODE"))
+			{
+				Node *incoming = *(Node **)p->Data;
+				size_t nodeIndex = node->getSiblingIndex();
+				Node *parent = node->getParent();
+
+				TE_INFO(std::format("Hierarchy: {} moves to sibling index {}, and parent is now", incoming->getName(), nodeIndex, parent->getName()));
+				// Try and update the parent. If parent has not changed, setParent will return false.
+				// If setParent returns false, we just need to set the sibling index as parent should already be `parent`.
+				if (!incoming->setParent(parent, nodeIndex))
+				{
+					size_t incomingIndex = incoming->getSiblingIndex();
+
+					// If we are increasing `incoming`'s index, we need to subtract 1 from the index supplied.
+					// Moving `incomingIndex` to `nodeIndex` would put it *ahead* of `node` (only in this case).
+					if (incomingIndex < nodeIndex)
+						incoming->setSiblingIndex(nodeIndex - 1);
+					else
+						incoming->setSiblingIndex(nodeIndex);
+				}
+				unstable = true;
+			}
+			ImGui::EndDragDropTarget();
+
+			if (unstable) return;
+		}
 		
 		ImGui::PushStyleColor(ImGuiCol_Text, nodeNameCol);
 		bool nodeExpanded = ImGui::TreeNodeEx((node->getName() + "##" + std::to_string(*count)).c_str(), flags);
@@ -94,6 +127,7 @@ namespace Tank::Editor
 		// Draw the right-click options, if user is right-clicking and hovering. If node gets deleted here, return.
 		if (!drawNodeContextMenu(node)) goto cleanup;
 
+		// Setup `node` as drag-and-droppable.
 		if (ImGui::BeginDragDropSource())
 		{
 			TE_INFO(std::format("{} source", node->getName()).c_str());
@@ -102,15 +136,21 @@ namespace Tank::Editor
 			ImGui::EndDragDropSource();
 		}
 
+		// Another node gets dropped on `node`.
 		if (ImGui::BeginDragDropTarget())
 		{
 			bool unstable = false;
 
+			// If the node was dropped onto `node`.
 			if (const ImGuiPayload *p = ImGui::AcceptDragDropPayload("HIERARCHY_NODE"))
 			{
 				Node *incoming = *(Node **)p->Data;
-				TE_INFO(std::format("Hierarchy: {} adopts {}", node->getName().c_str(), incoming->getName().c_str()));
-				incoming->setParent(node);
+				TE_INFO(std::format("Hierarchy: {} adopts {}", node->getName(), incoming->getName()));
+				// Try and update the parent. If parent has not changed, setParent will return false.
+				// If setParent returns false, `incoming` is already a child of `node`.
+				// In that case, just move `incoming` to the end of `node`'s m_children.
+				TE_INFO(std::format("{}", node->getChildCount()));
+				if (!incoming->setParent(node)) incoming->setSiblingIndex(node->getChildCount() - 1);
 				unstable = true;
 			}
 			ImGui::EndDragDropTarget();
