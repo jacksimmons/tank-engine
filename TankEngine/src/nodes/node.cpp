@@ -9,18 +9,6 @@
 
 namespace Tank
 {
-	Node::Node(const std::string &name)
-	{
-		m_type = "Node";
-		m_name = name;
-		m_transform = std::make_unique<Transform>(this);
-		m_keyInput = std::unique_ptr<KeyInput>(nullptr);
-	}
-
-
-	Node::~Node() = default;
-
-
 	void Node::setName(const std::string &name) noexcept
 	{
 		m_name = name;
@@ -87,70 +75,6 @@ namespace Tank
 
 
 	Transform *Node::getTransform() const { return m_transform.get(); }
-
-
-	void Node::addChild(std::unique_ptr<Node> child)
-	{
-		child->m_parent = this;
-		m_childrenAwaitingAdopt.push_back(std::move(child));
-	}
-
-	Node *Node::getChild(const std::string &name) const
-	{
-		for (auto &child : m_children)
-		{
-			if (child->getName() == name) return child.get();
-		}
-
-		// No child exists by this name.
-		return nullptr;
-	}
-
-	Node *Node::getChild(int index) const
-	{
-		if (0 <= index && index < m_children.size())
-		{
-			return m_children[index].get();
-		}
-
-		// Out of children list range.
-		return nullptr;
-	}
-
-
-	int Node::getSiblingIndex() const
-	{
-		for (int i = 0; i < m_parent->getChildCount(); i++)
-		{
-			if (getSibling(i) == this)
-				return i;
-		}
-		return -1;
-	}
-
-
-	void Node::forEachDescendant(std::function<void(Node *)> forEach, std::function<bool()> terminate)
-	{
-		std::stack<Node *> nodeStack;
-		nodeStack.push(this);
-
-		while (!nodeStack.empty())
-		{
-			// Exit early if necessary
-			if (terminate && terminate()) return;
-
-			// Pop the top node from the stack, and perform `forEach`.
-			Node *node = nodeStack.top();
-			nodeStack.pop();
-			forEach(node);
-
-			// Add all its children to the stack.
-			for (int i = 0; i < node->getChildCount(); i++)
-			{
-				nodeStack.push(node->getChild(i));
-			}
-		}
-	}
 
 
 	Node *Node::childFromTree(std::vector<int> treeTraversal)

@@ -5,7 +5,7 @@
 
 namespace Tank::Editor
 {
-	void _GlobalMenuBar::drawMainMenuBar()
+	void GlobalMenuBar_::drawMainMenuBar()
 	{
 		if (ImGui::BeginMenu("System"))
 		{
@@ -15,7 +15,7 @@ namespace Tank::Editor
 	}
 
 
-	void _GlobalMenuBar::drawSystem()
+	void GlobalMenuBar_::drawSystem()
 	{
 		// GPU manufacturer (e.g. NVIDIA Corporation)
 		ImGui::Text(std::format("GPU manufacturer: {}", (const char *)glGetString(GL_VENDOR)).c_str());

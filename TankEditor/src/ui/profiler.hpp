@@ -4,12 +4,12 @@
 
 namespace Tank::Editor
 {
-	class _Profiler : public _Window
+	class Profiler_ : public _Window
 	{
 		friend class EditorApp;
-		friend class _ProjectMenuBar;
+		friend class ProjectMenuBar_;
 	private:
-		_Profiler(const std::string &name = "Profiler");
+		Profiler_(const std::string &name = "Profiler");
 	public:
 		virtual void drawPanel() override;
 	};

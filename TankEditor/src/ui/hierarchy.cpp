@@ -25,7 +25,7 @@ namespace Tank::Editor
 	};
 
 
-	_Hierarchy::_Hierarchy(const std::string &name)
+	Hierarchy_::Hierarchy_(const std::string &name)
 		: _Window(name, WINDOW_OPTS)
 	{
 		m_showEditorHierarchy = false;
@@ -33,7 +33,7 @@ namespace Tank::Editor
 	}
 
 
-	void _Hierarchy::drawPanel()
+	void Hierarchy_::drawPanel()
 	{
 		if (m_showEditorHierarchy)
 		{
@@ -58,7 +58,7 @@ namespace Tank::Editor
 	/// Generates buttons for all children of the current node, at a given
 	/// indentation depth (based on the generation depth).
 	/// </summary>
-	void _Hierarchy::drawTreeNode(Node *node, int *count)
+	void Hierarchy_::drawTreeNode(Node *node, int *count)
 	{
 		// Base case.
 		if (!node) return;
@@ -94,6 +94,30 @@ namespace Tank::Editor
 		// Draw the right-click options, if user is right-clicking and hovering. If node gets deleted here, return.
 		if (!drawNodeContextMenu(node)) goto cleanup;
 
+		if (ImGui::BeginDragDropSource())
+		{
+			TE_INFO(std::format("{} source", node->getName()).c_str());
+
+			ImGui::SetDragDropPayload("HIERARCHY_NODE", &node, sizeof(Node *));
+			ImGui::EndDragDropSource();
+		}
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			bool unstable = false;
+
+			if (const ImGuiPayload *p = ImGui::AcceptDragDropPayload("HIERARCHY_NODE"))
+			{
+				Node *incoming = *(Node **)p->Data;
+				TE_INFO(std::format("Hierarchy: {} adopts {}", node->getName().c_str(), incoming->getName().c_str()));
+				incoming->setParent(node);
+				unstable = true;
+			}
+			ImGui::EndDragDropTarget();
+
+			if (unstable) goto cleanup;
+		}
+
 		// If node was clicked on in the tree, display its children (and further descendants if their parent has previously been expanded).
 		if (nodeExpanded)
 		{
@@ -113,7 +137,7 @@ namespace Tank::Editor
 	}
 
 
-	bool _Hierarchy::drawNodeContextMenu(Node *node)
+	bool Hierarchy_::drawNodeContextMenu(Node *node)
 	{
 		bool nodeSurvives = true;
 
@@ -193,7 +217,7 @@ namespace Tank::Editor
 	}
 
 
-	void _Hierarchy::addNewNode(Node *parent, Node *heapAllocatedNode) const
+	void Hierarchy_::addNewNode(Node *parent, Node *heapAllocatedNode) const
 	{
 		parent->addChild(std::unique_ptr<Node>(heapAllocatedNode));
 	}

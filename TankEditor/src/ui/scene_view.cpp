@@ -20,7 +20,7 @@ namespace Tank::Editor
 	};
 
 
-	_SceneView::_SceneView(const std::string &name, glm::ivec2 sceneViewportSize, glm::ivec2 fbViewportSize, KeyInput *keyInput, bool isPlayer)
+	SceneView_::SceneView_(const std::string &name, glm::ivec2 sceneViewportSize, glm::ivec2 fbViewportSize, KeyInput *keyInput, bool isPlayer)
 		: _Window(name, WINDOW_OPTS), m_isPlayer(isPlayer)
 	{
 		m_sceneW = sceneViewportSize.x, m_sceneH = sceneViewportSize.y;
@@ -50,7 +50,7 @@ namespace Tank::Editor
 		glBlendFunc(m_blendFuncSFactor, m_blendFuncDFactor);
 	}
 
-	void _SceneView::draw()
+	void SceneView_::draw()
 	{
 		int fbW = m_fb->getW(), fbH = m_fb->getH();
 
@@ -59,7 +59,7 @@ namespace Tank::Editor
 		_Window::draw();
 	}
 
-	void _SceneView::drawPanel()
+	void SceneView_::drawPanel()
 	{
 		int fbW = m_fb->getW(), fbH = m_fb->getH();
 
@@ -116,7 +116,7 @@ namespace Tank::Editor
 		if (!m_isPlayer) ImGui::EndChild();
 	}
 
-	void _SceneView::update()
+	void SceneView_::update()
 	{
 		int fbW = m_fb->getW(), fbH = m_fb->getH();
 		
@@ -128,7 +128,7 @@ namespace Tank::Editor
 		_Window::update();
 	}
 
-	void _SceneView::rescale(int w, int h) const
+	void SceneView_::rescale(int w, int h) const
 	{
 		// Re-render the framebuffer at new scale when the user has finished scaling.
 		if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
@@ -137,7 +137,7 @@ namespace Tank::Editor
 		}
 	}
 
-	void _SceneView::handleKeyInput()
+	void SceneView_::handleKeyInput()
 	{
 		if (!m_isFocussed) return;
 		if (m_started) return;
@@ -203,7 +203,7 @@ namespace Tank::Editor
 			cam->rotate(glm::vec3(0.0f, 0.0f, -frameDelta * rotSpd));
 	}
 
-	void _SceneView::cyclePolygonMode()
+	void SceneView_::cyclePolygonMode()
 	{
 		switch (m_polygonMode)
 		{
@@ -225,7 +225,7 @@ namespace Tank::Editor
 		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
 	}
 
-	void _SceneView::cycleCullFaceMode()
+	void SceneView_::cycleCullFaceMode()
 	{
 		switch (m_cullFaceMode)
 		{
@@ -248,7 +248,7 @@ namespace Tank::Editor
 		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
 	}
 
-	void _SceneView::cycleFrontFaceMode()
+	void SceneView_::cycleFrontFaceMode()
 	{
 		switch (m_frontFaceMode)
 		{
@@ -268,7 +268,7 @@ namespace Tank::Editor
 		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
 	}
 
-	void _SceneView::cycleDepthFuncComparisonMode()
+	void SceneView_::cycleDepthFuncComparisonMode()
 	{
 		std::string newMode = "(Null)";
 		switch (m_depthFuncComparisonMode)
@@ -299,7 +299,7 @@ namespace Tank::Editor
 	}
 
 	
-	void _SceneView::cycleBlendFuncFactor(GLenum &factor, const std::string &name)
+	void SceneView_::cycleBlendFuncFactor(GLenum &factor, const std::string &name)
 	{
 		std::map<GLenum, std::string> enumToName = {
 			{ GL_ZERO, "ZERO (0,0,0,0)" },

@@ -10,12 +10,12 @@ namespace Tank
 	class Shader;
 	enum class LightType;
 
-	namespace Editor { class _Hierarchy; }
+	namespace Editor { class Hierarchy_; }
 
 	class TANK_API Scene : public Node
 	{
 		// The Hierarchy may modify elements of the scene (lights, nodes).
-		friend class Editor::_Hierarchy;
+		friend class Editor::Hierarchy_;
 	public:
 		virtual json serialise() override;
 		virtual void deserialise(const json &ser) override;

@@ -102,18 +102,18 @@ namespace Tank::Editor
 						m_projRoot = std::make_unique<Node>("Editor");
 						setScene(std::unique_ptr<Scene>(rawScene));
 
-						m_projRoot->addChild(std::unique_ptr<_ProjectMenuBar>(new _ProjectMenuBar(*this)));
-						m_projRoot->addChild(std::unique_ptr<_SceneView>(new _SceneView("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
-						m_projRoot->addChild(std::unique_ptr<_Console>(new _Console("Console")));
-						m_projRoot->addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy("Hierarchy")));
-						m_projRoot->addChild(std::unique_ptr<_Inspector>(new _Inspector("Inspector")));
+						m_projRoot->addChild(std::unique_ptr<ProjectMenuBar_>(new ProjectMenuBar_(*this)));
+						m_projRoot->addChild(std::unique_ptr<SceneView_>(new SceneView_("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
+						m_projRoot->addChild(std::unique_ptr<Console_>(new Console_("Console")));
+						m_projRoot->addChild(std::unique_ptr<Hierarchy_>(new Hierarchy_("Hierarchy")));
+						m_projRoot->addChild(std::unique_ptr<Inspector_>(new Inspector_("Inspector")));
 						m_projRoot->preupdate();
 					}
 				}
 			)
 		);
 
-		m_initUI->addChild(std::unique_ptr<_GlobalMenuBar>(new _GlobalMenuBar(*this)));
+		m_initUI->addChild(std::unique_ptr<GlobalMenuBar_>(new GlobalMenuBar_(*this)));
 		m_initUI->addChild(std::move(projectsMenu));
 	}
 
@@ -180,7 +180,7 @@ namespace Tank::Editor
 	{
 		if (m_projRoot)
 		{
-			((_SceneView*)m_projRoot->getChild("SceneView"))->handleKeyInput();
+			((SceneView_*)m_projRoot->getChild("SceneView"))->handleKeyInput();
 		}
 	}
 }

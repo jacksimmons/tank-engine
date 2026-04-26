@@ -4,12 +4,12 @@
 
 namespace Tank::Editor
 {
-	class _GlobalMenuBar final : public _MenuBar
+	class GlobalMenuBar_ final : public _MenuBar
 	{
 	private:
 		void drawSystem();
 	public:
-		_GlobalMenuBar(EditorApp &editor) : _MenuBar(editor) {}
+		GlobalMenuBar_(EditorApp &editor) : _MenuBar(editor) {}
 
 		void drawMainMenuBar() override;
 	};

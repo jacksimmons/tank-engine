@@ -26,7 +26,7 @@ namespace Tank::Editor
 	};
 
 
-	_Inspector::_Inspector(const std::string &name)
+	Inspector_::Inspector_(const std::string &name)
 		: _Window(name, WINDOW_OPTS)
 	{
 		m_inspectedNode = nullptr;
@@ -100,7 +100,7 @@ namespace Tank::Editor
 	}
 
 
-	void _Inspector::drawPanel()
+	void Inspector_::drawPanel()
 	{
 		if (m_inspectedNode)
 		{
@@ -121,7 +121,7 @@ namespace Tank::Editor
 
 
 	template <class T>
-	void _Inspector::tryAddSection()
+	void Inspector_::tryAddSection()
 	{
 		// If the node can be casted to this node subtype, then draw using the subtype inspector.
 		if (T *t = dynamic_cast<T *>(m_inspectedNode))

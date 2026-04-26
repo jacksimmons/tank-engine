@@ -14,9 +14,9 @@ namespace Tank::Editor
 	/// Displays a Scene in a window. Draws a Play button, that when pressed,
 	/// calls 'startup' on all Nodes. Is exempt from EditorNode properties.
 	/// </summary>
-	class _SceneView final : public _Window
+	class SceneView_ final : public _Window
 	{
-		friend class _ProjectMenuBar;
+		friend class ProjectMenuBar_;
 		friend class EditorApp;
 
 	private:
@@ -43,7 +43,7 @@ namespace Tank::Editor
 		std::string m_fpsDisplayLastText = "";
 		const float FPS_DISPLAY_UPDATE_FREQUENCY = 0.5f;
 	public:
-		_SceneView(const std::string &name,
+		SceneView_(const std::string &name,
 			glm::ivec2 stdViewportSize,
 			glm::ivec2 fbViewportSize,
 			Tank::KeyInput *keyInput,

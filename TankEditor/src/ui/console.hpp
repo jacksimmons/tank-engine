@@ -4,10 +4,10 @@
 
 namespace Tank::Editor
 {
-	class _Console final : public _Window
+	class Console_ final : public _Window
 	{
 		friend class EditorApp;
-		friend class _ProjectMenuBar;
+		friend class ProjectMenuBar_;
 	private:
 		struct ConsoleCommand
 		{
@@ -18,7 +18,7 @@ namespace Tank::Editor
 		std::vector<std::function<void()>> m_lines;
 		std::vector<ConsoleCommand> m_commands;
 
-		_Console(const std::string &name = "Console");
+		Console_(const std::string &name = "Console");
 	public:
 		virtual void drawPanel() override;
 

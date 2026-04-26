@@ -50,13 +50,13 @@ namespace Tank::Editor
 	};
 
 
-	_Profiler::_Profiler(const std::string &name)
+	Profiler_::Profiler_(const std::string &name)
 		: _Window(name, WINDOW_OPTS)
 	{
 	}
 
 
-	void _Profiler::drawPanel()
+	void Profiler_::drawPanel()
 	{
 		ImGui::TextColored(Colour::TITLE, "Frame Delta");
 		{

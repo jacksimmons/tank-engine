@@ -6,7 +6,7 @@
 namespace Tank::Editor
 {
 	class EditorApp;
-	class _ProjectMenuBar final : public _MenuBar
+	class ProjectMenuBar_ final : public _MenuBar
 	{
 	private:
 		void drawFile();
@@ -14,7 +14,7 @@ namespace Tank::Editor
 
 		bool spawnerMenuItem(const std::string &nodeName);
 	public:
-		_ProjectMenuBar(EditorApp &editor) : _MenuBar(editor) {}
+		ProjectMenuBar_(EditorApp &editor) : _MenuBar(editor) {}
 		
 		void drawMainMenuBar() override;
 	};

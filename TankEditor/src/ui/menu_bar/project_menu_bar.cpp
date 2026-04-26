@@ -21,7 +21,7 @@
 
 namespace Tank::Editor
 {
-	void _ProjectMenuBar::drawMainMenuBar()
+	void ProjectMenuBar_::drawMainMenuBar()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
@@ -36,7 +36,7 @@ namespace Tank::Editor
 	}
 
 
-	void _ProjectMenuBar::drawFile()
+	void ProjectMenuBar_::drawFile()
 	{
 		bool resetInspector = false;
 
@@ -105,7 +105,7 @@ namespace Tank::Editor
 		// If we did anything that would corrupt the inspector's inspected node, reset the inspector.
 		if (resetInspector)
 		{
-			_Inspector *inspector = dynamic_cast<_Inspector *>(m_editor.getProjRoot().getChild("Inspector"));
+			Inspector_ *inspector = dynamic_cast<Inspector_ *>(m_editor.getProjRoot().getChild("Inspector"));
 			assert(inspector != nullptr);
 
 			inspector->m_inspectedNode = nullptr;
@@ -113,38 +113,38 @@ namespace Tank::Editor
 	}
 
 
-	void _ProjectMenuBar::drawView()
+	void ProjectMenuBar_::drawView()
 	{
 		Node& root = m_editor.getProjRoot();
 
 		if (spawnerMenuItem("Hierarchy"))
 		{
-			root.addChild(std::unique_ptr<_Hierarchy>(new _Hierarchy()));
+			root.addChild(std::unique_ptr<Hierarchy_>(new Hierarchy_()));
 		}
 
 		if (spawnerMenuItem("Inspector"))
 		{
-			root.addChild(std::unique_ptr<_Inspector>(new _Inspector()));
+			root.addChild(std::unique_ptr<Inspector_>(new Inspector_()));
 		}
 
 		if (spawnerMenuItem("SceneView"))
 		{
-			//root.addChild(std::unique_ptr<_SceneView>(new _SceneView()));
+			//root.addChild(std::unique_ptr<SceneView_>(new SceneView_()));
 		}
 
 		if (spawnerMenuItem("Console"))
 		{
-			root.addChild(std::unique_ptr<_Console>(new _Console()));
+			root.addChild(std::unique_ptr<Console_>(new Console_()));
 		}
 
 		if (spawnerMenuItem("Profiler"))
 		{
-			root.addChild(std::unique_ptr<_Profiler>(new _Profiler()));
+			root.addChild(std::unique_ptr<Profiler_>(new Profiler_()));
 		}
 	}
 
 
-	bool _ProjectMenuBar::spawnerMenuItem(const std::string& nodeName)
+	bool ProjectMenuBar_::spawnerMenuItem(const std::string& nodeName)
 	{
 		return ImGui::MenuItem(nodeName.c_str(), 0, false, !m_editor.getProjRoot().getChild(nodeName));
 	}

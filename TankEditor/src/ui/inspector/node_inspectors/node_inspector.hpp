@@ -14,7 +14,7 @@ namespace Tank
 
 	namespace Editor
 	{
-		class _Inspector;
+		class Inspector_;
 
 		class _NodeInspectorBase
 		{
@@ -27,9 +27,9 @@ namespace Tank
 		{
 		private:
 			T *m_node;
-			_Inspector *m_inspector;
+			Inspector_ *m_inspector;
 		public:
-			_NodeInspector(T *node, _Inspector *inspector) :
+			_NodeInspector(T *node, Inspector_ *inspector) :
 				_NodeInspectorBase(),
 				m_node(node),
 				m_inspector(inspector)

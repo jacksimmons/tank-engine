@@ -6,11 +6,11 @@
 
 namespace Tank::Editor
 {
-	class _Inspector;
-	class _Hierarchy final : public _Window
+	class Inspector_;
+	class Hierarchy_ final : public _Window
 	{
 		friend class EditorApp;
-		friend class _ProjectMenuBar;
+		friend class ProjectMenuBar_;
 		
 		// Fields
 	private:
@@ -38,7 +38,7 @@ namespace Tank::Editor
 		/// </summary>
 		void addNewNode(Node *parent, Node *heapAllocatedNode) const;
 
-		_Hierarchy(const std::string &name = "Hierarchy");
+		Hierarchy_(const std::string &name = "Hierarchy");
 	protected:
 		/// <summary>
 		/// Generates buttons for all children of the current node, at a given

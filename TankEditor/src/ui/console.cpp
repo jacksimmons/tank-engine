@@ -14,7 +14,7 @@ namespace Tank::Editor
 	};
 
 
-	_Console::_Console(const std::string &name) : _Window(name, WINDOW_OPTS)
+	Console_::Console_(const std::string &name) : _Window(name, WINDOW_OPTS)
 	{
 		// Register event handlers
 		EventManager::getEvent<std::string, ImColor>("Console.AddColouredLine")
@@ -27,7 +27,7 @@ namespace Tank::Editor
 	}
 
 
-	void _Console::drawPanel()
+	void Console_::drawPanel()
 	{
 		std::string linesAsStr;
 		for (auto line : m_lines)
@@ -76,7 +76,7 @@ namespace Tank::Editor
 	}
 
 
-	void _Console::addLine(std::function<void()> line)
+	void Console_::addLine(std::function<void()> line)
 	{
 		m_lines.push_back(line);
 
@@ -85,7 +85,7 @@ namespace Tank::Editor
 	}
 
 
-	void _Console::addColouredTextLine(ImVec4 colour, std::string text)
+	void Console_::addColouredTextLine(ImVec4 colour, std::string text)
 	{
 		addLine(
 			[colour, text]()

@@ -60,8 +60,8 @@ namespace Tank
 		void setName(const std::string &name) noexcept;
 		constexpr const std::string& getName() const noexcept { return m_name; }
 		
-		void setParent(Node *parent) noexcept { m_parent = parent; }
-		Node *getParent() const noexcept { return m_parent; }
+		void setParent(Node *parent);
+		Node *getParent() const noexcept;
 
 		std::string getPath() const;
 		KeyInput *getKeyInput() const;
@@ -76,11 +76,26 @@ namespace Tank
 		const_iterator end() const noexcept { return m_children.end(); }
 
 		// Add an existing child.
+
+		/// @brief Adds a node as a child.
+		/// @param child 
 		void addChild(std::unique_ptr<Node> child);
-		// Get first child whose name matches the provided name.
+
+		/// @brief Gets a child by name.
+		/// @param name 
+		/// @return The child, or nullptr if unsuccessful.
 		Node *getChild(const std::string &name) const;
-		// Get child by index.
+
+		/// @brief Gets a child by sibling index.
+		/// @param index Sibling index (index in m_children).
+		/// @return The child, or nullptr if unsuccessful.
 		Node *getChild(int index) const;
+
+		/// @brief Disown a child, removing it from the tree.
+		/// @param child
+		/// @return An owning reference to the child.
+		std::unique_ptr<Node> disownChild(Node *child);
+
 		// Get all children of type (if any).
 		template <class T>
 		std::vector<T*> getChildrenOfType() const
