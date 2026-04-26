@@ -76,6 +76,47 @@ namespace Tank::Editor
 		if (!node->Enabled()) nodeNameCol = Colour::DISABLED;
 		if (node->IsEditorControlled()) nodeNameCol = Colour::ERR;
 
+		drawSiblingSeparator(node);
+		ImGui::PushStyleColor(ImGuiCol_Text, nodeNameCol);
+		bool nodeExpanded = ImGui::TreeNodeEx((node->getName() + "##" + std::to_string(*count)).c_str(), flags);
+		ImGui::PopStyleColor();
+
+		// Set the inspected node if necessary: If clicking the non-arrow part of the tree-node, and once the
+		// click is complete, and if the tree-node's corresponding node differs from the inspected node.
+		if (
+			!ImGui::IsItemToggledOpen() &&
+			ImGui::IsItemFocused() &&
+			ImGui::IsMouseReleased(ImGuiMouseButton_Left)
+		)
+		{
+			EventManager::invokeEvent("Hierarchy.NodeSelected", node);
+		}
+
+		// Draw the right-click options, if user is right-clicking and hovering. If node gets deleted here, return.
+		if (!drawNodeContextMenu(node)) goto cleanup;
+		handleDragDrop(node);
+
+		// If node was clicked on in the tree, display its children (and further descendants if their parent has previously been expanded).
+		if (nodeExpanded)
+		{
+			// Nodes can be deleted during iteration, so cannot use for-each or iterator syntax.
+			for (int i = 0; i < node->getChildCount(); i++)
+			{
+				drawTreeNode(node->getChild(i), &(++(*count)));
+			}
+		}
+
+	cleanup:
+		if (nodeExpanded)
+		{
+			// Need to pop tree even if node was deleted.
+			ImGui::TreePop();
+		}
+	}
+
+
+	void Hierarchy_::drawSiblingSeparator(Node *node)
+	{
 		ImGui::InvisibleButton("##HIERARCHY_SEPARATOR", ImVec2(100, 5));
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -108,26 +149,12 @@ namespace Tank::Editor
 
 			if (unstable) return;
 		}
-		
-		ImGui::PushStyleColor(ImGuiCol_Text, nodeNameCol);
-		bool nodeExpanded = ImGui::TreeNodeEx((node->getName() + "##" + std::to_string(*count)).c_str(), flags);
-		ImGui::PopStyleColor();
-		
-		// Set the inspected node if necessary: If clicking the non-arrow part of the tree-node, and once the
-		// click is complete, and if the tree-node's corresponding node differs from the inspected node.
-		if (
-			!ImGui::IsItemToggledOpen() &&
-			ImGui::IsItemFocused() &&
-			ImGui::IsMouseReleased(ImGuiMouseButton_Left)
-		)
-		{
-			EventManager::invokeEvent("Hierarchy.NodeSelected", node);
-		}
+	}
 
-		// Draw the right-click options, if user is right-clicking and hovering. If node gets deleted here, return.
-		if (!drawNodeContextMenu(node)) goto cleanup;
 
-		// Setup `node` as drag-and-droppable.
+	void Hierarchy_::handleDragDrop(Node *node)
+	{
+		// Setup the Node payload created when dragging `node`.
 		if (ImGui::BeginDragDropSource())
 		{
 			TE_INFO(std::format("{} source", node->getName()).c_str());
@@ -136,11 +163,9 @@ namespace Tank::Editor
 			ImGui::EndDragDropSource();
 		}
 
-		// Another node gets dropped on `node`.
+		// Setup what happens when a Node payload gets dropped on `node`.
 		if (ImGui::BeginDragDropTarget())
 		{
-			bool unstable = false;
-
 			// If the node was dropped onto `node`.
 			if (const ImGuiPayload *p = ImGui::AcceptDragDropPayload("HIERARCHY_NODE"))
 			{
@@ -151,28 +176,8 @@ namespace Tank::Editor
 				// In that case, just move `incoming` to the end of `node`'s m_children.
 				TE_INFO(std::format("{}", node->getChildCount()));
 				if (!incoming->setParent(node)) incoming->setSiblingIndex(node->getChildCount() - 1);
-				unstable = true;
 			}
 			ImGui::EndDragDropTarget();
-
-			if (unstable) goto cleanup;
-		}
-
-		// If node was clicked on in the tree, display its children (and further descendants if their parent has previously been expanded).
-		if (nodeExpanded)
-		{
-			// Nodes can be deleted during iteration, so cannot use for-each or iterator syntax.
-			for (int i = 0; i < node->getChildCount(); i++)
-			{
-				drawTreeNode(node->getChild(i), &(++(*count)));
-			}
-		}
-
-	cleanup:
-		if (nodeExpanded)
-		{
-			// Need to pop tree even if node was deleted.
-			ImGui::TreePop();
 		}
 	}
 

@@ -24,6 +24,13 @@ namespace Tank::Editor
 		/// </summary>
 		void drawTreeNode(Node *node, int *count);
 
+		/// @brief Draws a sibling separator, which acts as a drag-drop target
+		/// for nodes. When a node is dropped onto this, it becomes the preceding
+		/// sibling to the node after the separator.
+		void drawSiblingSeparator(Node *node);
+
+		void handleDragDrop(Node *node);
+
 		/// <summary>
 		/// Handles drawing for node context menus. A node context menu is
 		/// displayed when a node is right-clicked in the hierarchy.
