@@ -60,7 +60,7 @@ namespace Tank::Editor
 	{
 		ImGui::TextColored(Colour::TITLE, "Frame Delta");
 		{
-			ImGui::Text(std::format("{} (FPS: {})", Time::FrameDelta(), 1 / Time::FrameDelta()).c_str());
+			ImGui::Text(std::format("{} (FPS: {})", Time::getFrameDelta(), 1 / Time::getFrameDelta()).c_str());
 		}
 
 		ImGui::TextColored(Colour::TITLE, "Memory");

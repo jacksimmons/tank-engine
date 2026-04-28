@@ -20,8 +20,10 @@ namespace Tank::Editor
 		
 		// Root for initial UI
 		std::unique_ptr<Node> m_initUI;
-		// Root for in-project UI
-		std::unique_ptr<Node> m_projRoot;
+		// Root for project UI
+		std::unique_ptr<Node> m_projectUI;
+		// Root for scene nodes
+		std::unique_ptr<Node> m_sceneRoot;
 
 		// Keyboard input for the Editor only.
 		std::unique_ptr<KeyInput> m_editorInput;
@@ -31,7 +33,7 @@ namespace Tank::Editor
 		~EditorApp();
 
 		const Project &getProject() const { return *m_project; }
-		Node &getProjRoot() const { return *m_projRoot; }
+		Node &getProjRoot() const { return *m_sceneRoot; }
 		void setScene(std::unique_ptr<Scene> scene);
 	protected:
 		virtual void step() override;

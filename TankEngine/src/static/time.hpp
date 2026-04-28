@@ -21,6 +21,6 @@ namespace Tank
 		}
 	public:
 		static Get<TimePoint> CurrentTime;
-		static Get<float> FrameDelta;
+		static float getFrameDelta() { return s_frameDelta; }
 	};
 }

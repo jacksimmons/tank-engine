@@ -14,6 +14,7 @@
 #include <nodes/node.hpp>
 #include <nodes/camera.hpp>
 #include <nodes/scene.hpp>
+#include <static/time.hpp>
 
 
 #define KC(x) #x, GLFW_KEY_##x
@@ -29,6 +30,8 @@
 // Declares a class field.
 #define SOL_FIELD(className, name, type) \
 	(GET_SOL_CLASS(className)->fields.push_back({name, type}), name)
+#define SOL_STATIC_FIELD(className, name, type) \
+	(GET_SOL_CLASS(className)->staticFields.push_back({name, type}), name)
 #define SOL_GLOBAL_FIELD(className, name, type) \
 	GET_SOL_CLASS(className)->globalFields.push_back({name, type})
 
@@ -245,16 +248,29 @@ namespace Tank
 		ut[SOL_FIELD("Transform", "scale", "Vec3")] = sol::property(&Transform::getLocalScale, &Transform::setLocalScale);
 	}
 
+	template<>
+	void UserTypes::generate<Time>(sol::state &lua)
+	{
+		auto ut = lua.new_usertype<Time>(
+			SOL_CLASS(Time)
+		);
+		ut[SOL_STATIC_FIELD("Time", "delta", "number")] = sol::property(&Time::getFrameDelta);
+	}
+
 	
 	void UserTypes::generate(sol::state &lua)
 	{
 		generate<glm::vec3>(lua);
+		
 		generate<KeyState>(lua);
 		generate<KeyInput>(lua);
+		
 		generate<Node>(lua);
 		generate<Camera>(lua);
 		generate<Scene>(lua);
 		generate<Transform>(lua);
+
+		generate<Time>(lua);
 	}
 
 

@@ -102,7 +102,7 @@ namespace Tank::Editor
 
 		// Update FPS counter at a constant frequency. If not updated,
 		// display previous FPS value.
-		float delta = Time::FrameDelta();
+		float delta = Time::getFrameDelta();
 		m_fpsDisplayUpdateTimer += delta;
 		if (m_fpsDisplayUpdateTimer > FPS_DISPLAY_UPDATE_FREQUENCY)
 		{
@@ -160,7 +160,7 @@ namespace Tank::Editor
 		if (m_keyInput->getKeyState(GLFW_KEY_F6) == KeyState::Pressed)
 			cycleBlendFuncFactor(m_blendFuncDFactor, "dfactor");
 
-		float frameDelta = Time::FrameDelta();
+		float frameDelta = Time::getFrameDelta();
 
 		// Exit early if camera free look is disabled.
 		if (!cam->getFreeLook()) return;

@@ -25,6 +25,7 @@ namespace Tank
 		std::string name;
 		std::string base;
 		std::vector<LuaField> fields;
+		std::vector<LuaField> staticFields;
 		std::vector<LuaField> globalFields;
 		std::vector<LuaCallable> methods;
 		std::vector<LuaCallable> metaMethods;

@@ -80,7 +80,9 @@ namespace Tank::Editor
 		// Set the ImGui context, over DLL boundary
 		ImGui::SetCurrentContext(getContext());
 
-		m_initUI = std::make_unique<Node>("Init");
+		m_initUI = std::make_unique<Node>("EditorInit");
+		m_projectUI = nullptr;
+		m_sceneRoot = std::make_unique<Node>("EditorScene");
 		m_project = nullptr;
 	
 		// Load Project (via New/Open Project)
@@ -99,15 +101,16 @@ namespace Tank::Editor
 					Res scenePath = m_project->getSceneRes();
 					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), *m_factory))
 					{
-						m_projRoot = std::make_unique<Node>("Editor");
-						setScene(std::unique_ptr<Scene>(rawScene));
+						m_projectUI = std::make_unique<Node>("EditorProject");
+						m_projectUI->addChild(std::unique_ptr<ProjectMenuBar_>(new ProjectMenuBar_(*this)));
+						m_projectUI->addChild(std::unique_ptr<SceneView_>(new SceneView_("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
+						m_projectUI->addChild(std::unique_ptr<Console_>(new Console_("Console")));
+						m_projectUI->addChild(std::unique_ptr<Hierarchy_>(new Hierarchy_("Hierarchy")));
+						m_projectUI->addChild(std::unique_ptr<Inspector_>(new Inspector_("Inspector")));
+						m_projectUI->preupdate();
 
-						m_projRoot->addChild(std::unique_ptr<ProjectMenuBar_>(new ProjectMenuBar_(*this)));
-						m_projRoot->addChild(std::unique_ptr<SceneView_>(new SceneView_("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
-						m_projRoot->addChild(std::unique_ptr<Console_>(new Console_("Console")));
-						m_projRoot->addChild(std::unique_ptr<Hierarchy_>(new Hierarchy_("Hierarchy")));
-						m_projRoot->addChild(std::unique_ptr<Inspector_>(new Inspector_("Inspector")));
-						m_projRoot->preupdate();
+						setScene(std::unique_ptr<Scene>(rawScene));
+						m_sceneRoot->preupdate();
 					}
 				}
 			)
@@ -125,18 +128,19 @@ namespace Tank::Editor
 	
 	void EditorApp::setScene(std::unique_ptr<Scene> scene)
 	{
-		assert(m_projRoot != nullptr);
+		assert(m_sceneRoot != nullptr);
 	
-		std::vector<Scene *> existingScenes = m_projRoot->getChildrenOfType<Scene>();
+		std::vector<Scene *> existingScenes = m_sceneRoot->getChildrenOfType<Scene>();
 		assert(existingScenes.size() <= 1);
 		if (existingScenes.size() > 0) existingScenes[0]->destroy();
 
-		m_projRoot->addChild(std::move(scene));
+		m_sceneRoot->addChild(std::move(scene));
 	}
 
 
 	void EditorApp::step()
 	{
+		TE_CORE_INFO("step");
 		if (m_editorInput)
 		{
 			handleKeyInput();
@@ -145,9 +149,9 @@ namespace Tank::Editor
 		}
 
 		// Run update step on root
-		if (m_projRoot)
+		if (m_sceneRoot)
 		{
-			m_projRoot->update();
+			m_sceneRoot->update();
 		}
 	}
 
@@ -155,16 +159,6 @@ namespace Tank::Editor
 	// Currently, the Editor handles drawUI
 	void EditorApp::uiStep()
 	{
-		// Run ImGui update step on root
-		if (m_projRoot)
-		{
-			auto uiNodes = m_projRoot->getChildrenOfType<UINode>();
-			for (const auto uiNode : uiNodes)
-			{
-				uiNode->drawUI();
-			}
-		}
-
 		// Run update step on initUI
 		m_initUI->update();
 		// Run ImGui update step on initUI and its children
@@ -173,14 +167,23 @@ namespace Tank::Editor
 		{
 			uiNode->drawUI();
 		}
+
+		if (m_projectUI)
+		{
+			auto uiNodes = m_projectUI->getChildrenOfType<UINode>();
+			for (const auto uiNode : uiNodes)
+			{
+				uiNode->drawUI();
+			}
+		}
 	}
 
 
 	void EditorApp::handleKeyInput()
 	{
-		if (m_projRoot)
+		if (m_projectUI)
 		{
-			((SceneView_*)m_projRoot->getChild("SceneView"))->handleKeyInput();
+			((SceneView_*)m_projectUI->getChild("SceneView"))->handleKeyInput();
 		}
 	}
 }

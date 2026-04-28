@@ -69,9 +69,16 @@ namespace Tank
 			printLuaMetaMethod(os, metaMeth);
 		}
 
-		// Static Methods
-		os << SECTION("Static Methods");
+		os << SECTION("Static Fields/Methods");
 		os << std::format("---@class (exact) {}", lc.name + "_Static") << std::endl;
+
+		// Static Fields
+		for (const auto &field : lc.staticFields)
+		{
+			os << field;
+		}
+
+		// Static Methods
 		for (const auto &meth : lc.staticMethods)
 		{
 			printLuaMethod(os, meth);
@@ -117,7 +124,7 @@ namespace Tank
 	std::ostream &operator<<(std::ostream &os, const LuaEnum &le)
 	{
 		os << std::format("---@enum {}", le.name) << std::endl;
-		os << std::format("{} = ", String::toUpper(le.name)) << "{" << std::endl;
+		os << std::format("{} = ", le.name) << "{" << std::endl;
 
 		// Pairs
 		for (const auto &pair : le.pairs)
