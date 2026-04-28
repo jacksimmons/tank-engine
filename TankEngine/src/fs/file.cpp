@@ -34,23 +34,6 @@ namespace Tank::File
 			return ReadResult::Error;
 		}
 	}
-
-
-	bool writeLines(const std::filesystem::path &fp, const std::string &inStr)
-	{
-		if (fs::is_directory(fp)) return false;
-
-		try
-		{
-			std::ofstream out(fp);
-			out.write(inStr.c_str(), inStr.size());
-			return true;
-		}
-		catch (std::exception const)
-		{
-			return false;
-		}
-	}
 	
 	
 	char* readBytes(const std::filesystem::path &fp, int *outSize)

@@ -32,6 +32,19 @@ namespace Tank
 		std::vector<LuaCallable> globalFunctions;
 	};
 
-	std::ostream &operator<<(std::ostream &os, const LuaClass &lc);
+	struct LuaEnumPair
+	{
+		std::string name;
+		int value;
+	};
+
+	struct LuaEnum
+	{
+		std::string name;
+		std::vector<LuaEnumPair> pairs;
+	};
+
 	std::ostream &operator<<(std::ostream &os, const LuaField &lf);
+	std::ostream &operator<<(std::ostream &os, const LuaClass &lc);
+	std::ostream &operator<<(std::ostream &os, const LuaEnum &le);
 }

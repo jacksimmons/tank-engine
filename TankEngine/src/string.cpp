@@ -19,4 +19,12 @@ namespace Tank::String
 			TE_CORE_ERROR(std::format("String > replaceAll occurences exceeded max of {}.", maxCount));
 		}
 	}
+
+
+	std::string toUpper(const std::string &original)
+	{
+		std::string copy;
+		for (auto &c : original) copy += toupper(c);
+		return copy;
+	}
 }

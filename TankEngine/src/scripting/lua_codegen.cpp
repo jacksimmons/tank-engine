@@ -41,6 +41,13 @@ namespace Tank
 	}
 
 
+	std::ostream &operator<<(std::ostream &os, const LuaField &lf)
+	{
+		os << std::format("---@field {} {}\n", lf.name, lf.type);
+		return os;
+	}
+
+
 	std::ostream &operator<<(std::ostream &os, const LuaClass &lc)
 	{
 		os << SECTION("Fields/Methods");
@@ -107,9 +114,18 @@ namespace Tank
 	}
 
 
-	std::ostream &operator<<(std::ostream &os, const LuaField &lf)
+	std::ostream &operator<<(std::ostream &os, const LuaEnum &le)
 	{
-		os << std::format("---@field {} {}\n", lf.name, lf.type);
+		os << std::format("---@enum {}", le.name) << std::endl;
+		os << std::format("{} = ", String::toUpper(le.name)) << "{" << std::endl;
+
+		// Pairs
+		for (const auto &pair : le.pairs)
+		{
+			os << std::format("\t{} = {},", pair.name, pair.value) << std::endl;
+		}
+
+		os << "}" << std::endl;
 		return os;
 	}
 }

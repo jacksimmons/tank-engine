@@ -1,4 +1,5 @@
 #include <format>
+#include <fstream>
 #include "scene_serialisation.hpp"
 #include "fs/file.hpp"
 #include "log.hpp"
@@ -55,7 +56,17 @@ namespace Tank
 
 			// Write with pretty print (indent=4)
 			TE_CORE_INFO(std::format("Saving scene to {}", scenePath.string()));
-			File::writeLines(scenePath, serialise(scene).dump(4));
+
+			std::string dump = serialise(scene).dump(4);
+			std::ofstream out(scenePath);
+			
+			if (!out)
+			{
+				TE_CORE_ERROR("Failed to serialise scene at file {}", scenePath.string());
+				return;
+			}
+			
+			out.write(dump.c_str(), dump.size());
 		}
 	}
 }
