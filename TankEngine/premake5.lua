@@ -1,4 +1,4 @@
-require("premake.outdir")
+require("premake.Outdir")
 
 
 local wks = "%{wks.location}/"
@@ -64,7 +64,7 @@ project "TankEngine"
 
 	-- PCH
 	pchheader "tepch.hpp"
-	pchsource "src/application.cpp"
+	pchsource "src/Application.cpp"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
 		

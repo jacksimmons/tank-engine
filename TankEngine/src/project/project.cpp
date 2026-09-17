@@ -1,7 +1,7 @@
-#include <scene_serialisation.hpp>
-#include <fs/file.hpp>
-#include <log.hpp>
-#include "project.hpp"
+#include <SceneSerialisation.hpp>
+#include <fs/File.hpp>
+#include <Log.hpp>
+#include "Project.hpp"
 
 
 namespace Tank
@@ -9,7 +9,7 @@ namespace Tank
     json Project::serialise()
     {
         json j;
-        j["lastLoadedScene"] = Res::encode(m_loadedScene);
+        j["lastOpenScene"] = Res::encode(m_loadedScene);
         return j;
     }
 

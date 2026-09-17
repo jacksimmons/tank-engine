@@ -1,9 +1,9 @@
 #include <glad/glad.h>
-#include "outlined.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/camera.hpp"
-#include "shader.hpp"
-#include "mesh.hpp"
+#include "Outlined.hpp"
+#include "nodes/Scene.hpp"
+#include "nodes/Camera.hpp"
+#include "Shader.hpp"
+#include "Mesh.hpp"
 
 
 namespace Tank

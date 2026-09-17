@@ -1,19 +1,19 @@
 #include <typeinfo>
 #include <imgui.h>
-#include "log.hpp"
-#include "colours.hpp"
-#include <events/event_manager.hpp>
-#include "nodes/camera.hpp"
-#include "nodes/light.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/cube_map.hpp"
-#include "nodes/model.hpp"
-#include "nodes/sprite.hpp"
-#include "nodes/ui/text.hpp"
-#include "ui/console.hpp"
-#include "ui/hierarchy.hpp"
-#include "nodes/physics/collider.hpp"
-#include "shapes/collision_sphere.hpp"
+#include "Log.hpp"
+#include "Colours.hpp"
+#include <events/EventManager.hpp>
+#include "nodes/Camera.hpp"
+#include "nodes/Light.hpp"
+#include "nodes/Scene.hpp"
+#include "nodes/CubeMap.hpp"
+#include "nodes/Model.hpp"
+#include "nodes/Sprite.hpp"
+#include "nodes/ui/Text.hpp"
+#include "ui/Console.hpp"
+#include "ui/Hierarchy.hpp"
+#include "nodes/physics/Collider.hpp"
+#include "shapes/CollisionSphere.hpp"
 
 
 namespace Tank::Editor

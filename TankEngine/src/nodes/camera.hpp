@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/gtx/quaternion.hpp>
-#include <nodes/node.hpp>
-#include "transformation.hpp"
+#include <nodes/Node.hpp>
+#include "Transformation.hpp"
 
 
 namespace Tank

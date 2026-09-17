@@ -1,6 +1,6 @@
 #include <imgui.h>
-#include "widget.hpp"
-#include "log.hpp"
+#include "Widget.hpp"
+#include "Log.hpp"
 
 
 namespace Tank

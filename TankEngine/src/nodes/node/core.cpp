@@ -1,7 +1,7 @@
-#include <nodes/node.hpp>
-#include <key_input.hpp>
-#include <transform.hpp>
-#include <scripting/script.hpp>
+#include <nodes/Node.hpp>
+#include <KeyInput.hpp>
+#include <Transform.hpp>
+#include <scripting/Script.hpp>
 
 
 namespace Tank

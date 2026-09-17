@@ -1,6 +1,6 @@
-require "premake.links"
-require "premake.outdir"
-require "premake.project"
+require "premake.Links"
+require "premake.Outdir"
+require "premake.Project"
 
 
 local wks = "%{wks.location}/"
@@ -70,7 +70,7 @@ project "TankEditor"
 
 	-- PCH
 	pchheader "tepch.hpp"
-	pchsource "src/editor.cpp"
+	pchsource "src/Editor.cpp"
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }
 

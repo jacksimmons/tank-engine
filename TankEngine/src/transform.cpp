@@ -1,6 +1,6 @@
-#include "transformation.hpp"
-#include "nodes/node.hpp"
-#include "static/glm_serialise.hpp"
+#include "Transformation.hpp"
+#include "nodes/Node.hpp"
+#include "static/GlmSerialise.hpp"
 
 
 namespace Tank

@@ -1,6 +1,6 @@
 #pragma once
-#include <nodes/node.hpp>
-#include "interfaces/mesh_container.hpp"
+#include <nodes/Node.hpp>
+#include "interfaces/MeshContainer.hpp"
 
 
 namespace Tank

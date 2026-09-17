@@ -1,11 +1,11 @@
-#include <nodes/scene.hpp>
-#include <nodes/interfaces/mesh_container.hpp>
-#include <nodes/interfaces/shader_container.hpp>
-#include <texture.hpp>
-#include <utils/flip.hpp>
-#include "profiler.hpp"
-#include "static/time.hpp"
-#include "colours.hpp"
+#include <nodes/Scene.hpp>
+#include <nodes/interfaces/MeshContainer.hpp>
+#include <nodes/interfaces/ShaderContainer.hpp>
+#include <Texture.hpp>
+#include <utils/Flip.hpp>
+#include "Profiler.hpp"
+#include "static/Time.hpp"
+#include "Colours.hpp"
 
 
 namespace Tank

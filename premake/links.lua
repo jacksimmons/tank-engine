@@ -1,5 +1,5 @@
-require("command")
-local os_type = require("os_type")
+require("Command")
+local os_type = require("OsType")
 
 
 -- Adds a libdir which premake will search through for each "links {}" operation.

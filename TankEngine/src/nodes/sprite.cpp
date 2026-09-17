@@ -1,13 +1,13 @@
 #include <glm/gtc/matrix_inverse.hpp>
-#include <shader_source.hpp>
-#include <shader.hpp>
-#include "sprite.hpp"
-#include "quad_mesh.hpp"
-#include "texture.hpp"
-#include "light.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/camera.hpp"
-#include "../reflection/node_factory.hpp"
+#include <ShaderSource.hpp>
+#include <Shader.hpp>
+#include "Sprite.hpp"
+#include "QuadMesh.hpp"
+#include "Texture.hpp"
+#include "Light.hpp"
+#include "nodes/Scene.hpp"
+#include "nodes/Camera.hpp"
+#include "../reflection/NodeFactory.hpp"
 namespace fs = std::filesystem;
 
 

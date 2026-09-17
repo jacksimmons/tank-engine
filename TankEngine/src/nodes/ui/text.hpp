@@ -1,6 +1,6 @@
 #pragma once
 #include <imgui.h>
-#include "../node.hpp"
+#include "../Node.hpp"
 
 
 namespace Tank

@@ -1,5 +1,5 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
-#include "log.hpp"
+#include "Log.hpp"
 
 
 namespace Tank

@@ -5,35 +5,35 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <nfd.h>
 
-#include <engine.hpp>
-#include <nodes/node.hpp>
-#include <nodes/model.hpp>
-#include <nodes/scene.hpp>
-#include <nodes/camera.hpp>
-#include <nodes/sprite.hpp>
-#include <nodes/audio.hpp>
-#include <nodes/cube_map.hpp>
-#include <nodes/light.hpp>
-#include <nodes/physics/physics_body.hpp>
-#include <nodes/ui/ui_node.hpp>
-#include <events/event_manager.hpp>
-#include <scripting/script.hpp>
-#include <project/project.hpp>
-#include <project/export.hpp>
-#include <reflection/node_factory.hpp>
-#include "editor.hpp"
-#include "shader.hpp"
-#include "log.hpp"
-#include "scene_serialisation.hpp"
-#include "key_input.hpp"
-#include "ui/console.hpp"
-#include "ui/scene_view.hpp"
-#include "ui/hierarchy.hpp"
-#include "ui/inspector/inspector.hpp"
-#include "ui/profiler.hpp"
-#include "ui/menu/projects_menu.hpp"
-#include "ui/menu_bar/global_menu_bar.hpp"
-#include "ui/menu_bar/project_menu_bar.hpp"
+#include <Engine.hpp>
+#include <nodes/Node.hpp>
+#include <nodes/Model.hpp>
+#include <nodes/Scene.hpp>
+#include <nodes/Camera.hpp>
+#include <nodes/Sprite.hpp>
+#include <nodes/Audio.hpp>
+#include <nodes/CubeMap.hpp>
+#include <nodes/Light.hpp>
+#include <nodes/physics/PhysicsBody.hpp>
+#include <nodes/ui/UiNode.hpp>
+#include <events/EventManager.hpp>
+#include <scripting/Script.hpp>
+#include <project/Project.hpp>
+#include <project/Export.hpp>
+#include <reflection/NodeFactory.hpp>
+#include "Editor.hpp"
+#include "Shader.hpp"
+#include "Log.hpp"
+#include "SceneSerialisation.hpp"
+#include "KeyInput.hpp"
+#include "ui/Console.hpp"
+#include "ui/SceneView.hpp"
+#include "ui/Hierarchy.hpp"
+#include "ui/inspector/Inspector.hpp"
+#include "ui/Profiler.hpp"
+#include "ui/menu/ProjectsMenu.hpp"
+#include "ui/MenuBar/GlobalMenuBar.hpp"
+#include "ui/MenuBar/ProjectMenuBar.hpp"
 
 
 namespace Tank::Editor
@@ -140,7 +140,6 @@ namespace Tank::Editor
 
 	void EditorApp::step()
 	{
-		TE_CORE_INFO("step");
 		if (m_editorInput)
 		{
 			handleKeyInput();
@@ -152,6 +151,12 @@ namespace Tank::Editor
 		if (m_sceneRoot)
 		{
 			m_sceneRoot->update();
+		}
+
+		// Run update step on project UI
+		if (m_projectUI)
+		{
+			m_projectUI->update();
 		}
 	}
 

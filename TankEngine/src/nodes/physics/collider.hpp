@@ -1,6 +1,6 @@
 #pragma once
-#include "nodes/node.hpp"
-#include "shapes/collision_shape.hpp"
+#include "nodes/Node.hpp"
+#include "shapes/CollisionShape.hpp"
 
 
 namespace Tank

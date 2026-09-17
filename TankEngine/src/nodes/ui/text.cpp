@@ -1,4 +1,4 @@
-#include "text.hpp"
+#include "Text.hpp"
 
 
 // Flags for a dummy window

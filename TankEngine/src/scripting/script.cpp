@@ -1,12 +1,12 @@
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
-#include <nodes/node.hpp>
-#include <nodes/scene.hpp>
-#include <nodes/camera.hpp>
-#include <log.hpp>
-#include "script.hpp"
-#include "script_manager.hpp"
-#include "user_types.hpp"
+#include <nodes/Node.hpp>
+#include <nodes/Scene.hpp>
+#include <nodes/Camera.hpp>
+#include <Log.hpp>
+#include "Script.hpp"
+#include "ScriptManager.hpp"
+#include "UserTypes.hpp"
 
 
 namespace Tank

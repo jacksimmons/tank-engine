@@ -3,20 +3,20 @@
 #include <GLFW/glfw3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
-#include "application.hpp"
-#include "key_input.hpp"
-#include "log.hpp"
-#include "events/event_manager.hpp"
-#include "nodes/camera.hpp"
-#include "nodes/cube_map.hpp"
-#include "nodes/light.hpp"
-#include "nodes/model.hpp"
-#include "nodes/node.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/sprite.hpp"
-#include "nodes/audio.hpp"
-#include "reflection/node_factory.hpp"
-#include "static/time.hpp"
+#include "Application.hpp"
+#include "KeyInput.hpp"
+#include "Log.hpp"
+#include "events/EventManager.hpp"
+#include "nodes/Camera.hpp"
+#include "nodes/CubeMap.hpp"
+#include "nodes/Light.hpp"
+#include "nodes/Model.hpp"
+#include "nodes/Node.hpp"
+#include "nodes/Scene.hpp"
+#include "nodes/Sprite.hpp"
+#include "nodes/Audio.hpp"
+#include "reflection/NodeFactory.hpp"
+#include "static/Time.hpp"
 
 
 // Enable debug output

@@ -1,9 +1,9 @@
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include "transformation.hpp"
-#include "static/glm_serialise.hpp"
-#include "nodes/camera.hpp"
-#include <nodes/sprite.hpp>
+#include <glm/gtc/matrix_Transform.hpp>
+#include "Transformation.hpp"
+#include "static/GlmSerialise.hpp"
+#include "nodes/Camera.hpp"
+#include <nodes/Sprite.hpp>
 
 
 namespace Tank

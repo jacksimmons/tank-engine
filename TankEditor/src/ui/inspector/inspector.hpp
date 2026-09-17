@@ -1,6 +1,6 @@
 #pragma once
-#include "ui/window.hpp"
-#include "node_inspectors/node_inspector.hpp"
+#include "ui/Window.hpp"
+#include "NodeInspectors/NodeInspector.hpp"
 
 
 namespace Tank

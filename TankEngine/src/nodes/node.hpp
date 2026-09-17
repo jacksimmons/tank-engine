@@ -1,7 +1,7 @@
 #pragma once
-#include <utils/getset.hpp>
-#include "nodes/interfaces/serialisable.hpp"
-#include "nodes/interfaces/scriptable.hpp"
+#include <utils/Getset.hpp>
+#include "nodes/interfaces/Serialisable.hpp"
+#include "nodes/interfaces/Scriptable.hpp"
 
 
 namespace Tank

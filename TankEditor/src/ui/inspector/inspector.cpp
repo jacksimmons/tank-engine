@@ -1,20 +1,20 @@
-#include <log.hpp>
-#include "colours.hpp"
-#include "node_inspectors/node_inspector.hpp"
-#include "nodes/camera.hpp"
-#include "nodes/interfaces/shader_container.hpp"
-#include "nodes/light.hpp"
-#include "nodes/model.hpp"
-#include "nodes/node.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/sprite.hpp"
-#include "nodes/audio.hpp"
-#include "nodes/ui/text.hpp"
-#include "ui/file_dialog.hpp"
-#include "ui/inspector/inspector.hpp"
-#include <events/event_manager.hpp>
+#include <Log.hpp>
+#include "Colours.hpp"
+#include "NodeInspectors/NodeInspector.hpp"
+#include "nodes/Camera.hpp"
+#include "nodes/interfaces/ShaderContainer.hpp"
+#include "nodes/Light.hpp"
+#include "nodes/Model.hpp"
+#include "nodes/Node.hpp"
+#include "nodes/Scene.hpp"
+#include "nodes/Sprite.hpp"
+#include "nodes/Audio.hpp"
+#include "nodes/ui/Text.hpp"
+#include "ui/FileDialog.hpp"
+#include "ui/inspector/Inspector.hpp"
+#include <events/EventManager.hpp>
 #include <imgui.h>
-#include <nodes/interfaces/mesh_container.hpp>
+#include <nodes/interfaces/MeshContainer.hpp>
 
 
 namespace Tank::Editor

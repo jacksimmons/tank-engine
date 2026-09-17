@@ -1,4 +1,4 @@
 #pragma once
-#include "application.hpp"
-#include "log.hpp"
-#include "entry_point.hpp"
+#include "Application.hpp"
+#include "Log.hpp"
+#include "EntryPoint.hpp"

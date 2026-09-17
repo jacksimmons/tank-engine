@@ -1,10 +1,10 @@
-#include "shader.hpp"
-#include "log.hpp"
-#include "static/glm_serialise.hpp"
-#include "nodes/light.hpp"
-#include "nodes/model.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/sprite.hpp"
+#include "Shader.hpp"
+#include "Log.hpp"
+#include "static/GlmSerialise.hpp"
+#include "nodes/Light.hpp"
+#include "nodes/Model.hpp"
+#include "nodes/Scene.hpp"
+#include "nodes/Sprite.hpp"
 
 
 namespace Tank

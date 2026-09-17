@@ -1,5 +1,5 @@
-#include <log.hpp>
-#include "string.hpp"
+#include <Log.hpp>
+#include "String.hpp"
 
 
 namespace Tank::String

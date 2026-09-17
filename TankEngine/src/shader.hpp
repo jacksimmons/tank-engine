@@ -2,9 +2,9 @@
 #include <optional>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
-#include "log.hpp"
-#include "fs/file.hpp"
-#include "shader_source.hpp"
+#include "Log.hpp"
+#include "fs/File.hpp"
+#include "ShaderSource.hpp"
 namespace fs = std::filesystem;
 
 

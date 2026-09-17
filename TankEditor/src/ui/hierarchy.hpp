@@ -1,7 +1,7 @@
 #pragma once
 #include <type_traits>
-#include "ui/window.hpp"
-#include "events/event.hpp"
+#include "ui/Window.hpp"
+#include "events/Event.hpp"
 
 
 namespace Tank::Editor

@@ -1,8 +1,8 @@
 #include <glad/glad.h>
-#include "mesh.hpp"
-#include "texture.hpp"
-#include "shader.hpp"
-#include "shapes/vertex.hpp"
+#include "Mesh.hpp"
+#include "Texture.hpp"
+#include "Shader.hpp"
+#include "shapes/Vertex.hpp"
 
 
 namespace Tank

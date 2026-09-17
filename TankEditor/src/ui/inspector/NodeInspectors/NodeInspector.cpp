@@ -1,0 +1,113 @@
+#include <imgui.h>
+#include <Widget.hpp>
+#include <Colours.hpp>
+#include <nodes/Node.hpp>
+#include <nodes/Camera.hpp>
+#include <nodes/Scene.hpp>
+#include <scripting/Script.hpp>
+#include <ui/inspector/schema/SchemaPrimitive.hpp>
+#include <ui/inspector/schema/SchemaGlm.hpp>
+#include "NodeInspector.hpp"
+
+
+namespace Tank::Editor
+{
+	/// <summary>
+	/// Draws inspector section that is present for all Nodes.
+	/// </summary>
+	template <>
+	void NodeInspector_<Node>::draw()
+	{
+		Tank::Transform *transform = m_node->getTransform();
+		const glm::mat4 &modelMatrix = transform->getWorldModelMatrix();
+
+		Schema::draw(m_node->Enabled(), "Enabled", [this](bool val) { m_node->Enabled = val; });
+		Schema::draw(m_node->Visible(), "Visible", [this](bool val) { m_node->Visible = val; });
+
+		ImGui::TextColored(Tank::Colour::TITLE, "Name");
+		Tank::Widget::textInput("##Inspector_Name", m_node->getName(),
+			[this](const std::string &newName)
+			{
+				if (newName != m_node->getName()) m_node->setName(newName);
+			}
+		);
+
+		if (ImGui::Button("<Snap To>"))
+		{
+			auto cam = Tank::Scene::getActiveScene()->getActiveCamera();
+			if (cam != nullptr)
+			{
+				glm::mat4 worldMatrix = transform->getWorldModelMatrix();
+				cam->setPosition(Tank::mat4::getTranslation(worldMatrix));
+				cam->setRotation(Tank::mat4::getRotation(worldMatrix));
+			}
+		}
+
+		ImGui::TextColored(Tank::Colour::TITLE, "Transform");
+		Schema::draw(modelMatrix, "Model Matrix");
+		Schema::draw(transform->getLocalTranslation(), "Translation", [&transform](const glm::vec3 &val)
+		{
+			transform->setLocalTranslation(val);
+		});
+		Schema::draw(transform->getLocalScale(), "Scale", [&transform](const glm::vec3 &val)
+		{
+			transform->setLocalScale(val);
+		});
+		Schema::draw(glm::eulerAngles(transform->getLocalRotation()), "Rotation (Euler Angles)", [&transform](const glm::vec3 &val)
+		{
+			transform->setLocalRotation(val);
+		});
+
+		ImGui::TextColored(Colour::TITLE, "Scripts");
+		std::vector<Res> scriptPaths = m_node->getScriptPaths();
+		if (scriptPaths.empty())
+		{
+			ImGui::TextColored(Colour::DISABLED, "None");
+		}
+
+		std::optional<Res> toDetach = std::nullopt;
+		for (const Res &path : scriptPaths)
+		{
+			ImGui::Text(Res::encode(path).c_str());
+			
+			ImGui::SameLine();
+			if (ImGui::Button("Open in VSCode"))
+			{
+				system(std::format("code {}", path.resolvePathStr()).c_str());
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Detach"))
+			{
+				m_node->removeScript(path);
+			}
+		}
+
+		// Allow user to add a new script
+		Widget::textInput(
+			"##Inspector_Add_Script",
+			"Add Script",
+			[this, &scriptPaths](std::string newPath)
+			{
+				auto script = Script::createScript(m_node, Res::decode(newPath));
+				if (!script.has_value()) return;
+
+				// Check if script already exists on this node, and we need to update it
+				TE_INFO(newPath);
+				for (auto it = scriptPaths.begin(); it != scriptPaths.end(); ++it)
+				{
+					TE_INFO(Res::encode(*it));
+					if (Res::encode(*it) == newPath)
+					{
+						m_node->addScript(std::move(script.value()));
+						return;
+					}
+				}
+				
+				m_node->addScript(std::move(script.value()));
+			},
+			"",
+			ImGuiInputTextFlags_EnterReturnsTrue
+		);
+	}
+}

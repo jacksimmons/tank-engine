@@ -5,14 +5,14 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp/material.h"
-#include <mesh.hpp>
-#include "log.hpp"
-#include "texture.hpp"
-#include "shader.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/model.hpp"
-#include "nodes/camera.hpp"
-#include "nodes/light.hpp"
+#include <Mesh.hpp>
+#include "Log.hpp"
+#include "Texture.hpp"
+#include "Shader.hpp"
+#include "nodes/Scene.hpp"
+#include "nodes/Model.hpp"
+#include "nodes/Camera.hpp"
+#include "nodes/Light.hpp"
 
 
 namespace Tank

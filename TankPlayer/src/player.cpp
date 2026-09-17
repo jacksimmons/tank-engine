@@ -1,16 +1,16 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "player.hpp"
-#include "scene_serialisation.hpp"
-#include "nodes/node.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/camera.hpp"
-#include "nodes/cube_map.hpp"
-#include "nodes/model.hpp"
-#include "nodes/physics/physics_body.hpp"
-#include "nodes/sprite.hpp"
-#include "nodes/light.hpp"
+#include "Player.hpp"
+#include "SceneSerialisation.hpp"
+#include "nodes/Node.hpp"
+#include "nodes/Scene.hpp"
+#include "nodes/Camera.hpp"
+#include "nodes/CubeMap.hpp"
+#include "nodes/Model.hpp"
+#include "nodes/physics/PhysicsBody.hpp"
+#include "nodes/Sprite.hpp"
+#include "nodes/Light.hpp"
 
 
 namespace Tank

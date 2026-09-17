@@ -1,7 +1,7 @@
-#include "log.hpp"
-#include "nodes/scene.hpp"
-#include "nodes/camera.hpp"
-#include "nodes/light.hpp"
+#include "Log.hpp"
+#include "nodes/Scene.hpp"
+#include "nodes/Camera.hpp"
+#include "nodes/Light.hpp"
 
 
 namespace Tank

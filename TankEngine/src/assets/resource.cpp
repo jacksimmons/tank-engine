@@ -1,5 +1,5 @@
-#include <log.hpp>
-#include "resource.hpp"
+#include <Log.hpp>
+#include "Resource.hpp"
 
 
 namespace Tank

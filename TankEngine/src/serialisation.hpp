@@ -1,8 +1,8 @@
 #pragma once
 #include <optional>
 #include <typeinfo>
-#include <core.hpp>
-#include "nodes/node.hpp"
+#include <Core.hpp>
+#include "nodes/Node.hpp"
 
 
 namespace Tank

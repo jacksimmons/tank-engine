@@ -1,0 +1,25 @@
+#pragma once
+#include "Mesh.hpp"
+#include "ShaderContainer.hpp"
+#include "Outlined.hpp"
+
+
+namespace Tank
+{
+	class IShaderContainer;
+	class IOutlined;
+	
+	class TANK_API IMeshContainer : public IOutlined, public IShaderContainer
+	{
+	protected:
+		std::vector<std::unique_ptr<Mesh>> m_meshes;
+
+
+		IMeshContainer();
+	public:
+		virtual ~IMeshContainer() = default;
+		
+		std::vector<Mesh*> getMeshes() const;
+		virtual void drawOutlineMeshes(Shader *outlineShader) override;
+	};
+}

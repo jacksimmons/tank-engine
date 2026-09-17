@@ -1,6 +1,6 @@
 #pragma once
-#include <nodes/node.hpp>
-#include <nodes/interfaces/mesh_container.hpp>
+#include <nodes/Node.hpp>
+#include <nodes/interfaces/MeshContainer.hpp>
 
 
 struct aiNode; struct aiScene; struct aiMesh;

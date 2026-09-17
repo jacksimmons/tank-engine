@@ -1,5 +1,5 @@
 #pragma once
-#include "ui/window.hpp"
+#include "ui/Window.hpp"
 
 
 namespace Tank::Editor

@@ -1,4 +1,4 @@
-require("premake.outdir")
+require("premake.Outdir")
 
 
 local wks = "%{wks.location}/"
@@ -45,6 +45,6 @@ project "TankPlayer"
 
 	-- PCH
 	pchheader "tepch.hpp"
-	pchsource (wks .. "%{prj.name}/src/player.cpp")
+	pchsource (wks .. "%{prj.name}/src/Player.cpp")
 	filter { "action:vs*" }
 		buildoptions { "/FI tepch.hpp" }

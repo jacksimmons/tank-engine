@@ -1,8 +1,8 @@
 #include <imgui.h>
-#include <events/event_manager.hpp>
-#include "console.hpp"
-#include "widget.hpp"
-#include "colours.hpp"
+#include <events/EventManager.hpp>
+#include "Console.hpp"
+#include "Widget.hpp"
+#include "Colours.hpp"
 
 
 namespace Tank::Editor
