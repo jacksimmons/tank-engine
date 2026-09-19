@@ -1,6 +1,6 @@
-#include <ShaderSource.hpp>
-#include <Shader.hpp>
-#include "ShaderContainer.hpp"
+#include <ShaderSource.h>
+#include <Shader.h>
+#include "ShaderContainer.h"
 
 
 namespace Tank

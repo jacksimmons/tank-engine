@@ -1,22 +1,22 @@
-#include "Log.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Camera.hpp"
-#include "nodes/Light.hpp"
+#include "Log.h"
+#include "nodes/Scene.h"
+#include "nodes/Camera.h"
+#include "nodes/Light.h"
 
 
 namespace Tank
 {
-	Scene *Scene::s_activeScene = nullptr;
+	_Scene *_Scene::s_activeScene = nullptr;
 
 
-	Scene::Scene(const std::string &name) : Node(name)
+	_Scene::_Scene(const std::string &name) : Node(name)
 	{
 		m_type = "Scene";
 		m_activeCamera = nullptr;
 	}
 
 
-	void Scene::update()
+	void _Scene::update()
 	{
 		// Ignore updates if no camera is active.
 		if (!m_activeCamera || !m_activeCamera->Enabled()) return;
@@ -27,7 +27,7 @@ namespace Tank
 	}
 
 
-	unsigned Scene::addLight(Light *light)
+	unsigned _Scene::addLight(Light *light)
 	{
 		auto it = std::find(m_lights.begin(), m_lights.end(), light);
 		if (it != m_lights.end())
@@ -40,7 +40,7 @@ namespace Tank
 	}
 
 
-	void Scene::removeLight(Light *light)
+	void _Scene::removeLight(Light *light)
 	{
 		auto it = std::find(m_lights.begin(), m_lights.end(), light);
 		if (it != m_lights.end())
@@ -54,7 +54,7 @@ namespace Tank
 	}
 
 
-	unsigned Scene::getNumLights(LightType type) const
+	unsigned _Scene::getNumLights(LightType type) const
 	{
 		unsigned cnt = 0;
 
@@ -75,7 +75,7 @@ namespace Tank
 	}
 
 
-	void Scene::onNodeDeleted(Node *deleted) noexcept
+	void _Scene::onNodeDeleted(Node *deleted) noexcept
 	{
 		if (m_activeCamera == deleted)
 		{
@@ -86,17 +86,17 @@ namespace Tank
 }
 
 
-json Tank::Scene::serialise()
+json Tank::_Scene::serialise()
 {
 	json serialised = Node::serialise();
 	serialised["activeCam"] = treeFromChild(getActiveCamera());
-	serialised["isActiveScene"] = Scene::getActiveScene() == this;
+	serialised["isActiveScene"] = _Scene::getActiveScene() == this;
 	return serialised;
 }
 
-void Tank::Scene::deserialise(const json &serialised)
+void Tank::_Scene::deserialise(const json &serialised)
 {
-	if (serialised["isActiveScene"]) Scene::setActiveScene(this);
+	if (serialised["isActiveScene"]) _Scene::setActiveScene(this);
 	setActiveCamera(dynamic_cast<Camera*>(childFromTree(serialised["activeCam"])));
 
 	Node::deserialise(serialised);

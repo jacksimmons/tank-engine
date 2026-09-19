@@ -1,6 +1,6 @@
-#include <fs/File.hpp>
-#include <Log.hpp>
-#include "ScriptManager.hpp"
+#include <fs/File.h>
+#include <Log.h>
+#include "ScriptManager.h"
 
 
 namespace Tank

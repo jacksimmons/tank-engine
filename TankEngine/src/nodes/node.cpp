@@ -1,10 +1,10 @@
 #include <GLFW/glfw3.h>
-#include <scripting/Script.hpp>
-#include <Log.hpp>
-#include <KeyInput.hpp>
-#include <Transform.hpp>
-#include <events/EventManager.hpp>
-#include "Node.hpp"
+#include <scripting/Script.h>
+#include <Log.h>
+#include <KeyInput.h>
+#include <Transform.h>
+#include <events/EventManager.h>
+#include "Node.h"
 
 
 namespace Tank

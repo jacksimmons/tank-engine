@@ -1,5 +1,5 @@
-#include <nodes/Node.hpp>
-#include <Log.hpp>
+#include <nodes/Node.h>
+#include <Log.h>
 
 
 namespace Tank

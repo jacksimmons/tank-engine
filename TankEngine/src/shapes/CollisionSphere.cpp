@@ -1,4 +1,4 @@
-#include "CollisionSphere.hpp"
+#include "CollisionSphere.h"
 
 
 namespace Tank

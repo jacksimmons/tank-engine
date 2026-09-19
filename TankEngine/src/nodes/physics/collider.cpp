@@ -1,5 +1,5 @@
-#include "Collider.hpp"
-#include "Log.hpp"
+#include "Collider.h"
+#include "Log.h"
 
 
 namespace Tank

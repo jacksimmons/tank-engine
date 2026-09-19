@@ -1,0 +1,62 @@
+#pragma once
+#include <nodes/Node.h>
+
+
+namespace Tank
+{
+	class Node;
+	class Camera;
+	class Light;
+	class Shader;
+	enum class LightType;
+
+	namespace Editor { class Hierarchy_; }
+
+	class TANK_API _Scene : public Node
+	{
+		// The Hierarchy may modify elements of the scene (lights, nodes).
+		friend class Editor::Hierarchy_;
+	public:
+		virtual json serialise() override;
+		virtual void deserialise(const json &ser) override;
+		
+		// Static
+	private:
+		static _Scene *s_activeScene;
+	public:
+		static _Scene *getActiveScene()
+		{ 
+			return s_activeScene;
+		}
+		static void setActiveScene(_Scene *scene)
+		{
+			s_activeScene = scene;
+		}
+
+		// Instance
+	private:
+		Camera *m_activeCamera;
+		std::vector<Light *> m_lights;
+
+		void onNodeDeleted(Node *deleted) noexcept;
+	public:
+		// A Scene has ownership of the entire Node hierarchy, and a reference to
+		// the active camera.
+		_Scene(const std::string &name = "Scene");
+		
+		// Get the active camera for this scene.
+		Camera *getActiveCamera() const noexcept { return m_activeCamera; }
+		// Set the active camera for this scene.
+		void setActiveCamera(Camera *camera) noexcept { m_activeCamera = camera; }
+		
+		// Adds a light to the scene. Returns the light's index.
+		unsigned addLight(Light *);
+		// Removes a light to the scene.
+		void removeLight(Light *);
+
+		std::vector<Light *> getLights() const { return m_lights; }
+		unsigned getNumLights(LightType type) const;
+		
+		virtual void update() override;
+	};
+}

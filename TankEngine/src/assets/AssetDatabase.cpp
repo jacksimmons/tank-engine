@@ -1,6 +1,6 @@
-//#include "AssetDatabase.hpp"
-//#include "Asset.hpp"
-//#include "Log.hpp"
+//#include "AssetDatabase.h"
+//#include "Asset.h"
+//#include "Log.h"
 //
 //
 //namespace Tank

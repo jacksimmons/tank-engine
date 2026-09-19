@@ -1,16 +1,16 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Player.hpp"
-#include "SceneSerialisation.hpp"
-#include "nodes/Node.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Camera.hpp"
-#include "nodes/CubeMap.hpp"
-#include "nodes/Model.hpp"
-#include "nodes/physics/PhysicsBody.hpp"
-#include "nodes/Sprite.hpp"
-#include "nodes/Light.hpp"
+#include "Player.h"
+#include "SceneSerialisation.h"
+#include "nodes/Node.h"
+#include "nodes/Scene.h"
+#include "nodes/Camera.h"
+#include "nodes/CubeMap.h"
+#include "nodes/Model.h"
+#include "nodes/physics/PhysicsBody.h"
+#include "nodes/Sprite.h"
+#include "nodes/Light.h"
 
 
 namespace Tank
@@ -20,7 +20,7 @@ namespace Tank
 		TE_INFO("Loading scene (hope it's in this directory)");
 
 		auto scene = std::unique_ptr<Tank::Scene>(Serialisation::loadScene("assets/scene.json", *m_factory));
-		Scene::setActiveScene(scene.get());
+		_Scene::setActiveScene(scene.get());
 		m_root = std::move(scene);
 
 		// Lights can only be added after scene load
@@ -31,7 +31,7 @@ namespace Tank
 			glm::vec3{ 0.2f, 0.2f, 0.2f },
 			glm::vec3{ 0.1f, 0.1f, 0.1f }
 		);
-		Scene::getActiveScene()->addChild(std::move(light));
+		_Scene::getActiveScene()->addChild(std::move(light));
 	}
 
 

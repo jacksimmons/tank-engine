@@ -1,0 +1,22 @@
+#pragma once
+#include "Engine.h"
+
+
+class ImGuiIO;
+namespace Tank
+{
+	class Node;
+	class Scene;
+	class KeyInput;
+
+	class Player : public Application
+	{
+	private:
+		std::unique_ptr<Node> m_root;
+	public:
+		Player();
+		~Player();
+	protected:
+		virtual void step() override;
+	};
+}

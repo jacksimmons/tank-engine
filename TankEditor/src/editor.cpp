@@ -5,35 +5,35 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <nfd.h>
 
-#include <Engine.hpp>
-#include <nodes/Node.hpp>
-#include <nodes/Model.hpp>
-#include <nodes/Scene.hpp>
-#include <nodes/Camera.hpp>
-#include <nodes/Sprite.hpp>
-#include <nodes/Audio.hpp>
-#include <nodes/CubeMap.hpp>
-#include <nodes/Light.hpp>
-#include <nodes/physics/PhysicsBody.hpp>
-#include <nodes/ui/UiNode.hpp>
-#include <events/EventManager.hpp>
-#include <scripting/Script.hpp>
-#include <project/Project.hpp>
-#include <project/Export.hpp>
-#include <reflection/NodeFactory.hpp>
-#include "Editor.hpp"
-#include "Shader.hpp"
-#include "Log.hpp"
-#include "SceneSerialisation.hpp"
-#include "KeyInput.hpp"
-#include "ui/Console.hpp"
-#include "ui/SceneView.hpp"
-#include "ui/Hierarchy.hpp"
-#include "ui/inspector/Inspector.hpp"
-#include "ui/Profiler.hpp"
-#include "ui/menu/ProjectsMenu.hpp"
-#include "ui/MenuBar/GlobalMenuBar.hpp"
-#include "ui/MenuBar/ProjectMenuBar.hpp"
+#include <Engine.h>
+#include <nodes/Node.h>
+#include <nodes/Model.h>
+#include <nodes/Scene.h>
+#include <nodes/Camera.h>
+#include <nodes/Sprite.h>
+#include <nodes/Audio.h>
+#include <nodes/CubeMap.h>
+#include <nodes/Light.h>
+#include <nodes/physics/PhysicsBody.h>
+#include <nodes/ui/UiNode.h>
+#include <events/EventManager.h>
+#include <scripting/Script.h>
+#include <project/Project.h>
+#include <project/Export.h>
+#include <reflection/NodeFactory.h>
+#include "Editor.h"
+#include "Shader.h"
+#include "Log.h"
+#include "SceneSerialisation.h"
+#include "KeyInput.h"
+#include "ui/Console.h"
+#include "ui/SceneView.h"
+#include "ui/Hierarchy.h"
+#include "ui/inspector/Inspector.h"
+#include "ui/Profiler.h"
+#include "ui/menu/ProjectsMenu.h"
+#include "ui/MenuBar/GlobalMenuBar.h"
+#include "ui/MenuBar/ProjectMenuBar.h"
 
 
 namespace Tank::Editor
@@ -99,7 +99,7 @@ namespace Tank::Editor
 
 					// Load the scene
 					Res scenePath = m_project->getSceneRes();
-					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), *m_factory))
+					if (_Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), *m_factory))
 					{
 						m_projectUI = std::make_unique<Node>("EditorProject");
 						m_projectUI->addChild(std::unique_ptr<ProjectMenuBar_>(new ProjectMenuBar_(*this)));
@@ -109,7 +109,7 @@ namespace Tank::Editor
 						m_projectUI->addChild(std::unique_ptr<Inspector_>(new Inspector_("Inspector")));
 						m_projectUI->preupdate();
 
-						setScene(std::unique_ptr<Scene>(rawScene));
+						setScene(std::unique_ptr<_Scene>(rawScene));
 						m_sceneRoot->preupdate();
 					}
 				}
@@ -126,11 +126,11 @@ namespace Tank::Editor
 	}
 
 	
-	void EditorApp::setScene(std::unique_ptr<Scene> scene)
+	void EditorApp::setScene(std::unique_ptr<_Scene> scene)
 	{
 		assert(m_sceneRoot != nullptr);
 	
-		std::vector<Scene *> existingScenes = m_sceneRoot->getChildrenOfType<Scene>();
+		std::vector<_Scene *> existingScenes = m_sceneRoot->getChildrenOfType<_Scene>();
 		assert(existingScenes.size() <= 1);
 		if (existingScenes.size() > 0) existingScenes[0]->destroy();
 

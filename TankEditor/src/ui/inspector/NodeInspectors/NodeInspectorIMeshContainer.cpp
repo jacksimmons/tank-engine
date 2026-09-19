@@ -1,8 +1,8 @@
 #include <imgui.h>
 #include <glm/gtx/string_cast.hpp>
-#include <nodes/interfaces/MeshContainer.hpp>
-#include <shapes/Vertex.hpp>
-#include "NodeInspector.hpp"
+#include <nodes/interfaces/MeshContainer.h>
+#include <shapes/Vertex.h>
+#include "NodeInspector.h"
 
 
 namespace Tank::Editor

@@ -1,19 +1,19 @@
 #include <typeinfo>
 #include <imgui.h>
-#include "Log.hpp"
-#include "Colours.hpp"
-#include <events/EventManager.hpp>
-#include "nodes/Camera.hpp"
-#include "nodes/Light.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/CubeMap.hpp"
-#include "nodes/Model.hpp"
-#include "nodes/Sprite.hpp"
-#include "nodes/ui/Text.hpp"
-#include "ui/Console.hpp"
-#include "ui/Hierarchy.hpp"
-#include "nodes/physics/Collider.hpp"
-#include "shapes/CollisionSphere.hpp"
+#include "Log.h"
+#include "Colours.h"
+#include <events/EventManager.h>
+#include "nodes/Camera.h"
+#include "nodes/Light.h"
+#include "nodes/Scene.h"
+#include "nodes/CubeMap.h"
+#include "nodes/Model.h"
+#include "nodes/Sprite.h"
+#include "nodes/ui/Text.h"
+#include "ui/Console.h"
+#include "ui/Hierarchy.h"
+#include "nodes/physics/Collider.h"
+#include "shapes/CollisionSphere.h"
 
 
 namespace Tank::Editor
@@ -29,7 +29,7 @@ namespace Tank::Editor
 		: _Window(name, WINDOW_OPTS)
 	{
 		m_showEditorHierarchy = false;
-		m_currentRoot = Tank::Scene::getActiveScene();
+		m_currentRoot = Tank::_Scene::getActiveScene();
 	}
 
 
@@ -46,7 +46,7 @@ namespace Tank::Editor
 		}
 		else
 		{
-			m_currentRoot = Tank::Scene::getActiveScene();
+			m_currentRoot = Tank::_Scene::getActiveScene();
 		}
 
 		int count = 0;
@@ -189,7 +189,7 @@ namespace Tank::Editor
 		// If item (node) is hovered and right-clicked...
 		if (ImGui::BeginPopupContextItem())
 		{
-			Scene *activeScene = Scene::getActiveScene();
+			_Scene *activeScene = _Scene::getActiveScene();
 			bool isEditorControlled = node->IsEditorControlled();
 
 			// If the node is not the root, not the current scene, and not an editor node, allow deletion

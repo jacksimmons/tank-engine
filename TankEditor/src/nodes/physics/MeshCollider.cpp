@@ -1,6 +1,6 @@
-#include "MeshCollider.hpp"
-#include "Log.hpp"
-#include "static/Time.hpp"
+#include "MeshCollider.h"
+#include "Log.h"
+#include "static/Time.h"
 
 
 namespace Tank

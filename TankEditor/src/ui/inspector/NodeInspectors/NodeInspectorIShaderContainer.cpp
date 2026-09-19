@@ -1,11 +1,11 @@
 #include <imgui.h>
-#include <Colours.hpp>
-#include <fs/File.hpp>
-#include <Widget.hpp>
-#include <Shader.hpp>
-#include <nodes/interfaces/ShaderContainer.hpp>
-#include <static/Time.hpp>
-#include "NodeInspector.hpp"
+#include <Colours.h>
+#include <fs/File.h>
+#include <Widget.h>
+#include <Shader.h>
+#include <nodes/interfaces/ShaderContainer.h>
+#include <static/Time.h>
+#include "NodeInspector.h"
 
 
 namespace Tank

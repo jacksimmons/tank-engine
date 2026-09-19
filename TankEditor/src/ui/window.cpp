@@ -1,6 +1,6 @@
-#include <nodes/Scene.hpp>
-#include "Window.hpp"
-#include "Log.hpp"
+#include <nodes/Scene.h>
+#include "Window.h"
+#include "Log.h"
 
 
 namespace Tank::Editor

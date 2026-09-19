@@ -1,14 +1,14 @@
 #include <format>
-#include "Serialisation.hpp"
-#include "fs/File.hpp"
-#include "Log.hpp"
-#include "nodes/Camera.hpp"
-#include "nodes/CubeMap.hpp"
-#include "nodes/Light.hpp"
-#include "nodes/Model.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Sprite.hpp"
-#include "reflection/NodeFactory.hpp"
+#include "Serialisation.h"
+#include "fs/File.h"
+#include "Log.h"
+#include "nodes/Camera.h"
+#include "nodes/CubeMap.h"
+#include "nodes/Light.h"
+#include "nodes/Model.h"
+#include "nodes/Scene.h"
+#include "nodes/Sprite.h"
+#include "reflection/NodeFactory.h"
 
 
 namespace Tank
@@ -52,7 +52,7 @@ namespace Tank
 			// Post-tree instantiation (after all children have been deserialised)
 			if (type == "Scene")
 			{
-				Scene *scene = (Scene*)node;
+				_Scene *scene = (_Scene*)node;
 				scene->preupdate();
 				scene->setActiveCamera((Camera*)scene->childFromTree(serialised["activeCam"]));
 			}

@@ -1,9 +1,9 @@
 #include <imgui.h>
-#include <Widget.hpp>
-#include <Colours.hpp>
-#include <nodes/Audio.hpp>
-#include "NodeInspector.hpp"
-#include "../Inspector.hpp"
+#include <Widget.h>
+#include <Colours.h>
+#include <nodes/Audio.h>
+#include "NodeInspector.h"
+#include "../Inspector.h"
 
 
 const std::string g_name = "Load Audio File";

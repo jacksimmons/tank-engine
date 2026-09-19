@@ -1,8 +1,8 @@
 #include <imgui.h>
-#include <Colours.hpp>
-#include <ui/inspector/schema/SchemaGlm.hpp>
-#include <nodes/Light.hpp>
-#include "NodeInspector.hpp"
+#include <Colours.h>
+#include <ui/inspector/schema/SchemaGlm.h>
+#include <nodes/Light.h>
+#include "NodeInspector.h"
 
 
 namespace Tank::Editor

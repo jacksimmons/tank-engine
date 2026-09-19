@@ -1,8 +1,8 @@
 #include <imgui.h>
-#include <Colours.hpp>
-#include <nodes/Scene.hpp>
-#include <nodes/Camera.hpp>
-#include "NodeInspector.hpp"
+#include <Colours.h>
+#include <nodes/Scene.h>
+#include <nodes/Camera.h>
+#include "NodeInspector.h"
 
 
 namespace Tank::Editor
@@ -11,7 +11,7 @@ namespace Tank::Editor
 	/// Draws a section specifically for the root node (scene).
 	/// </summary>
 	template <>
-	void NodeInspector_<Scene>::draw()
+	void NodeInspector_<_Scene>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Active Camera");
 

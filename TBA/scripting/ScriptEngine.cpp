@@ -1,10 +1,10 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/object.h>
 #include <mono/jit/jit.h>
-#include "Log.hpp"
-#include "File.hpp"
-#include "ScriptEngine.hpp"
-#include "ScriptGlue.hpp"
+#include "Log.h"
+#include "File.h"
+#include "ScriptEngine.h"
+#include "ScriptGlue.h"
 
 
 /// <summary>

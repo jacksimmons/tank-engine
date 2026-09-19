@@ -1,0 +1,13 @@
+#pragma once
+#include <imgui.h>
+#include "../Node.h"
+
+
+namespace Tank
+{
+	class TANK_API Text : public Node
+	{
+	public:
+		virtual void draw() override;
+	};
+}

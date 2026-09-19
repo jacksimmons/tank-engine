@@ -1,20 +1,20 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtx/string_cast.hpp>
 #include <fstream>
-#include <Log.hpp>
-#include <fs/File.hpp>
-#include <assets/Resource.hpp>
-#include "UserTypes.hpp"
+#include <Log.h>
+#include <fs/File.h>
+#include <assets/Resource.h>
+#include "UserTypes.h"
 #include "sol/sol.hpp"
-#include "LuaCodegen.hpp"
+#include "LuaCodegen.h"
 // The types to-be-defined as usertypes
 #include <glm/glm.hpp>
-#include <Transform.hpp>
-#include <KeyInput.hpp>
-#include <nodes/Node.hpp>
-#include <nodes/Camera.hpp>
-#include <nodes/Scene.hpp>
-#include <static/Time.hpp>
+#include <Transform.h>
+#include <KeyInput.h>
+#include <nodes/Node.h>
+#include <nodes/Camera.h>
+#include <nodes/Scene.h>
+#include <static/Time.h>
 
 
 #define KC(x) #x, GLFW_KEY_##x
@@ -225,16 +225,16 @@ namespace Tank
 	}
 
 	template<>
-	void UserTypes::generate<Scene>(sol::state &lua)
+	void UserTypes::generate<_Scene>(sol::state &lua)
 	{
 		// Scene
-		sol::usertype<Scene> ut = lua.new_usertype<Scene>(
-			SOL_CLASS(Scene),
+		sol::usertype<_Scene> ut = lua.new_usertype<_Scene>(
+			SOL_CLASS(_Scene),
 			sol::base_classes, sol::bases<Node>()
 		);
 		SOL_CLASS_BASE("Scene", Node);
-		ut[SOL_METHOD("Scene", "active_camera", "Camera", {})] = &Scene::getActiveCamera;
-		ut[SOL_STATIC_METHOD("Scene", "current", "Scene", {})] = &Scene::getActiveScene;
+		ut[SOL_METHOD("Scene", "active_camera", "Camera", {})] = &_Scene::getActiveCamera;
+		ut[SOL_STATIC_METHOD("Scene", "current", "Scene", {})] = &_Scene::getActiveScene;
 	}
 
 	template<>
@@ -267,7 +267,7 @@ namespace Tank
 		
 		generate<Node>(lua);
 		generate<Camera>(lua);
-		generate<Scene>(lua);
+		generate<_Scene>(lua);
 		generate<Transform>(lua);
 
 		generate<Time>(lua);

@@ -1,6 +1,6 @@
-#include "ScriptGlue.hpp"
+#include "ScriptGlue.h"
 #include <mono/metadata/object.h>
-#include "nodes/Node.hpp"
+#include "nodes/Node.h"
 
 
 namespace Tank

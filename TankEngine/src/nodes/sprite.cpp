@@ -1,13 +1,13 @@
 #include <glm/gtc/matrix_inverse.hpp>
-#include <ShaderSource.hpp>
-#include <Shader.hpp>
-#include "Sprite.hpp"
-#include "QuadMesh.hpp"
-#include "Texture.hpp"
-#include "Light.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Camera.hpp"
-#include "../reflection/NodeFactory.hpp"
+#include <ShaderSource.h>
+#include <Shader.h>
+#include "Sprite.h"
+#include "QuadMesh.h"
+#include "Texture.h"
+#include "Light.h"
+#include "nodes/Scene.h"
+#include "nodes/Camera.h"
+#include "../reflection/NodeFactory.h"
 namespace fs = std::filesystem;
 
 
@@ -72,7 +72,7 @@ namespace Tank
 		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
 		shader.setFloat("material.Ns", 32.0f);
 
-		auto cam = Scene::getActiveScene()->getActiveCamera();
+		auto cam = _Scene::getActiveScene()->getActiveCamera();
 		auto P = cam->getProj();
 		auto V = cam->getView();
 		auto M = getTransform()->getWorldModelMatrix();
@@ -83,7 +83,7 @@ namespace Tank
 		shader.setMat4("V", V);
 		shader.setMat4("VM_it", glm::inverseTranspose(VM));
 
-		auto scene = Scene::getActiveScene();
+		auto scene = _Scene::getActiveScene();
 		auto activeLights = scene->getLights();
 		for (Light *light : activeLights)
 		{

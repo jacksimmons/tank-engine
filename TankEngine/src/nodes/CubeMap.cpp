@@ -1,13 +1,13 @@
 #include <glad/glad.h>
-#include <nodes/CubeMap.hpp>
-#include <nodes/Camera.hpp>
-#include <nodes/Scene.hpp>
-#include <nodes/interfaces/ShaderContainer.hpp>
-#include <ShaderSource.hpp>
-#include "Log.hpp"
-#include "Texture.hpp"
-#include "Shader.hpp"
-#include "../reflection/NodeFactory.hpp"
+#include <nodes/CubeMap.h>
+#include <nodes/Camera.h>
+#include <nodes/Scene.h>
+#include <nodes/interfaces/ShaderContainer.h>
+#include <ShaderSource.h>
+#include "Log.h"
+#include "Texture.h"
+#include "Shader.h"
+#include "../reflection/NodeFactory.h"
 
 
 namespace Tank
@@ -102,7 +102,7 @@ namespace Tank
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(texTarget, texID);
 
-		Camera *cam = Scene::getActiveScene()->getActiveCamera();
+		Camera *cam = _Scene::getActiveScene()->getActiveCamera();
 		shader.setMat4("view", glm::mat4(glm::mat3(cam->getView())));
 		shader.setMat4("proj", cam->getProj());
 

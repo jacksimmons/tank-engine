@@ -1,11 +1,11 @@
-#include <nodes/Scene.hpp>
-#include <nodes/interfaces/MeshContainer.hpp>
-#include <nodes/interfaces/ShaderContainer.hpp>
-#include <Texture.hpp>
-#include <utils/Flip.hpp>
-#include "Profiler.hpp"
-#include "static/Time.hpp"
-#include "Colours.hpp"
+#include <nodes/Scene.h>
+#include <nodes/interfaces/MeshContainer.h>
+#include <nodes/interfaces/ShaderContainer.h>
+#include <Texture.h>
+#include <utils/Flip.h>
+#include "Profiler.h"
+#include "static/Time.h"
+#include "Colours.h"
 
 
 namespace Tank
@@ -68,7 +68,7 @@ namespace Tank::Editor
 			std::unordered_map<std::string, int> memoryMap;
 
 			Node *editor = getParent();
-			Scene *scene = Scene::getActiveScene();
+			_Scene *scene = _Scene::getActiveScene();
 
 			// Count memory usage of editor-only nodes
 			for (Node *child : editor->getChildrenOfType<Node>())

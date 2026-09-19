@@ -109,7 +109,7 @@ Copyright: 2013, Matthew Arsenault
  2015-2016 RWTH Aachen University, Federal Republic of Germany
 License: Expat
 
-Files: tools/assimp_cmd/generic_inserter.hpp
+Files: tools/assimp_cmd/generic_inserter.h
 Copyright: 2006-2016, ASSIMP Development Team
 License: BSL-1
 

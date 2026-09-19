@@ -1,5 +1,5 @@
-#include <Log.hpp>
-#include "FileDialog.hpp"
+#include <Log.h>
+#include "FileDialog.h"
 
 
 static std::string handleResult(nfdresult_t result, nfdchar_t **outPath)

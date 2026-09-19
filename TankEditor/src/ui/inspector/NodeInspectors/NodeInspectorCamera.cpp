@@ -1,10 +1,10 @@
 #include <imgui.h>
 #include <glm/gtx/string_cast.hpp>
-#include <Widget.hpp>
-#include <Colours.hpp>
-#include <nodes/Scene.hpp>
-#include <nodes/Camera.hpp>
-#include "NodeInspector.hpp"
+#include <Widget.h>
+#include <Colours.h>
+#include <nodes/Scene.h>
+#include <nodes/Camera.h>
+#include "NodeInspector.h"
 
 
 namespace Tank::Editor

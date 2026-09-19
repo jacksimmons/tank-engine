@@ -1,6 +1,6 @@
-#include <glm/ext/matrix_Transform.hpp>
-#include "GlmSerialise.hpp"
-#include "Transformation.hpp"
+#include <glm/ext/matrix_transform.hpp>
+#include "GlmSerialise.h"
+#include "Transformation.h"
 
 
 namespace Tank

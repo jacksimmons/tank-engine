@@ -1,11 +1,11 @@
 #include <nfd.h>
 #include <imgui.h>
-#include <ui/FileDialog.hpp>
-#include <nodes/Scene.hpp>
-#include <Serialisation.hpp>
-#include <Log.hpp>
-#include <fs/Dir.hpp>
-#include "ProjectsMenu.hpp"
+#include <ui/FileDialog.h>
+#include <nodes/Scene.h>
+#include <Serialisation.h>
+#include <Log.h>
+#include <fs/Dir.h>
+#include "ProjectsMenu.h"
 
 
 namespace Tank::Editor

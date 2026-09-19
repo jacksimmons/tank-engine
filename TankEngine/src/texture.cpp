@@ -1,9 +1,9 @@
 #include <glad/glad.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include <Log.hpp>
-#include <Texture.hpp>
-#include <nodes/Model.hpp>
+#include <Log.h>
+#include <Texture.h>
+#include <nodes/Model.h>
 
 
 namespace Tank

@@ -3,20 +3,20 @@
 #include <GLFW/glfw3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
-#include "Application.hpp"
-#include "KeyInput.hpp"
-#include "Log.hpp"
-#include "events/EventManager.hpp"
-#include "nodes/Camera.hpp"
-#include "nodes/CubeMap.hpp"
-#include "nodes/Light.hpp"
-#include "nodes/Model.hpp"
-#include "nodes/Node.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Sprite.hpp"
-#include "nodes/Audio.hpp"
-#include "reflection/NodeFactory.hpp"
-#include "static/Time.hpp"
+#include "Application.h"
+#include "KeyInput.h"
+#include "Log.h"
+#include "events/EventManager.h"
+#include "nodes/Camera.h"
+#include "nodes/CubeMap.h"
+#include "nodes/Light.h"
+#include "nodes/Model.h"
+#include "nodes/Node.h"
+#include "nodes/Scene.h"
+#include "nodes/Sprite.h"
+#include "nodes/Audio.h"
+#include "reflection/NodeFactory.h"
+#include "static/Time.h"
 
 
 // Enable debug output
@@ -47,7 +47,7 @@ namespace Tank
 		// Register nodes for deserialising
 		m_factory = std::make_unique<Reflect::NodeFactory>();
 		m_factory->registerClass<Node>("Node");
-		m_factory->registerClass<Scene>("Scene");
+		m_factory->registerClass<_Scene>("Scene");
 		m_factory->registerClass<Camera>("Camera");
 		m_factory->registerClass<DirLight>("DirLight");
 		m_factory->registerClass<PointLight>("PointLight");

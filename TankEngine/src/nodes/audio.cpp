@@ -1,5 +1,5 @@
-#include <Log.hpp>
-#include "Audio.hpp"
+#include <Log.h>
+#include "Audio.h"
 
 
 namespace Tank

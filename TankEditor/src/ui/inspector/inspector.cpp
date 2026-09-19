@@ -1,20 +1,20 @@
-#include <Log.hpp>
-#include "Colours.hpp"
-#include "NodeInspectors/NodeInspector.hpp"
-#include "nodes/Camera.hpp"
-#include "nodes/interfaces/ShaderContainer.hpp"
-#include "nodes/Light.hpp"
-#include "nodes/Model.hpp"
-#include "nodes/Node.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Sprite.hpp"
-#include "nodes/Audio.hpp"
-#include "nodes/ui/Text.hpp"
-#include "ui/FileDialog.hpp"
-#include "ui/inspector/Inspector.hpp"
-#include <events/EventManager.hpp>
+#include <Log.h>
+#include "Colours.h"
+#include "NodeInspectors/NodeInspector.h"
+#include "nodes/Camera.h"
+#include "nodes/interfaces/ShaderContainer.h"
+#include "nodes/Light.h"
+#include "nodes/Model.h"
+#include "nodes/Node.h"
+#include "nodes/Scene.h"
+#include "nodes/Sprite.h"
+#include "nodes/Audio.h"
+#include "nodes/ui/Text.h"
+#include "ui/FileDialog.h"
+#include "ui/inspector/Inspector.h"
+#include <events/EventManager.h>
 #include <imgui.h>
-#include <nodes/interfaces/MeshContainer.hpp>
+#include <nodes/interfaces/MeshContainer.h>
 
 
 namespace Tank::Editor
@@ -68,7 +68,7 @@ namespace Tank::Editor
 			// Now setup a node inspector, for each type which has one.
 			m_nodeInspectors.clear(); // Clear beforehand
 			tryAddSection<Node>();
-			tryAddSection<Scene>();
+			tryAddSection<_Scene>();
 			tryAddSection<Camera>();
 			tryAddSection<Light>();
 			tryAddSection<Audio>();

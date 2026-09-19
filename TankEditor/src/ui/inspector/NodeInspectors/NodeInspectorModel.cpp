@@ -1,13 +1,13 @@
 #include <filesystem>
-#include "../Inspector.hpp"
-#include "NodeInspector.hpp"
-#include <Colours.hpp>
-#include <events/Event.hpp>
-#include <events/EventManager.hpp>
+#include "../Inspector.h"
+#include "NodeInspector.h"
+#include <Colours.h>
+#include <events/Event.h>
+#include <events/EventManager.h>
 #include <imgui.h>
-#include <nodes/Model.hpp>
-#include "ui/FileDialog.hpp"
-#include <Widget.hpp>
+#include <nodes/Model.h>
+#include "ui/FileDialog.h"
+#include <Widget.h>
 #include <glad/glad.h>
 
 

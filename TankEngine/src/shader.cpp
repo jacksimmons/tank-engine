@@ -1,5 +1,5 @@
 #include <glad/glad.h>
-#include "Shader.hpp"
+#include "Shader.h"
 
 
 namespace Tank

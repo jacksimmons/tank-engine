@@ -1,5 +1,5 @@
 #include <imgui/imgui.h>
-#include "SchemaPrimitive.hpp"
+#include "SchemaPrimitive.h"
 
 
 namespace Tank::Editor::Schema

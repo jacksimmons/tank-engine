@@ -1,7 +1,7 @@
 #include <exception>
 #include <fstream>
-#include "fs/File.hpp"
-#include "Log.hpp"
+#include "fs/File.h"
+#include "Log.h"
 
 
 namespace Tank::File

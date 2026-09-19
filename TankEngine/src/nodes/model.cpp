@@ -5,14 +5,14 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp/material.h"
-#include <Mesh.hpp>
-#include "Log.hpp"
-#include "Texture.hpp"
-#include "Shader.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Model.hpp"
-#include "nodes/Camera.hpp"
-#include "nodes/Light.hpp"
+#include <Mesh.h>
+#include "Log.h"
+#include "Texture.h"
+#include "Shader.h"
+#include "nodes/Scene.h"
+#include "nodes/Model.h"
+#include "nodes/Camera.h"
+#include "nodes/Light.h"
 
 
 namespace Tank
@@ -210,7 +210,7 @@ namespace Tank
 		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
 		shader.setFloat("material.Ns", 32.0f);
 
-		auto cam = Scene::getActiveScene()->getActiveCamera();
+		auto cam = _Scene::getActiveScene()->getActiveCamera();
 		auto P = cam->getProj();
 		auto V = cam->getView();
 		auto M = getTransform()->getWorldModelMatrix();
@@ -237,7 +237,7 @@ namespace Tank
 
 	void Model::processLights()
 	{
-		auto scene = Scene::getActiveScene();
+		auto scene = _Scene::getActiveScene();
 		auto activeLights = scene->getLights();
 
 		const Shader &shader = getShader();

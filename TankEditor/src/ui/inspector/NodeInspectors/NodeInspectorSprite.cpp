@@ -1,11 +1,11 @@
 #include <imgui.h>
-#include <Colours.hpp>
-#include <Widget.hpp>
-#include <nodes/Sprite.hpp>
-#include <events/EventManager.hpp>
-#include "../Inspector.hpp"
-#include "ui/FileDialog.hpp"
-#include "NodeInspector.hpp"
+#include <Colours.h>
+#include <Widget.h>
+#include <nodes/Sprite.h>
+#include <events/EventManager.h>
+#include "../Inspector.h"
+#include "ui/FileDialog.h"
+#include "NodeInspector.h"
 
 
 const std::string g_name = "Load Texture File";

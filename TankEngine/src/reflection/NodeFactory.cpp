@@ -1,6 +1,6 @@
 #include <typeinfo>
-#include <nodes/Node.hpp>
-#include "NodeFactory.hpp"
+#include <nodes/Node.h>
+#include "NodeFactory.h"
 
 
 namespace Tank::Reflect

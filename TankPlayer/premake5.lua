@@ -17,7 +17,7 @@ project "TankPlayer"
 	}
 	
 	files {
-		"src/**.hpp",
+		"src/**.h",
 		"src/**.cpp",
 	}
 
@@ -44,7 +44,7 @@ project "TankPlayer"
 	}
 
 	-- PCH
-	pchheader "tepch.hpp"
+	pchheader "tepch.h"
 	pchsource (wks .. "%{prj.name}/src/Player.cpp")
 	filter { "action:vs*" }
-		buildoptions { "/FI tepch.hpp" }
+		buildoptions { "/FI tepch.h" }

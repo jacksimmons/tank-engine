@@ -1,6 +1,6 @@
 #include <GLFW/glfw3.h>
-#include "KeyInput.hpp"
-#include <Log.hpp>
+#include "KeyInput.h"
+#include <Log.h>
 
 
 namespace Tank

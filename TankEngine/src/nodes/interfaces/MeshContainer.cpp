@@ -1,5 +1,5 @@
-#include <ShaderSource.hpp>
-#include "MeshContainer.hpp"
+#include <ShaderSource.h>
+#include "MeshContainer.h"
 
 
 namespace Tank

@@ -2,13 +2,13 @@
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <events/EventManager.hpp>
-#include "KeyInput.hpp"
-#include "static/Time.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Camera.hpp"
-#include "ui/SceneView.hpp"
-#include <Colours.hpp>
+#include <events/EventManager.h>
+#include "KeyInput.h"
+#include "static/Time.h"
+#include "nodes/Scene.h"
+#include "nodes/Camera.h"
+#include "ui/SceneView.h"
+#include <Colours.h>
 
 
 namespace Tank::Editor
@@ -83,7 +83,7 @@ namespace Tank::Editor
 		{
 			m_isInPlayMode = true;
 			// Enable all scripting (and disable all EditorNodes)
-			Scene *activeScene = Scene::getActiveScene();
+			_Scene *activeScene = _Scene::getActiveScene();
 			activeScene->startup();
 			if (m_parent) m_parent->startup();
 
@@ -93,7 +93,7 @@ namespace Tank::Editor
 				m_isInPlayMode = false;
 
 				// Disable all scripting (and enable all EditorNodes)
-				Scene *activeScene = Scene::getActiveScene();
+				_Scene *activeScene = _Scene::getActiveScene();
 				//activeScene->getActiveCamera()->setFreeLook(true);
 				activeScene->shutdown();
 				if (m_parent) m_parent->shutdown();
@@ -142,7 +142,7 @@ namespace Tank::Editor
 		if (!m_isFocussed) return;
 		if (m_started) return;
 
-		auto cam = Scene::getActiveScene()->getActiveCamera();
+		auto cam = _Scene::getActiveScene()->getActiveCamera();
 		if (cam == nullptr) return;
 		float panSpd = cam->getPanSpeed();
 		float rotSpd = cam->getRotSpeed();

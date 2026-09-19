@@ -1,22 +1,22 @@
 #include <glad/glad.h>
 #include "imgui.h"
-#include <fs/File.hpp>
-#include <nodes/Node.hpp>
-#include <nodes/Scene.hpp>
-#include <ui/FileDialog.hpp>
-#include <ui/Hierarchy.hpp>
-#include <ui/inspector/Inspector.hpp>
-#include <ui/SceneView.hpp>
-#include <ui/Console.hpp>
-#include <ui/Profiler.hpp>
-#include <project/Export.hpp>
-#include <project/Project.hpp>
-#include <reflection/NodeFactory.hpp>
-#include <SceneSerialisation.hpp>
-#include <Colours.hpp>
-#include <Log.hpp>
-#include <Editor.hpp>
-#include "ProjectMenuBar.hpp"
+#include <fs/File.h>
+#include <nodes/Node.h>
+#include <nodes/Scene.h>
+#include <ui/FileDialog.h>
+#include <ui/Hierarchy.h>
+#include <ui/inspector/Inspector.h>
+#include <ui/SceneView.h>
+#include <ui/Console.h>
+#include <ui/Profiler.h>
+#include <project/Export.h>
+#include <project/Project.h>
+#include <reflection/NodeFactory.h>
+#include <SceneSerialisation.h>
+#include <Colours.h>
+#include <Log.h>
+#include <Editor.h>
+#include "ProjectMenuBar.h"
 
 
 namespace Tank::Editor
@@ -54,7 +54,7 @@ namespace Tank::Editor
 			);
 
 			// Load the scene
-			auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_editor.getFactory()));
+			auto scene = std::unique_ptr<_Scene>(Serialisation::loadScene(scenePath, m_editor.getFactory()));
 			m_editor.setScene(std::move(scene));
 
 			resetInspector = true;
@@ -68,7 +68,7 @@ namespace Tank::Editor
 			TE_INFO(std::format("Open scene > {}", scenePath.string()));
 
 			// Load the scene
-			auto scene = std::unique_ptr<Scene>(Serialisation::loadScene(scenePath, m_editor.getFactory()));
+			auto scene = std::unique_ptr<_Scene>(Serialisation::loadScene(scenePath, m_editor.getFactory()));
 			m_editor.setScene(std::move(scene));
 
 			resetInspector = true;
@@ -82,7 +82,7 @@ namespace Tank::Editor
 			TE_INFO(std::format("Save scene > {}", scenePath.string()));
 
 			// Save the scene
-			Serialisation::saveScene(Scene::getActiveScene(), scenePath);
+			Serialisation::saveScene(_Scene::getActiveScene(), scenePath);
 		}
 
 		if (ImGui::MenuItem("Export Project"))
@@ -93,7 +93,7 @@ namespace Tank::Editor
 			TE_INFO(std::format("Export > {}", exportPath.string()));
 
 			// Force save of current scene
-			Tank::Serialisation::saveScene(Scene::getActiveScene(), m_editor.getProject().getSceneRes().resolvePath());
+			Tank::Serialisation::saveScene(_Scene::getActiveScene(), m_editor.getProject().getSceneRes().resolvePath());
 
 			// Export
 			Export::project(

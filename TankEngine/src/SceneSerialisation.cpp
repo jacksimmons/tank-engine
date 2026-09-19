@@ -1,22 +1,22 @@
 #include <format>
 #include <fstream>
-#include "SceneSerialisation.hpp"
-#include "fs/File.hpp"
-#include "Log.hpp"
-#include "nodes/Node.hpp"
-#include "nodes/Camera.hpp"
-#include "nodes/CubeMap.hpp"
-#include "nodes/Light.hpp"
-#include "nodes/Model.hpp"
-#include "nodes/Scene.hpp"
-#include "reflection/NodeFactory.hpp"
+#include "SceneSerialisation.h"
+#include "fs/File.h"
+#include "Log.h"
+#include "nodes/Node.h"
+#include "nodes/Camera.h"
+#include "nodes/CubeMap.h"
+#include "nodes/Light.h"
+#include "nodes/Model.h"
+#include "nodes/Scene.h"
+#include "reflection/NodeFactory.h"
 
 
 namespace Tank
 {
 	namespace Serialisation
 	{
-		Scene* loadScene(const std::filesystem::path &scenePath, const Reflect::NodeFactory &factory)
+		_Scene* loadScene(const std::filesystem::path &scenePath, const Reflect::NodeFactory &factory)
 		{
 			std::string sceneFile;
 			if (File::readLines(scenePath, sceneFile) != File::ReadResult::Success)
@@ -36,7 +36,7 @@ namespace Tank
 				return nullptr;
 			}
 
-			if (Scene *scene = dynamic_cast<Scene*>(deserialise(serialised, factory)))
+			if (_Scene *scene = dynamic_cast<_Scene*>(deserialise(serialised, factory)))
 			{
 				return scene;
 			}
@@ -46,7 +46,7 @@ namespace Tank
 		}
 
 
-		void saveScene(Scene *scene, const std::filesystem::path &scenePath)
+		void saveScene(_Scene *scene, const std::filesystem::path &scenePath)
 		{
 			std::string sceneFile;
 			if (File::readLines(scenePath, sceneFile) == File::ReadResult::Error)

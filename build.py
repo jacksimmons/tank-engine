@@ -28,7 +28,7 @@ def main(
         command(f"{"bear --append -- " if use_bear else ""} make {str.join("", [f"{t} " for t in targets])}")
 
         if gmake_fix_precompiled_header_paths:
-            command(r"""perl -i -0pe 's|("-include",\s*")[^"]*tepch\.hpp"|$1'"$(pwd)"'/TankEngine/tepch.hpp"|g' compile_commands.json""")
+            command(r"""perl -i -0pe 's|("-include",\s*")[^"]*tepch\.h"|$1'"$(pwd)"'/TankEngine/tepch.h"|g' compile_commands.json""")
 
     if run:
         if os.name == "nt":

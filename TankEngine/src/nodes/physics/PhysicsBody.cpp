@@ -1,10 +1,10 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/epsilon.hpp>
-#include "Log.hpp"
-#include "PhysicsBody.hpp"
-#include "static/Math.hpp"
-#include "static/Constant.hpp"
-#include "static/Time.hpp"
+#include "Log.h"
+#include "PhysicsBody.h"
+#include "static/Math.h"
+#include "static/Constant.h"
+#include "static/Time.h"
 
 
 namespace Tank

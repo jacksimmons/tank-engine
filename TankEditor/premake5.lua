@@ -37,7 +37,7 @@ project "TankEditor"
 
 	files {
 		wks .. "include/imgui/imgui*.cpp",
-		"src/**.hpp",
+		"src/**.h",
 		"src/**.cpp",
 	}
 
@@ -69,10 +69,10 @@ project "TankEditor"
 	LinkAssimp(wks .. "lib", binDir)
 
 	-- PCH
-	pchheader "tepch.hpp"
+	pchheader "tepch.h"
 	pchsource "src/Editor.cpp"
 	filter { "action:vs*" }
-		buildoptions { "/FI tepch.hpp" }
+		buildoptions { "/FI tepch.h" }
 
 	-- Visual Studio debugging
 	debugdir "%{wks.location}"

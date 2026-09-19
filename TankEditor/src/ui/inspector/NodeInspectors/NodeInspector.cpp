@@ -1,13 +1,13 @@
 #include <imgui.h>
-#include <Widget.hpp>
-#include <Colours.hpp>
-#include <nodes/Node.hpp>
-#include <nodes/Camera.hpp>
-#include <nodes/Scene.hpp>
-#include <scripting/Script.hpp>
-#include <ui/inspector/schema/SchemaPrimitive.hpp>
-#include <ui/inspector/schema/SchemaGlm.hpp>
-#include "NodeInspector.hpp"
+#include <Widget.h>
+#include <Colours.h>
+#include <nodes/Node.h>
+#include <nodes/Camera.h>
+#include <nodes/Scene.h>
+#include <scripting/Script.h>
+#include <ui/inspector/schema/SchemaPrimitive.h>
+#include <ui/inspector/schema/SchemaGlm.h>
+#include "NodeInspector.h"
 
 
 namespace Tank::Editor
@@ -34,7 +34,7 @@ namespace Tank::Editor
 
 		if (ImGui::Button("<Snap To>"))
 		{
-			auto cam = Tank::Scene::getActiveScene()->getActiveCamera();
+			auto cam = Tank::_Scene::getActiveScene()->getActiveCamera();
 			if (cam != nullptr)
 			{
 				glm::mat4 worldMatrix = transform->getWorldModelMatrix();

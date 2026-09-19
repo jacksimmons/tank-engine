@@ -1,12 +1,12 @@
 #include <regex>
-#include <Log.hpp>
-#include <fs/File.hpp>
-#include <String.hpp>
-#include <nodes/Scene.hpp>
-#include <project/Project.hpp>
-#include <SceneSerialisation.hpp>
-#include "Export.hpp"
-#include <fs/Dir.hpp>
+#include <Log.h>
+#include <fs/File.h>
+#include <StringHelper.h>
+#include <nodes/Scene.h>
+#include <project/Project.h>
+#include <SceneSerialisation.h>
+#include "Export.h"
+#include <fs/Dir.h>
 
 
 namespace Tank

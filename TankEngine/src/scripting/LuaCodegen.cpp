@@ -1,6 +1,6 @@
-#include <Log.hpp>
-#include "LuaCodegen.hpp"
-#include <String.hpp>
+#include <Log.h>
+#include "LuaCodegen.h"
+#include <StringHelper.h>
 
 
 #define SECTION(title) std::format("\n--- {}\n", title)

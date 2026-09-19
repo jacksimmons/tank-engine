@@ -1,10 +1,10 @@
-#include "Shader.hpp"
-#include "Log.hpp"
-#include "static/GlmSerialise.hpp"
-#include "nodes/Light.hpp"
-#include "nodes/Model.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Sprite.hpp"
+#include "Shader.h"
+#include "Log.h"
+#include "static/GlmSerialise.h"
+#include "nodes/Light.h"
+#include "nodes/Model.h"
+#include "nodes/Scene.h"
+#include "nodes/Sprite.h"
 
 
 namespace Tank
@@ -13,7 +13,7 @@ namespace Tank
 		Node(name),
 		m_ambient(amb), m_diffuse(diff), m_specular(spec)
 	{
-		m_scene = Scene::getActiveScene();
+		m_scene = _Scene::getActiveScene();
 
 		// Add the light to scene
 		if (m_scene->getNumLights(getType()) >= 64)

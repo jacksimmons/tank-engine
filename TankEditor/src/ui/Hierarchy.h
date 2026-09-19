@@ -1,0 +1,56 @@
+#pragma once
+#include <type_traits>
+#include "ui/Window.h"
+#include "events/Event.h"
+
+
+namespace Tank::Editor
+{
+	class Inspector_;
+	class Hierarchy_ final : public _Window
+	{
+		friend class EditorApp;
+		friend class ProjectMenuBar_;
+		
+		// Fields
+	private:
+		Node *m_currentRoot;
+		bool m_showEditorHierarchy;
+
+		// Methods
+		/// <summary>
+		/// Draws a tree node for the node provided, then calls itself for each
+		/// of its children. Draws a leaf instead if no children.
+		/// </summary>
+		void drawTreeNode(Node *node, int *count);
+
+		/// @brief Draws a sibling separator, which acts as a drag-drop target
+		/// for nodes. When a node is dropped onto this, it becomes the preceding
+		/// sibling to the node after the separator.
+		void drawSiblingSeparator(Node *node);
+
+		void handleDragDrop(Node *node);
+
+		/// <summary>
+		/// Handles drawing for node context menus. A node context menu is
+		/// displayed when a node is right-clicked in the hierarchy.
+		/// This allows the user to Delete Nodes (leading to *node
+		/// = nullptr).
+		/// Returns true if the node survives, false if it is destroyed.
+		/// </summary>
+		bool drawNodeContextMenu(Node *node);
+
+		/// <summary>
+		/// Adds a created node as a child of parent.
+		/// </summary>
+		void addNewNode(Node *parent, Node *heapAllocatedNode) const;
+
+		Hierarchy_(const std::string &name = "Hierarchy");
+	protected:
+		/// <summary>
+		/// Generates buttons for all children of the current node, at a given
+		/// indentation depth (based on the generation depth).
+		/// </summary>
+		virtual void drawPanel() override;
+	};
+}

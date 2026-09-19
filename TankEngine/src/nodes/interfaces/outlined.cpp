@@ -1,9 +1,9 @@
 #include <glad/glad.h>
-#include "Outlined.hpp"
-#include "nodes/Scene.hpp"
-#include "nodes/Camera.hpp"
-#include "Shader.hpp"
-#include "Mesh.hpp"
+#include "Outlined.h"
+#include "nodes/Scene.h"
+#include "nodes/Camera.h"
+#include "Shader.h"
+#include "Mesh.h"
 
 
 namespace Tank
@@ -69,7 +69,7 @@ namespace Tank
 		m_outlineShader->use(); // use
 
 		// Setup uniforms
-		Camera *cam = Scene::getActiveScene()->getActiveCamera();
+		Camera *cam = _Scene::getActiveScene()->getActiveCamera();
 		const glm::vec3 scale = transform->getLocalScale();
 		const glm::vec3 trans = transform->getLocalTranslation();
 		transform->setLocalScale(scale * 1.025f);

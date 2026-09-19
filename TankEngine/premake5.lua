@@ -41,7 +41,7 @@ project "TankEngine"
 		wks .. "include/imgui/backends/imgui_impl_glfw.cpp",
 		wks .. "include/imgui/backends/imgui_impl_opengl3.cpp",
 		wks .. "include/glad/glad.cpp",
-		"src/**.hpp",
+		"src/**.h",
 		"src/**.cpp"
 	}
 
@@ -63,10 +63,10 @@ project "TankEngine"
 	LinkAssimp(wks .. "lib", engineBin)
 
 	-- PCH
-	pchheader "tepch.hpp"
+	pchheader "tepch.h"
 	pchsource "src/Application.cpp"
 	filter { "action:vs*" }
-		buildoptions { "/FI tepch.hpp" }
+		buildoptions { "/FI tepch.h" }
 		
 	-- Copy bin and libs into all applicable outdirs
 	PostCopyDir(engineBin, editorBin)

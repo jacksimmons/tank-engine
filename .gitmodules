@@ -19,3 +19,6 @@
 [submodule "include/nativefiledialog"]
 	path = include/nativefiledialog
 	url = https://github.com/mlabbe/nativefiledialog
+[submodule "include/entt"]
+	path = include/entt
+	url = https://github.com/skypjack/entt
