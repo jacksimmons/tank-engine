@@ -4,11 +4,16 @@
 
 namespace Tank
 {
-	class TANK_API _Scene
+	class Entity;
+	class TANK_API Scene
 	{
+		friend class Entity;
 	public:
-		_Scene();
-		~_Scene();
+		Scene();
+		~Scene();
+
+		Entity createEntity();
+		void update();
 	private:
 		entt::registry m_registry;
 	};

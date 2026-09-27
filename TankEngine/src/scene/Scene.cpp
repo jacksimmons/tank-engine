@@ -1,16 +1,29 @@
 #include <nodes/Node.h>
 #include "Scene.h"
+#include "Entity.h"
 
 
 namespace Tank
 {
-	_Scene::_Scene()
+	Scene::Scene()
 	{
-		entt::entity entity = m_registry.create();
-		m_registry.emplace<Node>(entity);
 	}
 
-	_Scene::~_Scene()
+	Scene::~Scene()
+	{
+	}
+
+	Entity Scene::createEntity()
+	{
+		Entity entity = { m_registry.create(), this };
+		
+		// ALL entities have these components.
+		entity.addComponent<Transform>();
+
+		return entity;
+	}
+
+	void Scene::update()
 	{
 	}
 }
