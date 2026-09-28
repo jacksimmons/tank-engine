@@ -64,7 +64,7 @@ namespace Tank
 	}
 
 
-	// ============== glm::quat ===============
+	// ============== glm::mat4 ===============
 	json mat4::serialise(const glm::mat4 &mat4)
 	{
 		json serialised = {

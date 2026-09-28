@@ -30,9 +30,9 @@ namespace Tank
 		ImGuiSettings m_settings;
 
 	private:
-		void init_GLFW();
-		void init_GLAD();
-		void init_ImGui();
+		void initGLFW();
+		void initGLAD();
+		void initImGui();
 	protected:
 		void beginImGui(const ImGuiIO &io);
 		void endImGui();

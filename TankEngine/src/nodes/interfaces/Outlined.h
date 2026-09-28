@@ -6,6 +6,7 @@ namespace Tank
 	class Mesh;
 	class Transform;
 	class Shader;
+	class TransformComponent;
 
 
 	class TANK_API IOutlined
@@ -20,7 +21,7 @@ namespace Tank
 
 		void setOutlineEnabled(bool enabled) noexcept { m_outlineEnabled = enabled; }
 		void predraw();
-		void postdraw(Transform *transform);
+		void postdraw(TransformComponent &transform);
 
 		/// <summary>
 		/// Called as part of postdraw.

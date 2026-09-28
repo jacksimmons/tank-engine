@@ -29,6 +29,12 @@ namespace Tank
 	}
 
 
+	glm::vec3 PhysicsBody::getCentre() const noexcept
+	{
+		return mat4::getTranslation(getComponent<TransformComponent>().getWorldModelMatrix());
+	}
+
+
 	void PhysicsBody::update()
 	{
 		if (!m_started) return Node::update();
@@ -51,7 +57,9 @@ namespace Tank
 		{
 			totalVelocity += velocity;
 		}
-		m_transform->setLocalTranslation(m_transform->getLocalTranslation() + (totalVelocity * dt));
+
+		TransformComponent transform = getComponent<TransformComponent>();
+		transform.setLocalTranslation(transform.getLocalTranslation() + (totalVelocity * dt));
 
 		Node::update();
 	}
@@ -83,7 +91,9 @@ namespace Tank
 			TE_CORE_INFO("HI");
 
 			m_velocities[bodyIndex] = {};
-			m_transform->setLocalTranslation(otherCentre);
+
+			TransformComponent transform = getComponent<TransformComponent>();
+			transform.setLocalTranslation(otherCentre);
 		}
 	}
 

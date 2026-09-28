@@ -27,9 +27,9 @@ namespace Tank
 		for (Collider *collider : s_instances)
 		{
 			if (collider == this) continue;
-			if (m_shape->contains(collider->getTransform()->getLocalTranslation()))
+			if (m_shape->contains(collider->getComponent<TransformComponent>().getLocalTranslation()))
 			{
-				TE_CORE_INFO(std::format("Collision: Offender {}, Recipient {}", collider->getName(), getName()));
+				TE_CORE_INFO(std::format("Collision: Offender {}, Recipient {}", collider->name(), name()));
 			}
 		}
 	}

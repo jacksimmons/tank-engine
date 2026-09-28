@@ -6,20 +6,20 @@
 
 namespace Tank
 {
-	_Scene *_Scene::s_activeScene = nullptr;
+	Scene *Scene::s_activeScene = nullptr;
 
 
-	_Scene::_Scene(const std::string &name) : Node(name)
+	Scene::Scene(const std::string &name) : Node(name)
 	{
 		m_type = "Scene";
 		m_activeCamera = nullptr;
 	}
 
 
-	void _Scene::update()
+	void Scene::update()
 	{
 		// Ignore updates if no camera is active.
-		if (!m_activeCamera || !m_activeCamera->Enabled()) return;
+		if (!m_activeCamera || !m_activeCamera->isEnabled()) return;
 
 		// Update camera, then the scene
 		m_activeCamera->update();
@@ -27,7 +27,7 @@ namespace Tank
 	}
 
 
-	unsigned _Scene::addLight(Light *light)
+	unsigned Scene::addLight(Light *light)
 	{
 		auto it = std::find(m_lights.begin(), m_lights.end(), light);
 		if (it != m_lights.end())
@@ -40,7 +40,7 @@ namespace Tank
 	}
 
 
-	void _Scene::removeLight(Light *light)
+	void Scene::removeLight(Light *light)
 	{
 		auto it = std::find(m_lights.begin(), m_lights.end(), light);
 		if (it != m_lights.end())
@@ -54,7 +54,7 @@ namespace Tank
 	}
 
 
-	unsigned _Scene::getNumLights(LightType type) const
+	unsigned Scene::getNumLights(LightType type) const
 	{
 		unsigned cnt = 0;
 
@@ -75,7 +75,7 @@ namespace Tank
 	}
 
 
-	void _Scene::onNodeDeleted(Node *deleted) noexcept
+	void Scene::onNodeDeleted(Node *deleted) noexcept
 	{
 		if (m_activeCamera == deleted)
 		{
@@ -86,17 +86,17 @@ namespace Tank
 }
 
 
-json Tank::_Scene::serialise()
+json Tank::Scene::serialise()
 {
 	json serialised = Node::serialise();
 	serialised["activeCam"] = treeFromChild(getActiveCamera());
-	serialised["isActiveScene"] = _Scene::getActiveScene() == this;
+	serialised["isActiveScene"] = Scene::getActiveScene() == this;
 	return serialised;
 }
 
-void Tank::_Scene::deserialise(const json &serialised)
+void Tank::Scene::deserialise(const json &serialised)
 {
-	if (serialised["isActiveScene"]) _Scene::setActiveScene(this);
+	if (serialised["isActiveScene"]) Scene::setActiveScene(this);
 	setActiveCamera(dynamic_cast<Camera*>(childFromTree(serialised["activeCam"])));
 
 	Node::deserialise(serialised);

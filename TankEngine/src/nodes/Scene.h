@@ -1,5 +1,6 @@
 #pragma once
-#include <nodes/Node.h>
+#include <ecs/ECS.h>
+#include "Node.h"
 
 
 namespace Tank
@@ -12,7 +13,7 @@ namespace Tank
 
 	namespace Editor { class Hierarchy_; }
 
-	class TANK_API _Scene : public Node
+	class TANK_API Scene : public Node, public ECS
 	{
 		// The Hierarchy may modify elements of the scene (lights, nodes).
 		friend class Editor::Hierarchy_;
@@ -22,13 +23,13 @@ namespace Tank
 		
 		// Static
 	private:
-		static _Scene *s_activeScene;
+		static Scene *s_activeScene;
 	public:
-		static _Scene *getActiveScene()
+		static Scene *getActiveScene()
 		{ 
 			return s_activeScene;
 		}
-		static void setActiveScene(_Scene *scene)
+		static void setActiveScene(Scene *scene)
 		{
 			s_activeScene = scene;
 		}
@@ -42,7 +43,7 @@ namespace Tank
 	public:
 		// A Scene has ownership of the entire Node hierarchy, and a reference to
 		// the active camera.
-		_Scene(const std::string &name = "Scene");
+		Scene(const std::string &name = "Scene");
 		
 		// Get the active camera for this scene.
 		Camera *getActiveCamera() const noexcept { return m_activeCamera; }

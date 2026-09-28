@@ -5,7 +5,7 @@
 
 namespace Tank
 {
-    class _Scene;
+    class Scene;
 
     namespace Reflect
     {

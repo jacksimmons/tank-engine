@@ -1,5 +1,4 @@
 #pragma once
-#include <utils/Getset.h>
 
 
 namespace Tank
@@ -20,7 +19,7 @@ namespace Tank
 			s_frameDelta = (lastFrameEnd - lastFrameStart) / (float)CLOCKS_PER_SEC;
 		}
 	public:
-		static Get<TimePoint> CurrentTime;
+		static const TimePoint &getCurrentTime();
 		static float getFrameDelta() { return s_frameDelta; }
 	};
 }

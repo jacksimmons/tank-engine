@@ -52,7 +52,7 @@ namespace Tank
 			// Post-tree instantiation (after all children have been deserialised)
 			if (type == "Scene")
 			{
-				_Scene *scene = (_Scene*)node;
+				Scene *scene = (Scene*)node;
 				scene->preupdate();
 				scene->setActiveCamera((Camera*)scene->childFromTree(serialised["activeCam"]));
 			}

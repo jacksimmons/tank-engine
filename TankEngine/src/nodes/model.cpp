@@ -199,7 +199,7 @@ namespace Tank
 
 	void Model::draw()
 	{
-		if (!Visible()) return;
+		if (!isVisible()) return;
 
 		glCullFace(m_cullFace);
 
@@ -210,10 +210,11 @@ namespace Tank
 		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
 		shader.setFloat("material.Ns", 32.0f);
 
-		auto cam = _Scene::getActiveScene()->getActiveCamera();
+		TransformComponent transform = getComponent<TransformComponent>();
+		auto cam = Scene::getActiveScene()->getActiveCamera();
 		auto P = cam->getProj();
 		auto V = cam->getView();
-		auto M = getTransform()->getWorldModelMatrix();
+		auto M = transform.getWorldModelMatrix();
 		auto VM = V * M;
 		
 		shader.setMat4("PVM", P * VM);
@@ -229,7 +230,7 @@ namespace Tank
 		}
 		shader.unuse();
 
-		IOutlined::postdraw(m_transform.get());
+		IOutlined::postdraw(transform);
 
 		glCullFace(GL_BACK);
 	}
@@ -237,7 +238,7 @@ namespace Tank
 
 	void Model::processLights()
 	{
-		auto scene = _Scene::getActiveScene();
+		auto scene = Scene::getActiveScene();
 		auto activeLights = scene->getLights();
 
 		const Shader &shader = getShader();

@@ -47,7 +47,7 @@ namespace Tank
 		// Register nodes for deserialising
 		m_factory = std::make_unique<Reflect::NodeFactory>();
 		m_factory->registerClass<Node>("Node");
-		m_factory->registerClass<_Scene>("Scene");
+		m_factory->registerClass<Scene>("Scene");
 		m_factory->registerClass<Camera>("Camera");
 		m_factory->registerClass<DirLight>("DirLight");
 		m_factory->registerClass<PointLight>("PointLight");
@@ -57,7 +57,7 @@ namespace Tank
 		m_factory->registerClass<Audio>("Audio");
 
 		// Init events
-		EventManager::addEvent("NodeAdopted", new Event<Node*>());
+		EventManager::addEvent("EntityAdopted", new Event<Node*>());
 		EventManager::addEvent("NodeDisowned", new Event<Node*>());
 
 		m_windowSize = glm::ivec2(800, 600);

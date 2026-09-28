@@ -1,5 +1,4 @@
 #pragma once
-#include <utils/Getset.h>
 
 
 namespace Tank
@@ -34,10 +33,10 @@ namespace Tank
 
 		~Texture();
 
-		Get<int> Width = m_width;
-		Get<int> Height = m_height;
-		Get<int> NumChannels = m_numChannels;
-		Get<int> Depth = m_depth;
+		int width() const noexcept { return m_width; }
+		int height() const noexcept { return m_height; }
+		int numChannels() const noexcept { return m_numChannels; }
+		int depth() const noexcept { return m_depth; }
 
 		unsigned getTexID() const noexcept { return m_texID; };
 		unsigned getTexTarget() const noexcept { return m_texTarget; }

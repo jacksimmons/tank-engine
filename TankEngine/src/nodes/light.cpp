@@ -1,3 +1,4 @@
+#include <Transformation.h>
 #include "Shader.h"
 #include "Log.h"
 #include "static/GlmSerialise.h"
@@ -13,7 +14,7 @@ namespace Tank
 		Node(name),
 		m_ambient(amb), m_diffuse(diff), m_specular(spec)
 	{
-		m_scene = _Scene::getActiveScene();
+		m_scene = Scene::getActiveScene();
 
 		// Add the light to scene
 		if (m_scene->getNumLights(getType()) >= 64)
@@ -35,7 +36,7 @@ namespace Tank
 	void Light::updateShader(const Shader &shader)
 	{
 		std::string str = getLightStruct();
-		if (Enabled())
+		if (isEnabled())
 		{
 			shader.setVec3(str + ".Ia", m_ambient);
 			shader.setVec3(str + ".Id", m_diffuse);
@@ -119,7 +120,7 @@ namespace Tank
 	void PointLight::updateShader(const Shader &shader)
 	{
 		std::string str = getLightStruct();
-		shader.setVec3(str + ".pos", mat4::getTranslation(getTransform()->getWorldModelMatrix()));
+		shader.setVec3(str + ".pos", mat4::getTranslation(getComponent<TransformComponent>().getWorldModelMatrix()));
 		shader.setFloat(str + ".constant", 1.0f);
 		shader.setFloat(str + ".linear", 0.0f);
 		shader.setFloat(str + ".quadratic", 0.0f);

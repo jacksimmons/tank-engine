@@ -62,7 +62,7 @@ namespace Tank
 
 	void Sprite::draw()
 	{
-		if (!Visible()) return;
+		if (!isVisible()) return;
 
 		IOutlined::predraw();
 
@@ -72,10 +72,11 @@ namespace Tank
 		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
 		shader.setFloat("material.Ns", 32.0f);
 
-		auto cam = _Scene::getActiveScene()->getActiveCamera();
+		TransformComponent transform = getComponent<TransformComponent>();
+		auto cam = Scene::getActiveScene()->getActiveCamera();
 		auto P = cam->getProj();
 		auto V = cam->getView();
-		auto M = getTransform()->getWorldModelMatrix();
+		auto M = transform.getWorldModelMatrix();
 		auto VM = V * M;
 		
 		shader.setMat4("PVM", P * VM);
@@ -83,7 +84,7 @@ namespace Tank
 		shader.setMat4("V", V);
 		shader.setMat4("VM_it", glm::inverseTranspose(VM));
 
-		auto scene = _Scene::getActiveScene();
+		auto scene = Scene::getActiveScene();
 		auto activeLights = scene->getLights();
 		for (Light *light : activeLights)
 		{
@@ -100,7 +101,7 @@ namespace Tank
 
 		shader.unuse();
 		
-		IOutlined::postdraw(m_transform.get());
+		IOutlined::postdraw(transform);
 		Node::draw();
 	}
 }

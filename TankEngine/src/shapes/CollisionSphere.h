@@ -4,16 +4,16 @@
 
 namespace Tank
 {
-	class Transform;
+	class TransformComponent;
 	class TANK_API CollisionSphere : public CollisionShape
 	{
 	private:
-		Transform *m_transform;
+		const TransformComponent &m_transform;
 		float m_radius;
 		bool m_isHollow;
 
 	public:
-		CollisionSphere(Transform *transform, float radius, bool isHollow=false)
+		CollisionSphere(const TransformComponent &transform, float radius, bool isHollow=false)
 			: m_transform(transform), m_radius(radius), m_isHollow(isHollow), CollisionShape() {}
 		virtual ~CollisionSphere() = default;
 

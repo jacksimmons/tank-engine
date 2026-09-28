@@ -20,11 +20,23 @@ namespace Tank
 #define TE_CORE_WARN(...)			::Tank::Log::getCoreLogger()->warn(__VA_ARGS__)
 #define TE_CORE_INFO(...)			::Tank::Log::getCoreLogger()->info(__VA_ARGS__)
 #define TE_CORE_TRACE(...)			::Tank::Log::getCoreLogger()->trace(__VA_ARGS__)
-#define TE_CORE_ASSERT(cond, ...) { if (!(x)) { TE_CORE_ERROR("Assertation failed: {0}", __VA_ARGS__); } }
+#define TE_CORE_ASSERT(cond, ...)\
+{\
+	if (!(cond))\
+	{\
+		TE_CORE_ERROR("Assertation failed: {0}", __VA_ARGS__);\
+	}\
+}
 
 #define TE_CRITICAL(...)			::Tank::Log::getClientLogger()->critical(__VA_ARGS__)
 #define TE_ERROR(...)				::Tank::Log::getClientLogger()->error(__VA_ARGS__)
 #define TE_WARN(...)				::Tank::Log::getClientLogger()->warn(__VA_ARGS__)
 #define TE_INFO(...)				::Tank::Log::getClientLogger()->info(__VA_ARGS__)
 #define TE_TRACE(...)				::Tank::Log::getClientLogger()->trace(__VA_ARGS__)
-#define TE_ASSERT(cond, ...) { if (!(x)) { TE_ERROR("Assertation failed: {0}", __VA_ARGS__); } }
+#define TE_ASSERT(cond, ...)\
+{\
+	if (!(x))\
+	{\
+		TE_ERROR("Assertation failed: {0}", __VA_ARGS__);\
+	}\
+}

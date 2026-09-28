@@ -5,12 +5,12 @@
 namespace Tank
 {
 	class Entity;
-	class TANK_API Scene
+	class TANK_API ECS
 	{
 		friend class Entity;
 	public:
-		Scene();
-		~Scene();
+		ECS();
+		~ECS();
 
 		Entity createEntity();
 		void update();

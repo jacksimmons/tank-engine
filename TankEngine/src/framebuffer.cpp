@@ -66,7 +66,7 @@ namespace Tank
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			glStencilMask(0x00); // Don't write to stencil by default
-			_Scene *activeScene = Tank::_Scene::getActiveScene();
+			Scene *activeScene = Tank::Scene::getActiveScene();
 			activeScene->update();
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

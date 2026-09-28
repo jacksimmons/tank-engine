@@ -56,7 +56,7 @@ namespace Tank
 	/// testing. Then draw a scaled-up version of the object, in
 	/// a block colour.
 	/// </summary>
-	void IOutlined::postdraw(Transform *transform)
+	void IOutlined::postdraw(TransformComponent &transform)
 	{
 		if (!m_outlineEnabled) return;
 
@@ -69,12 +69,12 @@ namespace Tank
 		m_outlineShader->use(); // use
 
 		// Setup uniforms
-		Camera *cam = _Scene::getActiveScene()->getActiveCamera();
-		const glm::vec3 scale = transform->getLocalScale();
-		const glm::vec3 trans = transform->getLocalTranslation();
-		transform->setLocalScale(scale * 1.025f);
-		m_outlineShader->setMat4("PVM", cam->getProj() * cam->getView() * transform->getWorldModelMatrix());
-		transform->setLocalScale(scale);
+		Camera *cam = Scene::getActiveScene()->getActiveCamera();
+		const glm::vec3 scale = transform.getLocalScale();
+		const glm::vec3 trans = transform.getLocalTranslation();
+		transform.setLocalScale(scale * 1.025f);
+		m_outlineShader->setMat4("PVM", cam->getProj() * cam->getView() * transform.getWorldModelMatrix());
+		transform.setLocalScale(scale);
 
 		drawOutlineMeshes(m_outlineShader.get());
 

@@ -22,7 +22,7 @@ namespace Tank
 		PhysicsBody(const std::string &name = "PhysicsBody", float mass = 1);
 		virtual ~PhysicsBody();
 
-		glm::vec3 getCentre() const noexcept { return mat4::getTranslation(m_transform->getWorldModelMatrix()); }
+		glm::vec3 getCentre() const noexcept;
 
 		void update() override;
 	};

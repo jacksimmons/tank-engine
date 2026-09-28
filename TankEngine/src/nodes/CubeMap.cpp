@@ -102,7 +102,7 @@ namespace Tank
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(texTarget, texID);
 
-		Camera *cam = _Scene::getActiveScene()->getActiveCamera();
+		Camera *cam = Scene::getActiveScene()->getActiveCamera();
 		shader.setMat4("view", glm::mat4(glm::mat3(cam->getView())));
 		shader.setMat4("proj", cam->getProj());
 

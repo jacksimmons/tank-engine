@@ -9,11 +9,11 @@
 #include "LuaCodegen.h"
 // The types to-be-defined as usertypes
 #include <glm/glm.hpp>
-#include <Transform.h>
 #include <KeyInput.h>
 #include <nodes/Node.h>
 #include <nodes/Camera.h>
 #include <nodes/Scene.h>
+#include <components/Transform.h>
 #include <static/Time.h>
 
 
@@ -204,8 +204,8 @@ namespace Tank
 		sol::usertype<Node> ut = lua.new_usertype<Node>(
 			SOL_CLASS(Node)
 		);
-		ut[SOL_FIELD("Node", "name", "string")] = sol::property(&Node::getName, &Node::setName);
-		ut[SOL_FIELD("Node", "transform", "Transform")] = sol::property(&Node::getTransform);
+		ut[SOL_FIELD("Node", "name", "string")] = sol::property(&Node::name, &Node::setName);
+		ut[SOL_FIELD("Node", "transform", "Transform")] = sol::property(&Node::getComponent<TransformComponent>);
 		ut[SOL_FIELD("Node", "key_input", "KeyInput")] = sol::property(&Node::getKeyInput);
 		ut[SOL_METHOD("Node", "get_parent", "Node", {})] = &Node::getParent;
 		ut[SOL_METHOD("Node", "get_child", "Node", { { "index", "number" } })] = static_cast<Node * (Node:: *)(int) const>(&Node::getChild);
@@ -225,27 +225,27 @@ namespace Tank
 	}
 
 	template<>
-	void UserTypes::generate<_Scene>(sol::state &lua)
+	void UserTypes::generate<Scene>(sol::state &lua)
 	{
 		// Scene
-		sol::usertype<_Scene> ut = lua.new_usertype<_Scene>(
-			SOL_CLASS(_Scene),
+		sol::usertype<Scene> ut = lua.new_usertype<Scene>(
+			SOL_CLASS(Scene),
 			sol::base_classes, sol::bases<Node>()
 		);
 		SOL_CLASS_BASE("Scene", Node);
-		ut[SOL_METHOD("Scene", "active_camera", "Camera", {})] = &_Scene::getActiveCamera;
-		ut[SOL_STATIC_METHOD("Scene", "current", "Scene", {})] = &_Scene::getActiveScene;
+		ut[SOL_METHOD("Scene", "active_camera", "Camera", {})] = &Scene::getActiveCamera;
+		ut[SOL_STATIC_METHOD("Scene", "current", "Scene", {})] = &Scene::getActiveScene;
 	}
 
 	template<>
 	void UserTypes::generate<Transform>(sol::state &lua)
 	{
-		auto ut = lua.new_usertype<Transform>(
-			SOL_CLASS(Transform)
+		auto ut = lua.new_usertype<TransformComponent>(
+			SOL_CLASS(TransformComponent)
 		);
-		ut[SOL_FIELD("Transform", "translation", "Vec3")] = sol::property(&Transform::getLocalTranslation, &Transform::setLocalTranslation);
-		ut[SOL_FIELD("Transform", "rotation", "Vec3")] = sol::property(&Transform::getLocalRotation, &Transform::setLocalRotation);
-		ut[SOL_FIELD("Transform", "scale", "Vec3")] = sol::property(&Transform::getLocalScale, &Transform::setLocalScale);
+		ut[SOL_FIELD("Transform", "translation", "Vec3")] = sol::property(&TransformComponent::getLocalTranslation, &TransformComponent::setLocalTranslation);
+		ut[SOL_FIELD("Transform", "rotation", "Vec3")] = sol::property(&TransformComponent::getLocalRotation, &TransformComponent::setLocalRotation);
+		ut[SOL_FIELD("Transform", "scale", "Vec3")] = sol::property(&TransformComponent::getLocalScale, &TransformComponent::setLocalScale);
 	}
 
 	template<>
@@ -267,7 +267,7 @@ namespace Tank
 		
 		generate<Node>(lua);
 		generate<Camera>(lua);
-		generate<_Scene>(lua);
+		generate<Scene>(lua);
 		generate<Transform>(lua);
 
 		generate<Time>(lua);

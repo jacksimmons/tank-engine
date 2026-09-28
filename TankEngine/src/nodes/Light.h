@@ -6,7 +6,7 @@ namespace Tank
 {
 	class Model;
 	class Shader;
-	class _Scene;
+	class Scene;
 	struct ShaderSources;
 	class ShaderSource;
 
@@ -26,7 +26,7 @@ namespace Tank
 	protected:
 		// The scene this light applies to shaders within. Responsibility lies in the Light class
 		// to call m_scene->updateShaders() after changes to the light occur.
-		_Scene *m_scene;
+		Scene *m_scene;
 		glm::vec3 m_ambient;
 		glm::vec3 m_diffuse;
 		glm::vec3 m_specular;

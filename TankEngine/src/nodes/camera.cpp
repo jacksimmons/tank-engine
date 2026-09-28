@@ -87,7 +87,7 @@ namespace Tank
 		glm::vec3 t_centre = getTransformedCentre();
 		glm::vec3 t_eye = getTransformedEye();
 		glm::vec3 t_up = getTransformedUp();
-		m_V = getTransform()->getWorldModelMatrix() * glm::lookAt(t_eye, t_centre, t_up);
+		m_V = getComponent<TransformComponent>().getWorldModelMatrix() * glm::lookAt(t_eye, t_centre, t_up);
 
 		Node::update();
 	}

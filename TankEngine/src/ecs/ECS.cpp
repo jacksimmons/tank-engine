@@ -1,29 +1,32 @@
-#include <nodes/Node.h>
-#include "Scene.h"
+#include "ECS.h"
 #include "Entity.h"
+#include <components/Innate.h>
 
 
 namespace Tank
 {
-	Scene::Scene()
+	ECS::ECS()
 	{
 	}
 
-	Scene::~Scene()
+
+	ECS::~ECS()
 	{
 	}
 
-	Entity Scene::createEntity()
+
+	Entity ECS::createEntity()
 	{
 		Entity entity = { m_registry.create(), this };
 		
 		// ALL entities have these components.
-		entity.addComponent<Transform>();
+		entity.addComponent<TransformComponent>();
 
 		return entity;
 	}
 
-	void Scene::update()
+
+	void ECS::update()
 	{
 	}
 }

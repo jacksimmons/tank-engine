@@ -16,7 +16,7 @@ namespace Tank
 {
 	namespace Serialisation
 	{
-		_Scene* loadScene(const std::filesystem::path &scenePath, const Reflect::NodeFactory &factory)
+		Scene* loadScene(const std::filesystem::path &scenePath, const Reflect::NodeFactory &factory)
 		{
 			std::string sceneFile;
 			if (File::readLines(scenePath, sceneFile) != File::ReadResult::Success)
@@ -36,7 +36,7 @@ namespace Tank
 				return nullptr;
 			}
 
-			if (_Scene *scene = dynamic_cast<_Scene*>(deserialise(serialised, factory)))
+			if (Scene *scene = dynamic_cast<Scene*>(deserialise(serialised, factory)))
 			{
 				return scene;
 			}
@@ -46,7 +46,7 @@ namespace Tank
 		}
 
 
-		void saveScene(_Scene *scene, const std::filesystem::path &scenePath)
+		void saveScene(Scene *scene, const std::filesystem::path &scenePath)
 		{
 			std::string sceneFile;
 			if (File::readLines(scenePath, sceneFile) == File::ReadResult::Error)

@@ -20,7 +20,7 @@ namespace Tank
 		TE_INFO("Loading scene (hope it's in this directory)");
 
 		auto scene = std::unique_ptr<Tank::Scene>(Serialisation::loadScene("assets/scene.json", *m_factory));
-		_Scene::setActiveScene(scene.get());
+		Scene::setActiveScene(scene.get());
 		m_root = std::move(scene);
 
 		// Lights can only be added after scene load
@@ -31,7 +31,7 @@ namespace Tank
 			glm::vec3{ 0.2f, 0.2f, 0.2f },
 			glm::vec3{ 0.1f, 0.1f, 0.1f }
 		);
-		_Scene::getActiveScene()->addChild(std::move(light));
+		Scene::getActiveScene()->addChild(std::move(light));
 	}
 
 
