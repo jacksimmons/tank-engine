@@ -60,7 +60,7 @@ namespace Tank::Editor
 		ShaderSources copy = ShaderSources(sources);
 
 		static TimePoint previousTime;
-		TimePoint currentTime = Time::CurrentTime();
+		TimePoint currentTime = Time::getCurrentTime();
 		static std::unordered_map<std::string, std::string> previousContents;
 		bool readFile = false;
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime).count() > 1000)

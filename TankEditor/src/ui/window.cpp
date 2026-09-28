@@ -16,7 +16,7 @@ namespace Tank::Editor
 	void _Window::drawUI()
 	{
 		bool open = true;
-		ImGui::Begin(getName().c_str(), m_opts.closeable ? &open : nullptr, m_opts.flags);
+		ImGui::Begin(name().c_str(), m_opts.closeable ? &open : nullptr, m_opts.flags);
 		{
 			if (!m_opts.closeable || open) drawPanel();
 			else

@@ -11,7 +11,7 @@ namespace Tank::Editor
 	/// Draws a section specifically for the root node (scene).
 	/// </summary>
 	template <>
-	void NodeInspector_<_Scene>::draw()
+	void NodeInspector_<Scene>::draw()
 	{
 		ImGui::TextColored(Colour::TITLE, "Active Camera");
 
@@ -21,7 +21,7 @@ namespace Tank::Editor
 		Camera *activeCamera = m_node->getActiveCamera();
 		if (activeCamera)
 		{
-			cameraName = activeCamera->getName();
+			cameraName = activeCamera->name();
 			cameraNameCol = Colour::NORMAL;
 		}
 		else

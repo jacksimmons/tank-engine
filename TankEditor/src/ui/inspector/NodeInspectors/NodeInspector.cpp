@@ -21,20 +21,20 @@ namespace Tank::Editor
 		Tank::Transform *transform = m_node->getTransform();
 		const glm::mat4 &modelMatrix = transform->getWorldModelMatrix();
 
-		Schema::draw(m_node->Enabled(), "Enabled", [this](bool val) { m_node->Enabled = val; });
-		Schema::draw(m_node->Visible(), "Visible", [this](bool val) { m_node->Visible = val; });
+		Schema::draw(m_node->isEnabled(), "Enabled", [this](bool val) { m_node->setEnabled(val); });
+		Schema::draw(m_node->isVisible(), "Visible", [this](bool val) { m_node->setVisible(val); });
 
 		ImGui::TextColored(Tank::Colour::TITLE, "Name");
-		Tank::Widget::textInput("##Inspector_Name", m_node->getName(),
+		Tank::Widget::textInput("##Inspector_Name", m_node->name(),
 			[this](const std::string &newName)
 			{
-				if (newName != m_node->getName()) m_node->setName(newName);
+				if (newName != m_node->name()) m_node->setName(newName);
 			}
 		);
 
 		if (ImGui::Button("<Snap To>"))
 		{
-			auto cam = Tank::_Scene::getActiveScene()->getActiveCamera();
+			auto cam = Tank::Scene::getActiveScene()->getActiveCamera();
 			if (cam != nullptr)
 			{
 				glm::mat4 worldMatrix = transform->getWorldModelMatrix();

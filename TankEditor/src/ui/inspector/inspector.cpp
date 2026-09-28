@@ -40,7 +40,7 @@ namespace Tank::Editor
 		onNodeSelected->registerHandler([this](Node *node)
 		{
 			// Don't allow editor nodes in the hierarchy to be inspected
-			if (node->IsEditorControlled())
+			if (node->isEditorControlled())
 			{
 				TE_WARN("Attempted to inspect an editor node - this is unsupported as it's extremely unstable.");
 				return;
@@ -68,7 +68,7 @@ namespace Tank::Editor
 			// Now setup a node inspector, for each type which has one.
 			m_nodeInspectors.clear(); // Clear beforehand
 			tryAddSection<Node>();
-			tryAddSection<_Scene>();
+			tryAddSection<Scene>();
 			tryAddSection<Camera>();
 			tryAddSection<Light>();
 			tryAddSection<Audio>();

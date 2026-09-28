@@ -99,7 +99,7 @@ namespace Tank::Editor
 
 					// Load the scene
 					Res scenePath = m_project->getSceneRes();
-					if (_Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), *m_factory))
+					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), *m_factory))
 					{
 						m_projectUI = std::make_unique<Node>("EditorProject");
 						m_projectUI->addChild(std::unique_ptr<ProjectMenuBar_>(new ProjectMenuBar_(*this)));
@@ -109,7 +109,7 @@ namespace Tank::Editor
 						m_projectUI->addChild(std::unique_ptr<Inspector_>(new Inspector_("Inspector")));
 						m_projectUI->preupdate();
 
-						setScene(std::unique_ptr<_Scene>(rawScene));
+						setScene(std::unique_ptr<Scene>(rawScene));
 						m_sceneRoot->preupdate();
 					}
 				}
@@ -126,11 +126,11 @@ namespace Tank::Editor
 	}
 
 	
-	void EditorApp::setScene(std::unique_ptr<_Scene> scene)
+	void EditorApp::setScene(std::unique_ptr<Scene> scene)
 	{
 		assert(m_sceneRoot != nullptr);
 	
-		std::vector<_Scene *> existingScenes = m_sceneRoot->getChildrenOfType<_Scene>();
+		std::vector<Scene *> existingScenes = m_sceneRoot->getChildrenOfType<Scene>();
 		assert(existingScenes.size() <= 1);
 		if (existingScenes.size() > 0) existingScenes[0]->destroy();
 

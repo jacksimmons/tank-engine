@@ -1,6 +1,7 @@
 #include <nodes/Scene.h>
 #include <nodes/interfaces/MeshContainer.h>
 #include <nodes/interfaces/ShaderContainer.h>
+#include <components/Transform.h>
 #include <Texture.h>
 #include <utils/Flip.h>
 #include "Profiler.h"
@@ -24,7 +25,7 @@ namespace Tank
 	static void addNodeMem(std::unordered_map<std::string, int> &memMap, Node *node, const std::string &keyPrefix = "")
 	{
 		memMap[keyPrefix + "Node"] += sizeof(*node);
-		memMap[keyPrefix + "Node"] += sizeof(Transform);
+		memMap[keyPrefix + "Node"] += sizeof(TransformComponent);
 
 		ifSubclass<IMeshContainer>(node, [&node, &memMap, &keyPrefix](IMeshContainer *mesh)
 		{
@@ -68,7 +69,7 @@ namespace Tank::Editor
 			std::unordered_map<std::string, int> memoryMap;
 
 			Node *editor = getParent();
-			_Scene *scene = _Scene::getActiveScene();
+			Scene *scene = Scene::getActiveScene();
 
 			// Count memory usage of editor-only nodes
 			for (Node *child : editor->getChildrenOfType<Node>())
@@ -84,7 +85,7 @@ namespace Tank::Editor
 			{
 				auto tex = texture.get();
 				memoryMap["Texture"] += sizeof(tex);
-				memoryMap["Texture"] += tex->Width() * tex->Height() * tex->NumChannels() * tex->Depth();
+				memoryMap["Texture"] += tex->width() * tex->height() * tex->numChannels() * tex->depth();
 			}
 
 			addNodeMem(memoryMap, scene);

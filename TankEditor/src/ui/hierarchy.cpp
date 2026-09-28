@@ -29,7 +29,7 @@ namespace Tank::Editor
 		: _Window(name, WINDOW_OPTS)
 	{
 		m_showEditorHierarchy = false;
-		m_currentRoot = Tank::_Scene::getActiveScene();
+		m_currentRoot = Tank::Scene::getActiveScene();
 	}
 
 
@@ -46,7 +46,7 @@ namespace Tank::Editor
 		}
 		else
 		{
-			m_currentRoot = Tank::_Scene::getActiveScene();
+			m_currentRoot = Tank::Scene::getActiveScene();
 		}
 
 		int count = 0;
@@ -73,12 +73,12 @@ namespace Tank::Editor
 
 		// Add node name to the tree, clicking on this node will set `nodeExpanded` to true if not a leaf node.
 		ImVec4 nodeNameCol = Colour::NORMAL;
-		if (!node->Enabled()) nodeNameCol = Colour::DISABLED;
-		if (node->IsEditorControlled()) nodeNameCol = Colour::ERR;
+		if (!node->isEnabled()) nodeNameCol = Colour::DISABLED;
+		if (node->isEditorControlled()) nodeNameCol = Colour::ERR;
 
 		drawSiblingSeparator(node);
 		ImGui::PushStyleColor(ImGuiCol_Text, nodeNameCol);
-		bool nodeExpanded = ImGui::TreeNodeEx((node->getName() + "##" + std::to_string(*count)).c_str(), flags);
+		bool nodeExpanded = ImGui::TreeNodeEx((node->name() + "##" + std::to_string(*count)).c_str(), flags);
 		ImGui::PopStyleColor();
 
 		// Set the inspected node if necessary: If clicking the non-arrow part of the tree-node, and once the
@@ -129,7 +129,7 @@ namespace Tank::Editor
 				size_t nodeIndex = node->getSiblingIndex();
 				Node *parent = node->getParent();
 
-				TE_INFO(std::format("Hierarchy: {} moves to sibling index {}, and parent is now", incoming->getName(), nodeIndex, parent->getName()));
+				TE_INFO(std::format("Hierarchy: {} moves to sibling index {}, and parent is now", incoming->name(), nodeIndex, parent->name()));
 				// Try and update the parent. If parent has not changed, setParent will return false.
 				// If setParent returns false, we just need to set the sibling index as parent should already be `parent`.
 				if (!incoming->setParent(parent, nodeIndex))
@@ -157,7 +157,7 @@ namespace Tank::Editor
 		// Setup the Node payload created when dragging `node`.
 		if (ImGui::BeginDragDropSource())
 		{
-			TE_INFO(std::format("{} source", node->getName()).c_str());
+			TE_INFO(std::format("{} source", node->name()).c_str());
 
 			ImGui::SetDragDropPayload("HIERARCHY_NODE", &node, sizeof(Node *));
 			ImGui::EndDragDropSource();
@@ -170,7 +170,7 @@ namespace Tank::Editor
 			if (const ImGuiPayload *p = ImGui::AcceptDragDropPayload("HIERARCHY_NODE"))
 			{
 				Node *incoming = *(Node **)p->Data;
-				TE_INFO(std::format("Hierarchy: {} adopts {}", node->getName(), incoming->getName()));
+				TE_INFO(std::format("Hierarchy: {} adopts {}", node->name(), incoming->name()));
 				// Try and update the parent. If parent has not changed, setParent will return false.
 				// If setParent returns false, `incoming` is already a child of `node`.
 				// In that case, just move `incoming` to the end of `node`'s m_children.
@@ -189,8 +189,8 @@ namespace Tank::Editor
 		// If item (node) is hovered and right-clicked...
 		if (ImGui::BeginPopupContextItem())
 		{
-			_Scene *activeScene = _Scene::getActiveScene();
-			bool isEditorControlled = node->IsEditorControlled();
+			Scene *activeScene = Scene::getActiveScene();
+			bool isEditorControlled = node->isEditorControlled();
 
 			// If the node is not the root, not the current scene, and not an editor node, allow deletion
 			bool deletionAllowed = node != m_currentRoot && node != activeScene && !isEditorControlled;

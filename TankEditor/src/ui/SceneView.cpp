@@ -83,7 +83,7 @@ namespace Tank::Editor
 		{
 			m_isInPlayMode = true;
 			// Enable all scripting (and disable all EditorNodes)
-			_Scene *activeScene = _Scene::getActiveScene();
+			Scene *activeScene = Scene::getActiveScene();
 			activeScene->startup();
 			if (m_parent) m_parent->startup();
 
@@ -93,7 +93,7 @@ namespace Tank::Editor
 				m_isInPlayMode = false;
 
 				// Disable all scripting (and enable all EditorNodes)
-				_Scene *activeScene = _Scene::getActiveScene();
+				Scene *activeScene = Scene::getActiveScene();
 				//activeScene->getActiveCamera()->setFreeLook(true);
 				activeScene->shutdown();
 				if (m_parent) m_parent->shutdown();
@@ -142,7 +142,7 @@ namespace Tank::Editor
 		if (!m_isFocussed) return;
 		if (m_started) return;
 
-		auto cam = _Scene::getActiveScene()->getActiveCamera();
+		auto cam = Scene::getActiveScene()->getActiveCamera();
 		if (cam == nullptr) return;
 		float panSpd = cam->getPanSpeed();
 		float rotSpd = cam->getRotSpeed();

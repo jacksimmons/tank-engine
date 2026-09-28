@@ -6,7 +6,7 @@ class ImGuiIO;
 namespace Tank
 {
 	class Node;
-	class _Scene;
+	class Scene;
 	class Project;
 	class KeyInput;
 }
@@ -34,7 +34,7 @@ namespace Tank::Editor
 
 		const Project &getProject() const { return *m_project; }
 		Node &getProjRoot() const { return *m_sceneRoot; }
-		void setScene(std::unique_ptr<_Scene> scene);
+		void setScene(std::unique_ptr<Scene> scene);
 	protected:
 		virtual void step() override;
 		virtual void uiStep() override;
