@@ -66,35 +66,6 @@ namespace Tank
 	}
 
 
-	KeyInput *Entity::keyInput() const { return m_keyInput.get(); }
-
-
-	void Entity::startup()
-	{
-		if (!m_enabled) return;
-		if (m_started) return;
-		m_started = true;
-
-		for (auto const &child : tree().m_children)
-		{
-			child->startup();
-		}
-	}
-
-
-	void Entity::shutdown()
-	{
-		if (!m_enabled) return;
-		if (!m_started) return;
-		m_started = false;
-
-		for (auto const &child : tree().m_children)
-		{
-			child->shutdown();
-		}
-	}
-
-
 	void Entity::preupdate()
 	{
 		// Disown all children waiting to be disowned
@@ -140,21 +111,6 @@ namespace Tank
 
 		preupdate();
 
-		// Handle scripts
-		if (m_started)
-		{
-			for (const auto &script : m_scripts)
-			{
-				if (script->getEnabled())
-				{
-					script->update();
-				}
-			}
-		}
-
-		// Update KeyInput (decay inputs)
-		if (m_keyInput) m_keyInput->update();
-
 		// Recursively update
 		for (auto it = m_children.begin(); it != m_children.end(); ++it)
 		{
@@ -169,86 +125,32 @@ namespace Tank
 	}
 
 
-	void Node::addScript(std::unique_ptr<Script> script)
-	{
-		if (!m_keyInput)
-		{
-			// Create Editor KeyInput
-			std::vector<int> registeredKeys = {
-				// Function keys
-				GLFW_KEY_F1, GLFW_KEY_F2, GLFW_KEY_F3, GLFW_KEY_F4, GLFW_KEY_F5, GLFW_KEY_F6,
-				// Cam Movement keys
-				GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_Q, GLFW_KEY_E,
-				// Cam Rotation keys
-				GLFW_KEY_I, GLFW_KEY_J, GLFW_KEY_K, GLFW_KEY_L, GLFW_KEY_U, GLFW_KEY_O,
-			};
-			m_keyInput = std::make_unique<KeyInput>(registeredKeys);
-		}
-
-		m_scripts.push_back(std::move(script));
-	}
-
-
-	bool Node::removeScript(const Res &path)
-	{
-		auto it = std::find_if(m_scripts.begin(), m_scripts.end(), [&path](std::unique_ptr<Script> &ownedScript)
-		{
-			if (ownedScript.get()->getPath() == path)
-			{
-				return true;
-			}
-			return false;
-		});
-
-		if (it == m_scripts.end()) return false;
-		m_scripts.erase(it);
-		return true;
-	}
-
-
-	std::vector<Res> Node::getScriptPaths()
-	{
-		std::vector<Res> scriptPaths;
-		for (const auto &script : m_scripts)
-		{
-			scriptPaths.push_back(script->getPath());
-		}
-		return scriptPaths;
-	}
-
-
-	void Node::update()
-	{
-		if (!m_enabled) return;
-		if (m_visible) draw();
-
-		preupdate();
-
-		// Handle scripts
-		if (m_started)
-		{
-			for (const auto &script : m_scripts)
-			{
-				if (script->getEnabled())
-				{
-					script->update();
-				}
-			}
-		}
-
-		// Update KeyInput (decay inputs)
-		if (m_keyInput) m_keyInput->update();
-
-		// Recursively update
-		for (auto it = m_children.begin(); it != m_children.end(); ++it)
-		{
-			(*it)->update();
-		}
-	}
-
-
 	TransformComponent &Entity::transform() const { return getComponent<TransformComponent>(); }
 
 
 	TreeComponent &Entity::tree() const { return getComponent<TreeComponent>(); }
+
+
+	// =======================
+	//		Serialisation
+	// =======================
+	template <>
+	json serialise(Entity *in)
+	{
+		json serialised;
+		serialised["name"] = in->name();
+		serialised["enabled"] = in->isEnabled();
+		serialised["visible"] = in->isVisible();
+		serialised["transform"] = serialise(&in->getComponent<TransformComponent>());
+		return serialised;
+	}
+
+	template <>
+	void deserialise(const json &serialised, Entity *out)
+	{
+		out->setName(serialised["name"]);
+		out->setEnabled(serialised["enabled"]);
+		out->setVisible(serialised["visible"]);
+		deserialise(serialised["transform"], &out->getComponent<TransformComponent>());
+	}
 }

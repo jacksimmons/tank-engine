@@ -231,4 +231,45 @@ namespace Tank
 
 		return treeTraversal;
 	}
+
+
+	// =======================
+	//		Serialisation
+	// =======================
+	template <>
+	json serialise<TreeComponent>(TreeComponent *in)
+	{
+		json serialised;
+
+		std::vector<json> children;
+		for (auto &child : *in)
+		{
+			children.push_back(serialise(child.get()));
+		}
+		serialised["children"] = children;
+
+		return serialised;
+	}
+
+	template <>
+	void deserialise<TreeComponent>(const json &serialised, TreeComponent *out)
+	{
+		Entity *entity = nullptr;
+
+		entity = factory.deserialise(serialised);
+		for (const json &child : serialised["children"].get<std::vector<json>>())
+		{
+			node->addChild(std::unique_ptr<Entity>(deserialise(child, factory)));
+		}
+
+		// Post-tree instantiation (after all children have been deserialised)
+		if (type == "Scene")
+		{
+			Scene *scene = (Scene *)node;
+			scene->preupdate();
+			scene->setActiveCamera((Camera *)scene->childFromTree(serialised["activeCam"]));
+		}
+
+		return node;
+	}
 }

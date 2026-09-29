@@ -1,30 +1,29 @@
 #pragma once
-#include "Node.h"
-#include <AudioEngine.h>
+#include <audio/AudioEngine.h>
+#include <serialisation/Serialisation.h>
 
 
 namespace Tank
 {
-	struct TANK_API AudioComponent
-		virtual json serialise() override;
-		virtual void deserialise(const json &) override;
-
+	struct AudioComponent
+	{
 	private:
-		Resource m_audioPath;
 		ma_sound m_currentSound;
 		bool m_hasSound = false;
-
 	public:
-		Audio(
-			const std::string &name = "Audio",
-			const Resource &audioPath = Resource("audio/test.wav", true)
-		);
-		~Audio();
+		Resource AudioPath { "audio/test.wav", true };
 
-		void setAudioPath(const Resource &path) { m_audioPath = path; };
-		const Resource &getAudioPath() const { return m_audioPath; };
+		AudioComponent() = default;
+		AudioComponent(const Res &audioPath) : AudioPath(audioPath) {};
+		~AudioComponent();
 
 		void updateSound();
 		void play();
 	};
+
+
+	template <>
+	json serialise<AudioComponent>(AudioComponent *);
+	template <>
+	void deserialise<AudioComponent>(const json &, AudioComponent *);
 }

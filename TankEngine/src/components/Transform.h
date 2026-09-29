@@ -1,14 +1,15 @@
 #pragma once
+#include <serialisation/Serialisation.h>
 
 
 namespace Tank
 {
 	/// @brief Stores the Entity model matrix in a friendly format.
-	struct TANK_API TransformComponent
+	struct TransformComponent
 	{
-		glm::quat m_rotation;
-		glm::vec3 m_scale;
-		glm::vec3 m_translation;
+		glm::quat Rotation;
+		glm::vec3 Scale;
+		glm::vec3 Translation;
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent &) = default;
@@ -18,13 +19,11 @@ namespace Tank
 
 		glm::mat4 getLocalModelMatrix() const;
 		glm::mat4 getWorldModelMatrix() const;
-
-		const glm::quat &getLocalRotation() const { return m_rotation; }
-		const glm::vec3 &getLocalScale() const { return m_scale; }
-		const glm::vec3 &getLocalTranslation() const { return m_translation; }
-
-		void setLocalRotation(const glm::quat &rot) { m_rotation = rot; }
-		void setLocalScale(const glm::vec3 &scale) { m_scale = scale; }
-		void setLocalTranslation(const glm::vec3 &trans) { m_translation = trans; }
 	};
+
+
+	template <>
+	json serialise<TransformComponent>(TransformComponent *);
+	template <>
+	void deserialise<TransformComponent>(const json &, TransformComponent *);
 }

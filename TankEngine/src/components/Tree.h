@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/gtx/quaternion.hpp>
+#include <serialisation/Serialisation.h>
 
 
 namespace Tank
@@ -12,6 +13,7 @@ namespace Tank
 	struct TANK_API TreeComponent
 	{
 		friend class Entity;
+		friend class GameEntity;
 	private:
 		Entity *m_entity;
 		Entity *m_parent;
@@ -110,4 +112,10 @@ namespace Tank
 		/// </summary>
 		std::vector<int> treeFromChild(Entity *child);
 	};
+
+
+	template <>
+	json serialise<TreeComponent>(TreeComponent *);
+	template <>
+	void deserialise<TreeComponent>(const json &, TreeComponent *);
 }

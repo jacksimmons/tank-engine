@@ -4,62 +4,51 @@
 
 namespace Tank
 {
-	//
-	// =-=-=-=-= Serialisation =-=-=-=-=
-	//
-	void Audio::deserialise(const json &serialised)
-	{
-		m_audioPath = Resource::decode(serialised["audioPath"]);
-
-		Node::deserialise(serialised);
-	}
-
-	json Audio::serialise()
-	{
-		json serialised = Node::serialise();
-		serialised["audioPath"] = Resource::encode(m_audioPath);
-
-		return serialised;
-	}
-
-
-	//
-	// =-=-=-=-= Instance =-=-=-=-=
-	//
-	Audio::Audio(const std::string &name, const Resource &audioPath)
-		: Node(name)
-	{
-		m_type = "Audio";
-		m_audioPath = audioPath;
-	}
-
-
-	Audio::~Audio()
+	AudioComponent::~AudioComponent()
 	{
 		if (m_hasSound) ma_sound_uninit(&m_currentSound);
 		m_hasSound = false;
 	}
 
 
-	void Audio::updateSound()
+	void AudioComponent::updateSound()
 	{
 		if (m_hasSound) ma_sound_uninit(&m_currentSound);
 
-		ma_result result = ma_sound_init_from_file(AudioEngine::maEngine(), m_audioPath.resolvePathStr().c_str(), 0, NULL, NULL, &m_currentSound);
-		if (!AudioEngine::handleResult(result, std::format("Failed to update sound with result {}. File: {}", (int)result, m_audioPath.resolvePathStr()))) return;
+		ma_result result = ma_sound_init_from_file(AudioEngine::maEngine(), AudioPath.resolvePathStr().c_str(), 0, NULL, NULL, &m_currentSound);
+		if (!AudioEngine::handleResult(result, std::format("Failed to update sound with result {}. File: {}", (int)result, AudioPath.resolvePathStr()))) return;
 
 		m_hasSound = true;
-		TE_CORE_INFO("Successfully updated sound to " + m_audioPath.resolvePathStr());
+		TE_CORE_INFO("Successfully updated sound to " + AudioPath.resolvePathStr());
 	}
 
 
-	void Audio::play()
+	void AudioComponent::play()
 	{
 		if (!m_hasSound) updateSound();
 
 		ma_result result = ma_sound_start(&m_currentSound);
-		if (!AudioEngine::handleResult(result, std::format("Failed to play sound with result {}. File: {}", (int)result, m_audioPath.resolvePathStr()))) return;
+		if (!AudioEngine::handleResult(result, std::format("Failed to play sound with result {}. File: {}", (int)result, AudioPath.resolvePathStr()))) return;
 
-		TE_CORE_INFO("Successfully played sound " + m_audioPath.resolvePathStr());
+		TE_CORE_INFO("Successfully played sound " + AudioPath.resolvePathStr());
+	}
+
+
+	// =======================
+	//		Serialisation
+	// =======================
+	template <>
+	json serialise(AudioComponent *in)
+	{
+		json serialised;
+		serialised["audioPath"] = Res::encode(in->AudioPath);
+
+		return serialised;
+	}
+
+	template <>
+	void deserialise(const json &serialised, AudioComponent *out)
+	{
+		out->AudioPath = Res::decode(serialised["audioPath"]);
 	}
 }

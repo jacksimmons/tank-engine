@@ -18,7 +18,7 @@
 #include <utility>
 
 // Dependencies
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 using json = nlohmann::json;
 namespace fs = std::filesystem;
 #include "glm/glm.hpp"

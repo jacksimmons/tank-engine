@@ -8,6 +8,7 @@ namespace Tank
 {
 	class TransformComponent;
 	class TreeComponent;
+	class KeyInput;
 
 
 	/// @brief The most basic game object which is registered by the ECS.
@@ -34,12 +35,6 @@ namespace Tank
 		/// unable to edit this node.
 		/// </summary>
 		bool m_isEditorControlled = false;
-
-		/// @brief Whether or not user scripts have started running.
-		bool m_started = false;
-
-		std::unique_ptr<KeyInput> m_keyInput;
-
 	public:
 		Entity() = default;
 		Entity(const entt::entity handle, ECS *ecs, const std::string &name = "");
@@ -57,8 +52,6 @@ namespace Tank
 
 		bool isEditorControlled() const noexcept { return m_isEditorControlled; }
 		void setEditorControlled(bool editorControlled) noexcept { m_isEditorControlled = editorControlled; }
-
-		KeyInput *keyInput() const;
 
 		template <typename T>
 		bool hasComponent() const
@@ -96,14 +89,16 @@ namespace Tank
 		TreeComponent &tree() const;
 
 
-		virtual void startup();
+		virtual void startup() {};
+		virtual void shutdown() {};
 		virtual void preupdate();
 		virtual void update();
-		virtual void shutdown();
 		virtual void destroy();
-
-
-		virtual json serialise();
-		virtual void deserialise(const json &serialised);
 	};
+
+
+	template <>
+	json serialise<Entity>(Entity *);
+	template <>
+	void deserialise<Entity>(const json &, Entity *);
 }
