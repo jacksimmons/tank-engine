@@ -5,9 +5,7 @@
 
 namespace Tank
 {
-	class TANK_API Audio : public Node
-	{
-	public:
+	struct TANK_API AudioComponent
 		virtual json serialise() override;
 		virtual void deserialise(const json &) override;
 

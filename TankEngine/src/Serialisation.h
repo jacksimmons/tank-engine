@@ -7,6 +7,12 @@
 
 namespace Tank
 {
+	template <typename T>
+	using Serialiser = ;
+
+	template <typename T>
+	using Deserialiser = T* (*)(const json &);
+
 	namespace Reflect { class NodeFactory; }
 	namespace Serialisation
 	{

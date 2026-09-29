@@ -1,5 +1,4 @@
 #pragma once
-#include <glm/gtx/quaternion.hpp>
 
 
 namespace Tank
@@ -27,8 +26,5 @@ namespace Tank
 		void setLocalRotation(const glm::quat &rot) { m_rotation = rot; }
 		void setLocalScale(const glm::vec3 &scale) { m_scale = scale; }
 		void setLocalTranslation(const glm::vec3 &trans) { m_translation = trans; }
-
-		static json serialise(TransformComponent *deserialised);
-		static void deserialise(const json &serialised, TransformComponent *transform);
 	};
 }
