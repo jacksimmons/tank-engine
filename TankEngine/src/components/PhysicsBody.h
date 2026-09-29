@@ -1,7 +1,4 @@
 #pragma once
-#include "Transformation.h"
-#include "nodes/Node.h"
-#include "interfaces/Mass.h"
 
 
 namespace Tank
@@ -10,20 +7,22 @@ namespace Tank
 	/// Base class for a Node which interacts with the physics engine.
 	/// Has a mass, and exerts gravity on all bodies in the scene.
 	/// </summary>
-	class TANK_API PhysicsBody : public Node, public IMass
+	struct PhysicsBodyComponent
 	{
 	private:
-		static std::vector<PhysicsBody*> s_instances;
+		static std::vector<PhysicsBodyComponent*> s_instances;
 		std::vector<glm::vec3> m_velocities;
+		float m_mass = 1;
 
 		void handleInteraction(size_t bodyIndex, float dt);
 		float getGravityScalar(float distance, float otherMass) const;
 	public:
-		PhysicsBody(const std::string &name = "PhysicsBody", float mass = 1);
-		virtual ~PhysicsBody();
+		PhysicsBodyComponent(float mass = 1);
+		virtual ~PhysicsBodyComponent();
 
 		glm::vec3 getCentre() const noexcept;
 
 		void update() override;
 	};
+	using PhysicsBody = PhysicsBodyComponent;
 }

@@ -3,14 +3,14 @@
 
 #include "Player.h"
 #include "SceneSerialisation.h"
-#include "nodes/Node.h"
-#include "nodes/Scene.h"
-#include "nodes/Camera.h"
-#include "nodes/CubeMap.h"
-#include "nodes/Model.h"
+#include "scene/Entity.h"
+#include "components/Scene.h"
+#include "components/Camera.h"
+#include "components/CubeMap.h"
+#include "components/Model.h"
 #include "nodes/physics/PhysicsBody.h"
-#include "nodes/Sprite.h"
-#include "nodes/Light.h"
+#include "components/Sprite.h"
+#include "components/Light.h"
 
 
 namespace Tank

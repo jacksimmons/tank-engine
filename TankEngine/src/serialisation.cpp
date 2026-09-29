@@ -2,12 +2,12 @@
 #include "Serialisation.h"
 #include "fs/File.h"
 #include "Log.h"
-#include "nodes/Camera.h"
-#include "nodes/CubeMap.h"
-#include "nodes/Light.h"
-#include "nodes/Model.h"
-#include "nodes/Scene.h"
-#include "nodes/Sprite.h"
+#include "components/Camera.h"
+#include "components/CubeMap.h"
+#include "components/Light.h"
+#include "components/Model.h"
+#include "components/Scene.h"
+#include "components/Sprite.h"
 #include "reflection/NodeFactory.h"
 
 
@@ -54,7 +54,7 @@ namespace Tank
 			{
 				Scene *scene = (Scene*)node;
 				scene->preupdate();
-				scene->setActiveCamera((Camera*)scene->childFromTree(serialised["activeCam"]));
+				scene->setActiveCamera((SceneCamera*)scene->childFromTree(serialised["activeCam"]));
 			}
 
 			return node;

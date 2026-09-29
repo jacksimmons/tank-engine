@@ -10,9 +10,9 @@
 // The types to-be-defined as usertypes
 #include <glm/glm.hpp>
 #include <KeyInput.h>
-#include <nodes/Node.h>
-#include <nodes/Camera.h>
-#include <nodes/Scene.h>
+#include <scene/Entity.h>
+#include <components/Camera.h>
+#include <components/Scene.h>
 #include <components/Transform.h>
 #include <static/Time.h>
 
@@ -214,7 +214,7 @@ namespace Tank
 	}
 
 	template<>
-	void UserTypes::generate<Camera>(sol::state &lua)
+	void UserTypes::generate<SceneCamera>(sol::state &lua)
 	{
 		sol::usertype<Camera> ut = lua.new_usertype<Camera>(
 			SOL_CLASS(Camera),
@@ -266,7 +266,7 @@ namespace Tank
 		generate<KeyInput>(lua);
 		
 		generate<Node>(lua);
-		generate<Camera>(lua);
+		generate<SceneCamera>(lua);
 		generate<Scene>(lua);
 		generate<Transform>(lua);
 

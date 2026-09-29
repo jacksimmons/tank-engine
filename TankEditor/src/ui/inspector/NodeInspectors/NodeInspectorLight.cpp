@@ -1,7 +1,7 @@
 #include <imgui.h>
 #include <Colours.h>
 #include <ui/inspector/schema/SchemaGlm.h>
-#include <nodes/Light.h>
+#include <components/Light.h>
 #include "NodeInspector.h"
 
 

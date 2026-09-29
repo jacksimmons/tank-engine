@@ -1,7 +1,7 @@
 #pragma once
 #include <entt/entt.hpp>
 #include <Log.h>
-#include "ECS.h"
+#include "Scene.h"
 
 
 namespace Tank
@@ -16,7 +16,7 @@ namespace Tank
 	{
 	private:
 		entt::entity m_handle = entt::null;
-		ECS *m_ecs = nullptr;
+		Scene *m_ecs = nullptr;
 
 		std::string m_name;
 
@@ -37,7 +37,7 @@ namespace Tank
 		bool m_isEditorControlled = false;
 	public:
 		Entity() = default;
-		Entity(const entt::entity handle, ECS *ecs, const std::string &name = "");
+		Entity(const entt::entity handle, Scene *ecs, const std::string &name = "");
 		Entity(const Entity &other) = default;
 		virtual ~Entity() = default;
 

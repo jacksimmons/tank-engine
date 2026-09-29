@@ -38,7 +38,7 @@ namespace Tank
 	//		Serialisation
 	// =======================
 	template <>
-	json serialise(AudioComponent *in)
+	json serialise<AudioComponent>(AudioComponent *in)
 	{
 		json serialised;
 		serialised["audioPath"] = Res::encode(in->AudioPath);
@@ -47,7 +47,7 @@ namespace Tank
 	}
 
 	template <>
-	void deserialise(const json &serialised, AudioComponent *out)
+	void deserialise<AudioComponent>(const json &serialised, AudioComponent *out)
 	{
 		out->AudioPath = Res::decode(serialised["audioPath"]);
 	}

@@ -5,8 +5,8 @@
 #include <events/EventManager.h>
 #include "KeyInput.h"
 #include "static/Time.h"
-#include "nodes/Scene.h"
-#include "nodes/Camera.h"
+#include "components/Scene.h"
+#include "components/Camera.h"
 #include "ui/SceneView.h"
 #include <Colours.h>
 

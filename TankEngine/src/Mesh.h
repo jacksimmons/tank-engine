@@ -2,7 +2,6 @@
 #include "shapes/Vertex.h"
 
 
-
 namespace Tank
 {
 	class Texture;
@@ -10,7 +9,7 @@ namespace Tank
 	class Shader;
 	class TANK_API Mesh
 	{
-		friend class IMeshContainer;
+		friend class Renderer2D;
 	private:
 		unsigned int m_vao, m_vbo, m_ebo;
 		std::vector<Vertex> m_vertices;
@@ -32,8 +31,5 @@ namespace Tank
 
 		const std::vector<Vertex> &getVertices() const { return m_vertices; }
 		const std::vector<unsigned> &getIndices() const { return m_indices; }
-
-
-		void draw(const Shader &shader) const;
 	};
 }

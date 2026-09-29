@@ -3,12 +3,12 @@
 #include "SceneSerialisation.h"
 #include "fs/File.h"
 #include "Log.h"
-#include "nodes/Node.h"
-#include "nodes/Camera.h"
-#include "nodes/CubeMap.h"
-#include "nodes/Light.h"
-#include "nodes/Model.h"
-#include "nodes/Scene.h"
+#include "scene/Entity.h"
+#include "components/Camera.h"
+#include "components/CubeMap.h"
+#include "components/Light.h"
+#include "components/Model.h"
+#include "components/Scene.h"
 #include "reflection/NodeFactory.h"
 
 

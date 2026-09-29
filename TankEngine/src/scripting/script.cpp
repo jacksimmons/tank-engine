@@ -1,8 +1,8 @@
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
-#include <nodes/Node.h>
-#include <nodes/Scene.h>
-#include <nodes/Camera.h>
+#include <scene/Entity.h>
+#include <components/Scene.h>
+#include <components/Camera.h>
 #include <Log.h>
 #include "Script.h"
 #include "ScriptManager.h"

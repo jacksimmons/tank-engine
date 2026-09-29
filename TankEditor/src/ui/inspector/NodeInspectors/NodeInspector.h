@@ -1,10 +1,10 @@
 #pragma once
 #include <events/Event.h>
 #include <events/EventManager.h>
-#include <nodes/Node.h>
-#include <nodes/Model.h>
-#include <nodes/Sprite.h>
-#include <nodes/Audio.h>
+#include <scene/Entity.h>
+#include <components/Model.h>
+#include <components/Sprite.h>
+#include <components/Audio.h>
 #include <ui/FileDialog.h>
 
 

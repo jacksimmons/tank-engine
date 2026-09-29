@@ -1,8 +1,8 @@
 #include <glad/glad.h>
 #include "imgui.h"
 #include <fs/File.h>
-#include <nodes/Node.h>
-#include <nodes/Scene.h>
+#include <scene/Entity.h>
+#include <components/Scene.h>
 #include <ui/FileDialog.h>
 #include <ui/Hierarchy.h>
 #include <ui/inspector/Inspector.h>

@@ -1,9 +1,9 @@
 #include <glad/glad.h>
+#include <scene/Scene.h>
+#include <components/Camera.h>
+#include <Shader.h>
+#include <Mesh.h>
 #include "Outlined.h"
-#include "nodes/Scene.h"
-#include "nodes/Camera.h"
-#include "Shader.h"
-#include "Mesh.h"
 
 
 namespace Tank
@@ -69,12 +69,12 @@ namespace Tank
 		m_outlineShader->use(); // use
 
 		// Setup uniforms
-		Camera *cam = Scene::getActiveScene()->getActiveCamera();
-		const glm::vec3 scale = transform.getLocalScale();
-		const glm::vec3 trans = transform.getLocalTranslation();
-		transform.setLocalScale(scale * 1.025f);
-		m_outlineShader->setMat4("PVM", cam->getProj() * cam->getView() * transform.getWorldModelMatrix());
-		transform.setLocalScale(scale);
+		CameraComponent *cam = Scene::getActiveScene()->getActiveCamera();
+		const glm::vec3 scale = transform.Scale;
+		const glm::vec3 trans = transform.Translation;
+		transform.Scale = scale * 1.025f;
+		m_outlineShader->setMat4("PVM", cam->Projection * cam->View * transform.getWorldModelMatrix());
+		transform.Scale = scale;
 
 		drawOutlineMeshes(m_outlineShader.get());
 

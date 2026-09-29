@@ -1,9 +1,9 @@
 #include <imgui.h>
 #include <Widget.h>
 #include <Colours.h>
-#include <nodes/Node.h>
-#include <nodes/Camera.h>
-#include <nodes/Scene.h>
+#include <scene/Entity.h>
+#include <components/Camera.h>
+#include <components/Scene.h>
 #include <scripting/Script.h>
 #include <ui/inspector/schema/SchemaPrimitive.h>
 #include <ui/inspector/schema/SchemaGlm.h>

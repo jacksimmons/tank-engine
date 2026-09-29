@@ -21,7 +21,7 @@ namespace Tank
 	//		Serialisation
 	// =======================
 	template <>
-	json serialise(TransformComponent *deserialised)
+	json serialise<TransformComponent>(TransformComponent *deserialised)
 	{
 		json serialised = {
 			{ "rotation", quat::serialise(deserialised->Rotation) },
@@ -33,7 +33,7 @@ namespace Tank
 	}
 
 	template <>
-	void deserialise(const json &serialised, TransformComponent *out)
+	void deserialise<TransformComponent>(const json &serialised, TransformComponent *out)
 	{
 		out->Rotation = quat::deserialise(serialised["rotation"]);
 		out->Scale = vec3::deserialise(serialised["scale"]);

@@ -1,4 +1,4 @@
-#include <nodes/Scene.h>
+#include <components/Scene.h>
 #include <nodes/interfaces/MeshContainer.h>
 #include <nodes/interfaces/ShaderContainer.h>
 #include <components/Transform.h>

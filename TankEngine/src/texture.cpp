@@ -3,7 +3,7 @@
 #include "stb_image.h"
 #include <Log.h>
 #include <Texture.h>
-#include <nodes/Model.h>
+#include <components/Model.h>
 
 
 namespace Tank

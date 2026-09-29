@@ -1,5 +1,4 @@
 #include "Entity.h"
-#include "ECS.h"
 #include <components/Transform.h>
 #include <components/Tree.h>
 #include <events/EventManager.h>
@@ -8,7 +7,7 @@
 
 namespace Tank
 {
-	Entity::Entity(const entt::entity handle, ECS *ecs, const std::string &name)
+	Entity::Entity(const entt::entity handle, Scene *ecs, const std::string &name)
 		: m_handle(handle), m_ecs(ecs), m_name(name)
 	{
 	}

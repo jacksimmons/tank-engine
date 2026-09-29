@@ -1,25 +1,24 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/epsilon.hpp>
-#include "Log.h"
+#include <Log.h>
+#include <static/Math.h>
+#include <static/Constant.h>
+#include <static/Time.h>
 #include "PhysicsBody.h"
-#include "static/Math.h"
-#include "static/Constant.h"
-#include "static/Time.h"
 
 
 namespace Tank
 {
-	std::vector<PhysicsBody*> PhysicsBody::s_instances;
+	std::vector<PhysicsBodyComponent*> PhysicsBodyComponent::s_instances;
 
 
-	PhysicsBody::PhysicsBody(const std::string &name, float mass)
-		: Node(name), IMass(mass)
+	PhysicsBodyComponent::PhysicsBodyComponent(float mass = 1) : m_mass(mass)
 	{
 		s_instances.push_back(this);
 	}
 
 
-	PhysicsBody::~PhysicsBody()
+	PhysicsBodyComponent::~PhysicsBodyComponent()
 	{
 		auto it = std::find(s_instances.begin(), s_instances.end(), this);
 		if (it != s_instances.end())
@@ -29,15 +28,15 @@ namespace Tank
 	}
 
 
-	glm::vec3 PhysicsBody::getCentre() const noexcept
+	glm::vec3 PhysicsBodyComponent::getCentre() const noexcept
 	{
-		return mat4::getTranslation(getComponent<TransformComponent>().getWorldModelMatrix());
+		return glm::vec3(0.0f);
 	}
 
 
-	void PhysicsBody::update()
+	void PhysicsBodyComponent::update()
 	{
-		if (!m_started) return Node::update();
+		if (!m_started) return;
 
 		// Ensure velocities list is correct size before starting
 		while (s_instances.size() > m_velocities.size()) m_velocities.push_back({});
@@ -46,7 +45,7 @@ namespace Tank
 		// Handle physics for all other physics bodies
 		for (size_t i = 0; i < s_instances.size(); i++)
 		{
-			PhysicsBody *body = s_instances[i];
+			PhysicsBodyComponent *body = s_instances[i];
 			if (body == this) continue;
 
 			handleInteraction(i, dt);
@@ -58,16 +57,14 @@ namespace Tank
 			totalVelocity += velocity;
 		}
 
-		TransformComponent transform = getComponent<TransformComponent>();
-		transform.setLocalTranslation(transform.getLocalTranslation() + (totalVelocity * dt));
+		(void)totalVelocity;
 
-		Node::update();
 	}
 
 
-	void PhysicsBody::handleInteraction(size_t bodyIndex, float dt)
+	void PhysicsBodyComponent::handleInteraction(size_t bodyIndex, float dt)
 	{
-		PhysicsBody *other = s_instances[bodyIndex];
+		PhysicsBodyComponent *other = s_instances[bodyIndex];
 		glm::vec3 centre = getCentre();
 		glm::vec3 otherCentre = other->getCentre();
 
@@ -79,11 +76,11 @@ namespace Tank
 		if (glm::all(glm::epsilonEqual(sep, {}, Physics::EPSILON)))
 			force = {};
 		else
-			force = glm::normalize(sep) * getGravityScalar(glm::length(sep), other->getMass());
+			force = glm::normalize(sep) * getGravityScalar(glm::length(sep), other->m_mass);
 
 		// Apply F = dp / dt
 		glm::vec3 changeInMomentum = force * dt;
-		m_velocities[bodyIndex] += (changeInMomentum / getMass());
+		m_velocities[bodyIndex] += (changeInMomentum / m_mass);
 
 		// Snap to other centre, if we would pass over it this frame
 		if (glm::length(sep) < (glm::length(m_velocities[bodyIndex]) * dt))
@@ -92,16 +89,14 @@ namespace Tank
 
 			m_velocities[bodyIndex] = {};
 
-			TransformComponent transform = getComponent<TransformComponent>();
-			transform.setLocalTranslation(otherCentre);
 		}
 	}
 
 
-	float PhysicsBody::getGravityScalar(float distance, float otherMass) const
+	float PhysicsBodyComponent::getGravityScalar(float distance, float otherMass) const
 	{
 		// F = Gm1m2/(r*r)
-		float f = (Physics::G * getMass() * otherMass) / (distance * distance);
+		float f = (Physics::G * m_mass * otherMass) / (distance * distance);
 		return f;
 	}
 }

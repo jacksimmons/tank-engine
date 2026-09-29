@@ -1,12 +1,12 @@
 #pragma once
-#include <nodes/Node.h>
+#include <serialisation/Serialisation.h>
 
 
 namespace Tank
 {
-	class Model;
+	struct ModelComponent;
 	class Shader;
-	class Scene;
+	struct Scene;
 	struct ShaderSources;
 	class ShaderSource;
 
@@ -17,12 +17,9 @@ namespace Tank
 		Directional
 	};
 
-	class TANK_API Light : public Node
-	{
-	public:
-		virtual json serialise() override;
-		virtual void deserialise(const json &ser) override;
 
+	struct LightComponent
+	{
 	protected:
 		// The scene this light applies to shaders within. Responsibility lies in the Light class
 		// to call m_scene->updateShaders() after changes to the light occur.
@@ -32,7 +29,7 @@ namespace Tank
 		glm::vec3 m_specular;
 		// Name of the array in GLSL containing all light structs.
 		std::string m_lightArrayName;
-		Light(
+		LightComponent(
 			const std::string &name = "Light",
 			glm::vec3 amb = { 1,1,1 },
 			glm::vec3 diff = { 1,1,1 },
@@ -40,7 +37,7 @@ namespace Tank
 		);
 	public:
 		// Virtual destructor so derived class destructors are always used.
-		virtual ~Light();
+		virtual ~LightComponent();
 
 		virtual void updateShader(const Shader &);
 		std::string getLightStruct();
@@ -58,22 +55,18 @@ namespace Tank
 	};
 
 
-	class TANK_API DirLight : public Light
+	struct TANK_API DirLightComponent : LightComponent
 	{
-	public:
-		virtual json serialise() override;
-		virtual void deserialise(const json &ser) override;
-
 	private:
 		glm::vec3 m_direction;
 	public:
-		DirLight(const std::string &name = "DirLight",
+		DirLightComponent(const std::string &name = "DirLight",
 			glm::vec3 dir = { 0.0f, -1.0f, 0.0f },
 			glm::vec3 amb = { 0.02f, 0.02f, 0.02f },
 			glm::vec3 diff = { 0.2f, 0.2f, 0.2f },
 			glm::vec3 spec = { 0.1f, 0.1f, 0.1f }
 		);
-		~DirLight();
+		~DirLightComponent();
 
 		void updateShader(const Shader &) override;
 
@@ -82,15 +75,30 @@ namespace Tank
 	};
 
 
-	class TANK_API PointLight : public Light
+	struct TANK_API PointLightComponent : LightComponent
 	{
 	public:
-		PointLight(const std::string &name = "PointLight",
+		PointLightComponent(const std::string &name = "PointLight",
 			glm::vec3 amb = { 0.1f, 0.1f, 0.1f },
 			glm::vec3 diff = { 0.1f, 0.1f, 0.1f },
 			glm::vec3 spec = { 0.1f, 0.1f, 0.1f });
-		~PointLight();
+		~PointLightComponent();
 
 		void updateShader(const Shader &) override;
 	};
+
+	template <>
+	json serialise<LightComponent>(LightComponent *);
+	template <>
+	void deserialise<LightComponent>(const json &, LightComponent *);
+
+	template <>
+	json serialise<DirLightComponent>(DirLightComponent *);
+	template <>
+	void deserialise<DirLightComponent>(const json &, DirLightComponent *);
+
+	//template <>
+	//json serialise<PointLightComponent>(PointLightComponent *);
+	//template <>
+	//void deserialise<PointLightComponent>(const json &, PointLightComponent *);
 }

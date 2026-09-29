@@ -1,7 +1,7 @@
 #include <imgui.h>
 #include <Widget.h>
 #include <Colours.h>
-#include <nodes/Audio.h>
+#include <components/Audio.h>
 #include "NodeInspector.h"
 #include "../Inspector.h"
 

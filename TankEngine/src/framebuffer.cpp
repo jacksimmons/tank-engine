@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include "Framebuffer.h"
-#include "nodes/Scene.h"
+#include "components/Scene.h"
 
 
 namespace Tank

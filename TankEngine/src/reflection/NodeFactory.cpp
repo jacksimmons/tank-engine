@@ -1,5 +1,5 @@
 #include <typeinfo>
-#include <nodes/Node.h>
+#include <scene/Entity.h>
 #include "NodeFactory.h"
 
 

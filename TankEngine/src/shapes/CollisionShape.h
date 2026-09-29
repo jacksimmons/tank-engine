@@ -3,7 +3,7 @@
 
 namespace Tank
 {
-	class TANK_API CollisionShape
+	class CollisionShape
 	{
 	public:
 		CollisionShape() = default;

@@ -1,4 +1,4 @@
-#include <nodes/Scene.h>
+#include <components/Scene.h>
 #include "Window.h"
 #include "Log.h"
 

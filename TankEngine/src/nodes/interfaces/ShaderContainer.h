@@ -14,7 +14,7 @@ namespace Tank
 	{
 	private:
 		std::unique_ptr<Shader> m_shader;
-	protected:
+	public:
 		void initShaderContainer(ShaderSources sources);
 	public:
 		IShaderContainer();

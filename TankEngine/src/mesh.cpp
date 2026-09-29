@@ -1,4 +1,3 @@
-#include <glad/glad.h>
 #include "Mesh.h"
 #include "Texture.h"
 #include "Shader.h"
@@ -54,32 +53,6 @@ namespace Tank
 	// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 	void Mesh::draw(const Shader &shader) const
 	{
-		unsigned int diffuseIdx = 0;
-		unsigned int specularIdx = 0;
 
-		shader.use();
-		
-		for (unsigned int i = 0; i < m_textures.size(); i++)
-		{
-			glActiveTexture(GL_TEXTURE0 + i);
-
-			std::string name = m_textures[i]->getTexType();
-			std::string number;
-
-			if (name == "diffuse")
-				number = std::to_string(diffuseIdx++);
-			else if (name == "specular")
-				number = std::to_string(specularIdx++);
-
-			shader.setInt("material." + name + "[" + number + "]", i);
-
-			glBindTexture(GL_TEXTURE_2D, m_textures[i]->getTexID());
-		}
-
-		// Draw mesh vertices
-		glBindVertexArray(m_vao);
-		glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-		shader.unuse();
 	}
 }

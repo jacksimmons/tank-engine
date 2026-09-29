@@ -2,7 +2,7 @@
 #include <Log.h>
 #include <fs/File.h>
 #include <StringHelper.h>
-#include <nodes/Scene.h>
+#include <components/Scene.h>
 #include <project/Project.h>
 #include <SceneSerialisation.h>
 #include "Export.h"

@@ -2,8 +2,8 @@
 #include <glm/gtx/string_cast.hpp>
 #include <Widget.h>
 #include <Colours.h>
-#include <nodes/Scene.h>
-#include <nodes/Camera.h>
+#include <components/Scene.h>
+#include <components/Camera.h>
 #include "NodeInspector.h"
 
 

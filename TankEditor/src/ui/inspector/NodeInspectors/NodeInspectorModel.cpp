@@ -5,7 +5,7 @@
 #include <events/Event.h>
 #include <events/EventManager.h>
 #include <imgui.h>
-#include <nodes/Model.h>
+#include <components/Model.h>
 #include "ui/FileDialog.h"
 #include <Widget.h>
 #include <glad/glad.h>

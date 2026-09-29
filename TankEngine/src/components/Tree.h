@@ -10,7 +10,7 @@ namespace Tank
 
 
 	/// @brief Positions an Entity in the scene tree.
-	struct TANK_API TreeComponent
+	struct TreeComponent
 	{
 		friend class Entity;
 		friend class GameEntity;

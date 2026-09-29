@@ -1,32 +1,27 @@
 #pragma once
-#include <nodes/Node.h>
 #include <nodes/interfaces/ShaderContainer.h>
+#include <serialisation/Serialisation.h>
 
 
 namespace Tank
 {
-	class Node;
 	class Texture;
 	class Shader;
 	struct ShaderSource;
 	struct ShaderSources;
 	namespace Reflect { class NodeFactory; }
 
-	class TANK_API CubeMap : public Node, public IShaderContainer
-	{
-		// Serialisation
-	public:
-		virtual json serialise() override;
-		virtual void deserialise(const json &serialised) override;
 
-	protected:
+	struct CubeMapComponent : public IShaderContainer
+	{
+	public:
 		unsigned m_vao;
 		unsigned m_vbo;
 		std::shared_ptr<Texture> m_texture;
 		std::array<Resource, 6> m_texturePaths;
 	public:
-		CubeMap(
-			const std::string &name = "CubeMap",
+		CubeMapComponent() = default;
+		CubeMapComponent(
 			const std::array<Resource, 6> &textureNames =
 			{
 				Res("textures/skybox/right.jpg", true),
@@ -39,7 +34,7 @@ namespace Tank
 		);
 
 		void setTexPaths(const std::array<Resource, 6> &texPaths);
-		virtual void draw() override;
+		void draw();
 
 	private:
 		constexpr static float s_vertices[] = {
@@ -87,4 +82,10 @@ namespace Tank
 			 1.0f, -1.0f,  1.0f
 		};
 	};
+
+
+	template <>
+	json serialise<CubeMapComponent>(CubeMapComponent *);
+	template <>
+	void deserialise<CubeMapComponent>(const json &, CubeMapComponent *);
 }

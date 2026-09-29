@@ -1,6 +1,6 @@
 #pragma once
-#include <nodes/Node.h>
 #include <nodes/interfaces/MeshContainer.h>
+#include <serialisation/Serialisation.h>
 
 
 struct aiNode; struct aiScene; struct aiMesh;
@@ -12,24 +12,19 @@ namespace Tank
 	struct ShaderSources;
 	namespace Reflect { class NodeFactory; }
 
+
 	/// <summary>
 	/// A class which can load 3D models using Assimp.
 	/// </summary>
-	class TANK_API Model : public Node, public IMeshContainer
+	struct ModelComponent : public IMeshContainer
 	{
-	public:
-		virtual json serialise() override;
-		void deserialise(const json &serialised);
-
 	private:
 		Resource m_modelPath;
 		unsigned m_cullFace;
 	public:
-		Model(
-			const std::string &name = "Model",
-			const Resource &modelPath = Res("models/backpack/backpack.obj", true)
-		);
-		virtual ~Model() = default;
+		ModelComponent() = default;
+		ModelComponent(const Resource &modelPath = Res("models/backpack/backpack.obj", true));
+		virtual ~ModelComponent() = default;
 
 		void setModelPath(const Resource &resource);
 		const Resource &getModelPath() const { return m_modelPath; }
@@ -37,8 +32,8 @@ namespace Tank
 		unsigned getCullFace() const { return m_cullFace; }
 		void setCullFace(unsigned face) { m_cullFace = face; }
 
-		virtual void draw() override;
-		virtual void update() override;
+		void draw();
+		void update();
 
 		void process();
 		void processNode(aiNode *node, const aiScene *scene);
@@ -47,4 +42,10 @@ namespace Tank
 		
 		std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, int assimpTextureType, std::string typeName);
 	};
+
+	template <>
+	json serialise<ModelComponent>(ModelComponent *);
+	template <>
+	void deserialise<ModelComponent>(const json &, ModelComponent *);
+	using Model = ModelComponent;
 }

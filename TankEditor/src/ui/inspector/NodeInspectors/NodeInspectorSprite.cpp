@@ -1,7 +1,7 @@
 #include <imgui.h>
 #include <Colours.h>
 #include <Widget.h>
-#include <nodes/Sprite.h>
+#include <components/Sprite.h>
 #include <events/EventManager.h>
 #include "../Inspector.h"
 #include "ui/FileDialog.h"

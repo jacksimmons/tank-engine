@@ -1,5 +1,5 @@
 #include <Log.h>
-#include <ecs/Entity.h>
+#include <scene/Entity.h>
 #include <static/GlmSerialise.h>
 #include "Tree.h"
 

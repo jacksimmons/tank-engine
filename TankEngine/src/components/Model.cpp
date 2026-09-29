@@ -1,60 +1,38 @@
 #include <format>
 #include <glad/glad.h>
 #include <glm/gtc/matrix_inverse.hpp>
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-#include "assimp/material.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/material.h>
+#include <scene/Scene.h>
 #include <Mesh.h>
-#include "Log.h"
-#include "Texture.h"
-#include "Shader.h"
-#include "nodes/Scene.h"
-#include "nodes/Model.h"
-#include "nodes/Camera.h"
-#include "nodes/Light.h"
+#include <Log.h>
+#include <Texture.h>
+#include <Shader.h>
+#include "Model.h"
+#include "Camera.h"
+#include "Light.h"
 
 
 namespace Tank
 {
-	json Model::serialise()
+	ModelComponent::ModelComponent(const Resource &modelPath)
+		: IMeshContainer()
 	{
-		json serialised = Node::serialise();
-		serialised["modelPath"] = Resource::encode(getModelPath());
-		serialised["shader"] = Shader::serialise(getShader());
-		serialised["cullFace"] = getCullFace();
-		return serialised;
-	}
-
-
-	void Model::deserialise(const json &serialised)
-	{
-		initShaderContainer(ShaderSources::deserialise(serialised["shader"]));
-		setModelPath(Resource::decode(serialised["modelPath"]));
-		setCullFace(serialised["cullFace"]);
-		Node::deserialise(serialised);
-
-		process();
-	}
-
-
-	Model::Model(const std::string &name, const Resource &modelPath)
-		: Node(name), IMeshContainer()
-	{
-		m_type = "Model";
 		setModelPath(modelPath);
 		m_cullFace = GL_BACK;
 	}
 
 
-	void Model::setModelPath(const Resource &res)
+	void ModelComponent::setModelPath(const Resource &res)
 	{
 		m_meshes.clear();
 		m_modelPath = res;
 	}
 
 
-	void Model::process()
+	void ModelComponent::process()
 	{
 		std::string modelPath = m_modelPath.resolvePathStr();
 
@@ -77,7 +55,7 @@ namespace Tank
 	}
 
 
-	void Model::processNode(aiNode *node, const aiScene *scene)
+	void ModelComponent::processNode(aiNode *node, const aiScene *scene)
 	{
 		// Process all of node's meshes
 		for (unsigned i = 0; i < node->mNumMeshes; i++)
@@ -94,7 +72,7 @@ namespace Tank
 	}
 
 
-	std::unique_ptr<Mesh> Model::processMesh(aiMesh *mesh, const aiScene *scene)
+	std::unique_ptr<Mesh> ModelComponent::processMesh(aiMesh *mesh, const aiScene *scene)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<unsigned> indices;
@@ -149,7 +127,7 @@ namespace Tank
 	}
 
 
-	std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat, int assimpTexType, std::string typeName)
+	std::vector<std::shared_ptr<Texture>> ModelComponent::loadMaterialTextures(aiMaterial *mat, int assimpTexType, std::string typeName)
 	{
 		aiTextureType type = (aiTextureType)assimpTexType;
 
@@ -197,10 +175,8 @@ namespace Tank
 	}
 
 
-	void Model::draw()
+	void ModelComponent::draw()
 	{
-		if (!isVisible()) return;
-
 		glCullFace(m_cullFace);
 
 		IOutlined::predraw();
@@ -210,10 +186,10 @@ namespace Tank
 		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
 		shader.setFloat("material.Ns", 32.0f);
 
-		TransformComponent transform = getComponent<TransformComponent>();
+		TransformComponent transform;
 		auto cam = Scene::getActiveScene()->getActiveCamera();
-		auto P = cam->getProj();
-		auto V = cam->getView();
+		auto P = cam->Projection;
+		auto V = cam->View;
 		auto M = transform.getWorldModelMatrix();
 		auto VM = V * M;
 		
@@ -236,13 +212,13 @@ namespace Tank
 	}
 
 
-	void Model::processLights()
+	void ModelComponent::processLights()
 	{
 		auto scene = Scene::getActiveScene();
 		auto activeLights = scene->getLights();
 
 		const Shader &shader = getShader();
-		for (Light *light : activeLights)
+		for (LightComponent *light : activeLights)
 		{
 			light->updateShader(shader);
 		}
@@ -252,8 +228,31 @@ namespace Tank
 	}
 
 
-	void Model::update()
+	void ModelComponent::update()
 	{
-		Node::update();
+	}
+
+
+	// =======================
+	//		Serialisation
+	// =======================
+	template <>
+	json serialise<ModelComponent>(ModelComponent *in)
+	{
+		json serialised;
+		serialised["modelPath"] = Resource::encode(in->getModelPath());
+		serialised["shader"] = Shader::serialise(in->getShader());
+		serialised["cullFace"] = in->getCullFace();
+		return serialised;
+	}
+
+	template <>
+	void deserialise<ModelComponent>(const json &serialised, ModelComponent *out)
+	{
+		out->initShaderContainer(ShaderSources::deserialise(serialised["shader"]));
+		out->setModelPath(Resource::decode(serialised["modelPath"]));
+		out->setCullFace(serialised["cullFace"]);
+
+		out->process();
 	}
 }

@@ -1,7 +1,7 @@
 #include <nfd.h>
 #include <imgui.h>
 #include <ui/FileDialog.h>
-#include <nodes/Scene.h>
+#include <components/Scene.h>
 #include <Serialisation.h>
 #include <Log.h>
 #include <fs/Dir.h>
