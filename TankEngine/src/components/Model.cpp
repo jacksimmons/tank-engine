@@ -175,64 +175,6 @@ namespace Tank
 	}
 
 
-	void ModelComponent::draw()
-	{
-		glCullFace(m_cullFace);
-
-		IOutlined::predraw();
-		const Shader &shader = getShader();
-		
-		shader.use();
-		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
-		shader.setFloat("material.Ns", 32.0f);
-
-		TransformComponent transform;
-		auto cam = Scene::getActiveScene()->getActiveCamera();
-		auto P = cam->Projection;
-		auto V = cam->View;
-		auto M = transform.getWorldModelMatrix();
-		auto VM = V * M;
-		
-		shader.setMat4("PVM", P * VM);
-		shader.setMat4("VM", VM);
-		shader.setMat4("V", V);
-		shader.setMat4("VM_it", glm::inverseTranspose(VM));
-		
-		processLights();
-
-		for (unsigned i = 0; i < m_meshes.size(); i++)
-		{
-			m_meshes[i]->draw(shader);
-		}
-		shader.unuse();
-
-		IOutlined::postdraw(transform);
-
-		glCullFace(GL_BACK);
-	}
-
-
-	void ModelComponent::processLights()
-	{
-		auto scene = Scene::getActiveScene();
-		auto activeLights = scene->getLights();
-
-		const Shader &shader = getShader();
-		for (LightComponent *light : activeLights)
-		{
-			light->updateShader(shader);
-		}
-
-		shader.setInt("num_dir_lights", scene->getNumLights(LightType::Directional));
-		shader.setInt("num_point_lights", scene->getNumLights(LightType::Point));
-	}
-
-
-	void ModelComponent::update()
-	{
-	}
-
-
 	// =======================
 	//		Serialisation
 	// =======================

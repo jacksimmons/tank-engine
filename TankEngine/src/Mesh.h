@@ -9,7 +9,7 @@ namespace Tank
 	class Shader;
 	class TANK_API Mesh
 	{
-		friend class Renderer2D;
+		friend class Renderer;
 	private:
 		unsigned int m_vao, m_vbo, m_ebo;
 		std::vector<Vertex> m_vertices;

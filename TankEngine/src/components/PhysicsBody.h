@@ -12,7 +12,6 @@ namespace Tank
 	private:
 		static std::vector<PhysicsBodyComponent*> s_instances;
 		std::vector<glm::vec3> m_velocities;
-		float m_mass = 1;
 
 		void handleInteraction(size_t bodyIndex, float dt);
 		float getGravityScalar(float distance, float otherMass) const;
@@ -20,9 +19,8 @@ namespace Tank
 		PhysicsBodyComponent(float mass = 1);
 		virtual ~PhysicsBodyComponent();
 
-		glm::vec3 getCentre() const noexcept;
+		float Mass;
 
-		void update() override;
+		glm::vec3 getCentre() const noexcept;
 	};
-	using PhysicsBody = PhysicsBodyComponent;
 }

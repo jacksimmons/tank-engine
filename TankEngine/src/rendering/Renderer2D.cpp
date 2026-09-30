@@ -1,21 +1,21 @@
 #include <glad/glad.h>
 #include <glm/gtc/matrix_inverse.hpp>
-#include <nodes/interfaces/Outlined.h>
 #include <scene/Scene.h>
+#include <scene/Camera.h>
 #include <components/Sprite.h>
-#include <components/Camera.h>
 #include <components/Light.h>
 #include <Texture.h>
 #include <Shader.h>
 #include <Mesh.h>
 #include "Renderer2D.h"
+#include "Renderer.h"
 
 
 namespace Tank
 {
-	void Renderer2D::drawSprite(const glm::mat4 &modelMatrix, SpriteComponent &sprite)
+	void Renderer2D::drawSprite(TransformComponent &transform, const SpriteComponent &sprite, const Camera &camera)
 	{
-		sprite.predraw();
+		Renderer::beginEditorOutline(sprite);
 
 		const Shader &shader = sprite.getShader();
 		shader.use();
@@ -25,9 +25,9 @@ namespace Tank
 
 		TransformComponent transform;
 		auto cam = Scene::getActiveScene()->getActiveCamera();
-		auto P = cam->Camera.m_projection;
-		auto V = cam->Camera.m_view;
-		auto M = modelMatrix;
+		auto P = camera.m_projection;
+		auto V = camera.m_view;
+		auto M = transform.getWorldModelMatrix();
 		auto VM = V * M;
 
 		shader.setMat4("PVM", P * VM);
@@ -47,43 +47,11 @@ namespace Tank
 
 		for (unsigned i = 0; i < sprite.getMeshes().size(); i++)
 		{
-			drawMesh(shader, *sprite.getMeshes()[i]);
+			Renderer::drawMesh(shader, *sprite.getMeshes()[i]);
 		}
 
 		shader.unuse();
 
-		sprite.postdraw(transform);
-	}
-
-
-	void Renderer2D::drawMesh(const Shader &shader, const Mesh &mesh)
-	{
-		unsigned int diffuseIdx = 0;
-		unsigned int specularIdx = 0;
-
-		shader.use();
-
-		for (unsigned int i = 0; i < mesh.m_textures.size(); i++)
-		{
-			glActiveTexture(GL_TEXTURE0 + i);
-
-			std::string name = mesh.m_textures[i]->getTexType();
-			std::string number;
-
-			if (name == "diffuse")
-				number = std::to_string(diffuseIdx++);
-			else if (name == "specular")
-				number = std::to_string(specularIdx++);
-
-			shader.setInt("material." + name + "[" + number + "]", i);
-
-			glBindTexture(GL_TEXTURE_2D, mesh.m_textures[i]->getTexID());
-		}
-
-		// Draw mesh vertices
-		glBindVertexArray(mesh.m_vao);
-		glDrawElements(GL_TRIANGLES, mesh.m_indices.size(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-		shader.unuse();
+		Renderer::endEditorOutline(transform, sprite, camera);
 	}
 }

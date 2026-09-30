@@ -1,8 +1,13 @@
 #include <Log.h>
+#include <static/Time.h>
 #include <components/Camera.h>
 #include <components/Light.h>
-#include <components/Sprite.h>
 #include <components/Collider.h>
+#include <components/PhysicsBody.h>
+#include <components/CubeMap.h>
+#include <components/Sprite.h>
+#include <physics/Physics.h>
+#include <rendering/Renderer.h>
 #include <rendering/Renderer2D.h>
 #include "Scene.h"
 #include "Entity.h"
@@ -46,9 +51,9 @@ namespace Tank
 		/// </summary>
 		{
 			glm::vec3 centre = m_activeCamera->Camera.getTransformedCentre();
-			glm::vec3 eye = m_activeCamera->getTransformedEye();
-			glm::vec3 up = m_activeCamera->getTransformedUp();
-			m_activeCamera->View = glm::lookAt(eye, centre, up);
+			glm::vec3 eye = m_activeCamera->Camera.getTransformedEye();
+			glm::vec3 up = m_activeCamera->Camera.getTransformedUp();
+			m_activeCamera->Camera.m_view = glm::lookAt(eye, centre, up);
 		}
 
 		// Handle collisions
@@ -63,11 +68,11 @@ namespace Tank
 				// Check for collisions against all colliders
 				for (auto o : view)
 				{
+					// Ignore interactions with self
+					if (e == o) continue;
+
 					Entity other = { o, this };
 					const auto &transform = other.getComponent<TransformComponent>();
-
-					// Ignore self collisions
-					if (other == entity) continue;
 
 					if (collider.Shape->contains(transform.Translation))
 					{
@@ -77,20 +82,66 @@ namespace Tank
 			}
 		}
 
+		// Handle physics
+		{
+			auto view = m_registry.view<PhysicsBodyComponent>();
+
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+
+				// Ensure velocities list is correct size before starting
+				float dt = Time::getFrameDelta();
+
+				// Handle this body's gravity, applied to all other physics bodies
+				for (auto o : view)
+				{
+					// Ignore interactions with self
+					if (e == o) continue;
+
+					Entity other = { o, this };
+					const auto &M = entity.getComponent<PhysicsBodyComponent>();
+					const auto &m = other.getComponent<PhysicsBodyComponent>();
+
+					Physics::handleGravity(M, m, dt);
+				}
+			}
+		}
+
+		// Draw cube maps (must be drawn first)
+		{
+			auto view = m_registry.view<CubeMapComponent>();
+
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+				auto &cubeMap = entity.getComponent<CubeMapComponent>();
+
+				Renderer::drawCubeMap(&cubeMap, m_activeCamera->Camera);
+			}
+		}
+
+		// Draw models (before sprites due to 3D advantage)
+		{
+			auto group = m_registry.group<TransformComponent>(entt::get<ModelComponent>);
+			for (auto entity : group)
+			{
+				auto [transform, model] = group.get<TransformComponent, ModelComponent>(entity);
+
+				Renderer::drawModel(transform, model, m_activeCamera->Camera);
+			}
+		}
+
 		// Draw sprites
 		{
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteComponent>);
 			for (auto entity : group)
 			{
-				SpriteRenderer::
+				auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+
+				Renderer2D::drawSprite(transform.getWorldModelMatrix(), sprite);
 			}
 		}
-
-
-
-
-		// Update camera, then the scene
-		m_activeCamera->update();
 	}
 
 

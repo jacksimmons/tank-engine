@@ -14,7 +14,8 @@ namespace Tank
 
 	struct CubeMapComponent : public IShaderContainer
 	{
-	public:
+		friend class Renderer;
+	private:
 		unsigned m_vao;
 		unsigned m_vbo;
 		std::shared_ptr<Texture> m_texture;
@@ -34,7 +35,7 @@ namespace Tank
 		);
 
 		void setTexPaths(const std::array<Resource, 6> &texPaths);
-		void draw();
+		const std::array<Resource, 6> &getTexPaths() { return m_texturePaths; }
 
 	private:
 		constexpr static float s_vertices[] = {

@@ -18,6 +18,7 @@ namespace Tank
 	/// </summary>
 	struct ModelComponent : public IMeshContainer
 	{
+		friend class Renderer;
 	private:
 		Resource m_modelPath;
 		unsigned m_cullFace;
@@ -32,13 +33,9 @@ namespace Tank
 		unsigned getCullFace() const { return m_cullFace; }
 		void setCullFace(unsigned face) { m_cullFace = face; }
 
-		void draw();
-		void update();
-
 		void process();
 		void processNode(aiNode *node, const aiScene *scene);
 		std::unique_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene);
-		void processLights();
 		
 		std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, int assimpTextureType, std::string typeName);
 	};

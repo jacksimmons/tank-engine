@@ -6,7 +6,9 @@ namespace Tank
 {
 	class Camera
 	{
+		friend class Scene;
 		friend class CameraComponent;
+		friend class Renderer;
 		friend class Renderer2D;
 
 		// Projection properties

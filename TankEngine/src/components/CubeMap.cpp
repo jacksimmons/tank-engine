@@ -6,7 +6,6 @@
 #include <Texture.h>
 #include "CubeMap.h"
 #include "Camera.h"
-#include "Scene.h"
 
 
 namespace Tank
@@ -55,35 +54,6 @@ namespace Tank
 	}
 
 
-	/// <summary>
-	/// Must be drawn before anything else in the scene.
-	/// </summary>
-	void CubeMapComponent::draw()
-	{
-		const Shader &shader = getShader();
-		shader.use();
-
-		// Bind all owned texture objects
-		int texTarget = m_texture->getTexTarget();
-		int texID = m_texture->getTexID();
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(texTarget, texID);
-
-		CameraComponent *cam = Scene::getActiveScene()->getActiveCamera();
-		shader.setMat4("view", glm::mat4(glm::mat3(cam->View)));
-		shader.setMat4("proj", cam->Projection);
-
-		glDepthMask(GL_FALSE);
-		glBindVertexArray(m_vao);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-		glDepthMask(GL_TRUE);
-
-		shader.unuse();
-
-	}
-
-
 	// =======================
 	//		Serialisation
 	// =======================
@@ -93,7 +63,7 @@ namespace Tank
 		json serialised;
 
 		std::vector<std::string> encodedPaths;
-		for (const Res &res : in->m_texturePaths)
+		for (const Res &res : in->getTexPaths())
 		{
 			encodedPaths.push_back(Res::encode(res));
 		}

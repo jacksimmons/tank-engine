@@ -3,15 +3,16 @@
 
 namespace Tank
 {
+	struct TransformComponent;
 	struct SpriteComponent;
 	class Shader;
 	class Mesh;
+	class Camera;
 
 
 	class Renderer2D
 	{
 	public:
-		static void drawSprite(const glm::mat4 &transform, SpriteComponent &sprite);
-		static void drawMesh(const Shader &shader, const Mesh &mesh);
+		static void drawSprite(TransformComponent &transform, const SpriteComponent &sprite, const Camera &camera);
 	};
 }
