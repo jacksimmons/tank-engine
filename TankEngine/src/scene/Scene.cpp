@@ -5,6 +5,7 @@
 #include <components/Collider.h>
 #include <components/PhysicsBody.h>
 #include <components/CubeMap.h>
+#include <components/Model.h>
 #include <components/Sprite.h>
 #include <physics/Physics.h>
 #include <rendering/Renderer.h>
@@ -56,7 +57,7 @@ namespace Tank
 			m_activeCamera->Camera.m_view = glm::lookAt(eye, centre, up);
 		}
 
-		// Handle collisions
+		// Collisions
 		{
 			auto view = m_registry.view<ColliderComponent>();
 
@@ -82,7 +83,7 @@ namespace Tank
 			}
 		}
 
-		// Handle physics
+		// Physics
 		{
 			auto view = m_registry.view<PhysicsBodyComponent>();
 
@@ -108,7 +109,7 @@ namespace Tank
 			}
 		}
 
-		// Draw cube maps (must be drawn first)
+		// Rendering (CubeMaps)
 		{
 			auto view = m_registry.view<CubeMapComponent>();
 
@@ -121,7 +122,7 @@ namespace Tank
 			}
 		}
 
-		// Draw models (before sprites due to 3D advantage)
+		// Rendering (Models)
 		{
 			auto group = m_registry.group<TransformComponent>(entt::get<ModelComponent>);
 			for (auto entity : group)
@@ -132,64 +133,16 @@ namespace Tank
 			}
 		}
 
-		// Draw sprites
+		// Rendering (Sprites)
 		{
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteComponent>);
 			for (auto entity : group)
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
-				Renderer2D::drawSprite(transform.getWorldModelMatrix(), sprite);
+				Renderer2D::drawSprite(transform, sprite, m_activeCamera->Camera);
 			}
 		}
-	}
-
-
-	unsigned Scene::addLight(LightComponent *light)
-	{
-		auto it = std::find(m_lights.begin(), m_lights.end(), light);
-		if (it != m_lights.end())
-		{
-			TE_CORE_WARN("Light has already been added to this scene.");
-		}
-
-		m_lights.push_back(light);
-		return m_lights.size() - 1;
-	}
-
-
-	void Scene::removeLight(LightComponent *light)
-	{
-		auto it = std::find(m_lights.begin(), m_lights.end(), light);
-		if (it != m_lights.end())
-		{
-			m_lights.erase(it);
-		}
-		else
-		{
-			TE_CORE_WARN("Light was not found in this scene.");
-		}
-	}
-
-
-	unsigned Scene::getNumLights(LightType type) const
-	{
-		unsigned cnt = 0;
-
-		switch (type)
-		{
-		case LightType::Any:
-			cnt = m_lights.size();
-			break;
-		default:
-			for (LightComponent *light : m_lights)
-			{
-				if (light->getType() == type) cnt++;
-			}
-			break;
-		}
-
-		return cnt;
 	}
 
 

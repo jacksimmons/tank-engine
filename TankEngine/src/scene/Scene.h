@@ -7,9 +7,8 @@ namespace Tank
 {
 	class Entity;
 	struct CameraComponent;
-	struct LightComponent;
+	class GlobalLight;
 	class Shader;
-	enum class LightType;
 
 	namespace Editor { class Hierarchy_; }
 
@@ -43,7 +42,6 @@ namespace Tank
 	// Instance
 	private:
 		CameraComponent *m_activeCamera;
-		std::vector<LightComponent *> m_lights;
 
 		void onNodeDeleted(Entity *deleted) noexcept;
 	public:
@@ -55,14 +53,6 @@ namespace Tank
 		CameraComponent *getActiveCamera() const noexcept { return m_activeCamera; }
 		// Set the active camera for this scene.
 		void setActiveCamera(CameraComponent *camera) noexcept { m_activeCamera = camera; }
-
-		// Adds a light to the scene. Returns the light's index.
-		unsigned addLight(LightComponent *);
-		// Removes a light to the scene.
-		void removeLight(LightComponent *);
-
-		std::vector<LightComponent *> getLights() const { return m_lights; }
-		unsigned getNumLights(LightType type) const;
 
 		void update();
 	};

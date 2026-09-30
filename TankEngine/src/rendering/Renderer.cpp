@@ -124,7 +124,7 @@ namespace Tank
 	}
 
 
-	void Renderer::drawModel(TransformComponent &transform, const ModelComponent &model, const Camera &camera)
+	void Renderer::drawModel(TransformComponent &transform, const ModelComponent &model, const std::vector<const LightComponent &> &lights, const Camera &camera)
 	{
 		glCullFace(model.m_cullFace);
 
@@ -147,11 +147,9 @@ namespace Tank
 
 		// Process lights
 		{
-			auto scene = Scene::getActiveScene();
-			auto activeLights = scene->getLights();
-
 			const Shader &shader = model.getShader();
-			for (LightComponent *light : activeLights)
+
+			for (auto &light : lights)
 			{
 				light->updateShader(shader);
 			}

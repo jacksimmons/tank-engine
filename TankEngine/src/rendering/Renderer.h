@@ -4,6 +4,7 @@
 namespace Tank
 {
 	struct CubeMapComponent;
+	struct LightComponent;
 	class IMeshContainer;
 	class Camera;
 
@@ -17,6 +18,6 @@ namespace Tank
 		static void endEditorOutline(TransformComponent &transform, const IMeshContainer &outlined, const Camera &camera);
 
 		static void drawCubeMap(CubeMapComponent *cubeMap, const Camera &camera);
-		static void drawModel(TransformComponent &transform, const ModelComponent &model, const Camera &camera);
+		static void drawModel(TransformComponent &transform, const ModelComponent &model, const std::vector<const LightComponent &> &lights, const Camera &camera);
 	};
 }
