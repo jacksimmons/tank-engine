@@ -13,7 +13,7 @@ namespace Tank::Reflect
 		auto classType = tryGetClass(type);
 		if (!classType.has_value())
 		{
-			TE_CORE_CRITICAL(std::format("Failed to deserialise type with name {}: it was not registered to a class.", type));
+			TE_CORE_FATAL(std::format("Failed to deserialise type with name {}: it was not registered to a class.", type));
 			return nullptr;
 		}
 

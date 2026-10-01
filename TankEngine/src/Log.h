@@ -15,7 +15,7 @@ namespace Tank
 }
 
 
-#define TE_CORE_CRITICAL(...)		::Tank::Log::getCoreLogger()->critical(__VA_ARGS__)
+#define TE_CORE_FATAL(...)			::Tank::Log::getCoreLogger()->critical(__VA_ARGS__)
 #define TE_CORE_ERROR(...)			::Tank::Log::getCoreLogger()->error(__VA_ARGS__)
 #define TE_CORE_WARN(...)			::Tank::Log::getCoreLogger()->warn(__VA_ARGS__)
 #define TE_CORE_INFO(...)			::Tank::Log::getCoreLogger()->info(__VA_ARGS__)
@@ -28,7 +28,7 @@ namespace Tank
 	}\
 }
 
-#define TE_CRITICAL(...)			::Tank::Log::getClientLogger()->critical(__VA_ARGS__)
+#define TE_FATAL(...)				::Tank::Log::getClientLogger()->critical(__VA_ARGS__)
 #define TE_ERROR(...)				::Tank::Log::getClientLogger()->error(__VA_ARGS__)
 #define TE_WARN(...)				::Tank::Log::getClientLogger()->warn(__VA_ARGS__)
 #define TE_INFO(...)				::Tank::Log::getClientLogger()->info(__VA_ARGS__)

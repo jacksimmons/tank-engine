@@ -91,7 +91,7 @@ namespace Tank
 		// Check GLFW initialises properly
 		if (!glfwInit())
 		{
-			TE_CORE_CRITICAL("GLFW failed to initialise.");
+			TE_CORE_FATAL("GLFW failed to initialise.");
 			glfwTerminate();
 		}
 
@@ -108,7 +108,7 @@ namespace Tank
 		m_window = glfwCreateWindow(m_windowSize.x, m_windowSize.y, (char *)"TankEngine", nullptr, nullptr);
 		if (m_window == nullptr)
 		{
-			TE_CORE_CRITICAL(std::format("GLFW failed to create window. Does your machine support OpenGL version {}.{}?", GL_MAJOR, GL_MINOR));
+			TE_CORE_FATAL(std::format("GLFW failed to create window. Does your machine support OpenGL version {}.{}?", GL_MAJOR, GL_MINOR));
 			glfwTerminate();
 			return;
 		}
@@ -125,7 +125,7 @@ namespace Tank
 		// Initialise GLAD
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
-			TE_CORE_CRITICAL("GLAD failed to initialise.");
+			TE_CORE_FATAL("GLAD failed to initialise.");
 			return;
 		}
 

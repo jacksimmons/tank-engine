@@ -1,19 +1,19 @@
 #pragma once
-#include <entt/entt.hpp>
 
 
 namespace Tank
 {
-	class Shader;
+	struct LightIntensity;
 	struct DirectionalLightComponent;
+	class Shader;
 
 
 	class Lighting
 	{
-	private:
-		static void applyLightIntensityToShader(const LightIntensity &I, const std::string &elementName, const Shader &shader);
 	public:
-		static void applyLightsToShader(std::vector<const DirectionalLightComponent &> lights, unsigned index, const Shader &shader);
-		static void applyLightsToShader(std::vector<const PointLightComponent &> lights, unsigned index, const Shader &shader);
+		static void applyLightIntensityToShader(const LightIntensity &I, const std::string &elementName, const Shader &shader);
+
+		static void applyDirectionalLightToShader(const DirectionalLightComponent &dirLight, const Shader &shader, unsigned index);
+		static void applyPointLightToShader(const PointLightComponent &ptLight, const Shader &shader, unsigned index);
 	};
 }

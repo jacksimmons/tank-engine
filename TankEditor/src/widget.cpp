@@ -12,7 +12,7 @@ namespace Tank
 
 		if (contents.length() > size)
 		{
-			TE_CORE_CRITICAL("'contents' was too large!");
+			TE_CORE_FATAL("'contents' was too large!");
 			return;
 		}
 

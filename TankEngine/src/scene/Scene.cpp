@@ -10,6 +10,8 @@
 #include <physics/Physics.h>
 #include <rendering/Renderer.h>
 #include <rendering/Renderer2D.h>
+#include <rendering/Lighting.h>
+#include <Shader.h>
 #include "Scene.h"
 #include "Entity.h"
 
@@ -129,6 +131,12 @@ namespace Tank
 			{
 				auto [transform, model] = group.get<TransformComponent, ModelComponent>(entity);
 
+				// Apply lighting
+				const Shader &shader = model.getShader();
+				shader.use();
+				applyLightsToShader(shader);
+				shader.unuse();
+
 				Renderer::drawModel(transform, model, m_activeCamera->Camera);
 			}
 		}
@@ -140,8 +148,59 @@ namespace Tank
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
+				// Apply lighting
+				const Shader &shader = sprite.getShader();
+				shader.use();
+				applyLightsToShader(shader);
+				shader.unuse();
+
 				Renderer2D::drawSprite(transform, sprite, m_activeCamera->Camera);
 			}
+		}
+	}
+
+
+	void Scene::applyLightsToShader(const Shader &shader)
+	{
+		// Directional Lights
+		{
+			auto view = m_registry.view<DirectionalLightComponent>();
+			int index = -1;
+			for (auto e : view)
+			{
+				index++;
+				if (index >= LIGHT::DIRECTIONAL_ARRAY_SIZE)
+				{
+					TE_CORE_ERROR(std::format("Directional light limit ({}) exceeded!", LIGHT::DIRECTIONAL_ARRAY_SIZE));
+					break;
+				}
+
+				auto [directionalLight] = view.get(e);
+				Lighting::applyDirectionalLightToShader(directionalLight, shader, index);
+			}
+
+			shader.setInt("num_dir_lights", index + 1);
+		}
+
+		// Point Lights
+		{
+			auto view = m_registry.view<PointLightComponent>();
+			int index = -1;
+			for (auto e : view)
+			{
+				index++;
+				if (index >= LIGHT::POINT_ARRAY_SIZE)
+				{
+					TE_CORE_ERROR(std::format("Point light limit ({}) exceeded!", LIGHT::POINT_ARRAY_SIZE));
+					break;
+				}
+
+
+				auto [pointLight] = view.get(e);
+				Lighting::applyPointLightToShader(pointLight, shader, index);
+			}
+
+			shader.setInt("num_point_lights", index + 1);
 		}
 	}
 

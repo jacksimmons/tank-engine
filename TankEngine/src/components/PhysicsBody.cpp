@@ -23,7 +23,7 @@ namespace Tank
 		if (it != s_instances.end())
 			s_instances.erase(it);
 		else
-			TE_CORE_CRITICAL("Destructor: PhysicsBody was missing from s_instances.");
+			TE_CORE_FATAL("Destructor: PhysicsBody was missing from s_instances.");
 	}
 
 

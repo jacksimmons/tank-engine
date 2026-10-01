@@ -14,34 +14,22 @@ namespace Tank
 	}
 
 
-	void Lighting::applyLightsToShader(const DirectionalLightComponent &light, unsigned index, const Shader &shader)
+	void Lighting::applyDirectionalLightToShader(const DirectionalLightComponent &dirLight, const Shader &shader, unsigned index)
 	{
-		if (index >= LIGHT::DIRECTIONAL_ARRAY_SIZE)
-		{
-			TE_CORE_ERROR("Directional light limit exceeded!");
-			return;
-		}
-
 		std::string lightArrayName = LIGHT::DIRECTIONAL_ARRAY;
 		std::string lightElement = std::format("{}[{}]", lightArrayName, std::to_string(index));
 
-		Lighting::applyLightIntensityToShader(light.Intensity, lightElement, shader);
-		shader.setVec3(lightElement + ".dir", light.Direction);
+		Lighting::applyLightIntensityToShader(dirLight.Intensity, lightElement, shader);
+		shader.setVec3(lightElement + ".dir", dirLight.Direction);
 	}
 
 
-	void Lighting::applyLightsToShader(const PointLightComponent &light, unsigned index, const Shader &shader)
+	void Lighting::applyPointLightToShader(const PointLightComponent &ptLight, const Shader &shader, unsigned index)
 	{
-		if (index >= LIGHT::POINT_ARRAY_SIZE)
-		{
-			TE_CORE_ERROR("Point light limit exceeded!");
-			return;
-		}
-
 		std::string lightArrayName = LIGHT::POINT_ARRAY;
 		std::string lightElement = std::format("{}[{}]", lightArrayName, std::to_string(index));
 
-		Lighting::applyLightIntensityToShader(light.Intensity, lightElement, shader);
+		Lighting::applyLightIntensityToShader(ptLight.Intensity, lightElement, shader);
 		shader.setVec3(lightElement + ".pos", glm::vec3(0.0f));
 		shader.setFloat(lightElement + ".constant", 1.0f);
 		shader.setFloat(lightElement + ".linear", 0.0f);

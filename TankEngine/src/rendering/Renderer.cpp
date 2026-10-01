@@ -124,7 +124,7 @@ namespace Tank
 	}
 
 
-	void Renderer::drawModel(TransformComponent &transform, const ModelComponent &model, const std::vector<const LightComponent &> &lights, const Camera &camera)
+	void Renderer::drawModel(TransformComponent &transform, const ModelComponent &model, const Camera &camera)
 	{
 		glCullFace(model.m_cullFace);
 
@@ -144,19 +144,6 @@ namespace Tank
 		shader.setMat4("VM", VM);
 		shader.setMat4("V", V);
 		shader.setMat4("VM_it", glm::inverseTranspose(VM));
-
-		// Process lights
-		{
-			const Shader &shader = model.getShader();
-
-			for (auto &light : lights)
-			{
-				light->updateShader(shader);
-			}
-
-			shader.setInt("num_dir_lights", scene->getNumLights(LightType::Directional));
-			shader.setInt("num_point_lights", scene->getNumLights(LightType::Point));
-		}
 
 		for (unsigned i = 0; i < model.m_meshes.size(); i++)
 		{

@@ -57,7 +57,7 @@ namespace Tank
 			// If even NAME (NUM_SIBLINGS - 1) didn't work, we have a problem
 			if (dupeIndex == tree().getSiblingCount())
 			{
-				TE_CORE_CRITICAL(std::format("[Infinite loop error] Tried to assign a node a duplicate identifier. Tried (0), ..., ({})", dupeIndex - 1));
+				TE_CORE_FATAL(std::format("[Infinite loop error] Tried to assign a node a duplicate identifier. Tried (0), ..., ({})", dupeIndex - 1));
 			}
 
 			m_name = dupeName;

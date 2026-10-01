@@ -25,7 +25,7 @@ namespace Tank
 		}
 		else
 		{
-			TE_CORE_CRITICAL("IMeshContainer: Invalid shader.");
+			TE_CORE_FATAL("IMeshContainer: Invalid shader.");
 		}
 
 		m_outlineShader->use();

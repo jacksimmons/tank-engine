@@ -55,6 +55,7 @@ namespace Tank
 		void setActiveCamera(CameraComponent *camera) noexcept { m_activeCamera = camera; }
 
 		void update();
+		void applyLightsToShader(const Shader &shader);
 	};
 
 

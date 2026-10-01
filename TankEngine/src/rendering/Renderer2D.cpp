@@ -35,16 +35,6 @@ namespace Tank
 		shader.setMat4("V", V);
 		shader.setMat4("VM_it", glm::inverseTranspose(VM));
 
-		auto scene = Scene::getActiveScene();
-		auto activeLights = scene->getLights();
-		for (LightComponent *light : activeLights)
-		{
-			light->updateShader(shader);
-		}
-
-		shader.setInt("num_dir_lights", scene->getNumLights(LightType::Directional));
-		shader.setInt("num_point_lights", scene->getNumLights(LightType::Point));
-
 		for (unsigned i = 0; i < sprite.getMeshes().size(); i++)
 		{
 			Renderer::drawMesh(shader, *sprite.getMeshes()[i]);

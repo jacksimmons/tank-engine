@@ -19,7 +19,7 @@ namespace Tank
 		if (it != s_instances.end())
 			s_instances.erase(it);
 		else
-			TE_CORE_CRITICAL("Destructor: MeshCollider was missing from s_instances.");
+			TE_CORE_FATAL("Destructor: MeshCollider was missing from s_instances.");
 	}
 
 	void MeshCollider::update()
