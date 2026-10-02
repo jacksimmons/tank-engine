@@ -89,7 +89,7 @@ namespace Tank
 		}
 
 		template <typename T>
-		static void operators(sol::usertype<T> &ut, const char *className, GlueOp operators...)
+		static void operators(sol::usertype<T> &ut, const char *className, GlueOp ...operators)
 		{
 			// Register each operator in type hints only
 			((GET_SOL_CLASS(className)->operators.push_back({ operators.enumName, operators.params, operators.returnType })), ...);
@@ -109,7 +109,7 @@ namespace Tank
 		}
 
 		template <typename T, typename ...Ms>
-		static void globalInstances(sol::usertype<T> &ut, const char *className, const char *instances...)
+		static void globalInstances(sol::usertype<T> &ut, const char *className, const char *...instances)
 		{
 			// Register each field in type hints only
 			((GET_SOL_CLASS(className)->globalFields.push_back({ instances, className })), ...);
