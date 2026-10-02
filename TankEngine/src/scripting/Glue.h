@@ -88,8 +88,8 @@ namespace Tank
 			Glue::addMethods(ut, GET_SOL_CLASS(className)->staticMethods, methods);
 		}
 
-		template <typename T>
-		static void operators(sol::usertype<T> &ut, const char *className, GlueOp ...operators)
+		template <typename T, typename ...Ops>
+		static void operators(sol::usertype<T> &ut, const char *className, GlueOp<Ops> ...operators)
 		{
 			// Register each operator in type hints only
 			((GET_SOL_CLASS(className)->operators.push_back({ operators.enumName, operators.params, operators.returnType })), ...);
@@ -108,8 +108,8 @@ namespace Tank
 			Glue::addFields(ut, GET_SOL_CLASS(className)->staticFields, fields);
 		}
 
-		template <typename T, typename ...Ms>
-		static void globalInstances(sol::usertype<T> &ut, const char *className, const char *...instances)
+		template <typename T, std::same_as<const char *> ...Names>
+		static void globalInstances(sol::usertype<T> &ut, const char *className, Names ...instances)
 		{
 			// Register each field in type hints only
 			((GET_SOL_CLASS(className)->globalFields.push_back({ instances, className })), ...);

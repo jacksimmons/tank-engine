@@ -32,9 +32,10 @@ namespace Tank
 		M member;
 	};
 
+	template <typename E>
 	struct GlueOp
 	{
-		unsigned enumName;
+		E enumKey;
 		const char *returnType;
 		std::vector<GlueVariable> params;
 		//M member;

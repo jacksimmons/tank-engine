@@ -18,8 +18,8 @@
 #include "Glue.h"
 
 
-#define KEY(x) GluePair { #x, GLFW_KEY_##x }
-#define PAIR(a, b) GluePair { #a, #b }
+#define PAIR(a, b) GluePair { a, b }
+#define KEY(x) PAIR(#x, GLFW_KEY_##x)
 
 
 namespace Tank
@@ -53,13 +53,13 @@ namespace Tank
 			GlueField { "z", "number", &glm::vec3::z }
 		);
 		Glue::operators(ut, "Vec3",
-			GlueOp { (unsigned)sol::meta_function::addition, "Vec3", {{ "other", "Vec3" }} },
-			GlueOp { (unsigned)sol::meta_function::subtraction, "Vec3", {{ "other", "Vec3" }} },
-			GlueOp { (unsigned)sol::meta_function::multiplication, "Vec3", {{ "scalar", "float" }} },
-			GlueOp { (unsigned)sol::meta_function::division, "Vec3", {{ "scalar", "float" }} },
-			GlueOp { (unsigned)sol::meta_function::unary_minus, "Vec3", {} },
-			GlueOp { (unsigned)sol::meta_function::equal_to, "Vec3", {{ "other", "Vec3" }} },
-			GlueOp { (unsigned)sol::meta_function::to_string, "string", {} }
+			GlueOp { sol::meta_function::addition, "Vec3", {{ "other", "Vec3" }} },
+			GlueOp { sol::meta_function::subtraction, "Vec3", {{ "other", "Vec3" }} },
+			GlueOp { sol::meta_function::multiplication, "Vec3", {{ "scalar", "float" }} },
+			GlueOp { sol::meta_function::division, "Vec3", {{ "scalar", "float" }} },
+			GlueOp { sol::meta_function::unary_minus, "Vec3" },
+			GlueOp { sol::meta_function::equal_to, "Vec3", {{ "other", "Vec3" }} },
+			GlueOp { sol::meta_function::to_string, "string" }
 		);
 	}
 
