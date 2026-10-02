@@ -16,6 +16,13 @@ namespace Tank
 		std::string returnType;
 	};
 
+	struct LuaOperator
+	{
+		unsigned type;
+		std::vector<LuaField> params;
+		std::string returnType;
+	};
+
 	/// <summary>
 	/// Consists of all data relevant to one Lua class.
 	/// Each class has its own file.
@@ -28,7 +35,7 @@ namespace Tank
 		std::vector<LuaField> staticFields;
 		std::vector<LuaField> globalFields;
 		std::vector<LuaCallable> methods;
-		std::vector<LuaCallable> metaMethods;
+		std::vector<LuaOperator> metaMethods;
 		std::vector<LuaCallable> staticMethods;
 		std::vector<LuaCallable> globalFunctions;
 	};
@@ -36,7 +43,7 @@ namespace Tank
 	struct LuaEnumPair
 	{
 		std::string name;
-		int value;
+		unsigned value;
 	};
 
 	struct LuaEnum

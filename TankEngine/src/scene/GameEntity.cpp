@@ -88,7 +88,6 @@ namespace Tank
 	void GameEntity::update()
 	{
 		if (!isEnabled()) return;
-		if (isVisible()) draw();
 
 		preupdate();
 

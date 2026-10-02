@@ -1,19 +1,19 @@
 #include <Log.h>
-#include <scene/Entity.h>
+#include <scene/GameEntity.h>
 #include <static/GlmSerialise.h>
 #include "Tree.h"
 
 
 namespace Tank
 {
-	void TreeComponent::addChild(std::unique_ptr<Entity> child, std::optional<size_t> atIndex)
+	void TreeComponent::addChild(std::unique_ptr<GameEntity> child, std::optional<size_t> atIndex)
 	{
 		child->tree().m_parent = this->m_entity;
 		m_childrenAwaitingAdopt.push_back(std::make_tuple(std::move(child), atIndex));
 	}
 
 
-	Entity *TreeComponent::getChild(const std::string &name) const
+	GameEntity *TreeComponent::getChild(const std::string &name) const
 	{
 		for (auto &child : m_children)
 		{
@@ -25,7 +25,7 @@ namespace Tank
 	}
 
 
-	Entity *TreeComponent::getChild(int index) const
+	GameEntity *TreeComponent::getChild(int index) const
 	{
 		if (0 <= index && index < m_children.size())
 		{
@@ -37,13 +37,13 @@ namespace Tank
 	}
 
 
-	std::unique_ptr<Entity> TreeComponent::disownChild(Entity *child)
+	std::unique_ptr<GameEntity> TreeComponent::disownChild(GameEntity *child)
 	{
-		std::unique_ptr<Entity> detached = nullptr;
+		std::unique_ptr<GameEntity> detached = nullptr;
 
 		// Erase the child from m_children, if it is present there.
 		// Also, if found, move the reference to `detached`, so we can return it.
-		std::erase_if(m_children, [&detached, &child](std::unique_ptr<Entity> &ownedChild)
+		std::erase_if(m_children, [&detached, &child](std::unique_ptr<GameEntity> &ownedChild)
 		{
 			if (child == ownedChild.get())
 			{
@@ -57,20 +57,20 @@ namespace Tank
 	}
 
 
-	std::vector<Entity*> TreeComponent::getSiblings() const
+	std::vector<GameEntity*> TreeComponent::getSiblings() const
 	{
 		if (m_parent == nullptr) return {};
-		return m_parent->tree().getChildrenOfType<Entity>();
+		return m_parent->tree().getChildrenOfType<GameEntity>();
 	}
 
 
-	Entity *TreeComponent::getSibling(const std::string &name) const
+	GameEntity *TreeComponent::getSibling(const std::string &name) const
 	{
 		return m_parent->tree().getChild(name);
 	}
 
 
-	Entity *TreeComponent::getSibling(int index) const
+	GameEntity *TreeComponent::getSibling(int index) const
 	{
 		return m_parent->tree().getChild(index);
 	}
@@ -139,9 +139,9 @@ namespace Tank
 	}
 
 
-	void TreeComponent::forEachDescendant(std::function<void(Entity *)> forEach, std::function<bool()> terminate)
+	void TreeComponent::forEachDescendant(std::function<void(GameEntity *)> forEach, std::function<bool()> terminate)
 	{
-		std::stack<Entity *> entityStack;
+		std::stack<GameEntity *> entityStack;
 		entityStack.push(m_entity);
 
 		while (!entityStack.empty())
@@ -150,7 +150,7 @@ namespace Tank
 			if (terminate && terminate()) return;
 
 			// Pop the top entity from the stack, and perform `forEach`.
-			Entity *entity = entityStack.top();
+			GameEntity *entity = entityStack.top();
 			entityStack.pop();
 			forEach(entity);
 
@@ -164,7 +164,7 @@ namespace Tank
 	}
 
 
-	bool TreeComponent::setParent(Entity *parent, std::optional<size_t> siblingIndex)
+	bool TreeComponent::setParent(GameEntity *parent, std::optional<size_t> siblingIndex)
 	{
 		// Set the parent if it's different to our current one
 		if (parent == m_parent)
@@ -172,7 +172,7 @@ namespace Tank
 			return false;
 		}
 
-		std::unique_ptr<Entity> disownedEntity = m_parent->tree().disownChild(m_entity);
+		std::unique_ptr<GameEntity> disownedEntity = m_parent->tree().disownChild(m_entity);
 		assert(disownedEntity != nullptr);
 		parent->tree().addChild(std::move(disownedEntity), siblingIndex);
 		return true;
@@ -190,9 +190,9 @@ namespace Tank
 	}
 
 
-	Entity *TreeComponent::childFromTree(std::vector<int> treeTraversal)
+	GameEntity *TreeComponent::childFromTree(std::vector<int> treeTraversal)
 	{
-		Entity *currentEntity = m_entity;
+		GameEntity *currentEntity = m_entity;
 		while (!treeTraversal.empty())
 		{
 			int childIndex = treeTraversal[0];
@@ -213,9 +213,9 @@ namespace Tank
 	}
 
 
-	std::vector<int> TreeComponent::treeFromChild(Entity *child)
+	std::vector<int> TreeComponent::treeFromChild(GameEntity *child)
 	{
-		Entity *currentChild = child;
+		GameEntity *currentChild = child;
 		std::vector<int> treeTraversal;
 		do
 		{
@@ -254,12 +254,12 @@ namespace Tank
 	template <>
 	void deserialise<TreeComponent>(const json &serialised, TreeComponent *out)
 	{
-		Entity *entity = nullptr;
+		GameEntity *entity = nullptr;
 
 		entity = factory.deserialise(serialised);
 		for (const json &child : serialised["children"].get<std::vector<json>>())
 		{
-			node->addChild(std::unique_ptr<Entity>(deserialise(child, factory)));
+			node->addChild(std::unique_ptr<GameEntity>(deserialise(child, factory)));
 		}
 
 		// Post-tree instantiation (after all children have been deserialised)

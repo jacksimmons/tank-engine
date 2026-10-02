@@ -1,7 +1,7 @@
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
 #include <scene/Entity.h>
-#include <components/Scene.h>
+#include <scene/GameEntity.h>
 #include <components/Camera.h>
 #include <Log.h>
 #include "Script.h"
@@ -11,14 +11,14 @@
 
 namespace Tank
 {
-	std::optional<std::unique_ptr<Script>> Script::createScript(Node *node, const Res &path)
+	std::optional<std::unique_ptr<Script>> Script::createScript(GameEntity *entity, const Res &path)
 	{
 		// Try to load lua file
 		ScriptData data = ScriptManager::addScript(path);
 		if (data.getContents() == "") return {};
 
 		// Interpret script with sol2
-		Script *script = new Script(node, path, data.getContents());
+		Script *script = new Script(entity, path, data.getContents());
 		script->initSol();
 		return std::unique_ptr<Script>(script);
 	}
@@ -58,7 +58,7 @@ namespace Tank
 
 	void Script::pushProperties()
 	{
-		m_state["node"] = m_node;
+		m_state["entity"] = m_entity;
 	}
 
 

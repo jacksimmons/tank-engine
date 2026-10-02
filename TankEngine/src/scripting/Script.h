@@ -3,7 +3,7 @@
 
 namespace Tank
 {
-	class Node;
+	class GameEntity;
 
 	/// <summary>
 	/// A script which can be attached to a Node subclass.
@@ -14,15 +14,15 @@ namespace Tank
 	{
 	private:
 		bool m_enabled = true;
-		Node *m_node;
+		GameEntity *m_entity;
 		Res m_path;
 		std::string m_scriptLines;
 		sol::state m_state;
-		Script(Node *node, const Res &scriptPath, std::string scriptLines) : m_node(node), m_path(scriptPath), m_scriptLines(scriptLines) {}
+		Script(GameEntity *entity, const Res &scriptPath, std::string scriptLines) : m_entity(entity), m_path(scriptPath), m_scriptLines(scriptLines) {}
 	public:
 		~Script() = default;
 
-		static std::optional<std::unique_ptr<Script>> createScript(Node *node, const Res &path);
+		static std::optional<std::unique_ptr<Script>> createScript(GameEntity *entity, const Res &path);
 
 		void setEnabled(bool enabled) noexcept { m_enabled = enabled; }
 		bool getEnabled() const noexcept { return m_enabled; }

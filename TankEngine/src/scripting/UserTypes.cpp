@@ -10,76 +10,16 @@
 // The types to-be-defined as usertypes
 #include <glm/glm.hpp>
 #include <KeyInput.h>
-#include <scene/Entity.h>
+#include <scene/GameEntity.h>
 #include <components/Camera.h>
-#include <components/Scene.h>
 #include <components/Transform.h>
+#include <components/Tree.h>
 #include <static/Time.h>
+#include "Glue.h"
 
 
-#define KC(x) #x, GLFW_KEY_##x
-#define PAIR(x, y) x, y
-
-// Declare a Sol class usertype.	
-#define SOL_CLASS(name) (s_luaClasses.push_back({#name}), #name)
-// Get a lua class from name
-#define GET_SOL_CLASS(name) Tank::UserTypes::findItem<LuaClass>(s_luaClasses, name)
-// Declares a class base for name.
-#define SOL_CLASS_BASE(name, baseName) (GET_SOL_CLASS(name)->base = #baseName/*, sol::bases<baseName>()*/)
-
-// Declares a class field.
-#define SOL_FIELD(className, name, type) \
-	(GET_SOL_CLASS(className)->fields.push_back({name, type}), name)
-#define SOL_STATIC_FIELD(className, name, type) \
-	(GET_SOL_CLASS(className)->staticFields.push_back({name, type}), name)
-#define SOL_GLOBAL_FIELD(className, name, type) \
-	GET_SOL_CLASS(className)->globalFields.push_back({name, type})
-
-#define SOL_CALLABLE(relevantClass, functionsVector, funcName, retType, ...) \
-	GET_SOL_CLASS(relevantClass)->functionsVector.push_back({ \
-		funcName, \
-		##__VA_ARGS__, \
-		retType \
-	})
-#define SOL_METHOD(className, name, retType, ...) \
-	(SOL_CALLABLE( \
-		className, \
-		methods, \
-		name, \
-		retType, \
-		__VA_ARGS__ \
-	), name)
-#define SOL_META_METHOD(className, methodVal, retType, ...) \
-	(SOL_CALLABLE( \
-		className, \
-		metaMethods, \
-		sol::meta_function_names()[(int)methodVal], \
-		retType, \
-		__VA_ARGS__ \
-	), methodVal)
-#define SOL_STATIC_METHOD(className, name, retType, ...) \
-	(SOL_CALLABLE( \
-		className, \
-		staticMethods, \
-		name, \
-		retType, \
-		__VA_ARGS__ \
-	), name)
-#define SOL_GLOBAL_FUNCTION(relevantClass, name, retType, ...) \
-	(SOL_CALLABLE( \
-		relevantClass, \
-		globalFunctions, \
-		name, \
-		retType, \
-		__VA_ARGS__ \
-	), name)
-#define SOL_CONSTRUCTOR(className, ...) \
-	SOL_STATIC_METHOD(className, "new", className, __VA_ARGS__)
-
-// Define an enum
-#define SOL_ENUM(name) (s_luaEnums.push_back({#name}), #name)
-#define GET_SOL_ENUM(name) Tank::UserTypes::findItem<LuaEnum>(s_luaEnums, name)
-#define SOL_ENUM_PAIR(enumName, pair) GET_SOL_ENUM(enumName)->pairs.push_back({pair})
+#define KEY(x) GluePair { #x, GLFW_KEY_##x }
+#define PAIR(a, b) GluePair { #a, #b }
 
 
 namespace Tank
@@ -102,61 +42,24 @@ namespace Tank
 	template<>
 	void UserTypes::generate<glm::vec3>(sol::state &lua)
 	{
-		// Vec3
-		auto ut = lua.new_usertype<glm::vec3>(
-			SOL_CLASS(Vec3),
-			sol::constructors<glm::vec3(), glm::vec3(float, float, float)>()
+		auto ut = Glue::newType<glm::vec3>(lua, "Vec3");
+		Glue::ctors(ut, "Vec3",
+			GlueCtor { {}, sol::constructors<glm::vec3()>() },
+			GlueCtor { {{"x", "number"}, {"y", "number"}, {"z", "number"}}, sol::constructors<glm::vec3(float, float, float)>() }
 		);
-		SOL_CONSTRUCTOR("Vec3", {});
-		SOL_CONSTRUCTOR("Vec3", { {"x", "number"}, {"y", "number"}, {"z", "number"} });
-
-		// Fields
-		ut[SOL_FIELD("Vec3", "x", "number")] = &glm::vec3::x;
-		ut[SOL_FIELD("Vec3", "y", "number")] = &glm::vec3::y;
-		ut[SOL_FIELD("Vec3", "z", "number")] = &glm::vec3::z;
-
-		// Meta functions
-		ut[SOL_META_METHOD(
-			"Vec3",
-			sol::meta_function::addition,
-			"Vec3",
-			{ { "other", "Vec3" } }
-		)] = [](const glm::vec3 &a, const glm::vec3 &b) { return a + b; };
-		ut[SOL_META_METHOD(
-			"Vec3",
-			sol::meta_function::subtraction,
-			"Vec3",
-			{ { "other", "Vec3" } }
-		)] = [](const glm::vec3 &a, const glm::vec3 &b) { return a - b; };
-		ut[SOL_META_METHOD(
-			"Vec3",
-			sol::meta_function::multiplication,
-			"Vec3",
-			{ { "scalar", "number" } }
-		)] = [](const glm::vec3 &a, const float b) { return a * b; };
-		ut[SOL_META_METHOD(
-			"Vec3",
-			sol::meta_function::division,
-			"Vec3",
-			{ { "scalar", "number" } }
-		)] = [](const glm::vec3 &a, const float b) { return a / b; };
-		SOL_META_METHOD(
-			"Vec3",
-			sol::meta_function::unary_minus,
-			"Vec3",
-			{}
+		Glue::fields(ut, "Vec3",
+			GlueField { "x", "number", &glm::vec3::x },
+			GlueField { "y", "number", &glm::vec3::y },
+			GlueField { "z", "number", &glm::vec3::z }
 		);
-		SOL_META_METHOD(
-			"Vec3",
-			sol::meta_function::equal_to,
-			"boolean",
-			{ { "other", "Vec3" } }
-		);
-		SOL_META_METHOD(
-			"Vec3",
-			sol::meta_function::to_string,
-			"string",
-			{}
+		Glue::operators(ut, "Vec3",
+			GlueOp { (unsigned)sol::meta_function::addition, "Vec3", {{ "other", "Vec3" }} },
+			GlueOp { (unsigned)sol::meta_function::subtraction, "Vec3", {{ "other", "Vec3" }} },
+			GlueOp { (unsigned)sol::meta_function::multiplication, "Vec3", {{ "scalar", "float" }} },
+			GlueOp { (unsigned)sol::meta_function::division, "Vec3", {{ "scalar", "float" }} },
+			GlueOp { (unsigned)sol::meta_function::unary_minus, "Vec3", {} },
+			GlueOp { (unsigned)sol::meta_function::equal_to, "Vec3", {{ "other", "Vec3" }} },
+			GlueOp { (unsigned)sol::meta_function::to_string, "string", {} }
 		);
 	}
 
@@ -164,97 +67,90 @@ namespace Tank
 	void UserTypes::generate<KeyState>(sol::state &lua)
 	{
 		// New KeyCode type to represent GLFW_KEY_ values
-		lua.new_enum(
-			SOL_ENUM(KeyCode),
-			KC(W),
-			KC(A),
-			KC(S),
-			KC(D)
+		Glue::newEnum(lua, "KeyCode",
+			KEY(W),
+			KEY(A),
+			KEY(S),
+			KEY(D)
 		);
-		SOL_ENUM_PAIR("KeyCode", KC(W));
-		SOL_ENUM_PAIR("KeyCode", KC(A));
-		SOL_ENUM_PAIR("KeyCode", KC(S));
-		SOL_ENUM_PAIR("KeyCode", KC(D));
 
-		lua.new_enum(
-			SOL_ENUM(KeyState),
+		Glue::newEnum(lua, "KeyState",
 			PAIR("Held", (int)KeyState::Held),
 			PAIR("Pressed", (int)KeyState::Pressed),
 			PAIR("NotPressed", (int)KeyState::NotPressed),
 			PAIR("Released", (int)KeyState::Released)
 		);
-		SOL_ENUM_PAIR("KeyState", PAIR("Held", (int)KeyState::Held));
-		SOL_ENUM_PAIR("KeyState", PAIR("Pressed", (int)KeyState::Pressed));
-		SOL_ENUM_PAIR("KeyState", PAIR("NotPressed", (int)KeyState::NotPressed));
-		SOL_ENUM_PAIR("KeyState", PAIR("Released", (int)KeyState::Released));
 	}
 
 	template<>
 	void UserTypes::generate<KeyInput>(sol::state &lua)
 	{
-		sol::usertype<KeyInput> utKeyInput = lua.new_usertype<KeyInput>(
-			SOL_CLASS(KeyInput)
+		auto ut = Glue::newType<KeyInput>(lua, "KeyInput");
+		Glue::methods(ut, "KeyInput",
+			GlueMethod { "get_key_state", "KeyState", {{ "code", "KeyCode" }}, &KeyInput::getKeyState }
 		);
-		utKeyInput[SOL_METHOD("KeyInput", "get_key_state", "KeyState", { { "code", "KeyCode" } })] = &KeyInput::getKeyState;
 	}
 
 	template<>
-	void UserTypes::generate<Node>(sol::state &lua)
+	void UserTypes::generate<GameEntity>(sol::state &lua)
 	{
-		sol::usertype<Node> ut = lua.new_usertype<Node>(
-			SOL_CLASS(Node)
+		auto ut = Glue::newType<GameEntity>(lua, "GameEntity");
+		Glue::fields(ut, "GameEntity",
+			GlueField { "name", "string", sol::property(&GameEntity::name, &GameEntity::setName) },
+			GlueField { "transform", "Transform", sol::property(&GameEntity::getComponent<TransformComponent>) },
+			GlueField { "tree", "Tree", sol::property(&GameEntity::getComponent<TreeComponent>) },
+			GlueField { "key_input", "KeyInput", sol::property(&GameEntity::keyInput) }
 		);
-		ut[SOL_FIELD("Node", "name", "string")] = sol::property(&Node::name, &Node::setName);
-		ut[SOL_FIELD("Node", "transform", "Transform")] = sol::property(&Node::getComponent<TransformComponent>);
-		ut[SOL_FIELD("Node", "key_input", "KeyInput")] = sol::property(&Node::getKeyInput);
-		ut[SOL_METHOD("Node", "get_parent", "Node", {})] = &Node::getParent;
-		ut[SOL_METHOD("Node", "get_child", "Node", { { "index", "number" } })] = static_cast<Node * (Node:: *)(int) const>(&Node::getChild);
-		ut[SOL_METHOD("Node", "get_child", "Node", { { "name", "string" } })] = static_cast<Node * (Node:: *)(const std::string &) const>(&Node::getChild);
-		SOL_GLOBAL_FIELD("Node", "node", "Node");
+		Glue::globalInstances(ut, "GameEntity", "entity");
 	}
 
 	template<>
-	void UserTypes::generate<SceneCamera>(sol::state &lua)
+	void UserTypes::generate<TransformComponent>(sol::state &lua)
 	{
-		sol::usertype<Camera> ut = lua.new_usertype<Camera>(
-			SOL_CLASS(Camera),
-			sol::base_classes, sol::bases<Node>()
+		auto ut = Glue::newType<TransformComponent>(lua, "Transform");
+		Glue::fields(ut, "Transform",
+			GlueField { "translation", "Vec3", &TransformComponent::Translation },
+			GlueField { "rotation", "Vec3", &TransformComponent::Rotation },
+			GlueField { "scale", "Vec3", &TransformComponent::Scale }
 		);
-		SOL_CLASS_BASE("Camera", Node);
-		ut[SOL_METHOD("Camera", "set_pos", "", { { "pos", "Vec3" } })] = &Camera::setPosition;
+	}
+
+	template<>
+	void UserTypes::generate<TreeComponent>(sol::state &lua)
+	{
+		auto ut = Glue::newType<TreeComponent>(lua, "Tree");
+		Glue::methods(ut, "Tree",
+			GlueMethod { "get_child", "GameEntity", {{ "index", "number" }}, static_cast<GameEntity * (TreeComponent:: *)(int) const>(&TreeComponent::getChild) },
+			GlueMethod { "get_child", "GameEntity", {{ "name", "string" }}, static_cast<GameEntity * (TreeComponent:: *)(const std::string &) const>(&TreeComponent::getChild) }
+		);
+	}
+
+	template<>
+	void UserTypes::generate<Camera>(sol::state &lua)
+	{
+		auto ut = Glue::newType<Camera>(lua, "Camera");
+		Glue::methods(ut, "Camera",
+			GlueMethod { "set_pos", "", {{ "pos", "Vec3" }}, &Camera::setPosition }
+		);
 	}
 
 	template<>
 	void UserTypes::generate<Scene>(sol::state &lua)
 	{
-		// Scene
-		sol::usertype<Scene> ut = lua.new_usertype<Scene>(
-			SOL_CLASS(Scene),
-			sol::base_classes, sol::bases<Node>()
+		auto ut = Glue::newType<Scene>(lua, "Scene");
+		Glue::methods(ut, "Scene",
+			GlueMethod { "active_camera", "Camera", {}, &Scene::getActiveCamera },
+			GlueMethod { "current", "Scene", {}, &Scene::getActiveScene }
 		);
-		SOL_CLASS_BASE("Scene", Node);
-		ut[SOL_METHOD("Scene", "active_camera", "Camera", {})] = &Scene::getActiveCamera;
-		ut[SOL_STATIC_METHOD("Scene", "current", "Scene", {})] = &Scene::getActiveScene;
-	}
-
-	template<>
-	void UserTypes::generate<Transform>(sol::state &lua)
-	{
-		auto ut = lua.new_usertype<TransformComponent>(
-			SOL_CLASS(TransformComponent)
-		);
-		ut[SOL_FIELD("Transform", "translation", "Vec3")] = sol::property(&TransformComponent::getLocalTranslation, &TransformComponent::setLocalTranslation);
-		ut[SOL_FIELD("Transform", "rotation", "Vec3")] = sol::property(&TransformComponent::getLocalRotation, &TransformComponent::setLocalRotation);
-		ut[SOL_FIELD("Transform", "scale", "Vec3")] = sol::property(&TransformComponent::getLocalScale, &TransformComponent::setLocalScale);
 	}
 
 	template<>
 	void UserTypes::generate<Time>(sol::state &lua)
 	{
-		auto ut = lua.new_usertype<Time>(
-			SOL_CLASS(Time)
+		auto ut = Glue::newType<Time>(lua, "Time");
+		Glue::staticFields(ut, "Time",
+			GlueField { "delta", "number", sol::property(&Time::getFrameDelta) }
 		);
-		ut[SOL_STATIC_FIELD("Time", "delta", "number")] = sol::property(&Time::getFrameDelta);
 	}
 
 	
@@ -265,10 +161,12 @@ namespace Tank
 		generate<KeyState>(lua);
 		generate<KeyInput>(lua);
 		
-		generate<Node>(lua);
-		generate<SceneCamera>(lua);
+		generate<GameEntity>(lua);
+		generate<TransformComponent>(lua);
+		generate<TreeComponent>(lua);
+		
 		generate<Scene>(lua);
-		generate<Transform>(lua);
+		generate<Camera>(lua);
 
 		generate<Time>(lua);
 	}

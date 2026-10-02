@@ -25,9 +25,10 @@ namespace Tank
 	}
 
 
-	static void printLuaMetaMethod(std::ostream &os, const LuaCallable &metaMeth)
+	static void printLuaMetaMethod(std::ostream &os, const LuaOperator &metaMeth)
 	{
-		std::string name = metaMeth.name;
+		auto &metaFunctionNames = sol::meta_function_names();
+		std::string name = metaFunctionNames[metaMeth.type];
 		String::eraseAll(name, "__");
 
 		std::string types;

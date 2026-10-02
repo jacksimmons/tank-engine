@@ -118,8 +118,11 @@ namespace Tank
 			for (auto e : view)
 			{
 				Entity entity = { e, this };
-				auto &cubeMap = entity.getComponent<CubeMapComponent>();
+				
+				// Don't render components on invisible entities
+				if (!entity.isVisible()) continue;
 
+				auto &cubeMap = entity.getComponent<CubeMapComponent>();
 				Renderer::drawCubeMap(&cubeMap, m_activeCamera->Camera);
 			}
 		}
@@ -127,9 +130,13 @@ namespace Tank
 		// Rendering (Models)
 		{
 			auto group = m_registry.group<TransformComponent>(entt::get<ModelComponent>);
-			for (auto entity : group)
+			for (auto e : group)
 			{
-				auto [transform, model] = group.get<TransformComponent, ModelComponent>(entity);
+				auto [transform, model] = group.get<TransformComponent, ModelComponent>(e);
+				Entity entity = { e, this };
+
+				// Don't render components on invisible entities
+				if (!entity.isVisible()) continue;
 
 				// Apply lighting
 				const Shader &shader = model.getShader();
@@ -144,9 +151,13 @@ namespace Tank
 		// Rendering (Sprites)
 		{
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteComponent>);
-			for (auto entity : group)
+			for (auto e : group)
 			{
-				auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+				auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(e);
+				Entity entity = { e, this };
+
+				// Don't render components on invisible entities
+				if (!entity.isVisible()) continue;
 
 				// Apply lighting
 				const Shader &shader = sprite.getShader();
