@@ -1,5 +1,7 @@
 #include <format>
 #include <fstream>
+#include <reflection/ReflectionRegistry.h>
+#include <scene/Scene.h> 
 #include "SceneSerialisation.h"
 #include "fs/File.h"
 #include "Log.h"
@@ -8,15 +10,13 @@
 #include "components/CubeMap.h"
 #include "components/Light.h"
 #include "components/Model.h"
-#include "components/Scene.h"
-#include "reflection/NodeFactory.h"
 
 
 namespace Tank
 {
 	namespace Serialisation
 	{
-		Scene* loadScene(const std::filesystem::path &scenePath, const Reflect::NodeFactory &factory)
+		Scene* loadScene(const std::filesystem::path &scenePath)
 		{
 			std::string sceneFile;
 			if (File::readLines(scenePath, sceneFile) != File::ReadResult::Success)
@@ -36,7 +36,7 @@ namespace Tank
 				return nullptr;
 			}
 
-			if (Scene *scene = dynamic_cast<Scene*>(deserialise(serialised, factory)))
+			if (Scene *scene = ReflectionRegistry::deserialise<Scene>(serialised))
 			{
 				return scene;
 			}

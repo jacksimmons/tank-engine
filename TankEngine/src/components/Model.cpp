@@ -18,10 +18,18 @@
 namespace Tank
 {
 	ModelComponent::ModelComponent(const Resource &modelPath)
-		: IMeshContainer()
+		: IMeshContainer(), shader({}, {})
 	{
 		setModelPath(modelPath);
-		m_cullFace = GL_BACK;
+		cullFace = GL_BACK;
+	}
+
+
+	ModelComponent::ModelComponent(const ModelComponent &other)
+		: IMeshContainer(), shader(other.shader)
+	{
+		setModelPath(other.m_modelPath);
+		cullFace = other.cullFace;
 	}
 
 
@@ -112,7 +120,7 @@ namespace Tank
 		// Materials
 		if (mesh->mMaterialIndex >= 0)
 		{
-			getShader().use();
+			shader.use();
 			aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
 			auto diffuse = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
@@ -120,7 +128,7 @@ namespace Tank
 
 			auto specular = loadMaterialTextures(material, aiTextureType_SPECULAR, "specular");
 			textures.insert(textures.end(), specular.begin(), specular.end());
-			getShader().unuse();
+			shader.unuse();
 		}
 
 		return std::make_unique<Mesh>(vertices, indices, textures);
@@ -183,18 +191,22 @@ namespace Tank
 	{
 		json serialised;
 		serialised["modelPath"] = Resource::encode(in->getModelPath());
-		serialised["shader"] = Shader::serialise(in->getShader());
-		serialised["cullFace"] = in->getCullFace();
+		serialised["shader"] = Shader::serialise(in->shader);
+		serialised["cullFace"] = in->cullFace;
 		return serialised;
 	}
 
 	template <>
-	void deserialise<ModelComponent>(const json &serialised, ModelComponent *out)
+	ModelComponent deserialise(const json &serialised)
 	{
-		out->initShaderContainer(ShaderSources::deserialise(serialised["shader"]));
-		out->setModelPath(Resource::decode(serialised["modelPath"]));
-		out->setCullFace(serialised["cullFace"]);
+		ModelComponent mc {};
 
-		out->process();
+		mc.shader = Shader{ {}, ShaderSources::deserialise(serialised["shader"]) };
+		mc.setModelPath(Resource::decode(serialised["modelPath"]));
+		mc.cullFace = serialised["cullFace"];
+
+		mc.process();
+
+		return mc;
 	}
 }

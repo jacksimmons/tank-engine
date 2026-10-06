@@ -1,18 +1,22 @@
 #pragma once
-#include <nodes/interfaces/ShaderContainer.h>
 #include <serialisation/Serialisation.h>
+#include <Shader.h>
 
 
 namespace Tank
 {
 	class Texture;
-	class Shader;
-	struct ShaderSource;
-	struct ShaderSources;
-	namespace Reflect { class NodeFactory; }
 
 
-	struct CubeMapComponent : public IShaderContainer
+	struct CubeMapData
+	{
+		friend class CubeMapComponent;
+	private:
+		static ShaderSources s_defaultSources;
+	};
+
+
+	struct CubeMapComponent
 	{
 		friend class Renderer;
 	private:
@@ -21,7 +25,8 @@ namespace Tank
 		std::shared_ptr<Texture> m_texture;
 		std::array<Resource, 6> m_texturePaths;
 	public:
-		CubeMapComponent() = default;
+		Shader shader;
+
 		CubeMapComponent(
 			const std::array<Resource, 6> &textureNames =
 			{
@@ -88,5 +93,5 @@ namespace Tank
 	template <>
 	json serialise<CubeMapComponent>(CubeMapComponent *);
 	template <>
-	void deserialise<CubeMapComponent>(const json &, CubeMapComponent *);
+	CubeMapComponent deserialise(const json &);
 }

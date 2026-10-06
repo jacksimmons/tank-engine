@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include "Mesh.h"
 #include "Texture.h"
 #include "Shader.h"
@@ -45,14 +46,5 @@ namespace Tank
 		glDeleteVertexArrays(1, &m_vao);
 		glDeleteBuffers(1, &m_vbo);
 		glDeleteBuffers(1, &m_ebo);
-	}
-
-
-	// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-	//			  Methods
-	// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-	void Mesh::draw(const Shader &shader) const
-	{
-
 	}
 }

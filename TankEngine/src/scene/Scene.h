@@ -5,10 +5,10 @@
 
 namespace Tank
 {
-	class Entity;
-	struct CameraComponent;
+	class GameEntity;
 	class GlobalLight;
 	class Shader;
+	struct CameraComponent;
 
 	namespace Editor { class Hierarchy_; }
 
@@ -18,12 +18,6 @@ namespace Tank
 		friend class Entity;
 		// The Hierarchy may modify elements of the scene (lights, nodes).
 		friend class Editor::Hierarchy_;
-	public:
-		Scene();
-		~Scene();
-
-		Entity createEntity();
-		void update();
 	private:
 		entt::registry m_registry;
 
@@ -45,9 +39,9 @@ namespace Tank
 
 		void onNodeDeleted(Entity *deleted) noexcept;
 	public:
-		// A Scene has ownership of the entire Node hierarchy, and a reference to
-		// the active camera.
-		Scene(const std::string &name = "Scene");
+		Scene(bool isActive = false);
+
+		std::unique_ptr<GameEntity> createEntity();
 
 		// Get the active camera for this scene.
 		CameraComponent *getActiveCamera() const noexcept { return m_activeCamera; }
@@ -62,5 +56,5 @@ namespace Tank
 	template <>
 	json serialise<Scene>(Scene *);
 	template <>
-	void deserialise<Scene>(const json &, Scene *);
+	Scene deserialise(const json &);
 }

@@ -16,10 +16,10 @@ namespace Tank
 		void handleInteraction(size_t bodyIndex, float dt);
 		float getGravityScalar(float distance, float otherMass) const;
 	public:
+		float mass;
+
 		PhysicsBodyComponent(float mass = 1);
 		virtual ~PhysicsBodyComponent();
-
-		float Mass;
 
 		glm::vec3 getCentre() const noexcept;
 	};

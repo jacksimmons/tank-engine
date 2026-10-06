@@ -9,9 +9,9 @@ namespace Tank
 	{
 		glm::mat4 model = glm::identity<glm::mat4>();
 
-		model = glm::translate(model, Translation);
-		model = glm::mat4_cast(Rotation) * model;
-		model = glm::scale(model, Scale);
+		model = glm::translate(model, translation);
+		model = glm::mat4_cast(rotation) * model;
+		model = glm::scale(model, scale);
 
 		return model;
 	}
@@ -24,19 +24,21 @@ namespace Tank
 	json serialise<TransformComponent>(TransformComponent *deserialised)
 	{
 		json serialised = {
-			{ "rotation", quat::serialise(deserialised->Rotation) },
-			{ "scale", vec3::serialise(deserialised->Scale) },
-			{ "translation", vec3::serialise(deserialised->Translation) },
+			{ "rotation", quat::serialise(deserialised->rotation) },
+			{ "scale", vec3::serialise(deserialised->scale) },
+			{ "translation", vec3::serialise(deserialised->translation) },
 		};
 
 		return serialised;
 	}
 
 	template <>
-	void deserialise<TransformComponent>(const json &serialised, TransformComponent *out)
+	TransformComponent deserialise(const json &serialised)
 	{
-		out->Rotation = quat::deserialise(serialised["rotation"]);
-		out->Scale = vec3::deserialise(serialised["scale"]);
-		out->Translation = vec3::deserialise(serialised["translation"]);
+		TransformComponent transform {};
+		transform.rotation = quat::deserialise(serialised["rotation"]);
+		transform.scale = vec3::deserialise(serialised["scale"]);
+		transform.translation = vec3::deserialise(serialised["translation"]);
+		return transform;
 	}
 }

@@ -11,8 +11,8 @@ namespace Tank
 	};
 
 
-	template <>
-	json serialise<TextComponent>(TextComponent *);
-	template <>
-	void deserialise<TextComponent>(const json &, TextComponent *);
+	//template <>
+	//json serialise<TextComponent>(TextComponent *);
+	//template <>
+	//void deserialise<TextComponent>(const json &, TextComponent *);
 }

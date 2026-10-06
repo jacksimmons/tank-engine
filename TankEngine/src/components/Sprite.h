@@ -1,20 +1,21 @@
 #pragma once
 #include <nodes/interfaces/MeshContainer.h>
 #include <serialisation/Serialisation.h>
+#include <Shader.h>
 
 
 namespace Tank
 {
-	namespace Reflect { class NodeFactory; }
-
-
 	struct SpriteComponent : public IMeshContainer
 	{
 	private:
 		Resource m_texPath;
 	public:
+		Shader shader;
+
 		SpriteComponent(const Resource &texPath = Resource("textures/awesomeface.png", true));
-		virtual ~SpriteComponent() = default;
+		SpriteComponent(const SpriteComponent &sc) = default;
+		~SpriteComponent() = default;
 
 		bool setTexPath(const Resource &texPath);
 		const Resource& getTexPath() { return m_texPath; }
@@ -24,5 +25,5 @@ namespace Tank
 	template <>
 	json serialise<SpriteComponent>(SpriteComponent *);
 	template <>
-	void deserialise<SpriteComponent>(const json &, SpriteComponent *);
+	SpriteComponent deserialise(const json &);
 }

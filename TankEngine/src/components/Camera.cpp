@@ -20,11 +20,14 @@ namespace Tank
 	}
 
 	template <>
-	void deserialise<CameraComponent>(const json &serialised, CameraComponent *out)
+	CameraComponent deserialise(const json &serialised)
 	{
-		deserialise(serialised["camera"], &out->Camera);
+		CameraComponent cc {};
 
-		out->PanSpeed = serialised["panSpd"];
-		out->RotationSpeed = serialised["rotSpd"];
+		cc.camera = deserialise<Camera>(serialised);
+		cc.panSpeed = serialised["panSpd"];
+		cc.rotationSpeed = serialised["rotSpd"];
+
+		return cc;
 	}
 }

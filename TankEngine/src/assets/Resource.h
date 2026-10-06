@@ -30,6 +30,7 @@ namespace Tank
 		{
 			return Resource::encode(*this) == Resource::encode(other);
 		}
+		std::string encode() const { return Resource::encode(*this); }
 
 		fs::path resolvePath() const;
 		std::string resolvePathStr() const;

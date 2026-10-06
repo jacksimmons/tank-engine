@@ -11,7 +11,7 @@ namespace Tank
 		bool enabled;
 
 
-		ShaderSource();
+		ShaderSource(const Resource &location = Res("", false));
 		ShaderSource(const ShaderSource &original);
 		bool operator==(const ShaderSource &other);
 	};

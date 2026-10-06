@@ -6,9 +6,9 @@ namespace Tank
 {
 	struct ColliderComponent
 	{
-		std::unique_ptr<CollisionShape> Shape;
+		std::unique_ptr<CollisionShape> shape;
 
 		ColliderComponent() = default;
-		ColliderComponent(std::unique_ptr<CollisionShape> shape) : Shape(std::move(shape)) {};
+		ColliderComponent(std::unique_ptr<CollisionShape> shape) : shape(std::move(shape)) {};
 	};
 }

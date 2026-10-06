@@ -5,8 +5,8 @@
 namespace Tank
 {
 	class Texture;
-	class IMeshContainer;
-	class Shader;
+
+
 	class TANK_API Mesh
 	{
 		friend class Renderer;
@@ -26,7 +26,7 @@ namespace Tank
 			const std::vector<unsigned> &indices,
 			const std::vector<std::shared_ptr<Texture>> &textures
 		);
-		virtual ~Mesh();
+		~Mesh();
 
 
 		const std::vector<Vertex> &getVertices() const { return m_vertices; }

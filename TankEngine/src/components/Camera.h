@@ -17,7 +17,7 @@ namespace Tank
 		float RotationSpeed = 10;
 		bool FreeLookEnabled = true;
 
-		CameraComponent() = default;
+		CameraComponent() : camera({}) {};
 		CameraComponent(CameraComponent &) = default;
 	};
 
@@ -25,5 +25,5 @@ namespace Tank
 	template <>
 	json serialise<CameraComponent>(CameraComponent *);
 	template <>
-	void deserialise<CameraComponent>(const json &, CameraComponent *);
+	CameraComponent deserialise(const json &);
 }

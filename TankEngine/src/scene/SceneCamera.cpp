@@ -90,19 +90,22 @@ namespace Tank
 	}
 
 	template <>
-	void deserialise<SceneCamera>(const json &serialised, SceneCameraout)
+	SceneCamera deserialise<SceneCamera>(const json &serialised)
 	{
-		out->deserialise(serialised);
+		SceneCamera cam
+		{
+			vec3::deserialise(serialised["eye"]),
+			vec3::deserialise(serialised["centre"]),
+			vec3::deserialise(serialised["up"])
+		};
+		cam.deserialise(serialised);
+		return cam;
 	}
 	void Camera::deserialise(const json &serialised)
 	{
 		m_view = mat4::deserialise(serialised["view"]);
 		m_rotation = mat4::deserialise(serialised["rotation"]);
 		m_translation = mat4::deserialise(serialised["translation"]);
-
-		m_eye = vec3::deserialise(serialised["eye"]);
-		m_centre = vec3::deserialise(serialised["centre"]);
-		m_up = vec3::deserialise(serialised["up"]);
 
 		m_cullNear = serialised["cullNear"];
 		m_cullFar = serialised["cullFar"];

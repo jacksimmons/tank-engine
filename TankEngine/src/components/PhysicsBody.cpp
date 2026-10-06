@@ -11,7 +11,7 @@ namespace Tank
 	std::vector<PhysicsBodyComponent*> PhysicsBodyComponent::s_instances;
 
 
-	PhysicsBodyComponent::PhysicsBodyComponent(float mass = 1) : Mass(mass)
+	PhysicsBodyComponent::PhysicsBodyComponent(float mass) : mass(mass)
 	{
 		s_instances.push_back(this);
 	}

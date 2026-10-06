@@ -1,10 +1,18 @@
 #pragma once
+#include <scripting/Script.h>
+#include <KeyInput.h>
 #include "Entity.h"
 
 
 namespace Tank
 {
-	/// @brief An entity which supports user-defined scripts.
+	class NameComponent;
+	class TransformComponent;
+	class TreeComponent;
+	class KeyInput;
+
+
+	/// @brief Implementation for a practical Entity in a scene.
 	class TANK_API GameEntity : public Entity
 	{
 	private:
@@ -14,14 +22,22 @@ namespace Tank
 		/// @brief Whether or not user scripts have started running.
 		bool m_started = false;
 	public:
-		GameEntity() = default;
+		GameEntity(entt::entity handle, Scene *ecs) : Entity(handle, ecs) {}
+		GameEntity(const GameEntity &other) : Entity(other) {};
 		~GameEntity() = default;
 
-		KeyInput *keyInput() const;
+		const std::string &name() const;
+		void setName(const std::string &name) noexcept;
 
-		virtual void startup() override;
-		virtual void shutdown() override;
-		virtual void update() override;
+		KeyInput *keyInput() const;
+		TransformComponent &transform() const;
+		TreeComponent &tree() const;
+
+		virtual void startup();
+		virtual void shutdown();
+		virtual void preupdate();
+		virtual void update();
+		virtual void destroy();
 
 		void addScript(std::unique_ptr<Script>);
 		bool removeScript(const Res &path);
@@ -33,5 +49,5 @@ namespace Tank
 	template <>
 	json serialise<GameEntity>(GameEntity *);
 	template <>
-	void deserialise<GameEntity>(const json &, GameEntity *);
+	GameEntity deserialise(const json &);
 }

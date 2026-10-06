@@ -22,14 +22,14 @@ namespace Tank
 	// =======================
 	//		Serialisation
 	// =======================
-	template <>
-	json serialise<TextComponent>(TextComponent *)
-	{
-		return {};
-	}
+	//template <>
+	//json serialise<TextComponent>(TextComponent *)
+	//{
+	//	return {};
+	//}
 
-	template <>
-	void deserialise<TextComponent>(const json &, TextComponent *)
-	{
-	}
+	//template <>
+	//void deserialise<TextComponent>(const json &, TextComponent *)
+	//{
+	//}
 }

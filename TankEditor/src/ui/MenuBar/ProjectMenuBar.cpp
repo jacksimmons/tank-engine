@@ -11,7 +11,7 @@
 #include <ui/Profiler.h>
 #include <project/Export.h>
 #include <project/Project.h>
-#include <reflection/NodeFactory.h>
+#include <reflection/ReflectionFactory.h>
 #include <SceneSerialisation.h>
 #include <Colours.h>
 #include <Log.h>

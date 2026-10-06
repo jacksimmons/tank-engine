@@ -1,6 +1,9 @@
 #include <Log.h>
 #include <scene/GameEntity.h>
 #include <static/GlmSerialise.h>
+#include <reflection/ReflectionRegistry.h>
+#include <scene/Scene.h>
+#include <scene/Entity.h>
 #include "Tree.h"
 
 
@@ -8,7 +11,7 @@ namespace Tank
 {
 	void TreeComponent::addChild(std::unique_ptr<GameEntity> child, std::optional<size_t> atIndex)
 	{
-		child->tree().m_parent = this->m_entity;
+		child->tree().m_parent = this->entity;
 		m_childrenAwaitingAdopt.push_back(std::make_tuple(std::move(child), atIndex));
 	}
 
@@ -142,7 +145,7 @@ namespace Tank
 	void TreeComponent::forEachDescendant(std::function<void(GameEntity *)> forEach, std::function<bool()> terminate)
 	{
 		std::stack<GameEntity *> entityStack;
-		entityStack.push(m_entity);
+		entityStack.push(entity);
 
 		while (!entityStack.empty())
 		{
@@ -167,12 +170,12 @@ namespace Tank
 	bool TreeComponent::setParent(GameEntity *parent, std::optional<size_t> siblingIndex)
 	{
 		// Set the parent if it's different to our current one
-		if (parent == m_parent)
+		if (parent == parent)
 		{
 			return false;
 		}
 
-		std::unique_ptr<GameEntity> disownedEntity = m_parent->tree().disownChild(m_entity);
+		std::unique_ptr<GameEntity> disownedEntity = parent->tree().disownChild(entity);
 		assert(disownedEntity != nullptr);
 		parent->tree().addChild(std::move(disownedEntity), siblingIndex);
 		return true;
@@ -183,7 +186,7 @@ namespace Tank
 	{
 		if (m_parent)
 		{
-			return m_parent->tree().getPath() + "/" + m_entity->name();
+			return m_parent->tree().getPath() + "/" + entity->name();
 		}
 
 		return std::string("");
@@ -192,7 +195,7 @@ namespace Tank
 
 	GameEntity *TreeComponent::childFromTree(std::vector<int> treeTraversal)
 	{
-		GameEntity *currentEntity = m_entity;
+		GameEntity *currentEntity = entity;
 		while (!treeTraversal.empty())
 		{
 			int childIndex = treeTraversal[0];
@@ -227,7 +230,7 @@ namespace Tank
 				TE_CORE_ERROR("treeFromChild: Tree traversal was not valid - this was not a parent of child.");
 				return std::vector<int>();
 			}
-		} while (currentChild != m_entity);
+		} while (currentChild != entity);
 
 		return treeTraversal;
 	}
@@ -252,24 +255,17 @@ namespace Tank
 	}
 
 	template <>
-	void deserialise<TreeComponent>(const json &serialised, TreeComponent *out)
+	TreeComponent deserialise(const json &serialised)
 	{
-		GameEntity *entity = nullptr;
+		auto entity = ReflectionRegistry::deserialise<GameEntity>(serialised);
+		TreeComponent tc = { entity };
+		entity->addComponent<TreeComponent>(tc);
 
-		entity = factory.deserialise(serialised);
 		for (const json &child : serialised["children"].get<std::vector<json>>())
 		{
-			node->addChild(std::unique_ptr<GameEntity>(deserialise(child, factory)));
+			tc.addChild(std::unique_ptr<GameEntity>(ReflectionRegistry::deserialise<GameEntity>(child)));
 		}
 
-		// Post-tree instantiation (after all children have been deserialised)
-		if (type == "Scene")
-		{
-			Scene *scene = (Scene *)node;
-			scene->preupdate();
-			scene->setActiveCamera((SceneCamera)scene->childFromTree(serialised["activeCam"]));
-		}
-
-		return node;
+		return tc;
 	}
 }

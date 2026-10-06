@@ -18,29 +18,27 @@ namespace Tank
 	}
 
 
-	Shader::Shader(unsigned id, const ShaderSources &sources) : m_id(id), m_sources(sources)
+	Shader::Shader(std::optional<unsigned> id, const ShaderSources &sources) : m_sources(sources)
 	{
+		if (id.has_value())
+			m_id = id.value();
+		else
+			m_id = glCreateProgram();
 
+		if (!attachShader(m_id, m_sources.vertex))
+			TE_CORE_ERROR(std::format("Failed to load vertex source: {}", sources.vertex.location.encode()));
+		if (!attachShader(m_id, m_sources.fragment))
+			TE_CORE_ERROR(std::format("Failed to load fragment source: {}", sources.fragment.location.encode()));
+		if (sources.geometry.enabled && !attachShader(m_id, m_sources.geometry))
+			TE_CORE_ERROR(std::format("Failed to load geometry source: {}", sources.geometry.location.encode()));
+
+		glLinkProgram(m_id);
 	}
 
 
 	Shader::~Shader()
 	{
 		glDeleteProgram(m_id);
-	}
-
-
-	std::optional<std::unique_ptr<Shader>> Shader::createShader(ShaderSources &sources)
-	{
-		unsigned progId = glCreateProgram();
-
-		if (!attachShader(progId, sources.vertex)) return {};
-		if (!attachShader(progId, sources.fragment)) return {};
-		if (sources.geometry.enabled && !attachShader(progId, sources.geometry)) return {};
-
-		glLinkProgram(progId);
-
-		return std::unique_ptr<Shader>(new Shader(progId, sources));
 	}
 
 

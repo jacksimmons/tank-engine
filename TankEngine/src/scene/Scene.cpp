@@ -13,7 +13,7 @@
 #include <rendering/Lighting.h>
 #include <Shader.h>
 #include "Scene.h"
-#include "Entity.h"
+#include "GameEntity.h"
 
 
 namespace Tank
@@ -21,21 +21,27 @@ namespace Tank
 	Scene *Scene::s_activeScene = nullptr;
 
 
-	Scene::Scene(const std::string &name)
+	Scene::Scene(bool isActive)
 	{
 		m_activeCamera = nullptr;
+
+		if (isActive) Scene::setActiveScene(this);
+		//scene->setActiveCamera((Camera *)scene->childFromTree(serialised["activeCam"]));
 	}
 
 
-	Entity Scene::createEntity()
+	std::unique_ptr<GameEntity> Scene::createEntity()
 	{
-		Entity entity = { m_registry.create(), this };
+		auto entity = std::make_unique<GameEntity>(m_registry.create(), this);
 
 		// ALL entities have these components.
-		entity.addComponent<TransformComponent>();
+		entity->addComponent<NameComponent>();
+		entity->addComponent<TransformComponent>();
+		entity->addComponent<TreeComponent>();
 
 		return entity;
 	}
+
 
 
 	void Scene::update()
@@ -53,10 +59,10 @@ namespace Tank
 		/// Combining these gives the view matrix.
 		/// </summary>
 		{
-			glm::vec3 centre = m_activeCamera->Camera.getTransformedCentre();
-			glm::vec3 eye = m_activeCamera->Camera.getTransformedEye();
-			glm::vec3 up = m_activeCamera->Camera.getTransformedUp();
-			m_activeCamera->Camera.m_view = glm::lookAt(eye, centre, up);
+			glm::vec3 centre = m_activeCamera->camera.getTransformedCentre();
+			glm::vec3 eye = m_activeCamera->camera.getTransformedEye();
+			glm::vec3 up = m_activeCamera->camera.getTransformedUp();
+			m_activeCamera->camera.m_view = glm::lookAt(eye, centre, up);
 		}
 
 		// Collisions
@@ -65,7 +71,7 @@ namespace Tank
 
 			for (auto e : view)
 			{
-				Entity entity = { e, this };
+				GameEntity entity = { e, this };
 				const auto &collider = entity.getComponent<ColliderComponent>();
 
 				// Check for collisions against all colliders
@@ -74,10 +80,10 @@ namespace Tank
 					// Ignore interactions with self
 					if (e == o) continue;
 
-					Entity other = { o, this };
+					GameEntity other = { o, this };
 					const auto &transform = other.getComponent<TransformComponent>();
 
-					if (collider.Shape->contains(transform.Translation))
+					if (collider.shape->contains(transform.translation))
 					{
 						TE_CORE_INFO(std::format("Collision: Offender {}, Recipient {}", entity.name(), other.name()));
 					}
@@ -123,7 +129,7 @@ namespace Tank
 				if (!entity.isVisible()) continue;
 
 				auto &cubeMap = entity.getComponent<CubeMapComponent>();
-				Renderer::drawCubeMap(&cubeMap, m_activeCamera->Camera);
+				Renderer::drawCubeMap(&cubeMap, m_activeCamera->camera);
 			}
 		}
 
@@ -139,12 +145,12 @@ namespace Tank
 				if (!entity.isVisible()) continue;
 
 				// Apply lighting
-				const Shader &shader = model.getShader();
+				const Shader &shader = model.shader;
 				shader.use();
 				applyLightsToShader(shader);
 				shader.unuse();
 
-				Renderer::drawModel(transform, model, m_activeCamera->Camera);
+				Renderer::drawModel(transform, model, m_activeCamera->camera);
 			}
 		}
 
@@ -160,12 +166,12 @@ namespace Tank
 				if (!entity.isVisible()) continue;
 
 				// Apply lighting
-				const Shader &shader = sprite.getShader();
+				const Shader &shader = sprite.shader;
 				shader.use();
 				applyLightsToShader(shader);
 				shader.unuse();
 
-				Renderer2D::drawSprite(transform, sprite, m_activeCamera->Camera);
+				Renderer2D::drawSprite(transform, sprite, m_activeCamera->camera);
 			}
 		}
 	}
@@ -234,8 +240,9 @@ namespace Tank
 	}
 
 	template <>
-	void deserialise<Scene>(const json &serialised, Scene *out)
+	Scene deserialise(const json &serialised)
 	{
-		if (serialised["isActiveScene"]) Scene::setActiveScene(out);
+		Scene scene { serialised["isActiveScene"] };
+		return scene;
 	}
 }

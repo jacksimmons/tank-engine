@@ -13,10 +13,7 @@ struct GLFWwindow;
 namespace Tank
 {
 	class KeyInput;
-	namespace Reflect
-	{
-		class NodeFactory;
-	}
+
 
 	class TANK_API Application
 	{
@@ -26,7 +23,6 @@ namespace Tank
 		bool m_gui;
 		glm::ivec2 m_windowSize;
 		GLFWwindow *m_window;
-		std::unique_ptr<Reflect::NodeFactory> m_factory;
 		ImGuiSettings m_settings;
 
 	private:
@@ -55,7 +51,6 @@ namespace Tank
 		const glm::ivec2 &getWindowSize() { return m_windowSize; }
 		GLFWwindow *const getWindow() { return m_window; }
 		ImGuiContext *const getContext() { return m_context; }
-		const Reflect::NodeFactory &getFactory() const { return *m_factory; }
 	};
 
 

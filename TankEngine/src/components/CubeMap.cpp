@@ -1,8 +1,6 @@
 #include <glad/glad.h>
-#include <nodes/interfaces/ShaderContainer.h>
-#include <reflection/NodeFactory.h>
 #include <Log.h>
-#include <Shader.h>
+#include <ShaderSource.h>
 #include <Texture.h>
 #include "CubeMap.h"
 #include "Camera.h"
@@ -10,14 +8,23 @@
 
 namespace Tank
 {
-	CubeMapComponent::CubeMapComponent(const std::array<Resource, 6> &texturePaths)
-		: IShaderContainer()
+	ShaderSources CubeMapData::s_defaultSources =
 	{
-		ShaderSources sources;
-		sources.vertex.location = Res("shaders/skybox.vert", true);
-		sources.fragment.location = Res("shaders/skybox.frag", true);
-		initShaderContainer(sources);
+		{
+			Res("shaders/skybox.vert", true)
+		},
 
+		{
+			Res("shaders/skybox.frag", true)
+		},
+
+		{}
+	};
+
+
+	CubeMapComponent::CubeMapComponent(const std::array<Resource, 6> &texturePaths)
+		: shader({}, CubeMapData::s_defaultSources)
+	{
 		glGenVertexArrays(1, &m_vao);
 		glGenBuffers(1, &m_vbo);
 		glBindVertexArray(m_vao);
@@ -34,7 +41,7 @@ namespace Tank
 	void CubeMapComponent::setTexPaths(const std::array<Resource, 6> &texPaths)
 	{
 		m_texturePaths = texPaths;
-		const Shader &shader = getShader();
+		const Shader &shader = shader;
 
 		shader.use();
 		{
@@ -69,20 +76,23 @@ namespace Tank
 		}
 		serialised["cubeMap"] = encodedPaths;
 
-		serialised["shader"] = Shader::serialise(in->getShader());
+		serialised["shader"] = Shader::serialise(in->shader);
 		return serialised;
 	}
 
 	template <>
-	void deserialise<CubeMapComponent>(const json &serialised, CubeMapComponent *out)
+	CubeMapComponent deserialise<CubeMapComponent>(const json &serialised)
 	{
-		out->initShaderContainer(ShaderSources::deserialise(serialised["shader"]));
+		CubeMapComponent cmc {};
+		cmc.shader = { {}, ShaderSources::deserialise(serialised["shader"]) };
 
 		std::array<Res, 6> decodedPaths;
 		for (int i = 0; i < 6; i++)
 		{
 			decodedPaths[i] = Res::decode(serialised["cubeMap"][i]);
 		}
-		out->setTexPaths(decodedPaths);
+
+		cmc.setTexPaths(decodedPaths);
+		return cmc;
 	}
 }
