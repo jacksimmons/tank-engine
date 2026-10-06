@@ -1,5 +1,6 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/epsilon.hpp>
+#include <scene/Entity.h>
 #include <components/PhysicsBody.h>
 #include <Log.h>
 #include "Physics.h"
@@ -15,9 +16,13 @@ namespace Tank
 	}
 
 
-	void Physics::handleGravity(const PhysicsBodyComponent &M, const PhysicsBodyComponent &m, float dt)
+	void Physics::handleGravity(entt::entity e, const PhysicsBodyComponent &M, const PhysicsBodyComponent &m, float dt)
 	{
-		while (s_instances.size() > m_velocities.size()) m_velocities.push_back({});
+		if (!s_velocities.contains(e))
+		{
+			// Add a (0,0,0) velocity vector for e, if e hasn't been touched by physics yet.
+			s_velocities.insert(std::make_pair(e, glm::vec3 { 0 }));
+		}
 
 		glm::vec3 M_centre = M.getCentre();
 		glm::vec3 m_centre = m.getCentre();
@@ -30,18 +35,16 @@ namespace Tank
 		if (glm::all(glm::epsilonEqual(sep, {}, PHYSICS::EPSILON)))
 			force = {};
 		else
-			force = glm::normalize(sep) * gravitation(M.Mass, m.Mass, glm::length(sep));
+			force = glm::normalize(sep) * gravitation(M.mass, m.mass, glm::length(sep));
 
 		// Apply F = dp / dt
 		glm::vec3 changeInMomentum = force * dt;
-		m_velocities[bodyIndex] += (changeInMomentum / m_mass);
+		s_velocities[e] += (changeInMomentum / m.mass);
 
-		// Snap to other centre, if we would pass over it this frame
-		if (glm::length(sep) < (glm::length(m_velocities[bodyIndex]) * dt))
+		// Snap to other centre, if we are going to pass over it this frame
+		if (glm::length(sep) < (glm::length(s_velocities[e]) * dt))
 		{
-			TE_CORE_INFO("HI");
-
-			m_velocities[bodyIndex] = {};
+			s_velocities[e] = glm::vec3 { 0 };
 		}
 	}
 }

@@ -1,6 +1,5 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #include <scene/Scene.h>
-#include <reflection/NodeFactory.h>
 #include <Shader.h>
 #include <Texture.h>
 #include <QuadMesh.h>
@@ -11,7 +10,8 @@
 
 namespace Tank
 {
-	SpriteComponent::SpriteComponent(const Resource &texPath) : IMeshContainer()
+	SpriteComponent::SpriteComponent(const Resource &texPath)
+		: IMeshContainer(), shader({}, {})
 	{
 		setTexPath(texPath);
 	}
@@ -44,14 +44,16 @@ namespace Tank
 	{
 		json serialised;
 		serialised["texPath"] = Res::encode(in->getTexPath());
-		serialised["shader"] = Shader::serialise(in->getShader());
+		serialised["shader"] = Shader::serialise(in->shader);
 		return serialised;
 	}
 
 	template <>
-	void deserialise<SpriteComponent>(const json &serialised, SpriteComponent *out)
+	SpriteComponent deserialise(const json &serialised)
 	{
-		out->initShaderContainer(ShaderSources::deserialise(serialised["shader"]));
-		out->setTexPath(Res::decode(serialised["texPath"]));
+		SpriteComponent sc {};
+		sc.shader = Shader { {}, ShaderSources::deserialise(serialised["shader"]) };
+		sc.setTexPath(Res::decode(serialised["texPath"]));
+		return sc;
 	}
 }

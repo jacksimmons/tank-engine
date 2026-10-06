@@ -20,7 +20,7 @@
 #include <scripting/Script.h>
 #include <project/Project.h>
 #include <project/Export.h>
-#include <reflection/NodeFactory.h>
+#include <reflection/ReflectionFactory.h>
 #include "Editor.h"
 #include "Shader.h"
 #include "Log.h"

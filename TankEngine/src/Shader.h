@@ -25,12 +25,13 @@ namespace Tank
 
 		int getLoc(const std::string &name) const;
 
-		Shader(unsigned progId, const ShaderSources &sources);
 	public:
+		Shader(std::optional<unsigned> id, const ShaderSources &sources);
+		Shader(const Shader &shader) = default;
 		~Shader();
 
 
-		static std::optional<std::unique_ptr<Shader>> createShader(ShaderSources &shaders);
+		static Shader createShader(ShaderSources &shaders);
 		static bool attachShader(unsigned programID, ShaderSource &source);
 		static bool readShaderFile(const fs::path &shaderPath, std::string &shaderContents, const std::string &shaderType);
 		static std::optional<unsigned> compileShader(const std::string &shaderContents, unsigned shaderType, const std::string &shaderTypeStr);

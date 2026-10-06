@@ -32,22 +32,22 @@ namespace Tank
 
 	struct LightIntensity
 	{
-		glm::vec3 Ambient;
-		glm::vec3 Diffuse;
-		glm::vec3 Specular;
+		glm::vec3 ambient;
+		glm::vec3 diffuse;
+		glm::vec3 specular;
 	};
 
 
 	struct DirectionalLightComponent
 	{
 	public:
-		LightIntensity Intensity =
+		LightIntensity intensity =
 		{
 			{ 0.02f, 0.02f, 0.02f },
 			{ 0.1f, 0.1f, 0.1f },
 			{ 0.2f, 0.2f, 0.2f }
 		};
-		glm::vec3 Direction = { 0.0f, -1.0f, 0.0f };
+		glm::vec3 direction = { 0.0f, -1.0f, 0.0f };
 
 		DirectionalLightComponent() = default;
 		~DirectionalLightComponent() = default;
@@ -57,7 +57,7 @@ namespace Tank
 	struct PointLightComponent
 	{
 	public:
-		LightIntensity Intensity =
+		LightIntensity intensity =
 		{
 			{ 0.1f, 0.1f, 0.1f },
 			{ 0.1f, 0.1f, 0.1f },
@@ -72,15 +72,15 @@ namespace Tank
 	template <>
 	json serialise<LightIntensity>(LightIntensity *);
 	template <>
-	void deserialise<LightIntensity>(const json &, LightIntensity *);
+	LightIntensity deserialise(const json &);
 
 	template <>
 	json serialise<DirectionalLightComponent>(DirectionalLightComponent *);
 	template <>
-	void deserialise<DirectionalLightComponent>(const json &, DirectionalLightComponent *);
+	DirectionalLightComponent deserialise(const json &);
 
 	template <>
 	json serialise<PointLightComponent>(PointLightComponent *);
 	template <>
-	void deserialise<PointLightComponent>(const json &, PointLightComponent *);
+	PointLightComponent deserialise(const json &);
 }

@@ -16,18 +16,21 @@ namespace Tank
 	json Tank::serialise<LightIntensity>(LightIntensity *in)
 	{
 		json serialised;
-		serialised["ambient"] = vec3::serialise(in->Ambient);
-		serialised["diffuse"] = vec3::serialise(in->Diffuse);
-		serialised["specular"] = vec3::serialise(in->Specular);
+		serialised["ambient"] = vec3::serialise(in->ambient);
+		serialised["diffuse"] = vec3::serialise(in->diffuse);
+		serialised["specular"] = vec3::serialise(in->specular);
 		return serialised;
 	}
 	
 	template <>
-	void deserialise<LightIntensity>(const json &serialised, LightIntensity *out)
+	LightIntensity deserialise(const json &serialised)
 	{
-		out->Ambient = vec3::deserialise(serialised["ambient"]);
-		out->Diffuse = vec3::deserialise(serialised["diffuse"]);
-		out->Specular = vec3::deserialise(serialised["specular"]);
+		return LightIntensity
+		{
+			vec3::deserialise(serialised["ambient"]),
+			vec3::deserialise(serialised["diffuse"]),
+			vec3::deserialise(serialised["specular"])
+		};
 	}
 
 
@@ -35,16 +38,18 @@ namespace Tank
 	json Tank::serialise<DirectionalLightComponent>(DirectionalLightComponent *in)
 	{
 		json serialised;
-		serialised["intensity"] = serialise(&in->Intensity);
-		serialised["direction"] = vec3::serialise(in->Direction);
+		serialised["intensity"] = serialise(&in->intensity);
+		serialised["direction"] = vec3::serialise(in->direction);
 		return serialised;
 	}
 
 	template <>
-	void Tank::deserialise<DirectionalLightComponent>(const json &serialised, DirectionalLightComponent *out)
+	DirectionalLightComponent Tank::deserialise(const json &serialised)
 	{
-		deserialise(serialised["intensity"], &out->Intensity);
-		out->Direction = vec3::deserialise(serialised["direction"]);
+		DirectionalLightComponent dlc {};
+		dlc.intensity = deserialise<LightIntensity>(serialised["intensity"]);
+		dlc.direction = vec3::deserialise(serialised["direction"]);
+		return dlc;
 	}
 
 
@@ -52,13 +57,15 @@ namespace Tank
 	json Tank::serialise<PointLightComponent>(PointLightComponent *in)
 	{
 		json serialised;
-		serialised["intensity"] = serialise(&in->Intensity);
+		serialised["intensity"] = serialise(&in->intensity);
 		return serialised;
 	}
 
 	template <>
-	void Tank::deserialise<PointLightComponent>(const json &serialised, PointLightComponent *out)
+	PointLightComponent Tank::deserialise(const json &serialised)
 	{
-		deserialise(serialised["intensity"], &out->Intensity);
+		PointLightComponent plc {};
+		plc.intensity = deserialise<LightIntensity>(serialised["intensity"]);
+		return plc;
 	}
 }

@@ -1,15 +1,18 @@
 #pragma once
 #include <serialisation/Serialisation.h>
+#include <glm/gtx/quaternion.hpp>
 
 
 namespace Tank
 {
+
+
 	/// @brief Stores the Entity model matrix in a friendly format.
 	struct TransformComponent
 	{
-		glm::quat Rotation;
-		glm::vec3 Scale;
-		glm::vec3 Translation;
+		glm::quat rotation;
+		glm::vec3 scale;
+		glm::vec3 translation;
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent &) = default;
@@ -25,5 +28,5 @@ namespace Tank
 	template <>
 	json serialise<TransformComponent>(TransformComponent *);
 	template <>
-	void deserialise<TransformComponent>(const json &, TransformComponent *);
+	TransformComponent deserialise(const json &);
 }

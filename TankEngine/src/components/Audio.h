@@ -11,10 +11,10 @@ namespace Tank
 		ma_sound m_currentSound;
 		bool m_hasSound = false;
 	public:
-		Resource AudioPath { "audio/test.wav", true };
+		Resource audioPath { "audio/test.wav", true };
 
 		AudioComponent() = default;
-		AudioComponent(const Res &audioPath) : AudioPath(audioPath) {};
+		AudioComponent(const Res &audioPath) : audioPath(audioPath) {};
 		~AudioComponent();
 
 		void updateSound();
@@ -25,5 +25,5 @@ namespace Tank
 	template <>
 	json serialise<AudioComponent>(AudioComponent *);
 	template <>
-	void deserialise<AudioComponent>(const json &, AudioComponent *);
+	AudioComponent deserialise(const json &);
 }

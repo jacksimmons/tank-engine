@@ -3,18 +3,20 @@
 #include <GLFW/glfw3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
+#include <scene/Scene.h>
+#include <components/Transform.h>
+#include <components/Tree.h>
+#include <components/Camera.h>
+#include <components/Light.h>
+#include <components/Sprite.h>
+#include <components/Model.h>
+#include <components/CubeMap.h>
+#include <components/Audio.h>
+#include <reflection/ReflectionRegistry.h>
+#include <events/EventManager.h>
 #include "Application.h"
 #include "KeyInput.h"
 #include "Log.h"
-#include "events/EventManager.h"
-#include "components/Camera.h"
-#include "components/CubeMap.h"
-#include "components/Light.h"
-#include "components/Model.h"
-#include "components/Scene.h"
-#include "components/Sprite.h"
-#include "components/Audio.h"
-#include "reflection/NodeFactory.h"
 #include "static/Time.h"
 
 
@@ -44,20 +46,23 @@ namespace Tank
 		TE_CORE_INFO(std::format("CWD: {}", fs::current_path().string()));
 
 		// Register nodes for deserialising
-		m_factory = std::make_unique<Reflect::NodeFactory>();
-		m_factory->registerClass<Node>("Node");
-		m_factory->registerClass<Scene>("Scene");
-		m_factory->registerClass<Camera>("Camera");
-		m_factory->registerClass<DirLight>("DirLight");
-		m_factory->registerClass<PointLight>("PointLight");
-		m_factory->registerClass<Sprite>("Sprite");
-		m_factory->registerClass<Model>("Model");
-		m_factory->registerClass<CubeMap>("CubeMap");
-		m_factory->registerClass<Audio>("Audio");
+		{
+			using R = ReflectionRegistry;
+			R::registerClass<Scene>("Scene");
+			R::registerClass<TransformComponent>("Transform");
+			R::registerClass<TreeComponent>("Tree");
+			R::registerClass<CameraComponent>("Camera");
+			R::registerClass<DirectionalLightComponent>("DirLight");
+			R::registerClass<PointLightComponent>("PointLight");
+			R::registerClass<SpriteComponent>("Sprite");
+			R::registerClass<ModelComponent>("Model");
+			R::registerClass<CubeMapComponent>("CubeMap");
+			R::registerClass<AudioComponent>("Audio");
+		}
 
 		// Init events
-		EventManager::addEvent("EntityAdopted", new Event<Node*>());
-		EventManager::addEvent("NodeDisowned", new Event<Node*>());
+		EventManager::addEvent("EntityAdopted", new Event<GameEntity*>());
+		EventManager::addEvent("EntityDisowned", new Event<GameEntity*>());
 
 		m_windowSize = glm::ivec2(800, 600);
 		m_settings.configFlags = settings.configFlags;

@@ -6,20 +6,19 @@
 
 namespace Tank
 {
-	class TransformComponent;
-	class TreeComponent;
-	class KeyInput;
-
-
-	/// @brief The most basic game object which is registered by the ECS.
+	/// @brief Wrapper for ECS entities.
+	/// 
+	/// ECS properties are kept private.
+	/// 
+	/// Only subclasses and friends can construct one.
 	class TANK_API Entity
 	{
+		friend class Scene;
+		friend class Physics;
 	private:
 		entt::entity m_handle = entt::null;
 		Scene *m_ecs = nullptr;
-
-		std::string m_name;
-
+	protected:
 		/// <summary>
 		/// If false, `update` isn't invoked for this entity and all children.
 		/// </summary>
@@ -35,14 +34,12 @@ namespace Tank
 		/// unable to edit this node.
 		/// </summary>
 		bool m_isEditorControlled = false;
-	public:
-		Entity() = default;
-		Entity(const entt::entity handle, Scene *ecs, const std::string &name = "");
+	protected:
+		Entity(entt::entity handle, Scene *ecs)
+			: m_handle(handle), m_ecs(ecs) {}
 		Entity(const Entity &other) = default;
+	public:
 		virtual ~Entity() = default;
-
-		const std::string &name() const noexcept { return m_name; }
-		void setName(const std::string &name) noexcept;
 
 		bool isEnabled() const noexcept { return m_enabled; }
 		void setEnabled(bool enabled) noexcept { m_enabled = enabled; }
@@ -80,25 +77,6 @@ namespace Tank
 			m_ecs->m_registry.remove<T>(m_handle);
 		}
 
-
 		operator bool() const { return m_handle != entt::null; }
-		
-		
-		// Common components
-		TransformComponent &transform() const;
-		TreeComponent &tree() const;
-
-
-		virtual void startup() {};
-		virtual void shutdown() {};
-		virtual void preupdate();
-		virtual void update();
-		virtual void destroy();
 	};
-
-
-	template <>
-	json serialise<Entity>(Entity *);
-	template <>
-	void deserialise<Entity>(const json &, Entity *);
 }

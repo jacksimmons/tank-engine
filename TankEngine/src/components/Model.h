@@ -1,6 +1,7 @@
 #pragma once
 #include <nodes/interfaces/MeshContainer.h>
 #include <serialisation/Serialisation.h>
+#include <Shader.h>
 
 
 struct aiNode; struct aiScene; struct aiMesh;
@@ -9,8 +10,6 @@ namespace Tank
 {
 	class Mesh;
 	class Texture;
-	struct ShaderSources;
-	namespace Reflect { class NodeFactory; }
 
 
 	/// <summary>
@@ -18,20 +17,19 @@ namespace Tank
 	/// </summary>
 	struct ModelComponent : public IMeshContainer
 	{
-		friend class Renderer;
 	private:
 		Resource m_modelPath;
 		unsigned m_cullFace;
 	public:
-		ModelComponent() = default;
+		Shader shader;
+		unsigned cullFace;
+
 		ModelComponent(const Resource &modelPath = Res("models/backpack/backpack.obj", true));
-		virtual ~ModelComponent() = default;
+		ModelComponent(const ModelComponent &model);
+		~ModelComponent() = default;
 
 		void setModelPath(const Resource &resource);
 		const Resource &getModelPath() const { return m_modelPath; }
-
-		unsigned getCullFace() const { return m_cullFace; }
-		void setCullFace(unsigned face) { m_cullFace = face; }
 
 		void process();
 		void processNode(aiNode *node, const aiScene *scene);
@@ -43,6 +41,5 @@ namespace Tank
 	template <>
 	json serialise<ModelComponent>(ModelComponent *);
 	template <>
-	void deserialise<ModelComponent>(const json &, ModelComponent *);
-	using Model = ModelComponent;
+	ModelComponent deserialise(const json &);
 }

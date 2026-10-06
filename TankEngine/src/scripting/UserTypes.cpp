@@ -110,7 +110,7 @@ namespace Tank
 		auto ut = Glue::newType<TransformComponent>(lua, "Transform");
 		Glue::fields(ut, "Transform",
 			GlueField { "translation", "Vec3", &TransformComponent::Translation },
-			GlueField { "rotation", "Vec3", &TransformComponent::Rotation },
+			GlueField { "rotation", "Vec3", &TransformComponent::rotation },
 			GlueField { "scale", "Vec3", &TransformComponent::Scale }
 		);
 	}

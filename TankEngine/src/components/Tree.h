@@ -1,10 +1,12 @@
 #pragma once
 #include <glm/gtx/quaternion.hpp>
 #include <serialisation/Serialisation.h>
+#include <scene/GameEntity.h>
 
 
 namespace Tank
 {
+	class GameEntity;
 	typedef std::tuple<std::unique_ptr<GameEntity>, std::optional<size_t>> Adoption;
 
 
@@ -14,15 +16,17 @@ namespace Tank
 		friend class Entity;
 		friend class GameEntity;
 	private:
-		GameEntity *m_entity;
 		GameEntity *m_parent;
+
 		std::vector<std::unique_ptr<GameEntity>> m_children;
 		std::vector<GameEntity *> m_childrenAwaitingDisown;
 		std::vector<Adoption> m_childrenAwaitingAdopt;
 	public:
+		GameEntity *entity;
+
 		TreeComponent() = default;
 		TreeComponent(GameEntity *entity, GameEntity *parent = nullptr)
-			: m_entity(entity), m_parent(parent) {}
+			: entity(entity), m_parent(parent) {}
 		TreeComponent(const TreeComponent &) = default;
 
 		bool setParent(TreeComponent *parent, std::optional<size_t> siblingIndex);
@@ -116,5 +120,5 @@ namespace Tank
 	template <>
 	json serialise<TreeComponent>(TreeComponent *);
 	template <>
-	void deserialise<TreeComponent>(const json &, TreeComponent *);
+	TreeComponent deserialise(const json &);
 }

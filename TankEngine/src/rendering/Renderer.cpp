@@ -80,10 +80,10 @@ namespace Tank
 		outlined.m_outlineShader->use(); // use
 
 		// Setup uniforms
-		const glm::vec3 scale = transform.Scale;
-		transform.Scale = scale * 1.025f;
+		const glm::vec3 scale = transform.scale;
+		transform.scale = scale * 1.025f;
 		outlined.m_outlineShader->setMat4("PVM", camera.m_projection * camera.m_view * transform.getWorldModelMatrix());
-		transform.Scale = scale;
+		transform.scale = scale;
 
 		/// <summary>
 		/// Draw all the meshes in the object, with outline shader enabled and transform
@@ -102,7 +102,7 @@ namespace Tank
 
 	void Renderer::drawCubeMap(CubeMapComponent *cubeMap, const Camera &camera)
 	{
-		const Shader &shader = cubeMap->getShader();
+		const Shader &shader = cubeMap->shader;
 		shader.use();
 
 		// Bind all owned texture objects
@@ -126,10 +126,10 @@ namespace Tank
 
 	void Renderer::drawModel(TransformComponent &transform, const ModelComponent &model, const Camera &camera)
 	{
-		glCullFace(model.m_cullFace);
+		glCullFace(model.cullFace);
 
 		beginEditorOutline(model);
-		const Shader &shader = model.getShader();
+		const Shader &shader = model.shader;
 
 		shader.use();
 		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });

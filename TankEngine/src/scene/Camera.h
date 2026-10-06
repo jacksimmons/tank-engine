@@ -52,5 +52,5 @@ namespace Tank
 	template <>
 	json serialise<Camera>(Camera *);
 	template <>
-	void deserialise<Camera>(const json &, Camera *);
+	Camera deserialise(const json &);
 }

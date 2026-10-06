@@ -17,13 +17,12 @@ namespace Tank
 	{
 		Renderer::beginEditorOutline(sprite);
 
-		const Shader &shader = sprite.getShader();
+		const Shader &shader = sprite.shader;
 		shader.use();
 
 		shader.setVec3("tex_scale", glm::vec3{ 1, 1, 1 });
 		shader.setFloat("material.Ns", 32.0f);
 
-		TransformComponent transform;
 		auto cam = Scene::getActiveScene()->getActiveCamera();
 		auto P = camera.m_projection;
 		auto V = camera.m_view;

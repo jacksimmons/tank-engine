@@ -9,7 +9,7 @@ namespace Tank
 
     namespace Reflect
     {
-        class NodeFactory;
+        class ReflectionFactory;
     }
 
 

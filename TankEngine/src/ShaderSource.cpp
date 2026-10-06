@@ -4,11 +4,11 @@
 
 namespace Tank
 {
-	ShaderSource::ShaderSource()
+	ShaderSource::ShaderSource(const Resource &location)
+		: location(location)
 	{
 		glType = GL_VERTEX_SHADER;
 		glID = 0;
-		location = Resource("", false);
 		enabled = false;
 	}
 

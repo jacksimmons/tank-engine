@@ -1,11 +1,13 @@
 #pragma once
 #include "Mesh.h"
-#include "ShaderContainer.h"
 
 
 namespace Tank
 {	
-	class TANK_API IMeshContainer : public IShaderContainer
+	class Shader;
+
+
+	class TANK_API IMeshContainer
 	{
 		friend class Renderer;
 	protected:
