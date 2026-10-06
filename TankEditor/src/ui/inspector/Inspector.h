@@ -5,7 +5,7 @@
 
 namespace Tank
 {
-	class Scene; class Model; class Camera; class Light; class DirLight; class PointLight;
+	class Scene; class Model; class SceneCamera; class Light; class DirLight; class PointLight;
 	class IShaderContainer; class ShaderSource; class IMeshContainer; class Sprite; class Model;
 }
 namespace Tank::Editor

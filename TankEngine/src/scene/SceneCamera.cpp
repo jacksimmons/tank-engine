@@ -69,7 +69,7 @@ namespace Tank
 	//		Serialisation
 	// =======================
 	template <>
-	json serialise<Camera>(Camera *in)
+	json serialise<SceneCamera>(SceneCamerain)
 	{
 		return in->serialise();
 	}
@@ -90,7 +90,7 @@ namespace Tank
 	}
 
 	template <>
-	void deserialise<Camera>(const json &serialised, Camera *out)
+	void deserialise<SceneCamera>(const json &serialised, SceneCameraout)
 	{
 		out->deserialise(serialised);
 	}

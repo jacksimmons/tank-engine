@@ -126,9 +126,9 @@ namespace Tank
 	}
 
 	template<>
-	void UserTypes::generate<Camera>(sol::state &lua)
+	void UserTypes::generate<SceneCamera>(sol::state &lua)
 	{
-		auto ut = Glue::newType<Camera>(lua, "Camera");
+		auto ut = Glue::newType<SceneCamera>(lua, "Camera");
 		Glue::methods(ut, "Camera",
 			GlueMethod { "set_pos", "", {{ "pos", "Vec3" }}, &Camera::setPosition }
 		);
@@ -166,7 +166,7 @@ namespace Tank
 		generate<TreeComponent>(lua);
 		
 		generate<Scene>(lua);
-		generate<Camera>(lua);
+		generate<SceneCamera>(lua);
 
 		generate<Time>(lua);
 	}

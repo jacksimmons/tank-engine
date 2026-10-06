@@ -5,7 +5,7 @@
 
 namespace Tank
 {
-	class Camera;
+	class SceneCamera;
 	class KeyInput;
 }
 namespace Tank::Editor

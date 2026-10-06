@@ -18,7 +18,7 @@ namespace Tank::Editor
 		// Determine active camera text name and colour.
 		std::string cameraName;
 		ImColor cameraNameCol;
-		Camera *activeCamera = m_node->getActiveCamera();
+		SceneCameraactiveCamera = m_node->getActiveCamera();
 		if (activeCamera)
 		{
 			cameraName = activeCamera->name();
@@ -46,7 +46,7 @@ namespace Tank::Editor
 			m_node->forEachDescendant(
 				[this](Node *node)
 				{
-					if (Camera *cam = dynamic_cast<Camera *>(node))
+					if (SceneCameracam = dynamic_cast<SceneCamera>(node))
 					{
 						if (ImGui::Button((cam->getPath() + "##INSPECTOR_SCENE_SET_CAM_LIST_BTN").c_str()))
 						{

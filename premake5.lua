@@ -1,8 +1,8 @@
 require "os"
-require "premake.Project"
-require "premake.Command"
-require "premake.Links"
-require "premake.Outdir"
+require "premake.project"
+require "premake.command"
+require "premake.links"
+require "premake.outdir"
 
 
 workspace "TankEngine"

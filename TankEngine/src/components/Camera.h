@@ -1,18 +1,18 @@
 #pragma once
 #include <glm/gtx/quaternion.hpp>
 #include <serialisation/Serialisation.h>
-#include <scene/Camera.h>
+#include <scene/SceneCamera.h>
 #include <Transformation.h>
 
 
 namespace Tank
 {
-	class Camera;
+	class SceneCamera;
 
 
 	struct CameraComponent
 	{
-		Camera Camera;
+		SceneCamera Camera;
 		float PanSpeed = 5;
 		float RotationSpeed = 10;
 		bool FreeLookEnabled = true;

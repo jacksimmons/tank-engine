@@ -238,7 +238,7 @@ namespace Tank::Editor
 				}
 				if (ImGui::MenuItem("Camera"))
 				{
-					Camera *cam = new Camera();
+					SceneCameracam = new Camera();
 					auto gizmo = std::make_unique<Sprite>("Gizmo", Res("textures/gizmo/camera.png", true));
 					cam->addChild(std::move(gizmo));
 					addNewNode(node, cam);

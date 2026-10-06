@@ -1,4 +1,5 @@
 #pragma once
+#include <glm/gtc/quaternion.hpp>
 #include <serialisation/Serialisation.h>
 
 

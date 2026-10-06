@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include <scene/Camera.h>
+#include <scene/SceneCamera.h>
 
 
 namespace Tank
@@ -12,7 +12,7 @@ namespace Tank
 	{
 		json serialised;
 
-		serialised["camera"] = serialise<Camera>(&in->Camera);
+		serialised["camera"] = serialise<SceneCamera>(&in->Camera);
 		serialised["panSpd"] = in->PanSpeed;
 		serialised["rotSpd"] = in->RotationSpeed;
 

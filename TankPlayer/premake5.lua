@@ -1,4 +1,4 @@
-require("premake.Outdir")
+require("premake.outdir")
 
 
 local wks = "%{wks.location}/"

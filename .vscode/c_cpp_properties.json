@@ -4,8 +4,8 @@
             "name": "Linux",
             "compileCommands": "compile_commands.json",
             "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c17",
-            "cppStandard": "gnu++17",
+            "cStandard": "c26",
+            "cppStandard": "gnu++26",
             "intelliSenseMode": "linux-gcc-x64"
         }
     ],

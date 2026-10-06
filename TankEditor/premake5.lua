@@ -1,6 +1,6 @@
-require "premake.Links"
-require "premake.Outdir"
-require "premake.Project"
+require "premake.links"
+require "premake.outdir"
+require "premake.project"
 
 
 local wks = "%{wks.location}/"

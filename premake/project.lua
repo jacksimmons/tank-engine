@@ -10,7 +10,7 @@ end
 ---comment Sets project language to c++
 function PrjUseCpp()
     language "C++"
-	cppdialect "c++23"
+	cppdialect "c++26"
 end
 
 ---comment Sets project language to C#

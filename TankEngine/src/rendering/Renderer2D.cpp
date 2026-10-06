@@ -1,7 +1,7 @@
 #include <glad/glad.h>
 #include <glm/gtc/matrix_inverse.hpp>
 #include <scene/Scene.h>
-#include <scene/Camera.h>
+#include <scene/SceneCamera.h>
 #include <components/Sprite.h>
 #include <components/Light.h>
 #include <Texture.h>
@@ -13,7 +13,7 @@
 
 namespace Tank
 {
-	void Renderer2D::drawSprite(TransformComponent &transform, const SpriteComponent &sprite, const Camera &camera)
+	void Renderer2D::drawSprite(TransformComponent &transform, const SpriteComponent &sprite, const SceneCamera &camera)
 	{
 		Renderer::beginEditorOutline(sprite);
 

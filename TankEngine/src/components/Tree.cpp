@@ -267,7 +267,7 @@ namespace Tank
 		{
 			Scene *scene = (Scene *)node;
 			scene->preupdate();
-			scene->setActiveCamera((Camera *)scene->childFromTree(serialised["activeCam"]));
+			scene->setActiveCamera((SceneCamera)scene->childFromTree(serialised["activeCam"]));
 		}
 
 		return node;

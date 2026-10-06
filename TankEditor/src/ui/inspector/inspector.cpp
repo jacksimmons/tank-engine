@@ -69,7 +69,7 @@ namespace Tank::Editor
 			m_nodeInspectors.clear(); // Clear beforehand
 			tryAddSection<Node>();
 			tryAddSection<Scene>();
-			tryAddSection<Camera>();
+			tryAddSection<SceneCamera>();
 			tryAddSection<Light>();
 			tryAddSection<Audio>();
 			tryAddSection<Sprite>();

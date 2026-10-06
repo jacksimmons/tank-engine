@@ -5,7 +5,7 @@
 #include <components/Model.h>
 #include <components/Light.h>
 #include <scene/Scene.h>
-#include <scene/Camera.h>
+#include <scene/SceneCamera.h>
 #include <Shader.h>
 #include <Texture.h>
 #include "Renderer.h"
@@ -67,7 +67,7 @@ namespace Tank
 	/// testing. Then draw a scaled-up version of the object, in
 	/// a block colour.
 	/// </summary>
-	void Renderer::endEditorOutline(TransformComponent &transform, const IMeshContainer &outlined, const Camera &camera)
+	void Renderer::endEditorOutline(TransformComponent &transform, const IMeshContainer &outlined, const SceneCamera &camera)
 	{
 		if (!outlined.m_outlineEnabled) return;
 
@@ -100,7 +100,7 @@ namespace Tank
 	}
 
 
-	void Renderer::drawCubeMap(CubeMapComponent *cubeMap, const Camera &camera)
+	void Renderer::drawCubeMap(CubeMapComponent *cubeMap, const SceneCamera &camera)
 	{
 		const Shader &shader = cubeMap->getShader();
 		shader.use();
@@ -124,7 +124,7 @@ namespace Tank
 	}
 
 
-	void Renderer::drawModel(TransformComponent &transform, const ModelComponent &model, const Camera &camera)
+	void Renderer::drawModel(TransformComponent &transform, const ModelComponent &model, const SceneCamera &camera)
 	{
 		glCullFace(model.m_cullFace);
 

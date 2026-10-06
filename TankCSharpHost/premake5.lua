@@ -1,6 +1,6 @@
-require "premake.Command"
-require "premake.Links"
-require "premake.Outdir"
+require "premake.command"
+require "premake.links"
+require "premake.outdir"
 
 
 function NativeHostProject()

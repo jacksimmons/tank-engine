@@ -47,7 +47,7 @@ namespace Tank
 		m_factory = std::make_unique<Reflect::NodeFactory>();
 		m_factory->registerClass<Node>("Node");
 		m_factory->registerClass<Scene>("Scene");
-		m_factory->registerClass<Camera>("Camera");
+		m_factory->registerClass<SceneCamera>("Camera");
 		m_factory->registerClass<DirLight>("DirLight");
 		m_factory->registerClass<PointLight>("PointLight");
 		m_factory->registerClass<Sprite>("Sprite");

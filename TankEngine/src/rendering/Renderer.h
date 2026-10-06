@@ -6,7 +6,7 @@ namespace Tank
 	struct CubeMapComponent;
 	struct LightComponent;
 	class IMeshContainer;
-	class Camera;
+	class SceneCamera;
 
 
 	class Renderer
@@ -15,9 +15,9 @@ namespace Tank
 		static void drawMesh(const Shader &shader, const Mesh &mesh);
 
 		static void beginEditorOutline(const IMeshContainer &outlined);
-		static void endEditorOutline(TransformComponent &transform, const IMeshContainer &outlined, const Camera &camera);
+		static void endEditorOutline(TransformComponent &transform, const IMeshContainer &outlined, const SceneCamera &camera);
 
-		static void drawCubeMap(CubeMapComponent *cubeMap, const Camera &camera);
-		static void drawModel(TransformComponent &transform, const ModelComponent &model, const Camera &camera);
+		static void drawCubeMap(CubeMapComponent *cubeMap, const SceneCamera &camera);
+		static void drawModel(TransformComponent &transform, const ModelComponent &model, const SceneCamera &camera);
 	};
 }

@@ -1,4 +1,4 @@
-require("premake.Outdir")
+require("premake.outdir")
 
 
 local wks = "%{wks.location}/"
@@ -33,6 +33,7 @@ project "TankEngine"
 		wks .. "include/imgui/backends",
 		wks .. "include/sol2/include",
 		wks .. "include/lua",
+		wks .. "include/entt/src",
 		wks .. "vendor",
 	}
 

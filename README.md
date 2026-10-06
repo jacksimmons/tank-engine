@@ -5,6 +5,9 @@
 A C++ graphics rendering application using OpenGL and the GUI framework "dear ImGUI".
 
 # Roadmap/Features
+## Engine: Systems
+- [ ] ECS
+- [ ] Reflection
 ## Engine: Nodes
 - [x] Scene node
 - [x] Camera node
@@ -37,13 +40,12 @@ A C++ graphics rendering application using OpenGL and the GUI framework "dear Im
 - [x] Saving and loading of scenes
 
 # Project Setup
-- This repository uses submodules. Use --recurse-submodules when git-cloning.    
-- (Or `git submodule update --init --recursive --progress` after cloning)  
-- No binaries are located in this repo, so instead use premake5 to generate them.
-- Premake binaries for Windows/Linux are included in the `premake` folder, but you may want/need to use your own version.  
-- Example build command (Windows): `./premake/premake5 vs2022`.  
+- You can run `setup.py` to handle the following steps for you.
 
-## Ubuntu
+1. Initialise submodules (`git clone --recurse-submodules` or `git submodule update --init --recursive`)
+2. This project uses C++26 reflection capabilities, ensure you bring a compatible compiler. (As of 10/26, this is only GCC 14+)
+
+## Linux
 You will need to install dependencies yourself:
 - `xargs sudo apt-get -y install < apt-packages.txt`  
 
@@ -53,6 +55,10 @@ above command with `remove`, or `purge`.
 # Project Building
 - Build the `TankEditor` project for the Editor (UI).
 - Build the `TankPlayer` project for the Standalone Player (no UI).
+- No engine binaries are located in this repo, so instead use premake5 to generate them.
+- Premake binaries for Windows/Linux are included in the `premake` folder, but you may want/need to use your own version.  
+- Example build command (Windows): `./premake/premake5 vs2026`. 
+- Example build command (Linux): `py build.py gmake`. 
 
 # Scripting
 - Lua is supported for scripting.

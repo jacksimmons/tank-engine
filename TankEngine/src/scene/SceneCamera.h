@@ -4,7 +4,7 @@
 
 namespace Tank
 {
-	class Camera
+	class SceneCamera
 	{
 		friend class Scene;
 		friend class CameraComponent;
@@ -28,8 +28,8 @@ namespace Tank
 		glm::vec3 m_up;
 
 	public:
-		Camera() = default;
-		Camera(glm::vec3 eye = { 0, 0, 3 }, glm::vec3 centre = { 0, 0, 0 }, glm::vec3 up = { 0, 1, 0 })
+		SceneCamera() = default;
+		SceneCamera(glm::vec3 eye = { 0, 0, 3 }, glm::vec3 centre = { 0, 0, 0 }, glm::vec3 up = { 0, 1, 0 })
 			: m_eye(eye), m_centre(centre), m_up(up) {}
 
 		void updateProj() { m_projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, m_cullNear, m_cullFar); }
@@ -50,7 +50,7 @@ namespace Tank
 
 
 	template <>
-	json serialise<Camera>(Camera *);
+	json serialise<SceneCamera>(SceneCamera *);
 	template <>
-	void deserialise<Camera>(const json &, Camera *);
+	void deserialise<SceneCamera>(const json &, SceneCamera *);
 }

@@ -1,6 +1,10 @@
 import os
 import typer
-from typing_extensions import Annotated, List, Union, Literal
+from typing_extensions import Annotated, List
+
+
+# This script can be used for an easier building process.
+# It's mainly for Linux.
 
 
 def command(cmd: str):

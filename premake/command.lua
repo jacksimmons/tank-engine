@@ -1,4 +1,4 @@
-local os_type = require("OsType")
+local os_type = require("os_type")
 
 
 -- Adds a postbuildcommand to make directory `dest`.

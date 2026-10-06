@@ -7,12 +7,12 @@ namespace Tank
 	struct SpriteComponent;
 	class Shader;
 	class Mesh;
-	class Camera;
+	class SceneCamera;
 
 
 	class Renderer2D
 	{
 	public:
-		static void drawSprite(TransformComponent &transform, const SpriteComponent &sprite, const Camera &camera);
+		static void drawSprite(TransformComponent &transform, const SpriteComponent &sprite, const SceneCamera &camera);
 	};
 }
