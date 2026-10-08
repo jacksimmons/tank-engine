@@ -32,25 +32,4 @@ namespace Tank
 
 		TE_CORE_INFO("Successfully played sound " + audioPath.resolvePathStr());
 	}
-
-
-	// =======================
-	//		Serialisation
-	// =======================
-	template <>
-	json serialise<AudioComponent>(AudioComponent *in)
-	{
-		json serialised;
-		serialised["audioPath"] = Res::encode(in->audioPath);
-
-		return serialised;
-	}
-
-	template <>
-	AudioComponent deserialise(const json &serialised)
-	{
-		AudioComponent audio {};
-		audio.audioPath = Res::decode(serialised["audioPath"]);
-		return audio;
-	}
 }

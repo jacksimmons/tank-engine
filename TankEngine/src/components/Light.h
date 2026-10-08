@@ -70,17 +70,7 @@ namespace Tank
 
 
 	template <>
-	json serialise<LightIntensity>(LightIntensity *);
+	json Serialisation::serialise<LightIntensity>(LightIntensity *);
 	template <>
-	LightIntensity deserialise(const json &);
-
-	template <>
-	json serialise<DirectionalLightComponent>(DirectionalLightComponent *);
-	template <>
-	DirectionalLightComponent deserialise(const json &);
-
-	template <>
-	json serialise<PointLightComponent>(PointLightComponent *);
-	template <>
-	PointLightComponent deserialise(const json &);
+	LightIntensity Serialisation::deserialise(const json &);
 }

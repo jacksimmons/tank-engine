@@ -6,8 +6,6 @@
 
 namespace Tank
 {
-
-
 	/// @brief Stores the Entity model matrix in a friendly format.
 	struct TransformComponent
 	{
@@ -24,10 +22,4 @@ namespace Tank
 		glm::mat4 getLocalModelMatrix() const;
 		glm::mat4 getWorldModelMatrix() const;
 	};
-
-
-	template <>
-	json serialise<TransformComponent>(TransformComponent *);
-	template <>
-	TransformComponent deserialise(const json &);
 }

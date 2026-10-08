@@ -1,7 +1,5 @@
 #include <Log.h>
 #include <scene/GameEntity.h>
-#include <static/GlmSerialise.h>
-#include <reflection/ReflectionRegistry.h>
 #include <scene/Scene.h>
 #include <scene/Entity.h>
 #include "Tree.h"
@@ -233,39 +231,5 @@ namespace Tank
 		} while (currentChild != entity);
 
 		return treeTraversal;
-	}
-
-
-	// =======================
-	//		Serialisation
-	// =======================
-	template <>
-	json serialise<TreeComponent>(TreeComponent *in)
-	{
-		json serialised;
-
-		std::vector<json> children;
-		for (auto &child : *in)
-		{
-			children.push_back(serialise(child.get()));
-		}
-		serialised["children"] = children;
-
-		return serialised;
-	}
-
-	template <>
-	TreeComponent deserialise(const json &serialised)
-	{
-		auto entity = ReflectionRegistry::deserialise<GameEntity>(serialised);
-		TreeComponent tc = { entity };
-		entity->addComponent<TreeComponent>(tc);
-
-		for (const json &child : serialised["children"].get<std::vector<json>>())
-		{
-			tc.addChild(std::unique_ptr<GameEntity>(ReflectionRegistry::deserialise<GameEntity>(child)));
-		}
-
-		return tc;
 	}
 }

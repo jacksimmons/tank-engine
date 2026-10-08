@@ -34,26 +34,4 @@ namespace Tank
 			return false;
 		}
 	}
-
-
-	// =======================
-	//		Serialisation
-	// =======================
-	template <>
-	json serialise<SpriteComponent>(SpriteComponent *in)
-	{
-		json serialised;
-		serialised["texPath"] = Res::encode(in->getTexPath());
-		serialised["shader"] = Shader::serialise(in->shader);
-		return serialised;
-	}
-
-	template <>
-	SpriteComponent deserialise(const json &serialised)
-	{
-		SpriteComponent sc {};
-		sc.shader = Shader { {}, ShaderSources::deserialise(serialised["shader"]) };
-		sc.setTexPath(Res::decode(serialised["texPath"]));
-		return sc;
-	}
 }

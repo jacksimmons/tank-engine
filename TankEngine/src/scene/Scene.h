@@ -16,6 +16,7 @@ namespace Tank
 	class TANK_API Scene
 	{
 		friend class Entity;
+		friend class SceneSerialisation;
 		// The Hierarchy may modify elements of the scene (lights, nodes).
 		friend class Editor::Hierarchy_;
 	private:
@@ -33,6 +34,8 @@ namespace Tank
 			s_activeScene = scene;
 		}
 
+		static Scene *loadScene(const std::filesystem::path &scenePath);
+		static void saveScene(Scene *scene, const std::filesystem::path &scenePath);
 	// Instance
 	private:
 		CameraComponent *m_activeCamera;
@@ -51,10 +54,4 @@ namespace Tank
 		void update();
 		void applyLightsToShader(const Shader &shader);
 	};
-
-
-	template <>
-	json serialise<Scene>(Scene *);
-	template <>
-	Scene deserialise(const json &);
 }

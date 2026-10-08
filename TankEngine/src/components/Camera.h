@@ -12,18 +12,12 @@ namespace Tank
 
 	struct CameraComponent
 	{
-		SceneCamera Camera;
-		float PanSpeed = 5;
-		float RotationSpeed = 10;
-		bool FreeLookEnabled = true;
+		SceneCamera camera;
+		float panSpeed = 5;
+		float rotationSpeed = 10;
+		bool freeLookEnabled = true;
 
 		CameraComponent() : camera({}) {};
 		CameraComponent(CameraComponent &) = default;
 	};
-
-
-	template <>
-	json serialise<CameraComponent>(CameraComponent *);
-	template <>
-	CameraComponent deserialise(const json &);
 }

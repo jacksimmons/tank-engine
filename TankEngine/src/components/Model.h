@@ -37,9 +37,4 @@ namespace Tank
 		
 		std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, int assimpTextureType, std::string typeName);
 	};
-
-	template <>
-	json serialise<ModelComponent>(ModelComponent *);
-	template <>
-	ModelComponent deserialise(const json &);
 }

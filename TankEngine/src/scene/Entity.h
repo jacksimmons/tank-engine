@@ -14,6 +14,7 @@ namespace Tank
 	class TANK_API Entity
 	{
 		friend class Scene;
+		friend class SceneSerialisation;
 		friend class Physics;
 	private:
 		entt::entity m_handle = entt::null;

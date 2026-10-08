@@ -20,10 +20,4 @@ namespace Tank
 		void updateSound();
 		void play();
 	};
-
-
-	template <>
-	json serialise<AudioComponent>(AudioComponent *);
-	template <>
-	AudioComponent deserialise(const json &);
 }

@@ -10,6 +10,7 @@ namespace Tank
 		friend class CameraComponent;
 		friend class Renderer;
 		friend class Renderer2D;
+		friend class Serialisation;
 
 		// Projection properties
 		float m_cullNear;
@@ -50,7 +51,7 @@ namespace Tank
 
 
 	template <>
-	json serialise<SceneCamera>(SceneCamera *);
+	json Serialisation::serialise<SceneCamera>(SceneCamera *);
 	template <>
-	void deserialise<SceneCamera>(const json &, SceneCamera *);
+	SceneCamera Serialisation::deserialise<SceneCamera>(const json &);
 }

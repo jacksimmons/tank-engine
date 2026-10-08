@@ -115,10 +115,4 @@ namespace Tank
 		/// </summary>
 		std::vector<int> treeFromChild(GameEntity *child);
 	};
-
-
-	template <>
-	json serialise<TreeComponent>(TreeComponent *);
-	template <>
-	TreeComponent deserialise(const json &);
 }

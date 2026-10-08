@@ -181,32 +181,4 @@ namespace Tank
 
 		return textures;
 	}
-
-
-	// =======================
-	//		Serialisation
-	// =======================
-	template <>
-	json serialise<ModelComponent>(ModelComponent *in)
-	{
-		json serialised;
-		serialised["modelPath"] = Resource::encode(in->getModelPath());
-		serialised["shader"] = Shader::serialise(in->shader);
-		serialised["cullFace"] = in->cullFace;
-		return serialised;
-	}
-
-	template <>
-	ModelComponent deserialise(const json &serialised)
-	{
-		ModelComponent mc {};
-
-		mc.shader = Shader{ {}, ShaderSources::deserialise(serialised["shader"]) };
-		mc.setModelPath(Resource::decode(serialised["modelPath"]));
-		mc.cullFace = serialised["cullFace"];
-
-		mc.process();
-
-		return mc;
-	}
 }

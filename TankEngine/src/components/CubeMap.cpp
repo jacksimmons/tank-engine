@@ -59,40 +59,4 @@ namespace Tank
 		}
 		shader.unuse();
 	}
-
-
-	// =======================
-	//		Serialisation
-	// =======================
-	template <>
-	json serialise<CubeMapComponent>(CubeMapComponent *in)
-	{
-		json serialised;
-
-		std::vector<std::string> encodedPaths;
-		for (const Res &res : in->getTexPaths())
-		{
-			encodedPaths.push_back(Res::encode(res));
-		}
-		serialised["cubeMap"] = encodedPaths;
-
-		serialised["shader"] = Shader::serialise(in->shader);
-		return serialised;
-	}
-
-	template <>
-	CubeMapComponent deserialise<CubeMapComponent>(const json &serialised)
-	{
-		CubeMapComponent cmc {};
-		cmc.shader = { {}, ShaderSources::deserialise(serialised["shader"]) };
-
-		std::array<Res, 6> decodedPaths;
-		for (int i = 0; i < 6; i++)
-		{
-			decodedPaths[i] = Res::decode(serialised["cubeMap"][i]);
-		}
-
-		cmc.setTexPaths(decodedPaths);
-		return cmc;
-	}
 }

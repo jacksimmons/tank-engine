@@ -88,10 +88,4 @@ namespace Tank
 			 1.0f, -1.0f,  1.0f
 		};
 	};
-
-
-	template <>
-	json serialise<CubeMapComponent>(CubeMapComponent *);
-	template <>
-	CubeMapComponent deserialise(const json &);
 }
