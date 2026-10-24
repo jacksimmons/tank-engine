@@ -10,7 +10,7 @@ namespace Tank
 
 	struct CubeMapData
 	{
-		friend class CubeMapComponent;
+		friend struct CubeMapComponent;
 	private:
 		static ShaderSources s_defaultSources;
 	};

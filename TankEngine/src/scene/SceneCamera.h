@@ -30,8 +30,7 @@ namespace Tank
 
 	public:
 		SceneCamera() = default;
-		SceneCamera(glm::vec3 eye = { 0, 0, 3 }, glm::vec3 centre = { 0, 0, 0 }, glm::vec3 up = { 0, 1, 0 })
-			: m_eye(eye), m_centre(centre), m_up(up) {}
+		SceneCamera(glm::vec3 eye = { 0, 0, 3 }, glm::vec3 centre = { 0, 0, 0 }, glm::vec3 up = { 0, 1, 0 });
 
 		void updateProj() { m_projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, m_cullNear, m_cullFar); }
 
@@ -44,9 +43,6 @@ namespace Tank
 		glm::vec3 getTransformedCentre() const;
 		glm::vec3 getTransformedEye() const;
 		glm::vec3 getTransformedUp() const;
-
-		json serialise() const;
-		void deserialise(const json &);
 	};
 
 

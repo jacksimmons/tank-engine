@@ -20,7 +20,7 @@ namespace Tank
 		// The Hierarchy may modify elements of the scene (lights, nodes).
 		friend class Editor::Hierarchy_;
 	private:
-		entt::registry m_registry;
+		::entt::registry m_registry;
 
 		// Static
 		static Scene *s_activeScene;

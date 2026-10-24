@@ -3,7 +3,7 @@
 #include <fs/File.h>
 #include <StringHelper.h>
 #include <project/Project.h>
-#include <SceneSerialisation.h>
+#include <serialisation/SceneSerialisation.h>
 #include "Export.h"
 #include <fs/Dir.h>
 

@@ -1,4 +1,4 @@
-#include <glm/gtx/string_cast.hpp>
+  #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/epsilon.hpp>
 #include <scene/Entity.h>
 #include <components/PhysicsBody.h>
@@ -8,6 +8,9 @@
 
 namespace Tank
 {
+	std::unordered_map<entt::entity, glm::vec3> Physics::s_velocities;
+
+
 	float Physics::gravitation(float M, float m, float r)
 	{
 		// F = GMm/(r*r)

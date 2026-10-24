@@ -31,7 +31,6 @@ namespace Tank
 		~Shader();
 
 
-		static Shader createShader(ShaderSources &shaders);
 		static bool attachShader(unsigned programID, ShaderSource &source);
 		static bool readShaderFile(const fs::path &shaderPath, std::string &shaderContents, const std::string &shaderType);
 		static std::optional<unsigned> compileShader(const std::string &shaderContents, unsigned shaderType, const std::string &shaderTypeStr);

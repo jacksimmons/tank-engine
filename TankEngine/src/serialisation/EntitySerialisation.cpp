@@ -10,32 +10,34 @@
 
 namespace Tank
 {
-	void EntitySerialisation::serialise(json &outData, const Scene &scene, const Entity &entity)
+	void EntitySerialisation::serialise(json &outData, const Scene &scene, const GameEntity &entity)
 	{
+		// Entity
+		outData["name"] = entity.name();
+		outData["enabled"] = entity.isEnabled();
+		outData["visible"] = entity.isVisible();
+
+		// Components
 		json &componentData = outData["components"];
 		
 		TE_CORE_ASSERT(entity.hasComponent<TransformComponent>(), "Serialise error: Missing essential Transform component");
 		{
 			auto &transform = entity.getComponent<TransformComponent>();
-			componentData["Transform"] = {
+			json &transformData = componentData["Transform"];
+			
+			transformData = {
 				{ "rotation", quat::serialise(transform.rotation) },
 				{ "scale", vec3::serialise(transform.scale) },
 				{ "translation", vec3::serialise(transform.translation) },
 			};
-		}
-
-		TE_CORE_ASSERT(entity.hasComponent<TreeComponent>(), "Serialise error: Missing essential Tree component");
-		{
-			auto &tree = entity.getComponent<TreeComponent>();
-			json &treeData = componentData["Tree"];
 
 			// Serialise all children - this will take a while.
 			std::vector<json> children;
-			for (auto &child : tree)
+			for (auto &child : transform)
 			{
 				json childData;
 				serialise(childData, scene, *child.get());
-				treeData["children"].push_back(childData);
+				transformData["children"].push_back(childData);
 			}
 		}
 
@@ -113,10 +115,24 @@ namespace Tank
 				{ "audioPath", audio.audioPath.encode() }
 			};
 		}
+
+		// Scripts
+		std::vector<std::string> scriptNames;
+		for (const auto &scriptRes : entity.getScriptPaths())
+		{
+			scriptNames.push_back(Res::encode(scriptRes));
+		}
+		outData["scripts"] = scriptNames;
 	}
 
 	void EntitySerialisation::deserialise(const json &data, Scene &scene, GameEntity &outEntity, GameEntity *parent)
 	{
+		// Entity
+		outEntity.setName(data["name"]);
+		outEntity.setEnabled(data["enabled"]);
+		outEntity.setVisible(data["visible"]);
+
+		// Components
 		TE_CORE_ASSERT(data.contains("components"), "Deserialise error: No component data");
 		const json &componentData = data["components"];
 
@@ -128,19 +144,12 @@ namespace Tank
 			transform.rotation = quat::deserialise(transformData["rotation"]);
 			transform.scale = vec3::deserialise(transformData["scale"]);
 			transform.translation = vec3::deserialise(transformData["translation"]);
-		}
 
-		TE_CORE_ASSERT(componentData.contains("Tree"), "Deserialise error: Missing essential Tree component");
-		{
-			json treeData = componentData["Tree"];
-
-			TreeComponent &tree = outEntity.addComponent<TreeComponent>(&outEntity, parent);
-
-			for (const json &child : treeData["children"].get<std::vector<json>>())
+			for (const json &child : transformData["children"].get<std::vector<json>>())
 			{
 				auto childEntity = scene.createEntity();
 				deserialise(child, scene, *childEntity, &outEntity);
-				tree.addChild(std::move(childEntity));
+				transform.addChild(std::move(childEntity));
 			}
 		}
 
@@ -213,6 +222,12 @@ namespace Tank
 			json audioData = data["Audio"];
 
 			outEntity.addComponent<AudioComponent>(Res::decode(audioData["audioPath"]));
+		}
+
+		// Scripts
+		for (const auto &script : data["scripts"].get<std::vector<std::string>>())
+		{
+			outEntity.addScript(Script::createScript(&outEntity, Res::decode(script)).value());
 		}
 	}
 }

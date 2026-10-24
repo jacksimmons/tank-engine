@@ -9,6 +9,7 @@
 namespace Tank
 {
 	SceneCamera::SceneCamera(glm::vec3 eye, glm::vec3 centre, glm::vec3 up)
+		: m_eye(eye), m_centre(centre), m_up(up)
 	{
 		// Create a perspective projection for this camera.
 		m_cullNear = 0.1f;
@@ -17,10 +18,6 @@ namespace Tank
 		m_view = glm::mat4(1.0f);
 		m_rotation = glm::mat4(1.0f);
 		m_translation = glm::mat4(1.0f);
-
-		m_eye = eye;
-		m_centre = centre;
-		m_up = up;
 	}
 
 
@@ -102,11 +99,14 @@ namespace Tank
 		cam.m_rotation = mat4::deserialise(serialised["rotation"]);
 		cam.m_translation = mat4::deserialise(serialised["translation"]);
 
+		cam.m_eye = vec3::deserialise(serialised["eye"]);
+		cam.m_centre = vec3::deserialise(serialised["centre"]);
+		cam.m_up = vec3::deserialise(serialised["up"]);
+
 		cam.m_cullNear = serialised["cullNear"];
 		cam.m_cullFar = serialised["cullFar"];
 		cam.updateProj();
-
-		cam.deserialise(serialised);
+		
 		return cam;
 	}
 }

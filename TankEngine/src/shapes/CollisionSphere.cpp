@@ -6,7 +6,7 @@ namespace Tank
 	bool CollisionSphere::contains(const glm::vec3 &point)
 	{
 		// Calculate radius of point from origin
-		float pointRadius = glm::distance(m_transform.Translation, point);
+		float pointRadius = glm::distance(m_transform.translation, point);
 
 		if (!m_isHollow) return pointRadius <= m_radius;
 		else

@@ -29,15 +29,15 @@ namespace Tank
 		static void newEnum(sol::state &lua, const char *enumName, GluePair<Vs> ...pairs)
 		{
 			// Register in type hints
-			UserTypes::s_luaEnums.push_back({ enumName });
+			UserTypes::s_luaEnums.push_back({ enumName, {} });
 			
 			// Register pairs in type hints
-			((GET_SOL_ENUM(enumName)->pairs.push_back({ pairs.key, pairs.value })), ...);
+			((GET_SOL_ENUM(enumName)->pairs.push_back({ pairs.key, (unsigned)pairs.value })), ...);
 
 			// Unpack pairs into enum constructor
-			return lua.new_enum(
+			lua.new_enum(
 				enumName,
-				((pairs.key, pairs.value), ...)
+				{ std::pair<std::string_view, Vs>{ pairs.key, pairs.value }... }
 			);
 		}
 
@@ -55,57 +55,57 @@ namespace Tank
 
 
 		template <typename T, typename ...MemberTypes>
-		static void addFields(sol::usertype<T> &ut, std::vector<LuaField> &fieldsVector, GlueField<MemberTypes> ...fields)
+		static void addFields(sol::usertype<T> &ut, std::vector<GlueVariable> &fieldsVector, GlueField<MemberTypes> ...fields)
 		{
 			// Register each field in type hints
-			((fieldsVector.push_back({ fields.name, fields.type }), ...);
+			((fieldsVector.push_back({ fields.name, fields.type })), ...);
 
 			// Register the fields in sol2
 			// Expand the parameter pack, into format (ut[field0.name] = field0.member), (ut[field1.name] = field1.member), ...
-			((ut[fields.fieldName] = fields.member), ...);
+			((ut[fields.name] = std::move(fields.member)), ...);
 		}
 
 	public:
-		template <typename T, typename ...Ms>
-		static void ctors(sol::usertype<T> &ut, const char *className, GlueCtor<sol::constructors<Ms>> ...ctors)
+		template <typename T, typename ...Signatures>
+		static void ctors(sol::usertype<T> &ut, const char *className, GlueCtor<Signatures> ...ctors)
 		{
 			// Register each ctor in type hints only
 			((GET_SOL_CLASS(className)->methods.push_back({ "new", ctors.params, className })), ...);
 
 			// Register the ctors in sol2
-			ut[sol::call_constructor] = sol::constructors<Ms...>();
+			ut[sol::call_constructor] = sol::constructors<Signatures...>();
 		}
 
 		template <typename T, typename ...Ms>
 		static void methods(sol::usertype<T> &ut, const char *className, GlueMethod<Ms> ...methods)
 		{
-			Glue::addMethods(ut, GET_SOL_CLASS(className)->methods, methods);
+			Glue::addMethods(ut, GET_SOL_CLASS(className)->methods, methods...);
 		}
 
 		template <typename T, typename ...Ms>
 		static void staticMethods(sol::usertype<T> &ut, const char *className, GlueMethod<Ms> ...methods)
 		{
-			Glue::addMethods(ut, GET_SOL_CLASS(className)->staticMethods, methods);
+			Glue::addMethods(ut, GET_SOL_CLASS(className)->staticMethods, methods...);
 		}
 
 		template <typename T, typename ...Ops>
-		static void operators(sol::usertype<T> &ut, const char *className, GlueOp<Ops> ...operators)
+		static void operators(sol::usertype<T> &ut, const char *className, GlueOperator<Ops> ...operators)
 		{
 			// Register each operator in type hints only
-			((GET_SOL_CLASS(className)->operators.push_back({ operators.enumName, operators.params, operators.returnType })), ...);
+			((GET_SOL_CLASS(className)->operators.push_back({ (unsigned)operators.enumValue, operators.params, operators.returnType })), ...);
 		}
 
 
 		template <typename T, typename ...Ms>
-		static void fields(sol::usertype<T> &ut, const char *className, GlueField<Ms> ...fields)
+		static void fields(sol::usertype<T> &ut, const char *className, const GlueField<Ms> &...fields)
 		{
-			Glue::addFields(ut, GET_SOL_CLASS(className)->fields, fields);
+			Glue::addFields(ut, GET_SOL_CLASS(className)->fields, fields...);
 		}
 
 		template <typename T, typename ...Ms>
-		static void staticFields(sol::usertype<T> &ut, const char *className, GlueField<Ms> ...fields)
+		static void staticFields(sol::usertype<T> &ut, const char *className, const GlueField<Ms> &...fields)
 		{
-			Glue::addFields(ut, GET_SOL_CLASS(className)->staticFields, fields);
+			Glue::addFields(ut, GET_SOL_CLASS(className)->staticFields, fields...);
 		}
 
 		template <typename T, std::same_as<const char *> ...Names>

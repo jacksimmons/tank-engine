@@ -6,6 +6,8 @@
 
 namespace Tank
 {
+	class Scene;
+
 	/// @brief Wrapper for ECS entities.
 	/// 
 	/// ECS properties are kept private.
@@ -17,8 +19,8 @@ namespace Tank
 		friend class SceneSerialisation;
 		friend class Physics;
 	private:
-		entt::entity m_handle = entt::null;
-		Scene *m_ecs = nullptr;
+		entt::entity m_handle;
+		Scene *m_ecs;
 	protected:
 		/// <summary>
 		/// If false, `update` isn't invoked for this entity and all children.
@@ -40,7 +42,7 @@ namespace Tank
 			: m_handle(handle), m_ecs(ecs) {}
 		Entity(const Entity &other) = default;
 	public:
-		virtual ~Entity() = default;
+		virtual ~Entity();
 
 		bool isEnabled() const noexcept { return m_enabled; }
 		void setEnabled(bool enabled) noexcept { m_enabled = enabled; }

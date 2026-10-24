@@ -4,15 +4,6 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <scene/Scene.h>
-#include <components/Transform.h>
-#include <components/Tree.h>
-#include <components/Camera.h>
-#include <components/Light.h>
-#include <components/Sprite.h>
-#include <components/Model.h>
-#include <components/CubeMap.h>
-#include <components/Audio.h>
-#include <reflection/ReflectionRegistry.h>
 #include <events/EventManager.h>
 #include "Application.h"
 #include "KeyInput.h"
@@ -44,21 +35,6 @@ namespace Tank
 	{
 		TE_CORE_INFO("Application > Constructor");
 		TE_CORE_INFO(std::format("CWD: {}", fs::current_path().string()));
-
-		// Register nodes for deserialising
-		{
-			using R = ReflectionRegistry;
-			R::registerClass<Scene>("Scene");
-			R::registerClass<TransformComponent>("Transform");
-			R::registerClass<TreeComponent>("Tree");
-			R::registerClass<CameraComponent>("Camera");
-			R::registerClass<DirectionalLightComponent>("DirLight");
-			R::registerClass<PointLightComponent>("PointLight");
-			R::registerClass<SpriteComponent>("Sprite");
-			R::registerClass<ModelComponent>("Model");
-			R::registerClass<CubeMapComponent>("CubeMap");
-			R::registerClass<AudioComponent>("Audio");
-		}
 
 		// Init events
 		EventManager::addEvent("EntityAdopted", new Event<GameEntity*>());

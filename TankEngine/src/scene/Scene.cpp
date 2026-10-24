@@ -1,5 +1,6 @@
 #include <Log.h>
 #include <static/Time.h>
+#include <components/Name.h>
 #include <components/Camera.h>
 #include <components/Light.h>
 #include <components/Collider.h>
@@ -37,7 +38,6 @@ namespace Tank
 		// ALL entities have these components.
 		entity->addComponent<NameComponent>();
 		entity->addComponent<TransformComponent>();
-		entity->addComponent<TreeComponent>();
 
 		return entity;
 	}
@@ -102,7 +102,7 @@ namespace Tank
 				// Ensure velocities list is correct size before starting
 				float dt = Time::getFrameDelta();
 
-				// Handle this body's gravity, applied to all other physics bodies
+				// Handle gravity with `e` as M, applied to all other physics bodies, m.
 				for (auto o : view)
 				{
 					// Ignore interactions with self
@@ -112,7 +112,7 @@ namespace Tank
 					const auto &M = entity.getComponent<PhysicsBodyComponent>();
 					const auto &m = other.getComponent<PhysicsBodyComponent>();
 
-					Physics::handleGravity(M, m, dt);
+					Physics::handleGravity(o, M, m, dt);
 				}
 			}
 		}
@@ -231,72 +231,72 @@ namespace Tank
 	// =======================
 	//		Serialisation
 	// =======================
-	Scene *loadScene(const std::filesystem::path &scenePath)
-	{
-		std::string sceneFile;
-		if (File::readLines(scenePath, sceneFile) != File::ReadResult::Success)
-		{
-			TE_CORE_ERROR(std::format("Failed to deserialise from file {}", scenePath.string()));
-			return nullptr;
-		}
+	//Scene *loadScene(const std::filesystem::path &scenePath)
+	//{
+	//	std::string sceneFile;
+	//	if (File::readLines(scenePath, sceneFile) != File::ReadResult::Success)
+	//	{
+	//		TE_CORE_ERROR(std::format("Failed to deserialise from file {}", scenePath.string()));
+	//		return nullptr;
+	//	}
 
-		json serialised;
-		try
-		{
-			serialised = json::parse(sceneFile);
-		}
-		catch (std::exception e)
-		{
-			TE_CORE_ERROR(std::format("Couldn't parse {} into JSON.", scenePath.string()));
-			return nullptr;
-		}
+	//	json serialised;
+	//	try
+	//	{
+	//		serialised = json::parse(sceneFile);
+	//	}
+	//	catch (std::exception e)
+	//	{
+	//		TE_CORE_ERROR(std::format("Couldn't parse {} into JSON.", scenePath.string()));
+	//		return nullptr;
+	//	}
 
-		if (Scene *scene = ReflectionRegistry::deserialise<Scene>(serialised))
-		{
-			return scene;
-		}
+	//	if (Scene *scene = ReflectionRegistry::deserialise<Scene>(serialised))
+	//	{
+	//		return scene;
+	//	}
 
-		TE_CORE_ERROR("File selected was not a valid scene.");
-		return nullptr;
-	}
-
-
-	void saveScene(Scene *scene, const std::filesystem::path &scenePath)
-	{
-		std::string sceneFile;
-		if (File::readLines(scenePath, sceneFile) == File::ReadResult::Error)
-		{
-			TE_CORE_ERROR(std::format("Failed to serialise to file {}", scenePath.string()));
-		}
-
-		// Write with pretty print (indent=4)
-		TE_CORE_INFO(std::format("Saving scene to {}", scenePath.string()));
-
-		std::string dump = serialise(scene).dump(4);
-		std::ofstream out(scenePath);
-
-		if (!out)
-		{
-			TE_CORE_ERROR("Failed to serialise scene at file {}", scenePath.string());
-			return;
-		}
-
-		out.write(dump.c_str(), dump.size());
-	}
+	//	TE_CORE_ERROR("File selected was not a valid scene.");
+	//	return nullptr;
+	//}
 
 
-	template <>
-	json serialise<Scene>(Scene *in)
-	{
-		json serialised;
-		serialised["isActiveScene"] = Scene::getActiveScene() == in;
-		return serialised;
-	}
+	//void saveScene(Scene *scene, const std::filesystem::path &scenePath)
+	//{
+	//	std::string sceneFile;
+	//	if (File::readLines(scenePath, sceneFile) == File::ReadResult::Error)
+	//	{
+	//		TE_CORE_ERROR(std::format("Failed to serialise to file {}", scenePath.string()));
+	//	}
 
-	template <>
-	Scene deserialise(const json &serialised)
-	{
-		Scene scene { serialised["isActiveScene"] };
-		return scene;
-	}
+	//	// Write with pretty print (indent=4)
+	//	TE_CORE_INFO(std::format("Saving scene to {}", scenePath.string()));
+
+	//	std::string dump = serialise(scene).dump(4);
+	//	std::ofstream out(scenePath);
+
+	//	if (!out)
+	//	{
+	//		TE_CORE_ERROR("Failed to serialise scene at file {}", scenePath.string());
+	//		return;
+	//	}
+
+	//	out.write(dump.c_str(), dump.size());
+	//}
+
+
+	//template <>
+	//json serialise<Scene>(Scene *in)
+	//{
+	//	json serialised;
+	//	serialised["isActiveScene"] = Scene::getActiveScene() == in;
+	//	return serialised;
+	//}
+
+	//template <>
+	//Scene deserialise(const json &serialised)
+	//{
+	//	Scene scene { serialised["isActiveScene"] };
+	//	return scene;
+	//}
 }

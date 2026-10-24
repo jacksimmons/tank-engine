@@ -6,6 +6,7 @@
 #include <components/Light.h>
 #include <scene/Scene.h>
 #include <scene/SceneCamera.h>
+#include <transformations/ModelMatrix.hpp>
 #include <Shader.h>
 #include <Texture.h>
 #include "Renderer.h"
@@ -82,7 +83,7 @@ namespace Tank
 		// Setup uniforms
 		const glm::vec3 scale = transform.scale;
 		transform.scale = scale * 1.025f;
-		outlined.m_outlineShader->setMat4("PVM", camera.m_projection * camera.m_view * transform.getWorldModelMatrix());
+		outlined.m_outlineShader->setMat4("PVM", camera.m_projection * camera.m_view * ModelMatrix::world(transform));
 		transform.scale = scale;
 
 		/// <summary>
@@ -137,7 +138,7 @@ namespace Tank
 
 		auto P = camera.m_projection;
 		auto V = camera.m_view;
-		auto M = transform.getWorldModelMatrix();
+		auto M = ModelMatrix::world(transform);
 		auto VM = V * M;
 
 		shader.setMat4("PVM", P * VM);

@@ -4,6 +4,7 @@
 #include <scene/SceneCamera.h>
 #include <components/Sprite.h>
 #include <components/Light.h>
+#include <transformations/ModelMatrix.hpp>
 #include <Texture.h>
 #include <Shader.h>
 #include <Mesh.h>
@@ -26,7 +27,7 @@ namespace Tank
 		auto cam = Scene::getActiveScene()->getActiveCamera();
 		auto P = camera.m_projection;
 		auto V = camera.m_view;
-		auto M = transform.getWorldModelMatrix();
+		auto M = ModelMatrix::world(transform);
 		auto VM = V * M;
 
 		shader.setMat4("PVM", P * VM);

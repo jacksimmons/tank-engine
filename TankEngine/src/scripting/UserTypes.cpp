@@ -13,7 +13,6 @@
 #include <scene/GameEntity.h>
 #include <components/Camera.h>
 #include <components/Transform.h>
-#include <components/Tree.h>
 #include <static/Time.h>
 #include "Glue.h"
 
@@ -44,8 +43,8 @@ namespace Tank
 	{
 		auto ut = Glue::newType<glm::vec3>(lua, "Vec3");
 		Glue::ctors(ut, "Vec3",
-			GlueCtor { {}, sol::constructors<glm::vec3()>() },
-			GlueCtor { {{"x", "number"}, {"y", "number"}, {"z", "number"}}, sol::constructors<glm::vec3(float, float, float)>() }
+			GlueCtor<glm::vec3()> { {} },
+			GlueCtor<glm::vec3(float, float, float)> { {{"x", "number"}, {"y", "number"}, {"z", "number"}} }
 		);
 		Glue::fields(ut, "Vec3",
 			GlueField { "x", "number", &glm::vec3::x },
@@ -53,13 +52,13 @@ namespace Tank
 			GlueField { "z", "number", &glm::vec3::z }
 		);
 		Glue::operators(ut, "Vec3",
-			GlueOp { sol::meta_function::addition, "Vec3", {{ "other", "Vec3" }} },
-			GlueOp { sol::meta_function::subtraction, "Vec3", {{ "other", "Vec3" }} },
-			GlueOp { sol::meta_function::multiplication, "Vec3", {{ "scalar", "float" }} },
-			GlueOp { sol::meta_function::division, "Vec3", {{ "scalar", "float" }} },
-			GlueOp { sol::meta_function::unary_minus, "Vec3" },
-			GlueOp { sol::meta_function::equal_to, "Vec3", {{ "other", "Vec3" }} },
-			GlueOp { sol::meta_function::to_string, "string" }
+			GlueOperator { sol::meta_function::addition, "Vec3", {{ "other", "Vec3" }} },
+			GlueOperator { sol::meta_function::subtraction, "Vec3", {{ "other", "Vec3" }} },
+			GlueOperator { sol::meta_function::multiplication, "Vec3", {{ "scalar", "float" }} },
+			GlueOperator { sol::meta_function::division, "Vec3", {{ "scalar", "float" }} },
+			GlueOperator { sol::meta_function::unary_minus, "Vec3" },
+			GlueOperator { sol::meta_function::equal_to, "Vec3", {{ "other", "Vec3" }} },
+			GlueOperator { sol::meta_function::to_string, "string" }
 		);
 	}
 
@@ -98,7 +97,6 @@ namespace Tank
 		Glue::fields(ut, "GameEntity",
 			GlueField { "name", "string", sol::property(&GameEntity::name, &GameEntity::setName) },
 			GlueField { "transform", "Transform", sol::property(&GameEntity::getComponent<TransformComponent>) },
-			GlueField { "tree", "Tree", sol::property(&GameEntity::getComponent<TreeComponent>) },
 			GlueField { "key_input", "KeyInput", sol::property(&GameEntity::keyInput) }
 		);
 		Glue::globalInstances(ut, "GameEntity", "entity");
@@ -109,19 +107,13 @@ namespace Tank
 	{
 		auto ut = Glue::newType<TransformComponent>(lua, "Transform");
 		Glue::fields(ut, "Transform",
-			GlueField { "translation", "Vec3", &TransformComponent::Translation },
+			GlueField { "translation", "Vec3", &TransformComponent::translation },
 			GlueField { "rotation", "Vec3", &TransformComponent::rotation },
-			GlueField { "scale", "Vec3", &TransformComponent::Scale }
+			GlueField { "scale", "Vec3", &TransformComponent::scale }
 		);
-	}
-
-	template<>
-	void UserTypes::generate<TreeComponent>(sol::state &lua)
-	{
-		auto ut = Glue::newType<TreeComponent>(lua, "Tree");
-		Glue::methods(ut, "Tree",
-			GlueMethod { "get_child", "GameEntity", {{ "index", "number" }}, static_cast<GameEntity * (TreeComponent:: *)(int) const>(&TreeComponent::getChild) },
-			GlueMethod { "get_child", "GameEntity", {{ "name", "string" }}, static_cast<GameEntity * (TreeComponent:: *)(const std::string &) const>(&TreeComponent::getChild) }
+		Glue::methods(ut, "Transform",
+			GlueMethod{ "get_child", "GameEntity", {{ "index", "number" }}, static_cast<GameEntity * (TransformComponent:: *)(int) const>(&TransformComponent::getChild) },
+			GlueMethod{ "get_child", "GameEntity", {{ "name", "string" }}, static_cast<GameEntity * (TransformComponent:: *)(const std::string &) const>(&TransformComponent::getChild) }
 		);
 	}
 
@@ -130,7 +122,7 @@ namespace Tank
 	{
 		auto ut = Glue::newType<SceneCamera>(lua, "Camera");
 		Glue::methods(ut, "Camera",
-			GlueMethod { "set_pos", "", {{ "pos", "Vec3" }}, &Camera::setPosition }
+			GlueMethod { "set_pos", "", {{ "pos", "Vec3" }}, &SceneCamera::setPosition }
 		);
 	}
 
@@ -149,7 +141,7 @@ namespace Tank
 	{
 		auto ut = Glue::newType<Time>(lua, "Time");
 		Glue::staticFields(ut, "Time",
-			GlueField { "delta", "number", sol::property(&Time::getFrameDelta) }
+			GlueField { "delta", "number", &Time::getFrameDelta }
 		);
 	}
 
@@ -163,7 +155,6 @@ namespace Tank
 		
 		generate<GameEntity>(lua);
 		generate<TransformComponent>(lua);
-		generate<TreeComponent>(lua);
 		
 		generate<Scene>(lua);
 		generate<SceneCamera>(lua);

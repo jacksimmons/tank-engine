@@ -8,20 +8,17 @@
 
 namespace Tank
 {
-	static void printLuaMethod(std::ostream &os, const LuaCallable &meth)
+	static void printLuaMethod(std::ostream &os, const LuaCallable &method)
 	{
-		LuaField funcAsField;
-		funcAsField.name = meth.name;
-
-		funcAsField.type = "";
-		for (const auto &param : meth.params)
+		GlueVariable paramAsVariable = { method.name, "" };
+		for (const auto &param : method.params)
 		{
 			// If not the first arg, add a , separator
-			if (!funcAsField.type.empty()) funcAsField.type += ",";
-			funcAsField.type += std::format("{}: {}", param.name, param.type);
+			if (!paramAsVariable.type.empty()) paramAsVariable.type += ",";
+			paramAsVariable.type += std::format("{}: {}", param.name, param.type);
 		}
-		funcAsField.type = std::format("fun(this, {}): {}", funcAsField.type, meth.returnType.empty() ? "nil" : meth.returnType);
-		os << funcAsField;
+		paramAsVariable.type = std::format("fun(this, {}): {}", paramAsVariable.type, method.returnType.empty() ? "nil" : method.returnType);
+		os << paramAsVariable;
 	}
 
 
@@ -42,9 +39,9 @@ namespace Tank
 	}
 
 
-	std::ostream &operator<<(std::ostream &os, const LuaField &lf)
+	std::ostream &operator<<(std::ostream &os, const GlueVariable &var)
 	{
-		os << std::format("---@field {} {}\n", lf.name, lf.type);
+		os << std::format("---@field {} {}\n", var.name, var.type);
 		return os;
 	}
 
@@ -65,7 +62,7 @@ namespace Tank
 		{
 			printLuaMethod(os, meth);
 		}
-		for (const auto &metaMeth : lc.metaMethods)
+		for (const auto &metaMeth : lc.operators)
 		{
 			printLuaMetaMethod(os, metaMeth);
 		}

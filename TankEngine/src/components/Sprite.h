@@ -20,10 +20,4 @@ namespace Tank
 		bool setTexPath(const Resource &texPath);
 		const Resource& getTexPath() { return m_texPath; }
 	};
-
-
-	template <>
-	json serialise<SpriteComponent>(SpriteComponent *);
-	template <>
-	SpriteComponent deserialise(const json &);
 }

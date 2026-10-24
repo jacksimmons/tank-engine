@@ -1,4 +1,5 @@
 #pragma once
+#include <assets/Resource.h>
 
 
 namespace Tank

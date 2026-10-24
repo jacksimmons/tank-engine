@@ -5,6 +5,7 @@ namespace Tank
 {
 	struct CubeMapComponent;
 	struct LightComponent;
+	struct ModelComponent;
 	class IMeshContainer;
 	class SceneCamera;
 

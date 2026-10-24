@@ -1,25 +1,20 @@
 #pragma once
+#include "GlueData.h"
 
 
 namespace Tank
 {
-	struct LuaField
-	{
-		std::string name;
-		std::string type;
-	};
-
 	struct LuaCallable
 	{
 		std::string name;
-		std::vector<LuaField> params;
+		std::vector<GlueVariable> params;
 		std::string returnType;
 	};
 
 	struct LuaOperator
 	{
 		unsigned type;
-		std::vector<LuaField> params;
+		std::vector<GlueVariable> params;
 		std::string returnType;
 	};
 
@@ -31,11 +26,11 @@ namespace Tank
 	{
 		std::string name;
 		std::string base;
-		std::vector<LuaField> fields;
-		std::vector<LuaField> staticFields;
-		std::vector<LuaField> globalFields;
+		std::vector<GlueVariable> fields;
+		std::vector<GlueVariable> staticFields;
+		std::vector<GlueVariable> globalFields;
 		std::vector<LuaCallable> methods;
-		std::vector<LuaOperator> metaMethods;
+		std::vector<LuaOperator> operators;
 		std::vector<LuaCallable> staticMethods;
 		std::vector<LuaCallable> globalFunctions;
 	};
@@ -52,7 +47,7 @@ namespace Tank
 		std::vector<LuaEnumPair> pairs;
 	};
 
-	std::ostream &operator<<(std::ostream &os, const LuaField &lf);
+	std::ostream &operator<<(std::ostream &os, const GlueVariable &var);
 	std::ostream &operator<<(std::ostream &os, const LuaClass &lc);
 	std::ostream &operator<<(std::ostream &os, const LuaEnum &le);
 }

@@ -1,8 +1,5 @@
 #include "Entity.h"
-#include <components/Transform.h>
-#include <components/Tree.h>
-#include <events/EventManager.h>
-#include <KeyInput.h>
+#include "Scene.h"
 
 
 namespace Tank

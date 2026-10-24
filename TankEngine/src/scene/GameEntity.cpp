@@ -2,7 +2,6 @@
 #include <KeyInput.h>
 #include <components/Name.h>
 #include <components/Transform.h>
-#include <components/Tree.h>
 #include <scene/Scene.h>
 #include <scripting/Script.h>
 #include <events/EventManager.h>
@@ -21,14 +20,14 @@ namespace Tank
 
 		// Get a vector of all sibling names
 		std::vector<std::string> siblingNames;
-		auto &treeComponent = tree();
-		for (const auto *sibling : treeComponent.getSiblings())
+		auto &transform = this->transform();
+		for (const auto *sibling : transform.getSiblings())
 		{
 			if (sibling == this) continue;
 			siblingNames.push_back(sibling->name());
 		}
 
-		std::vector<GameEntity *> siblings = treeComponent.getSiblings();
+		std::vector<GameEntity *> siblings = transform.getSiblings();
 		std::function<GameEntity *()> findSiblingWithSameName = [this, &siblings]()
 		{
 			auto it = std::find_if(siblings.begin(), siblings.end(),
@@ -49,7 +48,7 @@ namespace Tank
 			std::string dupeName;
 
 			// Try each of NAME (1), NAME (2), ... NAME (NUM_SIBLINGS - 1)
-			for (dupeIndex = 0; dupeIndex < tree().getSiblingCount(); dupeIndex++)
+			for (dupeIndex = 0; dupeIndex < this->transform().getSiblingCount(); dupeIndex++)
 			{
 				dupeName = std::format("{} ({})", baseName, dupeIndex);
 				nc.Name = dupeName;
@@ -57,7 +56,7 @@ namespace Tank
 			}
 
 			// If even NAME (NUM_SIBLINGS - 1) didn't work, we have a problem
-			if (dupeIndex == tree().getSiblingCount())
+			if (dupeIndex == this->transform().getSiblingCount())
 			{
 				TE_CORE_FATAL(std::format("[Infinite loop error] Tried to assign a node a duplicate identifier. Tried (0), ..., ({})", dupeIndex - 1));
 			}
@@ -71,8 +70,6 @@ namespace Tank
 
 	TransformComponent &GameEntity::transform() const { return getComponent<TransformComponent>(); }
 
-	TreeComponent &GameEntity::tree() const { return getComponent<TreeComponent>(); }
-
 
 	void GameEntity::startup()
 	{
@@ -80,7 +77,7 @@ namespace Tank
 		if (m_started) return;
 		m_started = true;
 
-		for (auto const &child : tree().m_children)
+		for (auto const &child : transform().m_children)
 		{
 			child->startup();
 		}
@@ -93,7 +90,7 @@ namespace Tank
 		if (!m_started) return;
 		m_started = false;
 
-		for (auto const &child : tree().m_children)
+		for (auto const &child : transform().m_children)
 		{
 			child->shutdown();
 		}
@@ -137,7 +134,7 @@ namespace Tank
 	}
 
 
-	std::vector<Res> GameEntity::getScriptPaths()
+	std::vector<Res> GameEntity::getScriptPaths() const
 	{
 		std::vector<Res> scriptPaths;
 		for (const auto &script : m_scripts)
@@ -148,43 +145,14 @@ namespace Tank
 	}
 
 
-	void GameEntity::update()
-	{
-		if (!isEnabled()) return;
-
-		preupdate();
-
-		// Handle scripts
-		if (m_started)
-		{
-			for (const auto &script : m_scripts)
-			{
-				if (script->getEnabled())
-				{
-					script->update();
-				}
-			}
-		}
-
-		// Update KeyInput (decay inputs)
-		if (m_keyInput) m_keyInput->update();
-
-		// Recursively update
-		for (auto it = tree().m_children.begin(); it != tree().m_children.end(); ++it)
-		{
-			(*it)->update();
-		}
-	}
-
-
 	void GameEntity::preupdate()
 	{
 		// Disown all children waiting to be disowned
-		auto &tree = this->tree();
+		auto &tree = this->transform();
 		for (GameEntity *toDisown : tree.m_childrenAwaitingDisown)
 		{
 			EventManager::invokeEvent<GameEntity *>("EntityDisowned", toDisown);
-			tree.m_children.erase(tree.m_children.begin() + toDisown->tree().getSiblingIndex());
+			tree.m_children.erase(tree.m_children.begin() + toDisown->transform().getSiblingIndex());
 		}
 		tree.m_childrenAwaitingDisown.clear();
 
@@ -217,12 +185,27 @@ namespace Tank
 
 	void GameEntity::update()
 	{
-		if (!m_enabled) return;
+		if (!isEnabled()) return;
 
 		preupdate();
 
+		// Handle scripts
+		if (m_started)
+		{
+			for (const auto &script : m_scripts)
+			{
+				if (script->getEnabled())
+				{
+					script->update();
+				}
+			}
+		}
+
+		// Update KeyInput (decay inputs)
+		if (m_keyInput) m_keyInput->update();
+
 		// Recursively update
-		for (auto it = tree().m_children.begin(); it != tree().m_children.end(); ++it)
+		for (auto it = transform().m_children.begin(); it != transform().m_children.end(); ++it)
 		{
 			(*it)->update();
 		}
@@ -231,47 +214,6 @@ namespace Tank
 
 	void GameEntity::destroy()
 	{
-		tree().getParent().tree().m_childrenAwaitingDisown.push_back(this);
-	}
-
-
-	// =======================
-	//		Serialisation
-	// =======================
-	template <>
-	json serialise(GameEntity *in)
-	{
-		json serialised;
-		serialised["name"] = in->name();
-		serialised["enabled"] = in->isEnabled();
-		serialised["visible"] = in->isVisible();
-		serialised["transform"] = serialise(&in->getComponent<TransformComponent>());
-		
-		std::vector<std::string> scriptNames;
-		for (const auto &scriptRes : in->getScriptPaths())
-		{
-			scriptNames.push_back(Res::encode(scriptRes));
-		}
-		serialised["scripts"] = scriptNames;
-	}
-
-	template<>
-	std::unique_ptr<GameEntity> deserialise(const json &serialised)
-	{
-		Scene *scene = Scene::getActiveScene();
-
-		std::unique_ptr<GameEntity> e = scene->createEntity();
-		e->getComponent<NameComponent>().Name = serialised["name"];
-		e->setEnabled(serialised["enabled"]);
-		e->setVisible(serialised["visible"]);
-		e->removeComponent<TransformComponent>();
-		e->addComponent<TransformComponent>(deserialise<TransformComponent>(serialised["transform"]));
-
-		for (const auto &script : serialised["scripts"].get<std::vector<std::string>>())
-		{
-			e->addScript(Script::createScript(e.get(), Res::decode(script)).value());
-		}
-
-		return e;
+		transform().getParent()->transform().m_childrenAwaitingDisown.push_back(this);
 	}
 }

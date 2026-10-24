@@ -1,6 +1,7 @@
 #include <scene/Scene.h>
 #include <components/Components.h>
 #include "SceneSerialisation.h"
+#include "EntitySerialisation.h"
 
 
 namespace Tank
@@ -12,11 +13,10 @@ namespace Tank
 		// Handle all entity serialisations
 		json &entityData = outData["entities"];
 
-		for (const auto &e : scene.m_registry.view<TreeComponent>())
+		for (const auto &e : scene.m_registry.view<TransformComponent>())
 		{
-			Entity entity = { e, &scene };
+			GameEntity entity = { e, &scene };
+			EntitySerialisation::serialise(entityData, scene, entity);
 		}
-
-		return serialised;
 	}
 }

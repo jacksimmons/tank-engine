@@ -10,7 +10,7 @@ namespace Tank
 	class EntitySerialisation
 	{
 	public:
-		static void serialise(json &outData, const Scene &scene, const Entity &entity);
+		static void serialise(json &outData, const Scene &scene, const GameEntity &entity);
 		static void deserialise(const json &data, Scene &scene, GameEntity &outEntity, GameEntity *parent = nullptr);
 	};
 }

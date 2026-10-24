@@ -1,10 +1,10 @@
 #pragma once
+#include <entt/entt.hpp>
 
 
 namespace Tank
 {
 	struct PhysicsBodyComponent;
-	namespace entt { typedef unsigned entity; }
 
 
 	namespace PHYSICS

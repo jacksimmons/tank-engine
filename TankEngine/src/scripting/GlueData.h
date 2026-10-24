@@ -5,8 +5,8 @@ namespace Tank
 {
 	struct GlueVariable
 	{
-		const char *name;
-		const char *type;
+		std::string name;
+		std::string type;
 	};
 
 	template <typename M>
@@ -16,36 +16,39 @@ namespace Tank
 	};
 
 
-	template <typename M>
+	template <typename Signature>
 	struct GlueCtor
 	{
 		std::vector<GlueVariable> params;
-		M member;
 	};
 
 	template <typename M>
 	struct GlueMethod
 	{
-		const char *name;
-		const char *returnType;
+		std::string name;
+		std::string returnType;
 		std::vector<GlueVariable> params;
 		M member;
 	};
 
-	template <typename E>
-	struct GlueOp
+	template <class T>
+	concept EnumValue = requires(const T &t)
 	{
-		E enumKey;
-		const char *returnType;
-		std::vector<GlueVariable> params;
-		//M member;
+		(unsigned)t;
 	};
-
-
-	template <typename V>
+	template <EnumValue V>
 	struct GluePair
 	{
-		const char *key;
+		std::string key;
 		V value;
+	};
+
+	template <EnumValue E>
+	struct GlueOperator
+	{
+		E enumValue;
+		std::string returnType;
+		std::vector<GlueVariable> params;
+		//M member;
 	};
 }

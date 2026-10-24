@@ -8,8 +8,8 @@ namespace Tank
 {
 	class NameComponent;
 	class TransformComponent;
-	class TreeComponent;
 	class KeyInput;
+	class Scene;
 
 
 	/// @brief Implementation for a practical Entity in a scene.
@@ -31,7 +31,6 @@ namespace Tank
 
 		KeyInput *keyInput() const;
 		TransformComponent &transform() const;
-		TreeComponent &tree() const;
 
 		virtual void startup();
 		virtual void shutdown();
@@ -42,12 +41,6 @@ namespace Tank
 		void addScript(std::unique_ptr<Script>);
 		bool removeScript(const Res &path);
 
-		std::vector<Res> getScriptPaths();
+		std::vector<Res> getScriptPaths() const;
 	};
-
-
-	template <>
-	json serialise<GameEntity>(GameEntity *);
-	template <>
-	GameEntity deserialise(const json &);
 }
