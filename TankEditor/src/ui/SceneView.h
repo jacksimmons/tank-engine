@@ -1,5 +1,5 @@
 #pragma once
-#include "ui/Window.h"
+#include "Window.h"
 #include "Framebuffer.h"
 
 
@@ -43,7 +43,9 @@ namespace Tank::Editor
 		std::string m_fpsDisplayLastText = "";
 		const float FPS_DISPLAY_UPDATE_FREQUENCY = 0.5f;
 	public:
-		SceneView_(const std::string &name,
+		SceneView_(
+			entt::handle handle,
+			Scene *ecs,
 			glm::ivec2 stdViewportSize,
 			glm::ivec2 fbViewportSize,
 			Tank::KeyInput *keyInput,
@@ -52,7 +54,6 @@ namespace Tank::Editor
 
 		void rescale(int w, int h) const;
 		void update() override;
-		virtual void draw() override;
 		virtual void drawPanel() override;
 		constexpr int getSceneW() const noexcept { return m_sceneW; }
 		constexpr int getSceneH() const noexcept { return m_sceneH; }

@@ -32,6 +32,8 @@ namespace Tank
 		KeyInput *keyInput() const;
 		TransformComponent &transform() const;
 
+		std::vector<GameEntity *> children() const;
+
 		virtual void startup();
 		virtual void shutdown();
 		virtual void preupdate();

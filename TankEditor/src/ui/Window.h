@@ -1,13 +1,12 @@
 #pragma once
-#include "imgui.h"
-#include <nodes/ui/UiNode.h>
+#include <imgui.h>
+#include <entity/EditorEntity.h>
 
 
 namespace Tank::Editor
 {
 	struct WindowOpts
 	{
-
 		ImGuiWindowFlags flags;
 		bool closeable;
 		bool autoScroll;
@@ -15,12 +14,12 @@ namespace Tank::Editor
 
 
 	/// <summary>
-	/// Base class to render an ImGui window.
+	/// ImGui window renderer component.
 	/// </summary>
-	class _Window : public UINode
+	class _Window : public EditorEntity
 	{
 	protected:
-		_Window(const std::string &name, const WindowOpts &opts);
+		_Window(entt::entity handle, Scene *ecs, WindowOpts opts);
 		WindowOpts m_opts;
 	public:
 		virtual ~_Window() = default;

@@ -5,6 +5,8 @@
 #include <scene/Scene.h>
 #include <scripting/Script.h>
 #include <events/EventManager.h>
+#include <events/EventID.h>
+#include <utils/Vector.h>
 #include "GameEntity.h"
 #include "Entity.h"
 
@@ -68,7 +70,14 @@ namespace Tank
 
 	KeyInput *GameEntity::keyInput() const { return m_keyInput.get(); }
 
+
 	TransformComponent &GameEntity::transform() const { return getComponent<TransformComponent>(); }
+
+	
+	std::vector<GameEntity *> GameEntity::children() const
+	{
+		return Vector::UniquePtr::toRawPtr(transform().m_children);
+	}
 
 
 	void GameEntity::startup()
@@ -151,7 +160,7 @@ namespace Tank
 		auto &tree = this->transform();
 		for (GameEntity *toDisown : tree.m_childrenAwaitingDisown)
 		{
-			EventManager::invokeEvent<GameEntity *>("EntityDisowned", toDisown);
+			EventManager::invokeEvent<GameEntity *>(TANK_EVENT_ENTITY_DISOWNED, toDisown);
 			tree.m_children.erase(tree.m_children.begin() + toDisown->transform().getSiblingIndex());
 		}
 		tree.m_childrenAwaitingDisown.clear();
@@ -177,7 +186,7 @@ namespace Tank
 			GameEntity *entity = tree.m_children.back().get();
 			// setName sets name to NAME (0) if any siblings share its name (then NAME (1) if NAME (0) already exists, etc...)
 			entity->setName(entity->name());
-			EventManager::invokeEvent<Entity *>("EntityAdopted", entity);
+			EventManager::invokeEvent<Entity *>(TANK_EVENT_ENTITY_ADOPTED, entity);
 		}
 		tree.m_childrenAwaitingAdopt.clear();
 	}

@@ -1,0 +1,13 @@
+#pragma once
+#include <events/EventID.h>
+
+
+namespace Tank
+{
+	enum EditorEventID
+	{
+		TANK_EVENT_HIERARCHY_NODE_SELECTED = TANK_CLIENT_EVENT << 0,
+		TANK_EVENT_HIERARCHY_NODE_DELETED = TANK_CLIENT_EVENT << 1,
+		TANK_EVENT_CONSOLE_ADD_LINE = TANK_CLIENT_EVENT << 2
+	};
+}

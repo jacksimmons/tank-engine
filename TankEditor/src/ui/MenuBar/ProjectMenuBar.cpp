@@ -108,7 +108,7 @@ namespace Tank::Editor
 			Inspector_ *inspector = dynamic_cast<Inspector_ *>(m_editor.getProjRoot().getChild("Inspector"));
 			assert(inspector != nullptr);
 
-			inspector->m_inspectedNode = nullptr;
+			inspector->m_selectedEntity = nullptr;
 		}
 	}
 

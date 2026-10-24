@@ -2,19 +2,17 @@
 #include "Colours.h"
 #include "NodeInspectors/NodeInspector.h"
 #include "components/Camera.h"
-#include "nodes/interfaces/ShaderContainer.h"
 #include "components/Light.h"
 #include "components/Model.h"
 #include "scene/Entity.h"
-#include "components/Scene.h"
 #include "components/Sprite.h"
 #include "components/Audio.h"
-#include "nodes/ui/Text.h"
 #include "ui/FileDialog.h"
 #include "ui/inspector/Inspector.h"
 #include <events/EventManager.h>
+#include <events/EditorEventID.h>
 #include <imgui.h>
-#include <nodes/interfaces/MeshContainer.h>
+#include <components/interfaces/MeshContainer.h>
 
 
 namespace Tank::Editor
@@ -29,14 +27,14 @@ namespace Tank::Editor
 	Inspector_::Inspector_(const std::string &name)
 		: _Window(name, WINDOW_OPTS)
 	{
-		m_inspectedNode = nullptr;
+		m_selectedEntity = nullptr;
 
 		/// <summary>
 		/// Handle removing outline shader for the currently selected node, and applying
 		/// outline shader to the new selected node.
 		/// Then update the inspected node variable.
 		/// </summary>
-		auto onNodeSelected = EventManager::getEvent<Node*>("Hierarchy.NodeSelected");
+		auto onNodeSelected = EventManager::getEvent<GameEntity*>(TANK_EVENT_HIERARCHY_NODE_SELECTED);
 		onNodeSelected->registerHandler([this](Node *node)
 		{
 			// Don't allow editor nodes in the hierarchy to be inspected
@@ -46,11 +44,11 @@ namespace Tank::Editor
 				return;
 			}
 
-			if (m_inspectedNode)
+			if (m_selectedEntity)
 			{
 				// Disable outline for current inspected node (if necessary)
 				// @todo Access violation after New Project (inspector stays open)
-				if (IOutlined *inspectedOutline = dynamic_cast<IOutlined*>(m_inspectedNode))
+				if (IOutlined *inspectedOutline = dynamic_cast<IOutlined*>(m_selectedEntity))
 				{
 					inspectedOutline->setOutlineEnabled(false);
 				}
@@ -63,7 +61,7 @@ namespace Tank::Editor
 			}
 
 			// Set the inspected node, before trying to setup node inspectors
-			m_inspectedNode = node;
+			m_selectedEntity = node;
 
 			// Now setup a node inspector, for each type which has one.
 			m_nodeInspectors.clear(); // Clear beforehand
@@ -88,12 +86,12 @@ namespace Tank::Editor
 			node->forEachDescendant(
 				[this](Node *node)
 				{
-					if (node == m_inspectedNode)
-						m_inspectedNode = nullptr;
+					if (node == m_selectedEntity)
+						m_selectedEntity = nullptr;
 				},
 				[this]()
 				{
-					return m_inspectedNode == nullptr;
+					return m_selectedEntity == nullptr;
 				}
 			);
 		});
@@ -102,10 +100,10 @@ namespace Tank::Editor
 
 	void Inspector_::drawPanel()
 	{
-		if (m_inspectedNode)
+		if (m_selectedEntity)
 		{
 			ImGui::TextColored(Tank::Colour::TITLE, "Type");
-			ImGui::Text(typeid(*m_inspectedNode).name());
+			ImGui::Text(typeid(*m_selectedEntity).name());
 			
 			// Draw all node inspector sections
 			for (const auto &nodeInspector : m_nodeInspectors)
@@ -124,7 +122,7 @@ namespace Tank::Editor
 	void Inspector_::tryAddSection()
 	{
 		// If the node can be casted to this node subtype, then draw using the subtype inspector.
-		if (T *t = dynamic_cast<T *>(m_inspectedNode))
+		if (T *t = dynamic_cast<T *>(m_selectedEntity))
 		{
 			m_nodeInspectors.push_back(std::make_unique<NodeInspector_<T>>(t, this));
 		}

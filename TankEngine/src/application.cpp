@@ -5,6 +5,7 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <scene/Scene.h>
 #include <events/EventManager.h>
+#include <events/EventID.h>
 #include "Application.h"
 #include "KeyInput.h"
 #include "Log.h"
@@ -37,8 +38,8 @@ namespace Tank
 		TE_CORE_INFO(std::format("CWD: {}", fs::current_path().string()));
 
 		// Init events
-		EventManager::addEvent("EntityAdopted", new Event<GameEntity*>());
-		EventManager::addEvent("EntityDisowned", new Event<GameEntity*>());
+		EventManager::addEvent(TANK_EVENT_ENTITY_ADOPTED, new Event<GameEntity*>());
+		EventManager::addEvent(TANK_EVENT_ENTITY_DISOWNED, new Event<GameEntity *>());
 
 		m_windowSize = glm::ivec2(800, 600);
 		m_settings.configFlags = settings.configFlags;

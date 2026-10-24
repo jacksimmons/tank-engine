@@ -1,4 +1,3 @@
-#include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
@@ -7,24 +6,14 @@
 
 #include <Engine.h>
 #include <scene/Entity.h>
-#include <components/Model.h>
-#include <components/Scene.h>
-#include <components/Camera.h>
-#include <components/Sprite.h>
-#include <components/Audio.h>
-#include <components/CubeMap.h>
-#include <components/Light.h>
-#include <nodes/physics/PhysicsBody.h>
-#include <nodes/ui/UiNode.h>
 #include <events/EventManager.h>
+#include <events/EditorEventID.h>
 #include <scripting/Script.h>
 #include <project/Project.h>
 #include <project/Export.h>
-#include <reflection/ReflectionFactory.h>
 #include "Editor.h"
 #include "Shader.h"
 #include "Log.h"
-#include "SceneSerialisation.h"
 #include "KeyInput.h"
 #include "ui/Console.h"
 #include "ui/SceneView.h"
@@ -73,16 +62,16 @@ namespace Tank::Editor
 		m_editorInput = std::make_unique<KeyInput>(registeredKeys);
 
 		// Add editor-specific events
-		EventManager::addEvent("Hierarchy.NodeSelected", new Event<Node*>());
-		EventManager::addEvent("Hierarchy.NodeDeleted", new Event<Node*>());
-		EventManager::addEvent("Console.AddColouredLine", new Event<std::string, ImColor>());
+		EventManager::addEvent(TANK_EVENT_HIERARCHY_NODE_SELECTED, new Event<GameEntity *>());
+		EventManager::addEvent(TANK_EVENT_HIERARCHY_NODE_DELETED, new Event<GameEntity *>());
+		EventManager::addEvent(TANK_EVENT_CONSOLE_ADD_LINE, new Event<std::string, ImColor>());
 
 		// Set the ImGui context, over DLL boundary
 		ImGui::SetCurrentContext(getContext());
 
-		m_initUI = std::make_unique<Node>("EditorInit");
+		m_initUI = std::make_unique<GameEntity>("EditorInit");
 		m_projectUI = nullptr;
-		m_sceneRoot = std::make_unique<Node>("EditorScene");
+		m_sceneRoot = std::make_unique<GameEntity>("EditorScene");
 		m_project = nullptr;
 	
 		// Load Project (via New/Open Project)
@@ -101,12 +90,13 @@ namespace Tank::Editor
 					Res scenePath = m_project->getSceneRes();
 					if (Scene *rawScene = Tank::Serialisation::loadScene(scenePath.resolvePathStr(), *m_factory))
 					{
-						m_projectUI = std::make_unique<Node>("EditorProject");
-						m_projectUI->addChild(std::unique_ptr<ProjectMenuBar_>(new ProjectMenuBar_(*this)));
-						m_projectUI->addChild(std::unique_ptr<SceneView_>(new SceneView_("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
-						m_projectUI->addChild(std::unique_ptr<Console_>(new Console_("Console")));
-						m_projectUI->addChild(std::unique_ptr<Hierarchy_>(new Hierarchy_("Hierarchy")));
-						m_projectUI->addChild(std::unique_ptr<Inspector_>(new Inspector_("Inspector")));
+						m_projectUI = std::make_unique<GameEntity>("EditorProject");
+						auto &ui = m_projectUI->transform();
+						ui.addChild(std::unique_ptr<ProjectMenuBar_>(new ProjectMenuBar_(*this)));
+						ui.addChild(std::unique_ptr<SceneView_>(new SceneView_("SceneView", getWindowSize(), getWindowSize(), m_editorInput.get())));
+						ui.addChild(std::unique_ptr<Console_>(new Console_("Console")));
+						ui.addChild(std::unique_ptr<Hierarchy_>(new Hierarchy_("Hierarchy")));
+						ui.addChild(std::unique_ptr<Inspector_>(new Inspector_("Inspector")));
 						m_projectUI->preupdate();
 
 						setScene(std::unique_ptr<Scene>(rawScene));

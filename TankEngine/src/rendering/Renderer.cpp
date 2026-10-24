@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include <glm/gtc/matrix_inverse.hpp>
-#include <nodes/interfaces/MeshContainer.h>
+#include <components/interfaces/MeshContainer.h>
 #include <components/CubeMap.h>
 #include <components/Model.h>
 #include <components/Light.h>

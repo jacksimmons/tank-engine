@@ -4,6 +4,7 @@
 #include <Shader.h>
 #include <Mesh.h>
 #include <ShaderSource.h>
+#include <utils/Vector.h>
 #include "MeshContainer.h"
 
 
@@ -27,11 +28,6 @@ namespace Tank
 
 	std::vector<Mesh*> IMeshContainer::getMeshes() const
 	{
-		std::vector<Mesh*> meshes;
-		for (const std::unique_ptr<Mesh> &mesh : m_meshes)
-		{
-			meshes.push_back(mesh.get());
-		}
-		return meshes;
+		return Vector::UniquePtr::toRawPtr(m_meshes);
 	}
 }

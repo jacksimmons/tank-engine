@@ -1,5 +1,6 @@
 #include <imgui.h>
 #include <events/EventManager.h>
+#include <events/EditorEventID.h>
 #include "Console.h"
 #include "Widget.h"
 #include "Colours.h"
@@ -17,7 +18,7 @@ namespace Tank::Editor
 	Console_::Console_(const std::string &name) : _Window(name, WINDOW_OPTS)
 	{
 		// Register event handlers
-		EventManager::getEvent<std::string, ImColor>("Console.AddColouredLine")
+		EventManager::getEvent<std::string, ImColor>(TANK_EVENT_CONSOLE_ADD_LINE)
 		->registerHandler(
 			[this](const std::string &line, const ImColor &colour)
 			{

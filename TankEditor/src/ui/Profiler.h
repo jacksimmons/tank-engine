@@ -9,7 +9,7 @@ namespace Tank::Editor
 		friend class EditorApp;
 		friend class ProjectMenuBar_;
 	private:
-		Profiler_(const std::string &name = "Profiler");
+		Profiler_(entt::handle handle, Scene *ecs);
 	public:
 		virtual void drawPanel() override;
 	};

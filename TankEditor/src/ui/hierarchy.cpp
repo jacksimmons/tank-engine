@@ -3,6 +3,7 @@
 #include "Log.h"
 #include "Colours.h"
 #include <events/EventManager.h>
+#include <events/EditorEventID.h>
 #include "components/Camera.h"
 #include "components/Light.h"
 #include "components/Scene.h"
@@ -89,7 +90,7 @@ namespace Tank::Editor
 			ImGui::IsMouseReleased(ImGuiMouseButton_Left)
 		)
 		{
-			EventManager::invokeEvent("Hierarchy.NodeSelected", node);
+			EventManager::invokeEvent(TANK_EVENT_HIERARCHY_NODE_SELECTED, node);
 		}
 
 		// Draw the right-click options, if user is right-clicking and hovering. If node gets deleted here, return.

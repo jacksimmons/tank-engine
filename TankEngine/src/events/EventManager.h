@@ -8,13 +8,13 @@ namespace Tank
 	class TANK_API EventManager
 	{
 	private:
-		static std::unordered_map<std::string, std::unique_ptr<BaseEvent>> s_eventMap;
+		static std::unordered_map<unsigned, std::unique_ptr<BaseEvent>> s_eventMap;
 	public:
-		static void addEvent(const std::string &id, BaseEvent *event);
-		static void removeEvent(const std::string &id);
+		static void addEvent(unsigned id, BaseEvent *event);
+		static void removeEvent(unsigned id);
 
 		template <class ...TArgs>
-		static Event<TArgs...> *getEvent(const std::string &id)
+		static Event<TArgs...> *getEvent(unsigned id)
 		{
 			if (!s_eventMap.contains(id))
 			{
@@ -33,8 +33,10 @@ namespace Tank
 			}
 		}
 	
+		/// @brief Invoke Event by ID. You should always pass an enum into this function, and never
+		/// reuse event IDs.
 		template <class ...TArgs>
-		static void invokeEvent(const std::string &id, TArgs... args)
+		static void invokeEvent(unsigned id, TArgs... args)
 		{
 			Event<TArgs...> *event = EventManager::getEvent<TArgs...>(id);
 			event->invoke(args...);

@@ -1,12 +1,11 @@
-#include <components/Scene.h>
 #include "Window.h"
 #include "Log.h"
 
 
 namespace Tank::Editor
 {
-	_Window::_Window(const std::string &name, const WindowOpts &opts)
-		: UINode(name), m_opts(opts)
+	_Window::_Window(entt::entity handle, Scene *ecs, WindowOpts opts)
+		: EditorEntity(handle, ecs), m_opts(opts)
 	{
 		m_opts.flags |= ImGuiWindowFlags_NoCollapse;
 		m_isEditorControlled = true;
@@ -31,6 +30,5 @@ namespace Tank::Editor
 
 			ImGui::End();
 		}
-		Node::draw();
 	}
 }

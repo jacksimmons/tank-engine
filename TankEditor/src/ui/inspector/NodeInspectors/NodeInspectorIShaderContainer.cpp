@@ -3,7 +3,7 @@
 #include <fs/File.h>
 #include <Widget.h>
 #include <Shader.h>
-#include <nodes/interfaces/ShaderContainer.h>
+#include <components/interfaces/ShaderContainer.h>
 #include <static/Time.h>
 #include "NodeInspector.h"
 

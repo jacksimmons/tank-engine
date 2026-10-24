@@ -5,7 +5,7 @@
 class ImGuiIO;
 namespace Tank
 {
-	class Node;
+	class GameEntity;
 	class Scene;
 	class Project;
 	class KeyInput;
@@ -19,11 +19,11 @@ namespace Tank::Editor
 		static std::vector<std::string> s_windowNames;
 		
 		// Root for initial UI
-		std::unique_ptr<Node> m_initUI;
+		std::unique_ptr<GameEntity> m_initUI;
 		// Root for project UI
-		std::unique_ptr<Node> m_projectUI;
+		std::unique_ptr<GameEntity> m_projectUI;
 		// Root for scene nodes
-		std::unique_ptr<Node> m_sceneRoot;
+		std::unique_ptr<GameEntity> m_sceneRoot;
 
 		// Keyboard input for the Editor only.
 		std::unique_ptr<KeyInput> m_editorInput;
@@ -33,7 +33,7 @@ namespace Tank::Editor
 		~EditorApp();
 
 		const Project &getProject() const { return *m_project; }
-		Node &getProjRoot() const { return *m_sceneRoot; }
+		GameEntity &getProjRoot() const { return *m_sceneRoot; }
 		void setScene(std::unique_ptr<Scene> scene);
 	protected:
 		virtual void step() override;

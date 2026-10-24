@@ -1,6 +1,6 @@
 #pragma once
 #define PROJECT_FILE "project.tank"
-#include <nodes/interfaces/Serialisable.h>
+#include <components/interfaces/Serialisable.h>
 
 
 namespace Tank

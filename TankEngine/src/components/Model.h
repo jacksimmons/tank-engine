@@ -1,5 +1,5 @@
 #pragma once
-#include <nodes/interfaces/MeshContainer.h>
+#include <components/interfaces/MeshContainer.h>
 #include <serialisation/Serialisation.h>
 #include <Shader.h>
 

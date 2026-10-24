@@ -15,7 +15,7 @@ namespace Tank::Editor
 		friend class EditorApp;
 		friend class ProjectMenuBar_;
 	private:
-		Node *m_inspectedNode;
+		GameEntity *m_selectedEntity;
 		std::vector<std::unique_ptr<NodeInspector_Base>> m_nodeInspectors;
 
 		Inspector_(const std::string &name = "Inspector");
@@ -25,6 +25,6 @@ namespace Tank::Editor
 	protected:
 		virtual void drawPanel() override;
 	public:
-		Node *getInspectedNode() const noexcept { return m_inspectedNode; }
+		GameEntity *selected() const noexcept { return m_selectedEntity; }
 	};
 }

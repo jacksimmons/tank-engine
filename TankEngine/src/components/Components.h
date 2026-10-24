@@ -7,5 +7,5 @@
 #include "Name.h"
 #include "PhysicsBody.h"
 #include "Sprite.h"
-#include "Text.h"
+//#include "Text.h"
 #include "Transform.h"

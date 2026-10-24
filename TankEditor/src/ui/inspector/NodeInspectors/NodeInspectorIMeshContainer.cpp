@@ -1,6 +1,6 @@
 #include <imgui.h>
 #include <glm/gtx/string_cast.hpp>
-#include <nodes/interfaces/MeshContainer.h>
+#include <components/interfaces/MeshContainer.h>
 #include <shapes/Vertex.h>
 #include "NodeInspector.h"
 

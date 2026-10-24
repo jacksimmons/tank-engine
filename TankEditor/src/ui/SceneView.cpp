@@ -2,13 +2,14 @@
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <components/Camera.h>
 #include <events/EventManager.h>
-#include "KeyInput.h"
-#include "static/Time.h"
-#include "components/Scene.h"
-#include "components/Camera.h"
-#include "ui/SceneView.h"
+#include <events/EditorEventID.h>
+#include <scene/Scene.h>
+#include <static/Time.h>
+#include <KeyInput.h>
 #include <Colours.h>
+#include "SceneView.h"
 
 
 namespace Tank::Editor
@@ -20,8 +21,8 @@ namespace Tank::Editor
 	};
 
 
-	SceneView_::SceneView_(const std::string &name, glm::ivec2 sceneViewportSize, glm::ivec2 fbViewportSize, KeyInput *keyInput, bool isPlayer)
-		: _Window(name, WINDOW_OPTS), m_isPlayer(isPlayer)
+	SceneView_::SceneView_(entt::handle handle, Scene *ecs, glm::ivec2 sceneViewportSize, glm::ivec2 fbViewportSize, KeyInput *keyInput, bool isPlayer)
+		: _Window(handle, ecs, WINDOW_OPTS), m_isPlayer(isPlayer)
 	{
 		m_sceneW = sceneViewportSize.x, m_sceneH = sceneViewportSize.y;
 		m_fb = std::make_unique<Framebuffer>(fbViewportSize.x, fbViewportSize.y);
@@ -56,7 +57,7 @@ namespace Tank::Editor
 
 		// Just sets default panel-window size.
 		ImGui::SetNextWindowSize(ImVec2(fbW + 10.0f, fbH + 10.0f), ImGuiCond_FirstUseEver);
-		_Window::draw();
+		EditorEntity::drawUI();
 	}
 
 	void SceneView_::drawPanel()
@@ -222,7 +223,7 @@ namespace Tank::Editor
 		std::string line = std::format("Set GL polygon mode to {}",
 			m_polygonMode == GL_FILL ? "FILL" : (m_polygonMode == GL_POINT ? "POINT" : "LINE"));
 
-		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
+		EventManager::invokeEvent(TANK_EVENT_CONSOLE_ADD_LINE, line, Tank::Colour::INFO);
 	}
 
 	void SceneView_::cycleCullFaceMode()
@@ -245,7 +246,7 @@ namespace Tank::Editor
 		std::string line = std::format("Set GL cull face mode to {}",
 			m_cullFaceMode == GL_BACK ? "BACK" : (m_cullFaceMode == GL_FRONT ? "FRONT" : "FRONT_AND_BACK"));
 
-		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
+		EventManager::invokeEvent(TANK_EVENT_CONSOLE_ADD_LINE, line, Tank::Colour::INFO);
 	}
 
 	void SceneView_::cycleFrontFaceMode()
@@ -265,7 +266,7 @@ namespace Tank::Editor
 		std::string line = std::format("Set GL front face mode (winding order) to {}",
 			m_frontFaceMode == GL_CCW ? "CCW" : "CW");
 
-		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
+		EventManager::invokeEvent(TANK_EVENT_CONSOLE_ADD_LINE, line, Tank::Colour::INFO);
 	}
 
 	void SceneView_::cycleDepthFuncComparisonMode()
@@ -295,7 +296,7 @@ namespace Tank::Editor
 		glDepthFunc(m_depthFuncComparisonMode);
 
 		std::string line = "Set GL depth func comparison to " + newMode;
-		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
+		EventManager::invokeEvent(TANK_EVENT_CONSOLE_ADD_LINE, line, Tank::Colour::INFO);
 	}
 
 	
@@ -347,6 +348,6 @@ namespace Tank::Editor
 		glBlendFunc(GL_SRC_ALPHA, factor);
 
 		std::string line = "Set GL blend func " + name + " to " + newName;
-		EventManager::invokeEvent("Console.AddColouredLine", line, Tank::Colour::INFO);
+		EventManager::invokeEvent(TANK_EVENT_CONSOLE_ADD_LINE, line, Tank::Colour::INFO);
 	}
 }

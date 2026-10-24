@@ -1,7 +1,4 @@
-#include <components/Scene.h>
-#include <nodes/interfaces/MeshContainer.h>
-#include <nodes/interfaces/ShaderContainer.h>
-#include <components/Transform.h>
+#include <components/interfaces/MeshContainer.h>
 #include <Texture.h>
 #include <utils/Flip.h>
 #include "Profiler.h"
